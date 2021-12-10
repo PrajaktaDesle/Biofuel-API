@@ -1,0 +1,392 @@
+{"level":"info","message":"Server running at 3000","timestamp":"2021-11-23T18:59:59.016Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-11-23T19:15:40.399Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-11-23T19:16:21.120Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-11-23T19:21:33.196Z"}
+{"level":"info","message":"errror","timestamp":"2021-11-23T19:21:33.196Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-11-25T17:37:34.008Z"}
+{"level":"info","message":"errror","timestamp":"2021-11-25T17:37:34.008Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-08T14:52:18.024Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-08T16:24:37.687Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-08T16:29:24.548Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T06:15:22.218Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T07:06:46.305Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T07:16:15.748Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T07:22:16.643Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T07:23:24.865Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T07:24:01.920Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T07:34:29.287Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T07:34:44.275Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T07:51:13.383Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T07:52:26.419Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T07:52:36.810Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T07:56:46.638Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T07:56:51.612Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T08:09:36.837Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T08:27:06.365Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T09:10:11.420Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T09:11:48.932Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T09:12:18.330Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T09:15:38.160Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T09:17:31.676Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T09:18:21.298Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T09:23:17.251Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T09:23:17.251Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T09:24:20.006Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T09:24:20.006Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T09:24:30.219Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T09:24:30.219Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T09:24:34.472Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T09:24:34.472Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T14:29:59.902Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T14:29:59.902Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T14:41:19.025Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T14:41:19.025Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T14:41:33.224Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T14:41:33.224Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T15:46:47.610Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T15:46:47.610Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T16:38:12.419Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T16:38:12.419Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T16:38:20.256Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T16:38:20.256Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T16:39:20.050Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T16:39:20.050Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T16:40:25.447Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T16:40:25.447Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T16:42:58.434Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T16:42:58.434Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T16:43:05.139Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T16:43:05.139Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T16:43:46.038Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T16:43:46.038Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T16:48:08.428Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T16:48:08.428Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T16:53:07.993Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T16:53:07.993Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T17:03:54.557Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T17:03:54.557Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T17:04:43.750Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T17:04:43.750Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-09T17:05:13.575Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T17:05:13.575Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T17:05:37.878Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-09T17:07:38.218Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T05:25:08.579Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T10:24:08.688Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T10:27:31.573Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-10T10:28:09.471Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T10:28:09.471Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-10T10:28:52.807Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T10:28:52.807Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-10T10:29:21.357Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T10:29:21.357Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-10T10:29:34.058Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T10:29:34.058Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-10T10:30:06.401Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T10:30:06.401Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-10T10:30:20.113Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T10:30:20.113Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-10T10:30:52.355Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T10:30:52.355Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-10T10:31:16.996Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T10:31:16.996Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-10T10:32:00.646Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T10:32:00.646Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-10T10:34:57.350Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T10:34:57.350Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-10T10:35:14.222Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T10:35:14.222Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-10T10:35:30.491Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T10:35:30.491Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-10T10:35:57.580Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T10:35:57.580Z"}
+{"level":"info","message":"Database connection not avilable","timestamp":"2021-12-10T10:36:11.648Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T10:36:11.648Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T11:06:35.774Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T11:06:35.774Z"}
+{"code":"ENOTFOUND","errno":-3008,"fatal":true,"hostname":"localhost1","level":"error","message":"[MYSQL Execption] getaddrinfo ENOTFOUND localhost1","stack":"Error: getaddrinfo ENOTFOUND localhost1\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:71:26)","syscall":"getaddrinfo","timestamp":"2021-12-10T11:06:35.774Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T11:08:05.984Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T11:08:05.984Z"}
+{"code":"ENOTFOUND","errno":-3008,"fatal":true,"hostname":"localhost1","level":"error","message":"[MYSQL Execption] getaddrinfo ENOTFOUND localhost1","stack":"Error: getaddrinfo ENOTFOUND localhost1\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:71:26)","syscall":"getaddrinfo","timestamp":"2021-12-10T11:08:05.984Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T11:12:51.440Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T11:12:51.440Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T11:51:41.898Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T11:51:41.898Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T11:52:44.803Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T11:52:44.803Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T11:53:48.299Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T11:53:48.299Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T11:53:48.299Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:21:53.145Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:21:53.145Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:21:53.145Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:22:41.417Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:22:41.417Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:22:41.417Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:25:42.403Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:25:42.403Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:25:42.403Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:25:53.040Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:25:53.040Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:25:53.040Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:28:26.926Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:28:26.926Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:28:26.926Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:29:08.513Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:29:08.513Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:29:08.513Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:30:25.813Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:30:25.813Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:30:25.813Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:30:55.746Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:30:55.746Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:30:55.746Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:32:32.949Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:32:32.949Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:32:32.949Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:33:06.751Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:33:06.751Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:33:06.751Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:33:59.330Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:33:59.330Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:33:59.330Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:35:22.560Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:35:22.560Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:35:22.560Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:35:45.235Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:35:45.235Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:35:45.235Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:38:07.424Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:38:07.424Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:38:07.424Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:39:34.539Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:39:34.539Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:39:34.539Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:58:27.055Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:58:27.055Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:58:27.055Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:58:58.339Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:58:58.339Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:58:58.339Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:59:36.934Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:59:36.934Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:59:36.934Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T12:59:49.998Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T12:59:49.998Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T12:59:49.998Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:00:03.325Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:00:03.325Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:00:03.325Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:03:55.835Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:03:55.835Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:03:55.835Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:04:31.263Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:04:31.263Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:04:31.263Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:04:43.257Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:04:43.257Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:04:43.257Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:08:22.859Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:08:22.859Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:08:22.859Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:10:07.871Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:10:07.871Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:10:07.871Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:11:15.083Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:11:15.083Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:11:15.083Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:13:11.438Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:13:11.438Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:13:11.438Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:13:33.125Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:13:33.125Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:13:33.125Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:15:43.173Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:15:43.173Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:15:43.173Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:16:03.761Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:16:03.761Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:16:03.761Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:16:25.959Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:16:25.959Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:16:25.959Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:16:35.715Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:16:35.715Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:16:35.715Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:22:34.976Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:22:34.976Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:22:34.976Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:23:01.306Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:23:01.306Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:23:01.306Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:23:56.023Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:23:56.023Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:23:56.023Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:28:25.735Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:28:25.735Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:28:25.735Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:28:46.490Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:28:46.490Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:28:46.490Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T13:29:14.445Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T13:29:14.445Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T13:29:14.445Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T14:38:25.647Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T14:38:25.647Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T14:38:25.647Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T14:48:56.516Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T14:48:56.516Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T14:48:56.516Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T14:55:45.523Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T14:55:45.523Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T14:55:45.523Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T15:04:31.758Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T15:04:31.758Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T15:04:31.758Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T15:21:09.188Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T15:21:09.188Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T15:21:09.188Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T15:51:34.710Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T15:51:34.710Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T15:51:34.710Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T15:52:49.744Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T15:52:49.744Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T15:52:49.744Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T15:54:59.885Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T15:54:59.885Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T15:54:59.885Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T15:55:40.925Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T15:55:40.925Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T15:55:40.925Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T15:55:55.601Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T15:55:55.601Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T15:55:55.601Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T15:58:56.231Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T15:58:56.231Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T15:58:56.231Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T15:59:06.804Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T15:59:06.804Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T15:59:06.804Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T15:59:29.125Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T15:59:29.125Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T15:59:29.125Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T15:59:36.449Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T15:59:36.449Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T15:59:36.449Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T15:59:46.279Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T15:59:46.279Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T15:59:46.279Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:00:15.115Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:00:15.115Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T16:00:15.115Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:01:03.852Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:01:03.852Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T16:01:03.852Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:02:33.478Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:02:33.478Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T16:02:33.478Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:03:48.382Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:03:48.382Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T16:03:48.382Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:05:20.560Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:05:20.560Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T16:05:20.560Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:06:44.183Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:06:44.183Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T16:06:44.183Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:08:55.814Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:08:55.814Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T16:08:55.814Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:09:22.580Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:09:22.580Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T16:09:22.580Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:09:55.975Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:09:55.975Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T16:09:55.975Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:10:31.391Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:10:31.391Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T16:10:31.391Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:10:45.999Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:10:45.999Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T16:10:45.999Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:18:55.335Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:18:55.335Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T16:18:55.335Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:19:10.590Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:19:10.590Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T16:19:10.590Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:19:51.006Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:19:51.006Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T16:19:51.006Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:21:53.334Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:21:53.334Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T16:21:53.334Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:22:11.569Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:22:11.569Z"}
+{"level":"info","message":"[MYSQL connected]","timestamp":"2021-12-10T16:22:11.569Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:24:36.069Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:24:36.069Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:26:26.867Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:26:26.867Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:26:44.894Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:26:44.894Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:27:42.829Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:27:42.829Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:28:28.031Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:28:28.031Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:28:33.441Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:28:33.441Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:28:42.206Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:28:42.206Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:29:27.311Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:29:27.311Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:30:12.316Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:30:12.316Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:31:44.109Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:31:44.109Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:32:01.705Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:32:01.705Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:32:34.166Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:32:34.166Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:33:31.877Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:33:31.877Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:33:42.055Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:33:42.055Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:34:04.153Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:34:04.153Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T16:34:30.964Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T16:34:30.964Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T18:30:36.418Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T18:30:36.418Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T18:31:25.367Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T18:31:25.367Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T18:32:55.489Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T18:32:55.489Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T18:33:12.014Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T18:33:12.014Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T18:37:33.483Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T18:37:33.483Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T18:38:34.761Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T18:38:34.761Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T18:39:35.001Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T18:39:35.001Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T18:44:39.454Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T18:44:39.454Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T18:56:25.463Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T18:56:25.463Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T18:56:59.258Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T18:56:59.258Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T18:58:25.068Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T18:58:25.068Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T18:59:42.670Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T18:59:42.670Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T19:01:12.665Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T19:01:12.665Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T19:11:06.257Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T19:11:06.257Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T19:12:50.577Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T19:12:50.577Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T19:13:44.645Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T19:13:44.645Z"}
+{"level":"info","message":"Database connection not available","timestamp":"2021-12-10T19:14:34.395Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-10T19:14:34.395Z"}
