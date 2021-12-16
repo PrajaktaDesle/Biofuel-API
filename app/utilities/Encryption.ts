@@ -5,22 +5,19 @@ export default class Encryption{
     constructor() {
 
     }
+
+
     public static async generateJwtToken (data : any){
-       // return "data"
-        let a={
-            tenant_id:data.tenant_id,
-            user_id:data.user_id
-        }
-        // console.log("gsgsgsggssgs--->",'test',config.JwtToken.secretKey,config.JwtToken.expiry)
-        return await jwt.sign(a, config.JwtToken.secretKey,{expiresIn:config.JwtToken.expiry});
-        // const token = jwt.sign({ user_id: user._id}, process.env.TOKEN_KEY, { expiresIn: "2h",});
+        return await jwt.sign({ data }, config.env.authSecret, {
+            expiresIn: config.timers.userCookieExpiry,
+        });
     }
 
     public static async verifyJwtToken (token : string){
         new Promise(resolve => {
             jwt.verify(
                 token,
-                config.JwtToken.secretKey,
+                config.env.authSecret,
                 (err: Error, decoded: any) => {
                     if (err) {
                         resolve(null);

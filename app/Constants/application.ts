@@ -11,7 +11,7 @@ export default {
 
     },
     authorizationIgnorePath: [
-        `${base}/user/auth/login`,
-        `${base}/user/auth/register`,
+        `${base}/user/login`,
+        ,
     ],
 };
