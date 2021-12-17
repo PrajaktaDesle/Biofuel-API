@@ -5,13 +5,12 @@ export default {
         base,
     },
     timers: {
-        userCookieExpiry: '720h',
+
     },
     env: {
 
     },
     authorizationIgnorePath: [
         `${base}/user/login`,
-        ,
     ],
 };

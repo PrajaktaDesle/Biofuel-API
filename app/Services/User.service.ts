@@ -1,7 +1,5 @@
 import async from "async";
-
 import bcrypt from "bcrypt";
-
 const jwt = require('jsonwebtoken');
 import {UserModel} from "../Models/User/User.model";
 import Encryption from "../utilities/Encryption";
@@ -20,9 +18,9 @@ const generateHash = async (
         });
     });
 
-const createUser = async (
-    data : any
-) => {
+const createUser = async (data : any) => {
+
+    if(data.password!==data.confirm_password) throw new Error("password did not match");
     let hash = await generateHash(data.password, 10);
     data.password = hash;
     console.log(data)
@@ -32,7 +30,6 @@ const createUser = async (
     console.log("User ->>>>", user);
     return user;
 };
-
 
 async function loginUser(data:any) {
     try{
