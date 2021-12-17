@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 const jwt = require('jsonwebtoken');
 import {UserModel} from "../Models/User/User.model";
 import Encryption from "../utilities/Encryption";
+import LOGGER from "../config/LOGGER";
 
 const generateHash = async (
     password: string,
@@ -35,27 +36,15 @@ const createUser = async (
 
 async function loginUser(data:any) {
     try{
-        console.log(111, data)
         let user = await new UserModel().getUser(data);
-        console.log("User", user)
+        LOGGER.info("User from DB ->", user);
         if(user.length == 0) throw new Error("No Such User Exists");
-
         //password bcrypt
         const match = await bcrypt.compare(data.password, user[0].password);
-        if(match) {
-            //login
-            console.log("login successfully");
-
-            const token = await Encryption.generateJwtToken(user);
-            console.log("token-->",token);
-            if(token) {
-                // let decoded = Encryption.verifyJwtToken(token)
-                // console.log("decoded",decoded);
-                user[0].token = token;
-                console.log("final----------->",user)
-                return user
-            }
-        }
+        if(!match) throw new Error("Invalid password");
+        const token = await Encryption.generateJwtToken({id : user.id, tenant_id:user.tenant_id});
+        user[0].token = token;
+        return user;
     }catch(e){
         return e;
     }
