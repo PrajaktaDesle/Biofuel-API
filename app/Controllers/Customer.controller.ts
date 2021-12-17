@@ -3,7 +3,7 @@ import httpStatusCodes from 'http-status-codes';
 import IController from '../Types/IController';
 import apiResponse from '../utilities/ApiResponse';
 import customerService from '../Services/Customer.service';
-import formidable = require('formidable')
+import formidable from 'formidable';
 import constants from "../Constants";
 import LOGGER from "../config/LOGGER";
 import {isError} from "util";
