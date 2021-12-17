@@ -2,7 +2,6 @@ import * as bodyParser from 'body-parser';
 import express from 'express';
 const morgan = require('morgan');
 
-import authenticate from '../Middlewares/authenticate';
 import application from '../Constants/application';
 import indexRoute from '../Routes/index';
 import joiErrorHandler from '../Middlewares/joiErrorHandler';
