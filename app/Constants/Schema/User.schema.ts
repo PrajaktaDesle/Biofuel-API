@@ -10,7 +10,6 @@ export default {
             confirm_password: Joi.string().min(6).max(32).required(),
             mobile: Joi.string().required(),
             user_id: Joi.number().required(),
-            // tenant_id: Joi.number().required(),
             status: Joi.number().required()
         },
         [Segments.HEADERS]:Joi.object({

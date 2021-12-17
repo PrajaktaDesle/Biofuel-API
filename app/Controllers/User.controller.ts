@@ -5,9 +5,6 @@ import apiResponse from '../utilities/ApiResponse';
 import userService from '../Services/User.service';
 import constants from "../Constants";
 import LOGGER from "../config/LOGGER";
-import {isError} from "util";
-import * as util from "util";
-
 
 const login: IController = async (req, res) => {
     console.log(1)

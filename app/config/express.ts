@@ -7,15 +7,14 @@ import application from '../Constants/application';
 import indexRoute from '../Routes/index';
 import joiErrorHandler from '../Middlewares/joiErrorHandler';
 //import * as errorHandler from '../middlewares/apiErrorHandler';
+import Authenticate from '../Middlewares/Authenticate';
 
 const app = express();
 
 require('dotenv').config();
 app.use(bodyParser.json());
-
 app.use(morgan('dev'));
-
-// app.use(authenticate);
+app.use(Authenticate);
 
 // Router
 app.use(application.url.base, indexRoute);

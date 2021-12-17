@@ -14,7 +14,7 @@ router.post(
 
 router.post(
     '/login',
-
+    celebrate(userSchema.login),
     userController.login,
 );
 

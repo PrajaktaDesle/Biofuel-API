@@ -5,6 +5,7 @@ export default class Encryption{
     constructor() {
 
     }
+
     public static async generateJwtToken (data : any){
        // return "data"
         // console.log("gsgsgsggssgs--->",'test',config.JwtToken.secretKey,config.JwtToken.expiry)
