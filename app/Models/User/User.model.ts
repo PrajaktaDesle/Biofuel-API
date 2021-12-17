@@ -9,7 +9,7 @@ export class UserModel extends BaseModel   {
         return results;
     }
     async createUser(userData:any){
-        let registerResult = await this._excuteQuery("insert into users set ?",[userData]);
+        let registerResult = await this._executeQuery("insert into users set ?",[userData]);
         return registerResult;
     }
 }
