@@ -12,9 +12,9 @@ router.post(
     customerController.register
 );
 
-// router.post(
-//     '/otp-login',
-//     celebrate(customerSchema.login),
-//     customerController.login
-// );
+router.post(
+    '/fetch/customers-details',
+    celebrate(customerSchema.fetch),
+    customerController.fetchCustomers
+);
 export default router;

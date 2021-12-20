@@ -501,3 +501,22 @@
 {"level":"info","message":"Server running at 3000","timestamp":"2021-12-16T04:17:11.818Z"}
 {"level":"info","message":"Server running at 3000","timestamp":"2021-12-16T04:19:24.508Z"}
 {"level":"info","message":"Server running at 3000","timestamp":"2021-12-16T04:21:24.863Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-20T04:53:26.253Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-20T05:07:01.655Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-20T05:19:11.708Z"}
+{"level":"info","message":"error","timestamp":"2021-12-20T05:19:11.708Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-20T05:25:32.624Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-20T05:30:40.142Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-20T07:03:11.206Z"}
+{"level":"info","message":"error","timestamp":"2021-12-20T07:03:11.206Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-20T07:16:24.904Z"}
+{"0":{"email":"amit@digitalflake.com","id":2,"password":"$2b$10$nHdQJSGou8Zm92UqMm4xLu8dF/f51HA0rtQM29hfJV5rKnq56RRqC","tenant_id":1},"level":"info","message":"User from DB ->","timestamp":"2021-12-20T07:16:24.904Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-20T08:03:20.079Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-20T08:05:51.461Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-20T08:06:40.812Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-20T08:46:28.513Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-20T08:46:49.003Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-20T08:47:47.736Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-20T08:48:31.783Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-20T08:49:55.648Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-20T08:52:02.411Z"}

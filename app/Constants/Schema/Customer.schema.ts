@@ -33,5 +33,15 @@ export default {
             "tenant-id": Joi.number().required()
         }).unknown()
 
-    }
+    },
+
+    fetch:{
+        // [Segments.BODY]:{
+        //     id:Joi.number().required()
+        // },
+        [Segments.HEADERS]: Joi.object({
+            "tenant-id": Joi.number().required()
+        }).unknown()
+
+    },
 }
