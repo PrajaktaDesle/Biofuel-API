@@ -6,15 +6,23 @@ import customerSchema from '../../Constants/Schema/Customer.schema';
 const router = express.Router();
 import { celebrate } from 'celebrate';
 
+// router.post(
+//     '/register',
+//     celebrate(custSchema.register),
+//     custController.register,
+// );
+
 router.post(
-    '/register',
-    // celebrate(customerSchema.register),
-    customerController.register
+    '/login',
+    celebrate(customerSchema.login),
+    customerController.login,
 );
 
-// router.post(
-//     '/otp-login',
-//     celebrate(customerSchema.login),
-//     customerController.login
-// );
+router.post(
+    '/verify-OTP',
+    celebrate(customerSchema.verify_otp),
+    customerController.verify_otp,
+);
+
+
 export default router;

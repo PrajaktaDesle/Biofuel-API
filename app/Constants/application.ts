@@ -12,5 +12,7 @@ export default {
     },
     authorizationIgnorePath: [
         `${base}/user/login`,
+        `${base}/customer/login`,
+        `${base}/customer/verify-OTP`
     ],
 };
