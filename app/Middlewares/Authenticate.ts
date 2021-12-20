@@ -29,6 +29,7 @@ export default async (
     console.log("authorizationHeader ->", authorizationHeader);
     if (authorizationHeader) {
       const decoded = await Encryption.verifyJwtToken(authorizationHeader);
+      console.log("Decoded -",decoded)
       // @ts-ignore
       if (decoded) {
         console.log('TOken Verified Successfully');

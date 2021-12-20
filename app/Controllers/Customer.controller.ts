@@ -15,7 +15,7 @@ try {
     let tenant= req.headers["tenant-id"];
     const form = new formidable.IncomingForm()
     // form.tenant_id = tenant
-    customer = await customerService.createCustomer(form,req,tenant);
+    customer = await customerService.createCustomer(form,tenant);
     console.log('customer at controller-----> ',customer);
 
     } catch (e) {
@@ -39,35 +39,36 @@ try {
     }
 };
 
-// const login: IController = async (req, res) => {
-//     const tenant=req.headers["tenant-id"]
-//     req.body.tenant_id=tenant;
-//     customerService.loginCustomer(req.body)
-//         .then( (customer) => {
-//             if(customer instanceof Error){
-//                 console.log("user 2", customer.message)
-//                 apiResponse.error(
-//                     res,
-//                     // response.send('Incorrect Username and/or Password!');
-//                     httpStatusCodes.BAD_REQUEST,
-//                     customer.message
-//                 );
-//             }else{
-//                 console.log("user 3", customer.message)
-//                 // response.redirect('/home');
-//                 apiResponse.result(res, customer[0], httpStatusCodes.OK);
-//             }
-//         }).catch(err => {
-//         console.log("Error  ->", err);
-//         apiResponse.error(
-//             res,
-//             httpStatusCodes.BAD_REQUEST,
-//             //locale.INVALID_CREDENTIALS,
-//         );
-//     });
-// }
+const fetchCustomers: IController = async (req, res) => {
+    const tenant=req.headers["tenant-id"]
+    // req.body.tenant_id=tenant;
+    customerService.customerDetails(tenant)
+        .then( (customer) => {
+            if(customer instanceof Error){
+                console.log("user 2", customer.message)
+                apiResponse.error(
+                    res,
+                    // response.send('Incorrect Username and/or Password!');
+                    httpStatusCodes.BAD_REQUEST,
+                    customer.message
+                );
+            }else{
+                console.log("user 3", customer.message)
+                // response.redirect('/home');
+                apiResponse.result(res, customer, httpStatusCodes.OK);
+            }
+        }).catch(err => {
+        console.log("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+            //locale.INVALID_CREDENTIALS,
+        );
+    });
+}
 
 export default {
     // login,
-    register
+    register,
+    fetchCustomers,
 };

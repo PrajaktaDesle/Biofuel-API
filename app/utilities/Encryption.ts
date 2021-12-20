@@ -1,3 +1,5 @@
+import {reject} from "async";
+
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const config = require("../config");
@@ -14,13 +16,13 @@ export default class Encryption{
     }
 
     public static async verifyJwtToken (token : string){
-        new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             jwt.verify(
                 token,
                 config.JwtToken.secretKey,
                 (err: Error, decoded: any) => {
                     if (err) {
-                        resolve(null);
+                        reject(err);
                     } else {
                         resolve(decoded);
                     }
