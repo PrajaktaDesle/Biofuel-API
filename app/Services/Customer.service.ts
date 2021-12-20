@@ -73,9 +73,10 @@ const createCustomer = async (form : any,tenant:any) =>{
 
 const customerDetails = async (data : any) =>{
     let customerData;
+
 customerData = await new CustomerModel().findCustomers(data)
         if (!customerData) throw new Error("details did not match");
-        console.log("details returned from model------>", customerData)
+        // console.log("details returned from model------>", customerData)
         return customerData;
 }
 

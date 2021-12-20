@@ -13,7 +13,7 @@ router.post(
 );
 
 router.post(
-    '/fetch/customers-details',
+    '/all',
     celebrate(customerSchema.fetch),
     customerController.fetchCustomers
 );
