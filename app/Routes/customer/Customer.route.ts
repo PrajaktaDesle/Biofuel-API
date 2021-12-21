@@ -6,11 +6,17 @@ import customerSchema from '../../Constants/Schema/Customer.schema';
 const router = express.Router();
 import { celebrate } from 'celebrate';
 
-// router.post(
-//     '/register',
-//     celebrate(custSchema.register),
-//     custController.register,
-// );
+router.post(
+    '/register',
+    // celebrate(customerSchema.register),
+    customerController.register
+);
+
+router.post(
+    '/all',
+    celebrate(customerSchema.fetch),
+    customerController.fetchCustomers
+);
 
 router.post(
     '/login',

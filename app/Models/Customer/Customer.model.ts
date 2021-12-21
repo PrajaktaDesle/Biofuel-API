@@ -19,4 +19,9 @@ export class CustomerModel extends BaseModel
     async getCustomer_otp(data: any){
         return await this._executeQuery("select * from customer_login where req_id = ? ", [data.request_id]);
     }
+
+    async findCustomers(customerData:any){
+        const customerResult= await this._executeQuery("select * from customers where tenant_id = ? ",[customerData] )
+        return customerResult;
+    }
 }
