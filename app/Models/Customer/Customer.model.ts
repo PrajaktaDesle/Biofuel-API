@@ -16,7 +16,7 @@ export class CustomerModel extends BaseModel
     async create_otp(data: any){
         return await this._executeQuery("insert into customer_login set ?", [data]);
     }
-    async getCust_otp(data: any){
+    async getCustomer_otp(data: any){
         return await this._executeQuery("select * from customer_login where req_id = ? ", [data.request_id]);
     }
 }

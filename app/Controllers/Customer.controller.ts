@@ -37,18 +37,18 @@ const verify_otp: IController = async (req, res) => {
     customerService.verify_customer_otp(req.body)
         .then( (customer) => {
             if(customer instanceof Error){
-                console.log("user 2", customer.message)
+                LOGGER.info("user 2", customer.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
                     customer.message
                 );
             }else{
-                console.log("Login Successful");
+                LOGGER.info("Login Successful");
                  apiResponse.result(res,{customer}, httpStatusCodes.OK);
             }
         }).catch(err => {
-        console.log("Error  ->", err);
+        LOGGER.info("Error  ->", err);
         apiResponse.error(
             res,
             httpStatusCodes.BAD_REQUEST,

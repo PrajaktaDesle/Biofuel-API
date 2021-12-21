@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import {CustomerModel} from "../Models/Customer/Customer.model";
 import moment from 'moment';
 import Encryption from "../utilities/Encryption";
+import LOGGER from "../config/LOGGER";
 
 const {v4 : uuidv4} = require('uuid');
 
@@ -30,19 +31,19 @@ const generateHash = async (password: string,saltRounds: number,): Promise<strin
 
 async function loginCustomer(data:any) {
     try{
-        console.log(111, data)
+        LOGGER.info(111, data)
         let customer = await new CustomerModel().getCustomer(data.mobile, data.tenant_id);
-        console.log("Customer", customer);
+        LOGGER.info("Customer", customer);
         if(customer.length === 0) throw new Error("No Such customer exits")
         const otp = Math.floor(100000 + Math.random() * 900000);
         //todo need to integrate sms
-        console.log(otp);
+        LOGGER.info(otp);
         data.otp = otp;
         data.customer_id = customer[0].id;
         data.req_id = uuidv4();
         data.expire_time = moment().add(3, "minutes").format("YYYY-MM-DD HH:mm:ss");
         delete data.mobile;
-        console.log(data)
+        LOGGER.info(data)
         await new CustomerModel().create_otp(data);
         return {request_id : data.req_id}
     }
@@ -56,8 +57,8 @@ async function loginCustomer(data:any) {
 
 async function verify_customer_otp(data:any) {
     try{
-        console.log(111, data)
-        let otp_details = await new CustomerModel().getCust_otp(data);
+        LOGGER.info(111, data)
+        let otp_details = await new CustomerModel().getCustomer_otp(data);
         if (otp_details.length === 0) throw new Error ("Error in login")
         if (!(data.otp == otp_details[0].otp)) throw  new Error ("Incorrect OTP")
         let now = moment().format("YYYY-MM-DD HH:mm:ss");
@@ -66,7 +67,7 @@ async function verify_customer_otp(data:any) {
             id: otp_details.customer_id,
             tenant_id: otp_details.tenant_id
         });
-        console.log("login successful");
+        LOGGER.info("login successful");
         return {otp_details};
         }
     catch(e)
