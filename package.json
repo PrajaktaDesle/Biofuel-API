@@ -6,7 +6,7 @@
   "scripts": {
     "tsc": "tsc",
     "dev": "ts-node-dev  ./app/app.ts",
-    "prod": "tsc && node ./bin/app.js"
+    "prod": "pm2 stop all && pm2 kill && tsc && pm2 start ./bin/app.js"
   },
   "author": "Chirag Jadhav",
   "license": "ISC",
