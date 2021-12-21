@@ -6,6 +6,7 @@ export = {
         user: env.MASTER_DB_USER || 'root',
         password: env.MASTER_DB_PASSWORD || 'Digit@007',
         database: env.MASTER_DB_NAME || 'dhani',
+        timezone: 'utc'
     },
     JwtToken: {
         secretKey : process.env.JWT_TOKEN_SECRET_KEY || 'test',

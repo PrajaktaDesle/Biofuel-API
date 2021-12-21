@@ -94,7 +94,7 @@ const login: IController = async (req, res) => {
 
 const verify_otp: IController = async (req, res) => {
     req.body.tenant_id=req.headers["tenant-id"];
-    customerService.verify_customer_otp(req.body)
+    const customer = await customerService.verify_customer_otp(req.body)
         .then( (customer) => {
             if(customer instanceof Error){
                 LOGGER.info("user 2", customer.message)
@@ -119,10 +119,8 @@ const verify_otp: IController = async (req, res) => {
 
 
 export default {
-    // register
     register,
     fetchCustomers,
-    // login,
     login,
     verify_otp
 };

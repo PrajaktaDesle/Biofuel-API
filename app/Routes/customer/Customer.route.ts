@@ -29,6 +29,4 @@ router.post(
     celebrate(customerSchema.verify_otp),
     customerController.verify_otp,
 );
-
-
 export default router;
