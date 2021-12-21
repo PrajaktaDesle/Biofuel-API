@@ -43,7 +43,7 @@ async function loginCustomer(data:any) {
         data.expire_time = moment().add(3, "minutes").format("YYYY-MM-DD HH:mm:ss");
         delete data.mobile;
         console.log(data)
-        let otp_details = await new CustomerModel().create_otp(data);
+        await new CustomerModel().create_otp(data);
         return {request_id : data.req_id}
     }
     catch(e)
@@ -54,42 +54,28 @@ async function loginCustomer(data:any) {
 
 
 
-async function verify_cust_otp(data:any) {
+async function verify_customer_otp(data:any) {
     try{
         console.log(111, data)
         let otp_details = await new CustomerModel().getCust_otp(data);
-        console.log("Otp Details", otp_details);
-        // const match = await bcrypt.compare(data.password, cust[0].password);
-        const match = await (data.request_id == otp_details[0].req_id );
-        if(match) {
-            if (data.otp == otp_details[0].otp){
-                otp_details[0].token = await Encryption.generateJwtToken({
-                    id: otp_details.customer_id,
-                    tenant_id: otp_details.tenant_id
-                });
-                console.log("login successful");
-                return otp_details;
-            }
-            else{
-                console.log("wrong otp")
-            }
+        if (otp_details.length === 0) throw new Error ("Error in login")
+        if (!(data.otp == otp_details[0].otp)) throw  new Error ("Incorrect OTP")
+        let now = moment().format("YYYY-MM-DD HH:mm:ss");
+        if (!(otp_details.expire_time >= now)) throw new Error ("OPT expired")
+        otp_details[0].token = await Encryption.generateJwtToken({
+            id: otp_details.customer_id,
+            tenant_id: otp_details.tenant_id
+        });
+        console.log("login successful");
+        return {otp_details};
         }
-        else{
-
-        }
-
-//todo need to integrate sms
-
-    }
     catch(e)
-    {
+        {
         return e;
-    }
+        }
 }
-
-
 export default {
     // createUser,
     loginCustomer,
-    verify_cust_otp
+    verify_customer_otp
 };

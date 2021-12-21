@@ -33,22 +33,18 @@ const login: IController = async (req, res) => {
 };
 
 const verify_otp: IController = async (req, res) => {
-    // console.log(req.headers["tenant-id"])
     req.body.tenant_id=req.headers["tenant-id"];
-    // req.body.req_id=req.headers["request-id"];
-    customerService.verify_cust_otp(req.body)
+    customerService.verify_customer_otp(req.body)
         .then( (customer) => {
             if(customer instanceof Error){
                 console.log("user 2", customer.message)
                 apiResponse.error(
                     res,
-                    // response.send('Incorrect Username and/or Password!');
                     httpStatusCodes.BAD_REQUEST,
                     customer.message
                 );
             }else{
                 console.log("Login Successful");
-                // console.log("user 3", customer.message)
                  apiResponse.result(res,{customer}, httpStatusCodes.OK);
             }
         }).catch(err => {
