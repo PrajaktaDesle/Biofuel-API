@@ -17,4 +17,16 @@ router.post(
     celebrate(customerSchema.fetch),
     customerController.fetchCustomers
 );
+
+router.post(
+    '/login',
+    celebrate(customerSchema.login),
+    customerController.login,
+);
+
+router.post(
+    '/verify-OTP',
+    celebrate(customerSchema.verify_otp),
+    customerController.verify_otp,
+);
 export default router;

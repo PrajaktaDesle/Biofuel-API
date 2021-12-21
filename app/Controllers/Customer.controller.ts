@@ -66,9 +66,61 @@ const fetchCustomers: IController = async (req, res) => {
         );
     });
 }
+const login: IController = async (req, res) => {
+    req.body.tenant_id=req.headers["tenant-id"];
+    customerService.loginCustomer(req.body)
+        .then( (customer) => {
+            if(customer instanceof Error){
+                console.log("user 2", customer.message)
+                apiResponse.error(
+                    res,
+                    // response.send('Incorrect Username and/or Password!');
+                    httpStatusCodes.BAD_REQUEST,
+                    customer.message
+                );
+            }else{
+                // console.log("user 3", customer.message)
+                apiResponse.result(res, {customer}, httpStatusCodes.OK);
+            }
+        }).catch(err => {
+        console.log("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+            //locale.INVALID_CREDENTIALS,
+        );
+    });
+};
+
+const verify_otp: IController = async (req, res) => {
+    req.body.tenant_id=req.headers["tenant-id"];
+    const customer = await customerService.verify_customer_otp(req.body)
+        .then( (customer) => {
+            if(customer instanceof Error){
+                LOGGER.info("user 2", customer.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    customer.message
+                );
+            }else{
+                LOGGER.info("Login Successful");
+                 apiResponse.result(res,{customer}, httpStatusCodes.OK);
+            }
+        }).catch(err => {
+        LOGGER.info("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+            //locale.INVALID_CREDENTIALS,
+        );
+    });
+};
+
 
 export default {
-    // login,
     register,
     fetchCustomers,
+    login,
+    verify_otp
 };

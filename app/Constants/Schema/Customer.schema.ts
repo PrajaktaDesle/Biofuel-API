@@ -24,13 +24,21 @@ export default {
             "tenant-id": Joi.number().required()
         }).unknown()
     },
-
-    login:{
-        [Segments.BODY]:{
-            mobile:Joi.number().required()
+    login: {
+        [Segments.BODY]: {
+            mobile: Joi.number().required()
         },
-        [Segments.HEADERS]: Joi.object({
-            "tenant-id": Joi.number().required()
+        [Segments.HEADERS]:Joi.object({
+            "tenant-id": Joi.string().required()
+        }).unknown()
+    },
+    verify_otp: {
+        [Segments.BODY]:{
+            otp: Joi.number().required(),
+            request_id: Joi.string().required()
+        },
+        [Segments.HEADERS]:Joi.object({
+            "tenant-id": Joi.string().required()
         }).unknown()
 
     },
@@ -44,4 +52,4 @@ export default {
         }).unknown()
 
     },
-}
+};
