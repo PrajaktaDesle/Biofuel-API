@@ -38,7 +38,7 @@ const createCustomer = async (req:any,tenant:any) =>{
         // @ts-ignore
         newPath = response.newPath;
         // console.log("response", response);
-        let hash = await Encryption.generateHash(fields.password, 10);
+        let hash = await new Encryption().generateHash(fields.password, 10);
         let Customers = {
             first_name: String(fields.f_name),
             middle_name: String(fields.m_name),

@@ -3,19 +3,16 @@ import {reject} from "async";
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const config = require("../config");
-export default class Encryption{
+export default class Encryption {
     constructor() {
 
     }
 
-    public static async generateJwtToken (data : any){
-       // return "data"
-        // console.log("gsgsgsggssgs--->",'test',config.JwtToken.secretKey,config.JwtToken.expiry)
-        return await jwt.sign(data, config.JwtToken.secretKey,{expiresIn:config.JwtToken.expiry});
-        // const token = jwt.sign({ user_id: user._id}, process.env.TOKEN_KEY, { expiresIn: "2h",});
+    public static async generateJwtToken(data: any) {
+        return await jwt.sign(data, config.JwtToken.secretKey, {expiresIn: config.JwtToken.expiry});
     }
 
-    public async verifyJwtToken(token: string | string[]):Promise<any>{
+    public async verifyJwtToken(token: string | string[]): Promise<any> {
         return new Promise((resolve, reject) => {
             jwt.verify(
                 token,
@@ -31,11 +28,7 @@ export default class Encryption{
         });
     }
 
-
-   public static generateHash = async (
-        password: string,
-        saltRounds: number,
-    ): Promise<string> =>
+    public async generateHash (password: string, saltRounds: number): Promise<any> {
         new Promise((resolve, reject) => {
             bcrypt.hash(password, saltRounds, (err: any, hash: string) => {
                 if (!err) {
@@ -44,11 +37,9 @@ export default class Encryption{
                 reject(err);
             });
         });
+    }
 
-    public static verifypassword = async (
-        password: string,
-        hashPassword: string,
-    ): Promise<string> =>
+    public async verifypassword (password: string, hashPassword: string): Promise<any> {
         new Promise((resolve, reject) => {
             bcrypt.compare(password, hashPassword, (err: any, hash: string) => {
                 if (!err) {
