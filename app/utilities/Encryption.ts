@@ -29,7 +29,7 @@ export default class Encryption {
     }
 
     public async generateHash (password: string, saltRounds: number): Promise<any> {
-        new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             bcrypt.hash(password, saltRounds, (err: any, hash: string) => {
                 if (!err) {
                     resolve(hash);
@@ -40,7 +40,7 @@ export default class Encryption {
     }
 
     public async verifypassword (password: string, hashPassword: string): Promise<any> {
-        new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             bcrypt.compare(password, hashPassword, (err: any, hash: string) => {
                 if (!err) {
                     resolve(hash);
