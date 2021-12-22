@@ -11,7 +11,8 @@ export class CustomerModel extends BaseModel
         return await this._executeQuery("select * from customers where mobile = ? and tenant_id = ? ", [mobile, tenant_id]);
     }
     async createCustomer(customerData:any){
-        return await this._executeQuery("insert into customers set ?", [customerData]);
+        const customerResult= await this._executeQuery("insert into customers set ?",[customerData] )
+        return customerResult;
     }
     async create_otp(data: any){
         return await this._executeQuery("insert into customer_login set ?", [data]);

@@ -12,7 +12,7 @@ router.post(
     customerController.register
 );
 
-router.post(
+router.get(
     '/all',
     celebrate(customerSchema.fetch),
     customerController.fetchCustomers
