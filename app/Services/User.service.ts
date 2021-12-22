@@ -19,12 +19,10 @@ const createUser = async (data : any) => {
 async function loginUser(data:any) {
     try{
         let user = await new UserModel().getUser(data);
-        LOGGER.info("User from DB ->", user);
-        if(user.length == 0) throw new Error("No Such User Exists");
         //password bcrypt
         const match =await new Encryption().verifypassword(data.password, user[0].password);
         if(!match) throw new Error("Invalid password");
-        const token = await Encryption.generateJwtToken({id : user.id, tenant_id:user.tenant_id});
+        const token = await Encryption.generateJwtToken({id : user[0].id, tenant_id:user[0].tenant_id});
         user[0].token = token;
         return user;
     }catch(e){
@@ -35,7 +33,8 @@ async function loginUser(data:any) {
 const userDetails = async (data : any) =>{
     let userData;
     userData = await new UserModel().findUsers(data)
-    if (userData == null) throw new Error("details did not match");
+    // console.log("details returned from model------>", userData)
+    if (userData[0] == null) throw new Error("details did not match");
     // console.log("details returned from model------>", userData)
     return userData;
 }
