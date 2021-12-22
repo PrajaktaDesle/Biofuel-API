@@ -30,4 +30,30 @@ export default class Encryption{
             );
         });
     }
+
+   public static generateHash = async (
+        password: string,
+        saltRounds: number,
+    ): Promise<string> =>
+        new Promise((resolve, reject) => {
+            bcrypt.hash(password, saltRounds, (err: any, hash: string) => {
+                if (!err) {
+                    resolve(hash);
+                }
+                reject(err);
+            });
+        });
+
+    public static verifypassword = async (
+        password: string,
+        hashPassword: string,
+    ): Promise<string> =>
+        new Promise((resolve, reject) => {
+            bcrypt.compare(password, hashPassword, (err: any, hash: string) => {
+                if (!err) {
+                    resolve(hash);
+                }
+                reject(err);
+            });
+        });
 }
