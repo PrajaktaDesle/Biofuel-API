@@ -24,7 +24,7 @@ export default async (
     ) === -1
   ) {
     const authorizationHeader = extractCookieFromRequest(
-      req, 'x-DigiFlake-Token'
+      req, 'x-digiflake-token'
     );
     console.log("authorizationHeader ->", authorizationHeader);
     if (authorizationHeader) {
