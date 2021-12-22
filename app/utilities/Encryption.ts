@@ -22,7 +22,7 @@ export default class Encryption{
                 config.JwtToken.secretKey,
                 (err: Error, decoded: any) => {
                     if (err) {
-                        reject(err);
+                        resolve(null);
                     } else {
                         resolve(decoded);
                     }
