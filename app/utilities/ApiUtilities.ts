@@ -11,7 +11,7 @@ const extractQueryForRequest = (req: Request, query: string) => {
 };
 
 const extractCookieFromRequest = (req: Request, key: string) => {
-  if (req.headers.authorization) {
+  /*if (req.headers.authorization) {
     return req.headers.authorization;
   }
   if (req.headers.cookie) {
@@ -22,6 +22,9 @@ const extractCookieFromRequest = (req: Request, key: string) => {
     if (filtered.length > 0) {
       return filtered[0].split('=')[1];
     }
+  }*/
+  if (req.headers[key]) {
+    return req.headers[key];
   }
   return null;
 };

@@ -15,14 +15,14 @@ export default class Encryption{
         // const token = jwt.sign({ user_id: user._id}, process.env.TOKEN_KEY, { expiresIn: "2h",});
     }
 
-    public static async verifyJwtToken (token : string){
+    public async verifyJwtToken(token: string | string[]):Promise<any>{
         return new Promise((resolve, reject) => {
             jwt.verify(
                 token,
                 config.JwtToken.secretKey,
                 (err: Error, decoded: any) => {
                     if (err) {
-                        reject(err);
+                        resolve(null);
                     } else {
                         resolve(decoded);
                     }
@@ -30,6 +30,7 @@ export default class Encryption{
             );
         });
     }
+
 
    public static generateHash = async (
         password: string,
@@ -56,4 +57,5 @@ export default class Encryption{
                 reject(err);
             });
         });
+    }
 }
