@@ -1,3 +1,5 @@
+import {CustomerModel} from "../Models/Customer/Customer.model";
+
 const jwt = require('jsonwebtoken');
 import {UserModel} from "../Models/User/User.model";
 import Encryption from "../utilities/Encryption";
@@ -30,7 +32,16 @@ async function loginUser(data:any) {
     }
 }
 
+const userDetails = async (data : any) =>{
+    let userData;
+    userData = await new UserModel().findUsers(data)
+    if (userData == null) throw new Error("details did not match");
+    // console.log("details returned from model------>", userData)
+    return userData;
+}
+
 export default {
     createUser,
     loginUser,
+    userDetails
 };

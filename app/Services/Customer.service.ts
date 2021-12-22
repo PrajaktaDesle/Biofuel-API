@@ -9,25 +9,7 @@ import Encryption from "../utilities/Encryption";
 import * as path from "path";
 import * as fs from "fs";
 const {v4 : uuidv4} = require('uuid');
-import userService from "./User.service";
 import formidable from "formidable";
-
-// const generateHash = async (
-//     password: string,
-//     saltRounds: number,
-// ): Promise<string> =>
-//     new Promise((resolve, reject) => {
-//         bcrypt.hash(password, saltRounds, (err: any, hash: string) => {
-//             if (!err) {
-//                 resolve(hash);
-//             }
-//             reject(err);
-//         });
-//     });
-//
-// const createCustomer = async (form : any,tenant:any) =>{
-//     let customerData;
-//     form.parse(async (err: any, fields: any, files: any) => {
 
 const createCustomer = async (req:any,tenant:any) =>{
     try{

@@ -23,6 +23,7 @@ export class CustomerModel extends BaseModel
 
     async findCustomers(customerData:any){
         const customerResult= await this._executeQuery("select * from customers where tenant_id = ? ",[customerData] )
+        // console.log("model data--->",customerResult2);
         return customerResult;
     }
 }
