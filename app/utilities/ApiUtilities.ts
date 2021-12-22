@@ -23,8 +23,8 @@ const extractCookieFromRequest = (req: Request, key: string) => {
       return filtered[0].split('=')[1];
     }
   }*/
-  if (req.headers["x-DigiFlake-Token"]) {
-    return req.headers["x-DigiFlake-Token"];
+  if (req.headers[key]) {
+    return req.headers[key];
   }
   return null;
 };
