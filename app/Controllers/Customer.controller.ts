@@ -65,7 +65,7 @@ const fetchCustomers: IController = async (req, res) => {
 }
 const login: IController = async (req, res) => {
     req.body.tenant_id=req.headers["tenant-id"];
-    customerService.loginCustomer(req.body)
+    await customerService.loginCustomer(req.body)
         .then( (customer) => {
             if(customer instanceof Error){
                 console.log("user 2", customer.message)
@@ -91,7 +91,7 @@ const login: IController = async (req, res) => {
 
 const verify_otp: IController = async (req, res) => {
     req.body.tenant_id=req.headers["tenant-id"];
-    const customer = await customerService.verify_customer_otp(req.body)
+    await customerService.verify_customer_otp(req.body)
         .then( (customer) => {
             if(customer instanceof Error){
                 LOGGER.info("user 2", customer.message)

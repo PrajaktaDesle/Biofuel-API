@@ -1,5 +1,4 @@
 import async from "async";
-
 import bcrypt from "bcrypt";
 import LOGGER from "../config/LOGGER";
 const jwt = require('jsonwebtoken');
@@ -11,23 +10,6 @@ import * as fs from "fs";
 const {v4 : uuidv4} = require('uuid');
 import userService from "./User.service";
 import formidable from "formidable";
-
-// const generateHash = async (
-//     password: string,
-//     saltRounds: number,
-// ): Promise<string> =>
-//     new Promise((resolve, reject) => {
-//         bcrypt.hash(password, saltRounds, (err: any, hash: string) => {
-//             if (!err) {
-//                 resolve(hash);
-//             }
-//             reject(err);
-//         });
-//     });
-//
-// const createCustomer = async (form : any,tenant:any) =>{
-//     let customerData;
-//     form.parse(async (err: any, fields: any, files: any) => {
 
 const createCustomer = async (req:any,tenant:any) =>{
     try{
@@ -109,8 +91,9 @@ async function loginCustomer(data: any) {
         let customer = await new CustomerModel().getCustomer(data.mobile, data.tenant_id);
         LOGGER.info("Customer", customer);
         if (customer.length === 0) throw new Error("No Such customer exits")
-        const otp = Math.floor(100000 + Math.random() * 900000);
+        // const otp = Math.floor(100000 + Math.random() * 900000);
         //todo need to integrate sms
+        const otp = 123456;
         LOGGER.info(otp);
         data.otp = otp;
         data.customer_id = customer[0].id;
@@ -129,8 +112,14 @@ async function verify_customer_otp(data: any) {
     try {
         LOGGER.info(111, data)
         let otp_details = await new CustomerModel().getCustomer_otp(data);
-        if (otp_details.length === 0) throw new Error("Error in login")
-        if (!(data.otp == otp_details[0].otp)) throw  new Error("Incorrect OTP")
+        console.log(otp_details)
+        if (otp_details.length === 0) throw new Error("Error in login");
+        if(otp_details[0].trials <= 0) throw new Error("No more trials");
+        if (!(data.otp == otp_details[0].otp )){
+            otp_details[0].trials = otp_details[0].trials - 1;
+            await new CustomerModel().update_trials(otp_details[0].req_id, otp_details[0].trials)
+            throw new Error("Incorrect OTP");
+        }
         let now = moment().format("YYYY-MM-DD HH:mm:ss");
         let expire_time = moment(otp_details[0].expire_time).utc().format("YYYY-MM-DD HH:mm:ss").toString()
         if (!(expire_time >= now)) throw new Error("OTP expired")
