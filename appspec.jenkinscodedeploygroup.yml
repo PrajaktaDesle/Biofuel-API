@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/Nidhi-Bank-API
+hooks:
+  BeforeInstall:
+    - location: /home/ubuntu/test.sh
+      timeout: 300
+      runas: root

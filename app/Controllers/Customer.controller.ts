@@ -10,16 +10,20 @@ import {isError} from "util";
 import * as util from "util";
 
 const register: IController = async (req, res) => {
-    let customer;
+    let customer : any;
 try {
     let tenant= req.headers["tenant-id"];
-    const form = new formidable.IncomingForm()
-    // form.tenant_id = tenant
-    customer = await customerService.createCustomer(form,tenant);
+    console.log("entry")
+    customer = await customerService.createCustomer(req,tenant);
     console.log('customer at controller-----> ',customer);
-
+    if (customer instanceof Error) {
+        console.log("error", customer)
+        apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+        apiResponse.result(res, {customer}, httpStatusCodes.CREATED);
+        }
     } catch (e) {
-    console.log(e)
+    console.log("controller ->", e)
     // @ts-ignore
     if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
         apiResponse.error(
@@ -28,14 +32,7 @@ try {
             'EMAIL_ALREADY_EXISTS',
         );
         return;
-    }
-}
-    // @ts-ignore
-    if (customer) {
-        apiResponse.result(res, customer, httpStatusCodes.CREATED);
-    } else {
-        LOGGER.info("error", customer)
-        apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        }
     }
 };
 

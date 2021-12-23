@@ -24,11 +24,11 @@ export default async (
     ) === -1
   ) {
     const authorizationHeader = extractCookieFromRequest(
-      req, 'x-DigiFlake-Token'
+      req, 'x-digiflake-token'
     );
     console.log("authorizationHeader ->", authorizationHeader);
     if (authorizationHeader) {
-      const decoded = await Encryption.verifyJwtToken(authorizationHeader);
+      const decoded = await new Encryption().verifyJwtToken(authorizationHeader);
       console.log("Decoded -",decoded)
       // @ts-ignore
       if (decoded) {
