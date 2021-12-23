@@ -8,13 +8,13 @@ import { celebrate } from 'celebrate';
 
 router.post(
     '/',
-    celebrate(rdSchema.rd),
+    celebrate(rdSchema.createRD),
     rdController.create_RD
 );
 
 router.get(
     '/',
-    //celebrate(rdSchema.rd),
+    celebrate(rdSchema.fetchRd),
     rdController.fetch_RD
 );
 

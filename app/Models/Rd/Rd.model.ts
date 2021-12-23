@@ -13,16 +13,7 @@ export class RdModel extends BaseModel {
         return await this._executeQuery("insert into rd_transaction set ?", [data]);
     }
 
-    async get_customer(data: any) {
-        console.log(data)
-        return await this._executeQuery("select * from rd_transaction where customer_id = ? and tenant_id = ?", [data.customer_id, data.tenant_id]);
-    }
-
-    async update_customer(data: any, id: any) {
-        return await this._executeQuery("update rd_transaction set ? WHERE id = ?", [data, id]);
-    }
-
-    async delete_customer(data: any) {
-        return await this._executeQuery("update rd_transaction set status = 0 WHERE id = ?", [data.id]);
+    async fetch_RD(customer_id: any, tenant_id : number) {
+        return await this._executeQuery("select * from rd_transaction where customer_id = ? and tenant_id = ?", [customer_id, tenant_id]);
     }
 }

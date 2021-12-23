@@ -31,21 +31,20 @@ const create_RD: IController = async (req, res) => {
     });
 }
 const fetch_RD: IController = async (req, res) => {
-    req.body.tenant_id=req.headers["tenant-id"]
-    await rdService.fetchRdByCustomer(req.body)
-        .then(customer => {
-            if(customer instanceof Error){
-                LOGGER.info("user 2", customer.message)
+    // @ts-ignore
+    await rdService.fetchRdByCustomer(req.query.customer_id, parseInt(req.headers["tenant-id"]))
+        .then((RD : Object) => {
+            if(RD instanceof Error){
+                LOGGER.info("RD List", RD.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
-                    customer.message
+                    RD.message
                 );
             }else{
+                LOGGER.info("RD List", RD);
                 // @ts-ignore
-                LOGGER.info("user 3", customer.message)
-                // @ts-ignore
-                apiResponse.result(res, customer, httpStatusCodes.OK);
+                apiResponse.result(res, RD, httpStatusCodes.OK);
             }
         }).catch(err => {
             LOGGER.info("Error  ->", err);
