@@ -7,10 +7,10 @@ async function create_rd(data: any) {
     try {
         console.log(data)
         let rd_detail = await new RdModel().get_maturity_amount(data);
-        //error handle
-        data.maturing_amount = rd_detail[0]. maturing_amount;
+        if(rd_detail.length == 0)throw new Error("NO DATA");
+        data.maturing_amount = rd_detail[0].maturing_amount;
         console.log("at rd service", data)
-        delete data.transaction_type
+        delete data.transaction_type;
         let customer = await new RdModel().create_RD(data);
         console.log("at rd service------>", customer);
         return data;
