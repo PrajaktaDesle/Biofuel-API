@@ -50,13 +50,15 @@ const createCustomer = async (req:any,tenant:any) =>{
     }
 }
 
+
 const customerDetails = async (data : any) =>{
     let customerData;
-customerData = await new CustomerModel().findCustomers(data)
-        if (customerData == null) throw new Error("details did not match");
-        // console.log("details returned from model------>", customerData)
-        return customerData;
+    customerData = await new CustomerModel().findCustomers(data)
+    if (customerData == null) throw new Error("details did not match");
+    // console.log("details returned from model------>", customerData)
+    return customerData;
 }
+
 
 const processForm = async(req : any) => {
     let newPath: string [] = [];
@@ -85,12 +87,24 @@ const processForm = async(req : any) => {
 }
 
 
-async function loginCustomer(data: any) {
+const fetch_customer = async (id: any, tenant_id:any ) => {
+    try {
+        let customer = await new CustomerModel().select(id, tenant_id);
+        if (customer.length == 0) throw new Error("No customer");
+        return customer;
+    }
+    catch (e){
+        return e;
+    }
+}
+
+
+const loginCustomer=async (data: any) => {
     try {
         LOGGER.info(111, data)
         let customer = await new CustomerModel().getCustomer(data.mobile, data.tenant_id);
         LOGGER.info("Customer", customer);
-        if (customer.length === 0) throw new Error("No Such customer exits")
+        if (customer.length === 0) throw new Error("No Such customer exits");
         // const otp = Math.floor(100000 + Math.random() * 900000);
         //todo need to integrate sms
         const otp = 123456;
@@ -100,19 +114,21 @@ async function loginCustomer(data: any) {
         data.req_id = uuidv4();
         data.expire_time = moment().add(3, "minutes").format("YYYY-MM-DD HH:mm:ss");
         delete data.mobile;
-        LOGGER.info(data)
-        console.log(data)
+        LOGGER.info(data);
+        console.log(data);
         await new CustomerModel().create_otp(data);
-        return {request_id: data.req_id}
+        return {request_id: data.req_id};
     } catch (e) {
         return e;
     }
 }
-async function verify_customer_otp(data: any) {
+
+
+const verify_customer_otp = async(data: any) => {
     try {
         LOGGER.info(111, data)
         let otp_details = await new CustomerModel().getCustomer_otp(data);
-        console.log(otp_details)
+        console.log(otp_details);
         if (otp_details.length === 0) throw new Error("Error in login");
         if(otp_details[0].trials <= 0) throw new Error("No more trials");
         if (!(data.otp == otp_details[0].otp )){
@@ -121,11 +137,11 @@ async function verify_customer_otp(data: any) {
             throw new Error("Incorrect OTP");
         }
         let now = moment().format("YYYY-MM-DD HH:mm:ss");
-        let expire_time = moment(otp_details[0].expire_time).utc().format("YYYY-MM-DD HH:mm:ss").toString()
-        if (!(expire_time >= now)) throw new Error("OTP expired")
+        let expire_time = moment(otp_details[0].expire_time).utc().format("YYYY-MM-DD HH:mm:ss").toString();
+        if (!(expire_time >= now)) throw new Error("OTP expired");
         otp_details[0].token = await Encryption.generateJwtToken({
-            id: otp_details.customer_id,
-            tenant_id: otp_details.tenant_id
+            id: otp_details[0].customer_id,
+            tenant_id: otp_details[0].tenant_id
         });
         LOGGER.info("login successful");
         return {token : otp_details[0].token};
@@ -135,11 +151,13 @@ async function verify_customer_otp(data: any) {
     }
 }
 
+
 export default {
     createCustomer,
     customerDetails,
     loginCustomer,
-    verify_customer_otp
+    verify_customer_otp,
+    fetch_customer
 }
 
 

@@ -63,6 +63,34 @@ const fetchCustomers: IController = async (req, res) => {
         );
     });
 }
+
+
+const selectCustomer: IController = async (req, res) => {
+    // req.query.tenant_id = req.headers["tenant-id"];
+    customerService.fetch_customer (req.query.id,  req.headers["tenant-id"])
+        .then( (customer_fetch) => {
+            if(customer_fetch instanceof Error){
+                console.log("user 2", customer_fetch.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    customer_fetch.message
+                );
+            }else{
+                console.log("user 3", customer_fetch)
+                apiResponse.result(res, {customer_fetch}, httpStatusCodes.OK);
+            }
+        }).catch(err => {
+        console.log("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+
+        );
+    });
+}
+
+
 const login: IController = async (req, res) => {
     req.body.tenant_id=req.headers["tenant-id"];
     await customerService.loginCustomer(req.body)
@@ -119,5 +147,6 @@ export default {
     register,
     fetchCustomers,
     login,
-    verify_otp
+    verify_otp,
+    selectCustomer
 };

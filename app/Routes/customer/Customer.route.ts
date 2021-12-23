@@ -17,7 +17,11 @@ router.get(
     celebrate(customerSchema.fetch),
     customerController.fetchCustomers
 );
-
+router.get(
+    '/',
+    celebrate(customerSchema.select),
+    customerController.selectCustomer
+);
 router.post(
     '/login',
     celebrate(customerSchema.login),

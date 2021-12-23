@@ -43,7 +43,7 @@ export default {
 
     },
 
-    fetch:{
+    fetch: {
         // [Segments.BODY]:{
         //     id:Joi.number().required()
         // },
@@ -52,5 +52,12 @@ export default {
         }).unknown()
 
     },
-
+    select:{
+        [Segments.QUERY]:{
+            id:Joi.number().required()
+        },
+        [Segments.HEADERS]: Joi.object({
+            "tenant-id": Joi.number().required()
+        }).unknown()
+    }
 };
