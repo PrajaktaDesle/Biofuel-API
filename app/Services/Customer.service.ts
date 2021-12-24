@@ -118,7 +118,7 @@ const verify_customer_otp = async(data: any) => {
         console.log(otp_details);
         if (otp_details.length === 0) throw new Error("Error in login");
         if(otp_details[0].trials <= 0) throw new Error("No more trials");
-        if (! data.otp == otp_details[0].otp){
+        if (parseInt(data.otp) !== otp_details[0].otp){
             otp_details[0].trials = otp_details[0].trials - 1;
             await new CustomerModel().update_trials(otp_details[0].req_id, otp_details[0].trials)
             throw new Error("Incorrect OTP");
