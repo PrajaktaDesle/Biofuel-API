@@ -1,8 +1,6 @@
 import express from 'express';
-
 import customerController from '../../Controllers/Customer.controller';
 import customerSchema from '../../Constants/Schema/Customer.schema';
-
 const router = express.Router();
 import { celebrate } from 'celebrate';
 
@@ -14,14 +12,16 @@ router.post(
 
 router.get(
     '/all',
-    celebrate(customerSchema.fetch),
-    customerController.fetchCustomers
+    celebrate(customerSchema.fetchAllCustomers),
+    customerController.fetchAllCustomers
 );
+
 router.get(
     '/',
-    celebrate(customerSchema.select),
-    customerController.selectCustomer
+    celebrate(customerSchema.fetchCustomerById),
+    customerController.fetchCustomerById
 );
+
 router.post(
     '/login',
     celebrate(customerSchema.login),
@@ -33,6 +33,5 @@ router.post(
     celebrate(customerSchema.verify_otp),
     customerController.verify_otp,
 );
-
 
 export default router;

@@ -1,16 +1,11 @@
-import async from "async";
-import bcrypt from "bcrypt";
 import LOGGER from "../config/LOGGER";
-const jwt = require('jsonwebtoken');
 import {CustomerModel} from "../Models/Customer/Customer.model";
 import moment from 'moment';
 import Encryption from "../utilities/Encryption";
 import * as path from "path";
 import * as fs from "fs";
 const {v4 : uuidv4} = require('uuid');
-import userService from "./User.service";
 import formidable from "formidable";
-
 const createCustomer = async (req:any,tenant:any) =>{
     try{
         let customerData, fields: any, newPath :any;
@@ -50,15 +45,12 @@ const createCustomer = async (req:any,tenant:any) =>{
     }
 }
 
-
-const customerDetails = async (data : any) =>{
+const fetchAllCustomers = async (tenant_id : any) =>{
     let customerData;
-    customerData = await new CustomerModel().findCustomers(data)
+    customerData = await new CustomerModel().findAllCustomers(tenant_id)
     if (customerData == null) throw new Error("details did not match");
-    // console.log("details returned from model------>", customerData)
     return customerData;
 }
-
 
 const processForm = async(req : any) => {
     let newPath: string [] = [];
@@ -67,18 +59,14 @@ const processForm = async(req : any) => {
         form.parse(req, (err: any, fields: any, files: any) => {
             const data: any [] = [];
             const data_path: string [] = [];
-            // let fieldData: any [] = []
             const images = Object.keys(files)
             for (let i = 0; i < images.length; i++) {
-                data.push(files[images[i]])
-                // const new_data = data[i]
-                data_path[i] = data[i].filepath
-                newPath[i] = path.join(__dirname, '../uploads')
-                    + '/' + data[i].originalFilename
-                let rawData = fs.readFileSync(data_path[i])
+                data.push(files[images[i]]);
+                data_path[i] = data[i].filepath;
+                newPath[i] = path.join(__dirname, '../uploads') + '/' + data[i].originalFilename;
+                let rawData = fs.readFileSync(data_path[i]);
                 fs.writeFile(newPath[i], rawData, function (err) {
-                    if (err) console.log(err)
-                    // reject({error : Error});
+                    if (err) console.log(err);
                 })
                 resolve({fields: fields, newPath : newPath});
             }
@@ -86,18 +74,16 @@ const processForm = async(req : any) => {
     })
 }
 
-
-const fetch_customer = async (id: any, tenant_id:any ) => {
+const fetchCustomerById = async (id: any, tenant_id:any ) => {
     try {
-        let customer = await new CustomerModel().select(id, tenant_id);
+        let customer = await new CustomerModel().findCustomerById(id, tenant_id);
         if (customer.length == 0) throw new Error("No customer");
-        return customer;
+        return customer[0];
     }
     catch (e){
         return e;
     }
 }
-
 
 const loginCustomer=async (data: any) => {
     try {
@@ -114,6 +100,8 @@ const loginCustomer=async (data: any) => {
         data.req_id = uuidv4();
         data.expire_time = moment().add(3, "minutes").format("YYYY-MM-DD HH:mm:ss");
         delete data.mobile;
+        data.trials = 3;
+        //todo fetch it from config
         LOGGER.info(data);
         console.log(data);
         await new CustomerModel().create_otp(data);
@@ -123,7 +111,6 @@ const loginCustomer=async (data: any) => {
     }
 }
 
-
 const verify_customer_otp = async(data: any) => {
     try {
         LOGGER.info(111, data)
@@ -131,7 +118,7 @@ const verify_customer_otp = async(data: any) => {
         console.log(otp_details);
         if (otp_details.length === 0) throw new Error("Error in login");
         if(otp_details[0].trials <= 0) throw new Error("No more trials");
-        if (!(data.otp == otp_details[0].otp )){
+        if (! data.otp == otp_details[0].otp){
             otp_details[0].trials = otp_details[0].trials - 1;
             await new CustomerModel().update_trials(otp_details[0].req_id, otp_details[0].trials)
             throw new Error("Incorrect OTP");
@@ -151,13 +138,12 @@ const verify_customer_otp = async(data: any) => {
     }
 }
 
-
 export default {
     createCustomer,
-    customerDetails,
+    fetchAllCustomers,
     loginCustomer,
     verify_customer_otp,
-    fetch_customer
+    fetchCustomerById
 }
 
 
