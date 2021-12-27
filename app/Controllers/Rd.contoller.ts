@@ -42,7 +42,7 @@ const fetch_RD: IController = async (req, res) => {
                     RD.message
                 );
             }else{
-                LOGGER.info("user 3", customer)
+                LOGGER.info("user 3", RD)
                 apiResponse.result(res, RD, httpStatusCodes.OK);
 
             }
