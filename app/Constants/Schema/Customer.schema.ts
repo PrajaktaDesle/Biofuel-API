@@ -43,13 +43,18 @@ export default {
 
     },
 
-    fetch:{
-        // [Segments.BODY]:{
-        //     id:Joi.number().required()
-        // },
+    fetchAllCustomers: {
         [Segments.HEADERS]: Joi.object({
             "tenant-id": Joi.number().required()
         }).unknown()
 
     },
+    fetchCustomerById:{
+        [Segments.QUERY]:{
+            id:Joi.number().required()
+        },
+        [Segments.HEADERS]: Joi.object({
+            "tenant-id": Joi.number().required()
+        }).unknown()
+    }
 };
