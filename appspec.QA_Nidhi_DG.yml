@@ -8,7 +8,6 @@ hooks:
   BeforeInstall:
     - location: scripts/BeforeInstallHook.sh
       timeout: 300
-      runas: root
   AfterInstall:
     - location: scripts/AfterInstallHook.sh
       timeout: 300
