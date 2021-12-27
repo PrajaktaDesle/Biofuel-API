@@ -19,13 +19,12 @@ export class CustomerModel extends BaseModel
         return await this._executeQuery("select * from customer_login where req_id = ? ", [data.request_id]);
     }
     async update_trials(req_id: any, trials: any){
-        // console.log(req_id, "-----------------", trials)
         return await this._executeQuery("update customer_login set trials = ? WHERE req_id = ?", [trials, req_id]);
     }
-    async findCustomers(customerData:any){
+    async findAllCustomers(customerData:any){
         return await this._executeQuery("select * from customers where tenant_id = ?", [customerData]);
     }
-    async select(id: any, tenant_id: any ){
+    async findCustomerById(id: any, tenant_id: any ){
         return await this._executeQuery("select * from customers where id = ? and tenant_id = ? ", [id, tenant_id]);
     }
 }

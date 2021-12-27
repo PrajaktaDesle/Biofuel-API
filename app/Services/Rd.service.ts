@@ -19,12 +19,12 @@ async function create_rd(data: any) {
     }
 }
 
-async function fetchRdByCustomer(data: any) {
+async function fetchRdByCustomer(customer_id : any, tenant_id : number) {
     try {
-        console.log(data);
-        let customer = await new RdModel().get_customer(data);
-        console.log(customer);
-        return {customer};
+        console.log("customer_id :", customer_id, "tenant-id:", tenant_id);
+        let rdList = await new RdModel().fetch_RD(customer_id, tenant_id);
+        console.log("RD List ",rdList)
+        return rdList;
     } catch (e) {
         return e;
     }
