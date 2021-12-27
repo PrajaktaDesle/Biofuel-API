@@ -2,14 +2,14 @@ import httpStatusCodes from 'http-status-codes';
 
 import IController from '../Types/IController';
 import apiResponse from '../utilities/ApiResponse';
-import rdService from '../Services/Rd.service';
+import fdService from '../Services/Fd.services';
 import constants from "../Constants";
 import LOGGER from "../config/LOGGER";
 
 
-const create_RD: IController = async (req, res) => {
+const create_FD: IController = async (req, res) => {
     req.body.tenant_id=req.headers["tenant-id"]
-    await rdService.create_rd(req.body)
+    await fdService.create_fd(req.body)
         .then((RD : Object) => {
             if(RD instanceof Error){
                 LOGGER.info("user 2", RD.message)
@@ -23,16 +23,16 @@ const create_RD: IController = async (req, res) => {
                 apiResponse.result(res, RD, httpStatusCodes.OK);
             }
         }).catch(err => {
-        LOGGER.info("Error  ->", err);
-        apiResponse.error(
-            res,
-            httpStatusCodes.BAD_REQUEST,
-        );
-    });
+            LOGGER.info("Error  ->", err);
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+            );
+        });
 }
-const fetch_RD: IController = async (req, res) => {
+const fetch_FD: IController = async (req, res) => {
     req.body.tenant_id=req.headers["tenant-id"]
-    await rdService.fetchRdByCustomer(req.body)
+    await fdService.fetchFdByCustomer(req.body)
         .then(customer => {
             if(customer instanceof Error){
                 LOGGER.info("user 2", customer.message)
@@ -58,6 +58,6 @@ const fetch_RD: IController = async (req, res) => {
 
 
 export default {
-    fetch_RD,
-    create_RD,
+    fetch_FD,
+    create_FD,
 };

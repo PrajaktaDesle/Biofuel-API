@@ -1,6 +1,6 @@
 import { Joi, Segments } from 'celebrate';
 export default {
-    rd:{[Segments.BODY]:{
+    insert_fd:{[Segments.BODY]:{
             customer_id: Joi.number(),
             start_date:  Joi.date().required(),
             tenure: Joi.number().required(),
@@ -9,13 +9,12 @@ export default {
             status: Joi.number(),
             user_id: Joi.number(),
             id: Joi.number()
-            // maturing_amount: Joi.number().required()
         },
         [Segments.HEADERS]: Joi.object({
             "tenant-id": Joi.number().required()
         }).unknown()
     },
-    fetch:{[Segments.QUERY]:{
+    fetch_fd:{[Segments.QUERY]:{
             customer_id: Joi.number().required(),
         },
         [Segments.HEADERS]: Joi.object({

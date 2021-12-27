@@ -14,7 +14,7 @@ router.post(
 
 router.get(
     '/',
-    //celebrate(rdSchema.rd),
+    celebrate(rdSchema.fetch),
     rdController.fetch_RD
 );
 

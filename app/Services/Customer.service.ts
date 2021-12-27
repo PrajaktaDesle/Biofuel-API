@@ -1,14 +1,10 @@
-import async from "async";
-import bcrypt from "bcrypt";
 import LOGGER from "../config/LOGGER";
-const jwt = require('jsonwebtoken');
 import {CustomerModel} from "../Models/Customer/Customer.model";
 import moment from 'moment';
 import Encryption from "../utilities/Encryption";
 import * as path from "path";
 import * as fs from "fs";
 const {v4 : uuidv4} = require('uuid');
-import userService from "./User.service";
 import formidable from "formidable";
 
 const createCustomer = async (req:any,tenant:any) =>{
@@ -70,9 +66,9 @@ const processForm = async(req : any) => {
             // let fieldData: any [] = []
             const images = Object.keys(files)
             for (let i = 0; i < images.length; i++) {
-                data.push(files[images[i]])
+                data.push(files[images[i]]);
                 // const new_data = data[i]
-                data_path[i] = data[i].filepath
+                data_path[i] = data[i].filepath;
                 newPath[i] = path.join(__dirname, '../uploads')
                     + '/' + data[i].originalFilename
                 let rawData = fs.readFileSync(data_path[i])
@@ -101,7 +97,7 @@ const fetch_customer = async (id: any, tenant_id:any ) => {
 
 const loginCustomer=async (data: any) => {
     try {
-        LOGGER.info(111, data)
+        LOGGER.info(111, data);
         let customer = await new CustomerModel().getCustomer(data.mobile, data.tenant_id);
         LOGGER.info("Customer", customer);
         if (customer.length === 0) throw new Error("No Such customer exits");
@@ -114,6 +110,7 @@ const loginCustomer=async (data: any) => {
         data.req_id = uuidv4();
         data.expire_time = moment().add(3, "minutes").format("YYYY-MM-DD HH:mm:ss");
         delete data.mobile;
+        data.trials = 3;
         LOGGER.info(data);
         console.log(data);
         await new CustomerModel().create_otp(data);
@@ -126,7 +123,7 @@ const loginCustomer=async (data: any) => {
 
 const verify_customer_otp = async(data: any) => {
     try {
-        LOGGER.info(111, data)
+        LOGGER.info(111, data);
         let otp_details = await new CustomerModel().getCustomer_otp(data);
         console.log(otp_details);
         if (otp_details.length === 0) throw new Error("Error in login");
@@ -144,7 +141,7 @@ const verify_customer_otp = async(data: any) => {
             tenant_id: otp_details[0].tenant_id
         });
         LOGGER.info("login successful");
-        return {token : otp_details[0].token};
+        return {token : otp_details[0].token, customer_id: otp_details[0].customer_id};
     }
     catch (e) {
         return e;
