@@ -5,6 +5,6 @@ files:
     destination: /home/ubuntu/Nidhi-Bank-API
 hooks:
   BeforeInstall:
-    - location: /home/ubuntu/test.sh
+    - location: home/ubuntu/test.sh
       timeout: 300
       runas: root
