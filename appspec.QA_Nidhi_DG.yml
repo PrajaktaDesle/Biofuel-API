@@ -3,6 +3,7 @@ os: linux
 files:
   - source: /
     destination: /home/ubuntu/Nidhi-Bank-API
+    overwrite: true
 hooks:
   BeforeInstall:
     - location: scripts/BeforeInstallHook.sh
