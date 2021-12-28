@@ -2,4 +2,4 @@
 set -e
 cd /home/ubuntu/Nidhi-Bank-API
 npm install
-npm run build
+npm build
