@@ -54,7 +54,7 @@ const fetchAllCustomers: IController = async (req, res) => {
             //locale.INVALID_CREDENTIALS,
         );
     });
-}
+};
 
 
 const fetchCustomerById: IController = async (req, res) => {
@@ -78,7 +78,7 @@ const fetchCustomerById: IController = async (req, res) => {
             httpStatusCodes.BAD_REQUEST,
         );
     });
-}
+};
 
 
 const login: IController = async (req, res) => {
@@ -105,6 +105,7 @@ const login: IController = async (req, res) => {
         );
     });
 };
+
 
 const verify_otp: IController = async (req, res) => {
     req.body.tenant_id=req.headers["tenant-id"];

@@ -6,7 +6,7 @@ export default {
             tenure: Joi.number().required(),
             amount: Joi.number().required(),
             start_date:  Joi.date().required(),
-            roi: Joi.number(),
+            roi: Joi.number()
         },
         [Segments.HEADERS]: Joi.object({
             "tenant-id": Joi.number().required()

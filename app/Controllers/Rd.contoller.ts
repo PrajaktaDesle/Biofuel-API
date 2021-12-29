@@ -42,9 +42,9 @@ const fetch_RD: IController = async (req, res) => {
                     RD.message
                 );
             }else{
-                LOGGER.info("RD List", RD);
-                // @ts-ignore
+                LOGGER.info("user 3", RD)
                 apiResponse.result(res, RD, httpStatusCodes.OK);
+
             }
         }).catch(err => {
             LOGGER.info("Error  ->", err);

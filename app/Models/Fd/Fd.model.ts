@@ -4,6 +4,7 @@ export class FdModel extends BaseModel {
     constructor() {
         super();
     }
+  
     async createFd(data: any) {
         return await this._executeQuery("insert into fd_transactions set ?", [data]);
     }

@@ -14,7 +14,6 @@ export default {
             "tenant-id": Joi.number().required()
         }).unknown()
     },
-
     fetchRd:{[Segments.QUERY]:{
             customer_id: Joi.number().required(),
         },

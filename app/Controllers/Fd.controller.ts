@@ -1,5 +1,4 @@
 import httpStatusCodes from 'http-status-codes';
-
 import IController from '../Types/IController';
 import apiResponse from '../utilities/ApiResponse';
 import fdService from '../Services/Fd.service';
@@ -30,9 +29,7 @@ const createFd: IController = async (req, res) => {
         });
 }
 
-
 const fetchFd: IController = async (req, res) => {
-
     await fdService.fetchFdInformation(req.headers["tenant-id"],req.query.customer_id)
         .then((FDInformation : Object) => {
             if(FDInformation instanceof Error){
@@ -57,5 +54,5 @@ const fetchFd: IController = async (req, res) => {
 
 export default {
     createFd,
-    fetchFd,
+    fetchFd
 };
