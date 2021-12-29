@@ -11,6 +11,6 @@ router.use('/User', userRoute);
 router.use('/Customer', customerRoute);
 router.use('/Rd-transactions', rdRoute);
 router.use('/transaction-config',tcRoute)
-router.use('/Fd-transaction',fdRoute)
+router.use('/Fd-transactions',fdRoute)
 
 export default router;
