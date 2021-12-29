@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Running Hook: applicationstart.sh"
-cd /home/ubuntu/teller-install/Server/
+cd /home/ubuntu/Nidhi-Bank-API
 source /etc/profile
 # Start PM2
 pm2 start ecosystem.config.js 2>&1
