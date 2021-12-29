@@ -2,5 +2,12 @@
 echo "Running Hook: applicationstart.sh"
 cd /home/ubuntu/teller-install/Server/
 source /etc/profile
-pm2 start app.js
+# Start PM2
+pm2 start ecosystem.config.js 2>&1
+if [ $? != "0" ]; then
+   cat /var/log/deployment-logs/bootscript-log.log;
+   error_exit "pm2 start unsuccessful"
+else
+   echo "PM2 started";
+fi
 exit 0
