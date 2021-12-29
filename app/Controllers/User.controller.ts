@@ -14,7 +14,7 @@ const login: IController = async (req, res) => {
     userService.loginUser(req.body)
         .then( (user) => {
         if(user instanceof Error){
-            console.log("user 2", user.message)
+            console.log("User 2", user.message)
             apiResponse.error(
                 res,
                 // response.send('Incorrect Username and/or Password!');
@@ -22,7 +22,7 @@ const login: IController = async (req, res) => {
                 user.message
             );
         }else{
-            console.log("user 3", user.message)
+            console.log("User 3", user.message)
             // response.redirect('/home');
             apiResponse.result(res, user[0], httpStatusCodes.OK);
         }
@@ -71,7 +71,7 @@ const fetchUsers: IController = async (req, res) => {
     userService.userDetails(tenant)
         .then( (users) => {
             if(users instanceof Error){
-                console.log("user 2", users.message)
+                console.log("User 2", users.message)
                 apiResponse.error(
                     res,
                     // response.send('Incorrect Username and/or Password!');
@@ -79,7 +79,7 @@ const fetchUsers: IController = async (req, res) => {
                     users.message
                 );
             }else{
-                console.log("user 3", users.message)
+                console.log("User 3", users.message)
                 // response.redirect('/home');
                 apiResponse.result(res, users, httpStatusCodes.OK);
             }

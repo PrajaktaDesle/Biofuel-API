@@ -1,16 +1,16 @@
 import  {Router} from 'express';
-import userRoute from './user/User.route';
-import customerRoute from './customer/Customer.route';
-import rdRoute from './rd/Rd.route';
-import tcRoute from './transaction.config/TransConfig.route'
+import userRoute from './User/User.route';
+import customerRoute from './Customer/Customer.route';
+import rdRoute from './Rd/Rd.route';
+import tcRoute from './Transaction-config/TransConfig.route'
 import fdRoute from './Fd/Fd.route'
 
 const router = Router();
 
-router.use('/user', userRoute);
-router.use('/customer', customerRoute);
-router.use('/rd-transactions', rdRoute);
+router.use('/User', userRoute);
+router.use('/Customer', customerRoute);
+router.use('/Rd-transactions', rdRoute);
 router.use('/transaction-config',tcRoute)
-router.use('/fd-transaction',fdRoute)
+router.use('/Fd-transaction',fdRoute)
 
 export default router;

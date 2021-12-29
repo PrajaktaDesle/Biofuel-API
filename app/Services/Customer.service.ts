@@ -77,7 +77,7 @@ const processForm = async(req : any) => {
 const fetchCustomerById = async (id: any, tenant_id:any ) => {
     try {
         let customer = await new CustomerModel().findCustomerById(id, tenant_id);
-        if (customer.length == 0) throw new Error("No customer");
+        if (customer.length == 0) throw new Error("No Customer");
         return customer[0];
     }
     catch (e){
@@ -90,7 +90,7 @@ const loginCustomer=async (data: any) => {
         LOGGER.info(111, data);
         let customer = await new CustomerModel().getCustomer(data.mobile, data.tenant_id);
         LOGGER.info("Customer", customer);
-        if (customer.length === 0) throw new Error("No Such customer exits");
+        if (customer.length === 0) throw new Error("No Such Customer exits");
         // const otp = Math.floor(100000 + Math.random() * 900000);
         //todo need to integrate sms
         const otp = 123456;

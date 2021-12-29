@@ -13,7 +13,7 @@ export default {
         }).unknown()
     },
 
-    fetchFD:{[Segments.QUERY]:{
+    fetchFdByCustomer:{[Segments.QUERY]:{
             customer_id: Joi.number().required(),
         },
         [Segments.HEADERS]:Joi.object({

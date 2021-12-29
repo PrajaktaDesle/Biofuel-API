@@ -11,7 +11,7 @@ const createTransConfig: IController = async (req, res) => {
     await transConfigService.createTransInformation(req.body)
         .then((TC : Object) => {
             if(TC instanceof Error){
-                LOGGER.info("user 2", TC.message)
+                LOGGER.info("User 2", TC.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
@@ -36,7 +36,7 @@ const fetchTransConfig: IController = async (req, res) => {
     await transConfigService.fetchTransInformation(req.headers["tenant-id"],req.query.transaction_type)
         .then((transInformation : Object) => {
             if(transInformation instanceof Error){
-                LOGGER.info("user 2", transInformation.message)
+                LOGGER.info("User 2", transInformation.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,

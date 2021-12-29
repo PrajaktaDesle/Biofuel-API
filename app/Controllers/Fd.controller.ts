@@ -7,7 +7,7 @@ import LOGGER from "../config/LOGGER";
 
 const createFd: IController = async (req, res) => {
     req.body.tenant_id=req.headers["tenant-id"]
-    await fdService.insertFdInformation(req.body)
+    await fdService.createFD(req.body)
         .then((FDInformation : Object) => {
             if(FDInformation instanceof Error){
                 LOGGER.info("FD", FDInformation.message)
@@ -29,8 +29,8 @@ const createFd: IController = async (req, res) => {
         });
 }
 
-const fetchFd: IController = async (req, res) => {
-    await fdService.fetchFdInformation(req.headers["tenant-id"],req.query.customer_id)
+const fetchFdByCustomer: IController = async (req, res) => {
+    await fdService.fetchFdByCustomer(req.headers["tenant-id"],req.query.customer_id)
         .then((FDInformation : Object) => {
             if(FDInformation instanceof Error){
                 LOGGER.info("FD", FDInformation.message)
@@ -54,5 +54,5 @@ const fetchFd: IController = async (req, res) => {
 
 export default {
     createFd,
-    fetchFd
+    fetchFdByCustomer
 };

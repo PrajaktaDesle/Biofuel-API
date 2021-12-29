@@ -3,7 +3,7 @@ import {FdModel} from "../Models/Fd/Fd.model";
 import moment from "moment";
 
 
-async function insertFdInformation(data: any) {
+async function createFD(data: any) {
     try {
         // console.log(data);
         let fdDetail = await new FdModel().createFd(data);
@@ -15,9 +15,9 @@ async function insertFdInformation(data: any) {
     }
 }
 
-async function fetchFdInformation(tenant_id: any, customer_id: any) {
+async function fetchFdByCustomer(tenant_id: any, customer_id: any) {
     try {
-        let fdDetail = await new FdModel().fetchFd(tenant_id,customer_id);
+        let fdDetail = await new FdModel().fetchFdByCustomer(tenant_id,customer_id);
         if(fdDetail.length == 0)throw new Error("NO DATA");
         // console.log("at FD_service", fdDetail);
         return fdDetail;
@@ -27,6 +27,6 @@ async function fetchFdInformation(tenant_id: any, customer_id: any) {
 }
 
 export default {
-    insertFdInformation,
-    fetchFdInformation
+    createFD,
+    fetchFdByCustomer
 }

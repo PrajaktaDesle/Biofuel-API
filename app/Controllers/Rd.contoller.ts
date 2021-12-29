@@ -12,7 +12,7 @@ const create_RD: IController = async (req, res) => {
     await rdService.create_rd(req.body)
         .then((RD : Object) => {
             if(RD instanceof Error){
-                LOGGER.info("user 2", RD.message)
+                LOGGER.info("User 2", RD.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
@@ -42,7 +42,7 @@ const fetch_RD: IController = async (req, res) => {
                     RD.message
                 );
             }else{
-                LOGGER.info("user 3", RD)
+                LOGGER.info("User 3", RD)
                 apiResponse.result(res, RD, httpStatusCodes.OK);
 
             }
