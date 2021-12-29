@@ -1,23 +1,27 @@
 import { Joi, Segments } from 'celebrate';
 export default {
-    createFD:{[Segments.BODY]:{
+
+    createTransConfig: {
+        [Segments.BODY]: {
             id: Joi.number(),
-            customer_id: Joi.number(),
+            transaction_type: Joi.string().required(),
             tenure: Joi.number().required(),
             amount: Joi.number().required(),
-            start_date:  Joi.date().required(),
-            roi: Joi.number()
+            maturity_amount: Joi.number(),
+            roi: Joi.number(),
+            user_id: Joi.number()
         },
         [Segments.HEADERS]: Joi.object({
             "tenant-id": Joi.number().required()
         }).unknown()
     },
 
-    fetchFD:{[Segments.QUERY]:{
-            customer_id: Joi.number().required(),
+    fetchTransConfig: {
+        [Segments.QUERY]: {
+            transaction_type: Joi.string()
         },
-        [Segments.HEADERS]:Joi.object({
+        [Segments.HEADERS]: Joi.object({
             "tenant-id": Joi.number().required()
         }).unknown()
-    }
+    },
 };

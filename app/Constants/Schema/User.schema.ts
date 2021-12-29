@@ -24,5 +24,15 @@ export default {
         [Segments.HEADERS]:Joi.object({
             "tenant-id": Joi.string().required()
         }).unknown()
+    },
+
+    fetch: {
+        // [Segments.BODY]: {
+        //     email: Joi.string().email().required(),
+        //     password: Joi.string().required()
+        // },
+        [Segments.HEADERS]:Joi.object({
+            "tenant-id": Joi.string().required()
+        }).unknown()
     }
 };

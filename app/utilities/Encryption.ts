@@ -9,6 +9,7 @@ export default class Encryption {
     }
 
     public static async generateJwtToken(data: any) {
+        console.log("before token", data)
         return await jwt.sign(data, config.JwtToken.secretKey, {expiresIn: config.JwtToken.expiry});
     }
 

@@ -31,7 +31,7 @@ export default async (
       const decoded = await new Encryption().verifyJwtToken(authorizationHeader);
       console.log("Decoded -",decoded)
       // @ts-ignore
-      if (decoded) {
+      if (decoded && req.headers["tenant-id"] == decoded.tenant_id) {
         console.log('TOken Verified Successfully');
       } else {
         apiResponse.error(res, httpStatusCodes.UNAUTHORIZED);
