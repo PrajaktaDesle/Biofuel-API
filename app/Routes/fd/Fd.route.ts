@@ -1,21 +1,22 @@
 import express from 'express';
 
 import fdController from '../../Controllers/Fd.controller';
-import fdSchema from '../../Constants/Schema/Fd.schema';
+import fdSchema from "../../Constants/Schema/Fd.schema"
 
 const router = express.Router();
 import { celebrate } from 'celebrate';
+// import TransConfig from "../../Constants/Schema/TransConfig.schema.ts";
 
 router.post(
-    '/',
-    celebrate(fdSchema.insert_fd),
-    fdController.create_FD
+    '/insert',
+    celebrate(fdSchema.createFD),
+    fdController.createFd
 );
 
 router.get(
-    '/',
-    celebrate(fdSchema.fetch_fd),
-    fdController.fetch_FD
+    '/find',
+    celebrate(fdSchema.fetchFD),
+    fdController.fetchFd
 );
 
 
