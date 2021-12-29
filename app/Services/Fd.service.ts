@@ -18,7 +18,7 @@ async function createFD(data: any) {
 async function fetchFdByCustomer(tenant_id: any, customer_id: any) {
     try {
         let fdDetail = await new FdModel().fetchFdByCustomer(tenant_id,customer_id);
-        if(fdDetail.length == 0)throw new Error("NO DATA");
+        //if(fdDetail.length == 0)throw new Error("NO DATA");
         // console.log("at FD_service", fdDetail);
         return fdDetail;
     } catch (e) {
