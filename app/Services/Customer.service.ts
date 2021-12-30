@@ -77,7 +77,7 @@ const processForm = async(req : any) => {
 const fetchCustomerById = async (id: any, tenant_id:any ) => {
     try {
         let customer = await new CustomerModel().findCustomerById(id, tenant_id);
-        if (customer.length == 0) throw new Error("No customer");
+        if (customer.length == 0) throw new Error("No Customer");
         return customer[0];
     }
     catch (e){
@@ -87,10 +87,10 @@ const fetchCustomerById = async (id: any, tenant_id:any ) => {
 
 const loginCustomer=async (data: any) => {
     try {
-        LOGGER.info(111, data)
+        LOGGER.info(111, data);
         let customer = await new CustomerModel().getCustomer(data.mobile, data.tenant_id);
         LOGGER.info("Customer", customer);
-        if (customer.length === 0) throw new Error("No Such customer exits");
+        if (customer.length === 0) throw new Error("No Such Customer exits");
         // const otp = Math.floor(100000 + Math.random() * 900000);
         //todo need to integrate sms
         const otp = 123456;
@@ -113,7 +113,7 @@ const loginCustomer=async (data: any) => {
 
 const verify_customer_otp = async(data: any) => {
     try {
-        LOGGER.info(111, data)
+        LOGGER.info(111, data);
         let otp_details = await new CustomerModel().getCustomer_otp(data);
         console.log(otp_details);
         if (otp_details.length === 0) throw new Error("Error in login");
@@ -131,7 +131,7 @@ const verify_customer_otp = async(data: any) => {
             tenant_id: otp_details[0].tenant_id
         });
         LOGGER.info("login successful");
-        return {token : otp_details[0].token};
+        return {token : otp_details[0].token, customer_id: otp_details[0].customer_id};
     }
     catch (e) {
         return e;

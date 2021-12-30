@@ -5,6 +5,7 @@ import apiResponse from '../utilities/ApiResponse';
 import userService from '../Services/User.service';
 import constants from "../Constants";
 import LOGGER from "../config/LOGGER";
+import customerService from "../Services/Customer.service";
 
 const login: IController = async (req, res) => {
     console.log(1)
@@ -13,7 +14,7 @@ const login: IController = async (req, res) => {
     userService.loginUser(req.body)
         .then( (user) => {
         if(user instanceof Error){
-            console.log("user 2", user.message)
+            console.log("User 2", user.message)
             apiResponse.error(
                 res,
                 // response.send('Incorrect Username and/or Password!');
@@ -21,7 +22,7 @@ const login: IController = async (req, res) => {
                 user.message
             );
         }else{
-            console.log("user 3", user.message)
+            console.log("User 3", user.message)
             // response.redirect('/home');
             apiResponse.result(res, user[0], httpStatusCodes.OK);
         }
@@ -63,7 +64,37 @@ const register: IController = async (req, res) => {
 };
 
 
+
+const fetchUsers: IController = async (req, res) => {
+    const tenant=req.headers["tenant-id"]
+    // req.body.tenant_id=tenant;
+    userService.userDetails(tenant)
+        .then( (users) => {
+            if(users instanceof Error){
+                console.log("User 2", users.message)
+                apiResponse.error(
+                    res,
+                    // response.send('Incorrect Username and/or Password!');
+                    httpStatusCodes.BAD_REQUEST,
+                    users.message
+                );
+            }else{
+                console.log("User 3", users.message)
+                // response.redirect('/home');
+                apiResponse.result(res, users, httpStatusCodes.OK);
+            }
+        }).catch(err => {
+        console.log("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+            //locale.INVALID_CREDENTIALS,
+        );
+    });
+}
+
 export default {
     login,
-    register
+    register,
+    fetchUsers
 };
