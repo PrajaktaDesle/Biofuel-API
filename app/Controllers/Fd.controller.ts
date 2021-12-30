@@ -41,7 +41,7 @@ const fetchFdByCustomer: IController = async (req, res) => {
                 );
             }else{
                 LOGGER.info("transactionType ->", FDInformation)
-                apiResponse.result(res, [{1:12679908989}], httpStatusCodes.OK);
+                apiResponse.result(res, FDInformation, httpStatusCodes.OK);
             }
         }).catch(err => {
             LOGGER.info("Error  ->", err);
