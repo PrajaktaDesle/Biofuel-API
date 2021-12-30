@@ -7,20 +7,20 @@ import constants from "../Constants";
 import LOGGER from "../config/LOGGER";
 
 
-const create_RD: IController = async (req, res) => {
+const createRd: IController = async (req, res) => {
     req.body.tenant_id=req.headers["tenant-id"]
-    await rdService.create_rd(req.body)
-        .then((RD : Object) => {
-            if(RD instanceof Error){
-                LOGGER.info("User 2", RD.message)
+    await rdService.createRd(req.body)
+        .then((rdDetails : Object) => {
+            if(rdDetails instanceof Error){
+                LOGGER.info("User 2", rdDetails.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
-                    RD.message
+                    rdDetails.message
                 );
             }else{
-                LOGGER.info("RD info->", RD)
-                apiResponse.result(res, RD, httpStatusCodes.OK);
+                LOGGER.info("RD info->", rdDetails)
+                apiResponse.result(res, rdDetails, httpStatusCodes.OK);
             }
         }).catch(err => {
         LOGGER.info("Error  ->", err);
@@ -30,20 +30,20 @@ const create_RD: IController = async (req, res) => {
         );
     });
 }
-const fetch_RD: IController = async (req, res) => {
+const fetchRd: IController = async (req, res) => {
     // @ts-ignore
-    await rdService.fetchRdByCustomer(req.query.customer_id, parseInt(req.headers["tenant-id"]))
-        .then((RD : Object) => {
-            if(RD instanceof Error){
-                LOGGER.info("RD List", RD.message)
+    await rdService.fetchRdByCustomerId(req.query.customer_id, parseInt(req.headers["tenant-id"]))
+        .then((rdDetails : Object) => {
+            if(rdDetails instanceof Error){
+                LOGGER.info("RD List", rdDetails.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
-                    RD.message
+                    rdDetails.message
                 );
             }else{
-                LOGGER.info("User 3", RD)
-                apiResponse.result(res, RD, httpStatusCodes.OK);
+                LOGGER.info("User 3", rdDetails)
+                apiResponse.result(res, rdDetails, httpStatusCodes.OK);
 
             }
         }).catch(err => {
@@ -56,9 +56,7 @@ const fetch_RD: IController = async (req, res) => {
 }
 
 
-
-
 export default {
-    fetch_RD,
-    create_RD,
+    fetchRd,
+    createRd,
 };

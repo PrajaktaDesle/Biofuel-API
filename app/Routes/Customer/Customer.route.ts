@@ -33,5 +33,10 @@ router.post(
     celebrate(customerSchema.verify_otp),
     customerController.verify_otp,
 );
+router.put(
+    '/change',
+    celebrate(customerSchema.updateCustomerById),
+    customerController.updateCustomerById
+);
 
 export default router;

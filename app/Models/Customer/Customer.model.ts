@@ -27,4 +27,7 @@ export class CustomerModel extends BaseModel
     async findCustomerById(id: any, tenant_id: any ){
         return await this._executeQuery("select * from customers where id = ? and tenant_id = ? ", [id, tenant_id]);
     }
+    async updateCustomerById(data:any){
+        return await this._executeQuery("update customers set mobile = ? where id = ? and tenant_id = ? ", [data .mobile,data.id, data.tenant_id]);
+    }
 }

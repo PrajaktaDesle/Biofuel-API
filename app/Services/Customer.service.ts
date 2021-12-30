@@ -138,12 +138,24 @@ const verify_customer_otp = async(data: any) => {
     }
 }
 
+const updateCustomerById = async (data:any) => {
+    try {
+        let customer = await new CustomerModel().updateCustomerById(data);
+        if (customer.length == 0) throw new Error("No customer");
+        return customer[0];
+    }
+    catch (e){
+        return e;
+    }
+}
+
 export default {
     createCustomer,
     fetchAllCustomers,
     loginCustomer,
     verify_customer_otp,
-    fetchCustomerById
+    fetchCustomerById,
+    updateCustomerById
 }
 
 
