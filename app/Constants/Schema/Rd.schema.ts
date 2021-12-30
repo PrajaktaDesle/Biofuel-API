@@ -1,6 +1,7 @@
 import { Joi, Segments } from 'celebrate';
 export default {
     createRD:{[Segments.BODY]:{
+            id: Joi.number(),
             customer_id: Joi.number(),
             start_date:  Joi.date().required(),
             tenure: Joi.number().required(),
@@ -8,7 +9,6 @@ export default {
             transaction_type: Joi.string().required(),
             status: Joi.number(),
             user_id: Joi.number(),
-            id: Joi.number()
         },
         [Segments.HEADERS]: Joi.object({
             "tenant-id": Joi.number().required()

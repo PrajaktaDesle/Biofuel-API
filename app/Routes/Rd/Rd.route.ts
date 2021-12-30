@@ -9,13 +9,13 @@ import { celebrate } from 'celebrate';
 router.post(
     '/',
     celebrate(rdSchema.createRD),
-    rdController.create_RD
+    rdController.createRd
 );
 
 router.get(
     '/',
     celebrate(rdSchema.fetchRd),
-    rdController.fetch_RD
+    rdController.fetchRd
 );
 
 

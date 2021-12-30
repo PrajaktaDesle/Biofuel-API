@@ -711,3 +711,27 @@
 {"level":"info","message":"Server running at 3000","timestamp":"2021-12-28T05:59:23.248Z"}
 {"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T05:16:51.428Z"}
 {"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T05:17:03.566Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T05:32:07.589Z"}
+{"0":{"amount":1000,"maturity_amount":20000,"tenure":20},"1":{"amount":1000,"maturity_amount":20000,"tenure":20},"2":{"amount":500,"maturity_amount":15000,"tenure":30},"level":"info","message":"transactionType ->","timestamp":"2021-12-30T05:32:07.589Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T05:43:18.525Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T05:48:33.626Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T06:23:25.274Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T06:23:47.071Z"}
+{"level":"info","message":"RD List","timestamp":"2021-12-30T06:23:47.071Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T07:03:12.331Z"}
+{"level":"info","message":"RD List","timestamp":"2021-12-30T07:03:12.331Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T07:36:24.175Z"}
+{"0":{"amount":1000,"maturity_amount":20000,"tenure":20},"1":{"amount":1000,"maturity_amount":20000,"tenure":20},"2":{"amount":500,"maturity_amount":15000,"tenure":30},"level":"info","message":"transactionType ->","timestamp":"2021-12-30T07:36:24.175Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T07:36:24.175Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T07:46:40.782Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T07:52:52.593Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T07:55:29.156Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T09:01:07.169Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T09:03:09.262Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T09:04:40.376Z"}
+{"level":"info","message":"User 2","timestamp":"2021-12-30T09:04:40.376Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T09:23:34.642Z"}
+{"level":"info","message":"User 2","timestamp":"2021-12-30T09:23:34.642Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":1,"level":"info","message":"RD info->","serverStatus":2,"timestamp":"2021-12-30T09:23:34.642Z","warningStatus":0}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T09:23:34.642Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T09:23:34.642Z"}
