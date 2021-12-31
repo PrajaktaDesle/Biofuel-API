@@ -23,13 +23,12 @@ async function fetchRdByCustomerId(customer_id : any, tenant_id : number) {
     try {
         console.log("customer_id :", customer_id, "tenant-id:", tenant_id);
         let rdList = await new RdModel().fetchRd(customer_id, tenant_id);
-        console.log("RD List ",rdList)
+        // console.log("RD List ",rdList);
         return rdList;
     } catch (e) {
         return e;
     }
 }
-
 export default {
     createRd,
     fetchRdByCustomerId

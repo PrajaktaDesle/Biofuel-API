@@ -31,7 +31,7 @@ const createFd: IController = async (req, res) => {
 
 const fetchFdByCustomer: IController = async (req, res) => {
     await fdService.fetchFdByCustomer(req.headers["tenant-id"],req.query.customer_id)
-        .then((FDInformation : Object) => {
+        .then((FDInformation : any) => {
             if(FDInformation instanceof Error){
                 LOGGER.info("FD", FDInformation.message)
                 apiResponse.error(
@@ -40,8 +40,9 @@ const fetchFdByCustomer: IController = async (req, res) => {
                     FDInformation.message
                 );
             }else{
+                if(FDInformation.length == 0) throw new Error("Value mismatched")
                 LOGGER.info("transactionType ->", FDInformation)
-                apiResponse.result(res, [{1:1267}], httpStatusCodes.OK);
+                apiResponse.result(res, FDInformation, httpStatusCodes.OK);
             }
         }).catch(err => {
             LOGGER.info("Error  ->", err);

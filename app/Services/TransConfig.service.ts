@@ -6,10 +6,10 @@ import moment from "moment";
 async function createTransInformation(data: any) {
     try {
         console.log(data)
-        let tc_detail = await new TcModel().createTc(data);
-        if(tc_detail.length == 0)throw new Error("NO DATA");
-        console.log("at TC_service", data)
-        return data;
+        let tcDetail = await new TcModel().createTc(data);
+        if(tcDetail.length == 0)throw new Error("NO DATA");
+        console.log("at TC_service", tcDetail)
+        return tcDetail;
     } catch (e) {
         return e;
     }

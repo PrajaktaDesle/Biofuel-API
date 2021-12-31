@@ -33,7 +33,7 @@ const createRd: IController = async (req, res) => {
 const fetchRd: IController = async (req, res) => {
     // @ts-ignore
     await rdService.fetchRdByCustomerId(req.query.customer_id, parseInt(req.headers["tenant-id"]))
-        .then((rdDetails : Object) => {
+        .then((rdDetails : any) => {
             if(rdDetails instanceof Error){
                 LOGGER.info("RD List", rdDetails.message)
                 apiResponse.error(
@@ -43,8 +43,11 @@ const fetchRd: IController = async (req, res) => {
                 );
             }else{
                 LOGGER.info("User 3", rdDetails)
-                apiResponse.result(res, rdDetails, httpStatusCodes.OK);
-
+                if(rdDetails.length > 0 )
+                    apiResponse.result(res, rdDetails, httpStatusCodes.OK);
+                else{
+                    throw new Error("value didnt match");
+                }
             }
         }).catch(err => {
             LOGGER.info("Error  ->", err);

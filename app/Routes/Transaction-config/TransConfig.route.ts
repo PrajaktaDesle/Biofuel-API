@@ -19,5 +19,4 @@ router.get(
     transConfigController.fetchTransConfig
 );
 
-
 export default router;

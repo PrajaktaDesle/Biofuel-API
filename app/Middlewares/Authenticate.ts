@@ -32,7 +32,7 @@ export default async (
       console.log("Decoded -",decoded)
       // @ts-ignore
       if (decoded && req.headers["tenant-id"] == decoded.tenant_id) {
-        console.log('TOken Verified Successfully');
+        console.log('TOKEN ---> Verified Successfully');
       } else {
         apiResponse.error(res, httpStatusCodes.UNAUTHORIZED);
         return;

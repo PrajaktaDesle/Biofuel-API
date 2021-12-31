@@ -735,3 +735,84 @@
 {"affectedRows":1,"fieldCount":0,"info":"","insertId":1,"level":"info","message":"RD info->","serverStatus":2,"timestamp":"2021-12-30T09:23:34.642Z","warningStatus":0}
 {"level":"info","message":"User 3","timestamp":"2021-12-30T09:23:34.642Z"}
 {"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T09:23:34.642Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T09:23:34.642Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:18:47.954Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:18:47.954Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:18:47.954Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:19:16.251Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T10:19:16.251Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:25:11.183Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:25:43.819Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:25:43.819Z"}
+{"level":"info","message":"Error  -> Cannot read property 'length' of undefined","stack":"TypeError: Cannot read property 'length' of undefined\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:46:38\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2021-12-30T10:25:43.819Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:31:48.771Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:32:13.212Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:32:13.212Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:32:13.212Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:32:55.256Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:32:55.256Z"}
+{"level":"info","message":"Error  -> Cannot read property 'length' of undefined","stack":"TypeError: Cannot read property 'length' of undefined\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:46:38\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2021-12-30T10:32:55.256Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T10:32:55.256Z"}
+{"level":"info","message":"Error  -> Cannot read property 'length' of undefined","stack":"TypeError: Cannot read property 'length' of undefined\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:46:38\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2021-12-30T10:32:55.256Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T10:32:55.256Z"}
+{"level":"info","message":"Error  -> Cannot read property 'length' of undefined","stack":"TypeError: Cannot read property 'length' of undefined\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:46:38\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2021-12-30T10:32:55.256Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:33:55.822Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T10:33:55.822Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:33:55.822Z"}
+{"level":"info","message":"Error  -> value didnt match","stack":"Error: value didnt match\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:49:27\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2021-12-30T10:33:55.822Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:34:50.091Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:34:50.091Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:34:50.091Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T10:34:50.091Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:34:50.091Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:35:12.780Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T10:35:12.780Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:42:05.643Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:42:30.856Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:44:48.840Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T10:44:48.840Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T11:06:34.392Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":2,"level":"info","message":"RD info->","serverStatus":2,"timestamp":"2021-12-30T11:06:34.392Z","warningStatus":0}
+{"level":"info","message":"User 2","timestamp":"2021-12-30T11:06:34.392Z"}
+{"level":"info","message":"User 2","timestamp":"2021-12-30T11:06:34.392Z"}
+{"level":"info","message":"User 2","timestamp":"2021-12-30T11:06:34.392Z"}
+{"level":"info","message":"User 2","timestamp":"2021-12-30T11:06:34.392Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T11:39:51.775Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T11:39:51.775Z"}
+{"level":"info","message":"Error  -> value didnt match","stack":"Error: value didnt match\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:49:27\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2021-12-30T11:39:51.775Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T11:39:51.775Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T12:29:30.957Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T12:32:06.946Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":1,"level":"info","message":"TC info->","serverStatus":2,"timestamp":"2021-12-30T12:32:06.946Z","warningStatus":0}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":2,"level":"info","message":"TC info->","serverStatus":2,"timestamp":"2021-12-30T12:32:06.946Z","warningStatus":0}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":3,"level":"info","message":"TC info->","serverStatus":2,"timestamp":"2021-12-30T12:32:06.946Z","warningStatus":0}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T04:01:37.202Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T04:51:35.901Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":4,"level":"info","message":"TC info->","serverStatus":2,"timestamp":"2021-12-31T04:51:35.901Z","warningStatus":0}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":5,"level":"info","message":"TC info->","serverStatus":2,"timestamp":"2021-12-31T04:51:35.901Z","warningStatus":0}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T05:44:19.222Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T05:49:25.010Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T05:49:47.921Z"}
+{"level":"info","message":"FD","timestamp":"2021-12-31T05:49:47.921Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T05:51:25.432Z"}
+{"level":"info","message":"FD","timestamp":"2021-12-31T05:51:25.432Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T05:51:50.659Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":1,"level":"info","message":"FDInformation->","serverStatus":2,"timestamp":"2021-12-31T05:51:50.659Z","warningStatus":1}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T05:52:46.714Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T05:53:26.676Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":2,"level":"info","message":"FDInformation->","serverStatus":2,"timestamp":"2021-12-31T05:53:26.676Z","warningStatus":1}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T05:58:07.443Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T06:02:10.862Z"}
+{"0":{"amount":20000,"create_date_time":"2021-12-31T11:27:15.000Z","customer_id":112,"id":2,"roi":12,"start_date":"2021-09-30T00:00:00.000Z","tenant_id":1,"tenure":12,"update_date_time":"2021-12-31T11:27:15.000Z"},"level":"info","message":"transactionType ->","timestamp":"2021-12-31T06:02:10.862Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T06:06:08.737Z"}
+{"0":{"amount":20000,"create_date_time":"2021-12-31T11:27:15.000Z","customer_id":112,"id":2,"roi":12,"start_date":"2021-09-30T00:00:00.000Z","tenant_id":1,"tenure":12,"update_date_time":"2021-12-31T11:27:15.000Z"},"level":"info","message":"transactionType ->","timestamp":"2021-12-31T06:06:08.737Z"}
+{"level":"info","message":"transactionType ->","timestamp":"2021-12-31T06:06:08.737Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T06:17:05.185Z"}
+{"level":"info","message":"Error  -> Value mismatched","stack":"Error: Value mismatched\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Fd.controller.ts:43:53\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2021-12-31T06:17:05.185Z"}
+{"0":{"amount":20000,"create_date_time":"2021-12-31T11:27:15.000Z","customer_id":112,"id":2,"roi":12,"start_date":"2021-09-30T00:00:00.000Z","tenant_id":1,"tenure":12,"update_date_time":"2021-12-31T11:27:15.000Z"},"level":"info","message":"transactionType ->","timestamp":"2021-12-31T06:17:05.185Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T06:19:35.699Z"}
+{"0":{"amount":20000,"create_date_time":"2021-12-31T11:27:15.000Z","customer_id":112,"id":2,"roi":12,"start_date":"2021-09-30T00:00:00.000Z","tenant_id":1,"tenure":12,"update_date_time":"2021-12-31T11:27:15.000Z"},"level":"info","message":"transactionType ->","timestamp":"2021-12-31T06:19:35.699Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T06:20:35.124Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T06:20:50.883Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T06:21:03.466Z"}
+{"0":{"amount":20000,"create_date_time":"2021-12-31T11:27:15.000Z","customer_id":112,"id":2,"roi":12,"start_date":"2021-09-30T00:00:00.000Z","tenant_id":1,"tenure":12,"update_date_time":"2021-12-31T11:27:15.000Z"},"level":"info","message":"transactionType ->","timestamp":"2021-12-31T06:21:03.466Z"}
