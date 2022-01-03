@@ -158,6 +158,29 @@ const updateCustomerById: IController = async (req, res) => {
     });
 };
 
+const updateCustomerStatus: IController = async (req, res) => {
+    req.body.tenant_id=req.headers["tenant-id"]
+    customerService.updateCustomerStatus(req.body)
+        .then( (customer) => {
+            if(customer instanceof Error){
+                console.log("user 2", customer.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    customer.message
+                );
+            }else{
+                console.log("user 3", customer)
+                apiResponse.result(res, customer, httpStatusCodes.OK);
+            }
+        }).catch(err => {
+        console.log("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+        );
+    });
+};
 
 export default {
     register,
@@ -165,5 +188,5 @@ export default {
     login,
     verify_otp,
     fetchCustomerById,
-    updateCustomerById
+    updateCustomerStatus
 };

@@ -66,4 +66,15 @@ export default {
             "tenant-id": Joi.string().required()
         }).unknown()
     },
+
+    updateCustomerStatus: {
+        [Segments.BODY]: {
+            status: Joi.number().required(),
+            id: Joi.number().required()
+        },
+        [Segments.HEADERS]:Joi.object({
+            "tenant-id": Joi.string().required()
+        }).unknown()
+    },
+
 };

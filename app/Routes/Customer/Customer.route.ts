@@ -36,7 +36,13 @@ router.post(
 router.put(
     '/change',
     celebrate(customerSchema.updateCustomerById),
-    customerController.updateCustomerById
+    customerController.updateCustomerStatus
+);
+
+router.put(
+    '/change-status',
+    celebrate(customerSchema.updateCustomerStatus),
+    customerController.updateCustomerStatus
 );
 
 export default router;
