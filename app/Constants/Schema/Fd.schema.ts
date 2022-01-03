@@ -1,7 +1,6 @@
 import { Joi, Segments } from 'celebrate';
 export default {
     createFD:{[Segments.BODY]:{
-            id: Joi.number(),
             customer_id: Joi.number(),
             tenure: Joi.number().required(),
             amount: Joi.number().required(),
