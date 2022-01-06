@@ -174,6 +174,3 @@ export default {
     updateCustomerById,
     updateCustomerStatus
 }
-
-
-

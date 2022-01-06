@@ -924,3 +924,118 @@
 {"customer_id":1,"expire_time":"2022-01-03 18:48:29","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"a34a3ec8-e7f7-4f11-b27a-7919fda85a30","tenant_id":"2","timestamp":"2022-01-03T13:15:25.716Z","trials":3}
 {"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T13:15:41.996Z"}
 {"level":"info","message":111,"mobile":7845123265,"tenant_id":"2","timestamp":"2022-01-03T13:15:41.996Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-04T04:44:14.566Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-04T05:56:01.418Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-04T06:41:07.159Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-04T06:41:27.594Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-04T09:48:47.873Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T06:52:01.887Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T06:54:26.155Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T06:54:26.155Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T06:56:26.554Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T06:56:26.554Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T06:57:27.899Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T06:57:27.899Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T06:58:01.882Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T06:58:14.196Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T06:58:14.196Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:00:55.073Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:00:55.073Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:02:31.932Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:02:31.932Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:03:31.765Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:03:31.765Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:04:52.286Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:04:52.286Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:05:29.323Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:05:29.323Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:06:15.134Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:06:15.134Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:13:49.789Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:14:50.754Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:16:53.822Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:17:17.459Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:17:17.459Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:32:30.210Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:35:48.608Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:38:03.637Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:39:13.858Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:40:08.656Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:43:29.266Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:44:49.056Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:47:50.850Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:47:50.850Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:48:38.802Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:48:38.802Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:51:27.601Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:52:59.907Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:52:59.907Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:52:59.907Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:55:16.868Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:55:16.868Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:56:09.020Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:56:09.020Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:57:08.718Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:57:08.718Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:59:57.078Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:00:11.250Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T08:00:11.250Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T08:00:11.250Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:46:49.639Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:48:50.687Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T08:48:50.687Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:49:47.762Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:52:29.003Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T08:52:29.003Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:53:05.328Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:53:27.075Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T08:53:27.075Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:54:58.186Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T08:54:58.186Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:58:02.010Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:58:17.315Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T08:58:17.315Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:59:14.734Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T08:59:14.734Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:00:14.079Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T09:00:14.079Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:13:35.323Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T09:13:35.323Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:14:00.773Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T09:14:00.773Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:15:31.906Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T09:15:31.906Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:16:51.132Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T09:16:51.132Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:18:42.930Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T09:18:42.930Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:21:19.799Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:22:09.980Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:23:41.940Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T10:03:14.641Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T10:03:47.715Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T10:04:09.814Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T10:04:57.700Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":1,"level":"info","message":"TransHistInformation->","serverStatus":2,"timestamp":"2022-01-05T10:04:57.700Z","warningStatus":0}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":2,"level":"info","message":"TransHistInformation->","serverStatus":2,"timestamp":"2022-01-05T10:04:57.700Z","warningStatus":0}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":3,"level":"info","message":"TransHistInformation->","serverStatus":2,"timestamp":"2022-01-05T10:04:57.700Z","warningStatus":0}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T10:15:05.165Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":4,"level":"info","message":"TransHistInformation->","serverStatus":2,"timestamp":"2022-01-05T10:15:05.165Z","warningStatus":0}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T10:15:05.165Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T10:17:22.036Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T10:52:50.503Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T11:18:00.092Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T11:19:17.554Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T11:43:06.338Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T11:49:52.978Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T11:52:19.361Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T11:53:07.923Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T11:59:23.281Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T12:00:11.109Z"}
+{"level":"info","message":"addBalanceService--->","timestamp":"2022-01-05T12:00:11.109Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T12:03:22.858Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":5,"level":"info","message":"addBalanceService->","serverStatus":2,"timestamp":"2022-01-05T12:03:22.858Z","warningStatus":0}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T12:18:05.130Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T12:19:03.687Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T12:33:52.843Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-06T04:05:50.890Z"}
