@@ -60,6 +60,7 @@ const processForm = async(req : any) => {
             const data: any [] = [];
             const data_path: string [] = [];
             const images = Object.keys(files)
+            if(images.length == 0) reject(new Error("No files are uploaded"));
             for (let i = 0; i < images.length; i++) {
                 data.push(files[images[i]]);
                 data_path[i] = data[i].filepath;
