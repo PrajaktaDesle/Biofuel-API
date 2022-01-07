@@ -10,7 +10,7 @@ const createCustomer = async (req:any,tenant:any) =>{
     try{
         let customerData, fields: any, newPath :any;
         let response = await processForm(req);
-        if(response instanceOf Error) throw response;
+        if(response instanceof Error) throw response;
         // @ts-ignore
         fields = response.fields;
         // @ts-ignore
