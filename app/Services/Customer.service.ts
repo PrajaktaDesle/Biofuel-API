@@ -84,16 +84,11 @@ const fetchCustomerById = async (id: any, tenant_id:any ) => {
         let RecurringDeposit = await new CustomerModel().getCustomerRD(customer_id, tenant_id);
         let FixedDeposit = await new CustomerModel().getCustomerFD(customer_id, tenant_id);
         let shares= 2000;
-        console.log("RecurringDeposit----->",RecurringDeposit);
-        console.log("FixedDeposit----->",FixedDeposit);
-        console.log("customer_balance----->",customer_balance);
-
         customer[0].RecurringDeposit=RecurringDeposit[0].amount;
         customer[0].FixedDeposit=FixedDeposit[0].amount;
         customer[0].SavingBalance=customer_balance[0].balance;
         customer[0].Shares=shares;
-
-        console.log("customer----->",customer);
+        // console.log("customer----->",customer);
         if (customer.length == 0) throw new Error("No Customer");
         return customer[0];
     }
