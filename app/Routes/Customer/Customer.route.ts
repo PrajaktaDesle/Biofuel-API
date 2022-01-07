@@ -36,7 +36,7 @@ router.post(
 router.put(
     '/change',
     celebrate(customerSchema.updateCustomerById),
-    customerController.updateCustomerStatus
+    customerController.updateCustomerById
 );
 
 router.put(

@@ -1,11 +1,15 @@
 import LOGGER from "../config/LOGGER";
 import {AddBalanceModel} from "../Models/AddBalance/AddBalance.model";
 import moment from "moment";
+import {error} from "winston";
+import BaseModel from "../Models/BaseModel";
 
 
 async function createTransHistory(data: any) {
+
     try {
         // console.log(data);
+        // Start Transaction;
         let customer_balance = await new AddBalanceModel().getCustomerBalance(data.customer_id);
         if (data.debit > 0 && data.debit !== null && data.debit >= customer_balance[0].balance) throw new Error("Insufficient Balance")
         console.log("customer_balance---->",customer_balance[0]);
@@ -19,11 +23,14 @@ async function createTransHistory(data: any) {
         data.customer_balance= data.new_balance;
         delete data.new_balance;
         const customerBalanceInfo = await new AddBalanceModel().updateCustomerBalance(data.customer_id,data.customer_balance);
-        if (customerBalanceInfo==false) throw new Error("Balance Update Failed");
+        if (customerBalanceInfo instanceof Error)
         console.log("customer_Balance Info------>", customerBalanceInfo);
+        // Commit Transaction
         return TransHistDetail;
-    }catch (e) {
-        return e;
+    }catch (Error) {
+        // Rollback Transaction
+        console.log(Error);
+        return Error;
     }
 }
 export default {

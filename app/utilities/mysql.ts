@@ -41,7 +41,7 @@ export default class MySQL{
         return rows;
     }
 
-    private async connect() {
+    async connect() {
         this.poolConnection.getConnection((err: any, conn: any) =>{
             if(conn) conn.release();
             if (err) {

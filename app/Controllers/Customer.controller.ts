@@ -68,7 +68,7 @@ const fetchCustomerById: IController = async (req, res) => {
                     customer.message
                 );
             }else{
-                console.log("User 3", customer)
+                // console.log("User 3", customer)
                 apiResponse.result(res, customer, httpStatusCodes.OK);
             }
         }).catch(err => {
@@ -188,5 +188,6 @@ export default {
     login,
     verify_otp,
     fetchCustomerById,
+    updateCustomerById,
     updateCustomerStatus
 };

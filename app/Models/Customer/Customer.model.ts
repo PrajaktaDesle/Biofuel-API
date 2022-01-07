@@ -36,4 +36,11 @@ export class CustomerModel extends BaseModel
     async getCustomerStatus(mobile:string, tenant_id : number){
         return await this._executeQuery("select status from customers where mobile = ? and tenant_id = ? ", [mobile, tenant_id]);
     }
+
+    async getCustomerRD(customer_id: number, tenant_id: number ){
+        return await this._executeQuery("select amount from rd_transactions where customer_id = ? and tenant_id = ? ", [customer_id, tenant_id]);
+    }
+    async getCustomerFD(customer_id: number, tenant_id: number ){
+        return await this._executeQuery("select amount from fd_transactions where customer_id = ? and tenant_id = ? ", [customer_id, tenant_id]);
+    }
 }

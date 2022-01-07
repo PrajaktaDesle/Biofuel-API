@@ -6,15 +6,16 @@ import * as path from "path";
 import * as fs from "fs";
 const {v4 : uuidv4} = require('uuid');
 import formidable from "formidable";
+import {any} from "async";
+import {AddBalanceModel} from "../Models/AddBalance/AddBalance.model";
 const createCustomer = async (req:any,tenant:any) =>{
     try{
+        console.log("print data ---->",req)
         let customerData, fields: any, newPath :any;
-        let response = await processForm(req);
-        // @ts-ignore
+        let response:any = await processForm(req)
         fields = response.fields;
-        // @ts-ignore
         newPath = response.newPath;
-        // console.log("response", response);
+        console.log("response", response);
         let hash = await new Encryption().generateHash(fields.password, 10);
         let Customers = {
             first_name: String(fields.f_name),
@@ -63,6 +64,7 @@ const processForm = async(req : any) => {
             for (let i = 0; i < images.length; i++) {
                 data.push(files[images[i]]);
                 data_path[i] = data[i].filepath;
+                // console.log("Into process form--->",data_path[i]);
                 newPath[i] = path.join(__dirname, '../uploads') + '/' + data[i].originalFilename;
                 let rawData = fs.readFileSync(data_path[i]);
                 fs.writeFile(newPath[i], rawData, function (err) {
@@ -71,12 +73,27 @@ const processForm = async(req : any) => {
                 resolve({fields: fields, newPath : newPath});
             }
         });
-    })
+    });
 }
 
 const fetchCustomerById = async (id: any, tenant_id:any ) => {
     try {
         let customer = await new CustomerModel().findCustomerById(id, tenant_id);
+        const customer_id=id;
+        let customer_balance = await new AddBalanceModel().getCustomerBalance(customer_id);
+        let RecurringDeposit = await new CustomerModel().getCustomerRD(customer_id, tenant_id);
+        let FixedDeposit = await new CustomerModel().getCustomerFD(customer_id, tenant_id);
+        let shares= 2000;
+        console.log("RecurringDeposit----->",RecurringDeposit);
+        console.log("FixedDeposit----->",FixedDeposit);
+        console.log("customer_balance----->",customer_balance);
+
+        customer[0].RecurringDeposit=RecurringDeposit[0].amount;
+        customer[0].FixedDeposit=FixedDeposit[0].amount;
+        customer[0].SavingBalance=customer_balance[0].balance;
+        customer[0].Shares=shares;
+
+        console.log("customer----->",customer);
         if (customer.length == 0) throw new Error("No Customer");
         return customer[0];
     }
