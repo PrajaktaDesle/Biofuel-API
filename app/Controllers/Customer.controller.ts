@@ -6,28 +6,30 @@ import constants from "../Constants";
 import LOGGER from "../config/LOGGER";
 
 const register: IController = async (req, res) => {
-    let customer : any;
-try {
-    let tenant= req.headers["tenant-id"];
-    console.log("entry")
-    customer = await customerService.createCustomer(req,tenant);
-    console.log('Customer at controller-----> ',customer);
-    if (customer instanceof Error) {
-        console.log("error", customer)
-        apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+    let customer: any;
+    try {
+        let tenant = req.headers["tenant-id"];
+        console.log("entry")
+        customer = await customerService.createCustomer(req, tenant);
+        console.log('Customer at controller-----> ', customer);
+        if (customer instanceof Error) {
+            console.log("error", customer)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
-        apiResponse.result(res, {customer}, httpStatusCodes.CREATED);
+            apiResponse.result(res, {
+                customer
+            }, httpStatusCodes.CREATED);
         }
     } catch (e) {
-    console.log("controller ->", e)
-    // @ts-ignore
-    if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
-        apiResponse.error(
-            res,
-            httpStatusCodes.BAD_REQUEST,
-            'EMAIL_ALREADY_EXISTS',
-        );
-        return;
+        console.log("controller ->", e)
+        // @ts-ignore
+        if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                'EMAIL_ALREADY_EXISTS',
+            );
+            return;
         }
     }
 };
