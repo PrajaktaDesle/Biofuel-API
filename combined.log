@@ -735,3 +735,307 @@
 {"affectedRows":1,"fieldCount":0,"info":"","insertId":1,"level":"info","message":"RD info->","serverStatus":2,"timestamp":"2021-12-30T09:23:34.642Z","warningStatus":0}
 {"level":"info","message":"User 3","timestamp":"2021-12-30T09:23:34.642Z"}
 {"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T09:23:34.642Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T09:23:34.642Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:18:47.954Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:18:47.954Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:18:47.954Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:19:16.251Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T10:19:16.251Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:25:11.183Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:25:43.819Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:25:43.819Z"}
+{"level":"info","message":"Error  -> Cannot read property 'length' of undefined","stack":"TypeError: Cannot read property 'length' of undefined\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:46:38\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2021-12-30T10:25:43.819Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:31:48.771Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:32:13.212Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:32:13.212Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:32:13.212Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:32:55.256Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:32:55.256Z"}
+{"level":"info","message":"Error  -> Cannot read property 'length' of undefined","stack":"TypeError: Cannot read property 'length' of undefined\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:46:38\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2021-12-30T10:32:55.256Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T10:32:55.256Z"}
+{"level":"info","message":"Error  -> Cannot read property 'length' of undefined","stack":"TypeError: Cannot read property 'length' of undefined\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:46:38\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2021-12-30T10:32:55.256Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T10:32:55.256Z"}
+{"level":"info","message":"Error  -> Cannot read property 'length' of undefined","stack":"TypeError: Cannot read property 'length' of undefined\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:46:38\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2021-12-30T10:32:55.256Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:33:55.822Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T10:33:55.822Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:33:55.822Z"}
+{"level":"info","message":"Error  -> value didnt match","stack":"Error: value didnt match\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:49:27\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2021-12-30T10:33:55.822Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:34:50.091Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:34:50.091Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:34:50.091Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T10:34:50.091Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T10:34:50.091Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:35:12.780Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T10:35:12.780Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:42:05.643Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:42:30.856Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T10:44:48.840Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T10:44:48.840Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T11:06:34.392Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":2,"level":"info","message":"RD info->","serverStatus":2,"timestamp":"2021-12-30T11:06:34.392Z","warningStatus":0}
+{"level":"info","message":"User 2","timestamp":"2021-12-30T11:06:34.392Z"}
+{"level":"info","message":"User 2","timestamp":"2021-12-30T11:06:34.392Z"}
+{"level":"info","message":"User 2","timestamp":"2021-12-30T11:06:34.392Z"}
+{"level":"info","message":"User 2","timestamp":"2021-12-30T11:06:34.392Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T11:39:51.775Z"}
+{"level":"info","message":"User 3","timestamp":"2021-12-30T11:39:51.775Z"}
+{"level":"info","message":"Error  -> value didnt match","stack":"Error: value didnt match\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:49:27\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2021-12-30T11:39:51.775Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":12,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2021-12-30T14:54:56.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2021-12-30T11:39:51.775Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T12:29:30.957Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-30T12:32:06.946Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":1,"level":"info","message":"TC info->","serverStatus":2,"timestamp":"2021-12-30T12:32:06.946Z","warningStatus":0}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":2,"level":"info","message":"TC info->","serverStatus":2,"timestamp":"2021-12-30T12:32:06.946Z","warningStatus":0}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":3,"level":"info","message":"TC info->","serverStatus":2,"timestamp":"2021-12-30T12:32:06.946Z","warningStatus":0}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T04:01:37.202Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T04:51:35.901Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":4,"level":"info","message":"TC info->","serverStatus":2,"timestamp":"2021-12-31T04:51:35.901Z","warningStatus":0}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":5,"level":"info","message":"TC info->","serverStatus":2,"timestamp":"2021-12-31T04:51:35.901Z","warningStatus":0}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T05:44:19.222Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T05:49:25.010Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T05:49:47.921Z"}
+{"level":"info","message":"FD","timestamp":"2021-12-31T05:49:47.921Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T05:51:25.432Z"}
+{"level":"info","message":"FD","timestamp":"2021-12-31T05:51:25.432Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T05:51:50.659Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":1,"level":"info","message":"FDInformation->","serverStatus":2,"timestamp":"2021-12-31T05:51:50.659Z","warningStatus":1}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T05:52:46.714Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T05:53:26.676Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":2,"level":"info","message":"FDInformation->","serverStatus":2,"timestamp":"2021-12-31T05:53:26.676Z","warningStatus":1}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T05:58:07.443Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T06:02:10.862Z"}
+{"0":{"amount":20000,"create_date_time":"2021-12-31T11:27:15.000Z","customer_id":112,"id":2,"roi":12,"start_date":"2021-09-30T00:00:00.000Z","tenant_id":1,"tenure":12,"update_date_time":"2021-12-31T11:27:15.000Z"},"level":"info","message":"transactionType ->","timestamp":"2021-12-31T06:02:10.862Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T06:06:08.737Z"}
+{"0":{"amount":20000,"create_date_time":"2021-12-31T11:27:15.000Z","customer_id":112,"id":2,"roi":12,"start_date":"2021-09-30T00:00:00.000Z","tenant_id":1,"tenure":12,"update_date_time":"2021-12-31T11:27:15.000Z"},"level":"info","message":"transactionType ->","timestamp":"2021-12-31T06:06:08.737Z"}
+{"level":"info","message":"transactionType ->","timestamp":"2021-12-31T06:06:08.737Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T06:17:05.185Z"}
+{"level":"info","message":"Error  -> Value mismatched","stack":"Error: Value mismatched\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Fd.controller.ts:43:53\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2021-12-31T06:17:05.185Z"}
+{"0":{"amount":20000,"create_date_time":"2021-12-31T11:27:15.000Z","customer_id":112,"id":2,"roi":12,"start_date":"2021-09-30T00:00:00.000Z","tenant_id":1,"tenure":12,"update_date_time":"2021-12-31T11:27:15.000Z"},"level":"info","message":"transactionType ->","timestamp":"2021-12-31T06:17:05.185Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T06:19:35.699Z"}
+{"0":{"amount":20000,"create_date_time":"2021-12-31T11:27:15.000Z","customer_id":112,"id":2,"roi":12,"start_date":"2021-09-30T00:00:00.000Z","tenant_id":1,"tenure":12,"update_date_time":"2021-12-31T11:27:15.000Z"},"level":"info","message":"transactionType ->","timestamp":"2021-12-31T06:19:35.699Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T06:20:35.124Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T06:20:50.883Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2021-12-31T06:21:03.466Z"}
+{"0":{"amount":20000,"create_date_time":"2021-12-31T11:27:15.000Z","customer_id":112,"id":2,"roi":12,"start_date":"2021-09-30T00:00:00.000Z","tenant_id":1,"tenure":12,"update_date_time":"2021-12-31T11:27:15.000Z"},"level":"info","message":"transactionType ->","timestamp":"2021-12-31T06:21:03.466Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T10:28:30.227Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T11:24:24.950Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T11:26:20.645Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T11:45:12.124Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T11:45:12.124Z"}
+{"0":{"aadhar_number":"9895558724","aadhar_url":"/home/rushikesh/Nidhi-Bank-API/app/uploads/71ZCJYuOqIL.png","address":"at goa tq goa dist south goa","create_date_time":"2021-12-22T10:18:31.000Z","dob":"1997-06-20T00:00:00.000Z","email":"vinay@digitalflake.com","first_name":"Vinay","id":3,"last_name":"Naik","middle_name":"Rao","mobile":"9958672413","pan_number":"VB48788","pancard_url":"/home/rushikesh/Nidhi-Bank-API/app/uploads/photo-1561731216-c3a4d99437d5.jpeg","password":"$2b$10$tNxuZtZejIzFy6JfcdCNMudPUAtiMBmjU3BSNNzsW.iTCzeR1mJdK","reg_date":"2021-11-22T00:00:00.000Z","status":0,"tenant_id":1,"update_date_time":"2021-12-22T10:18:31.000Z","user_id":103},"level":"info","message":"Customer","timestamp":"2022-01-03T11:45:12.124Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T11:45:12.124Z"}
+{"level":"info","message":{"customer_id":3,"expire_time":"2022-01-03 17:20:05","otp":123456,"req_id":"c91b1d56-b061-42df-ba2e-a227dfcfaced","tenant_id":"1","trials":3},"timestamp":"2022-01-03T11:45:12.124Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T11:53:59.088Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T11:54:12.924Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T11:56:23.662Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:13:04.542Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:13:04.542Z"}
+{"0":{"aadhar_number":"9895558724","aadhar_url":"/home/rushikesh/Nidhi-Bank-API/app/uploads/71ZCJYuOqIL.png","address":"at goa tq goa dist south goa","create_date_time":"2021-12-22T10:18:31.000Z","dob":"1997-06-20T00:00:00.000Z","email":"vinay@digitalflake.com","first_name":"Vinay","id":3,"last_name":"Naik","middle_name":"Rao","mobile":"9958672413","pan_number":"VB48788","pancard_url":"/home/rushikesh/Nidhi-Bank-API/app/uploads/photo-1561731216-c3a4d99437d5.jpeg","password":"$2b$10$tNxuZtZejIzFy6JfcdCNMudPUAtiMBmjU3BSNNzsW.iTCzeR1mJdK","reg_date":"2021-11-22T00:00:00.000Z","status":0,"tenant_id":1,"update_date_time":"2021-12-22T10:18:31.000Z","user_id":103},"level":"info","message":"Customer","timestamp":"2022-01-03T12:13:04.542Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:13:04.542Z"}
+{"customer_id":3,"expire_time":"2022-01-03 17:46:12","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"55ba59e4-3454-4232-9514-71590b39d137","tenant_id":"1","timestamp":"2022-01-03T12:13:04.542Z","trials":3}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:15:36.584Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:15:36.584Z"}
+{"0":{"aadhar_number":"9895558724","aadhar_url":"/home/rushikesh/Nidhi-Bank-API/app/uploads/71ZCJYuOqIL.png","address":"at goa tq goa dist south goa","create_date_time":"2021-12-22T10:18:31.000Z","dob":"1997-06-20T00:00:00.000Z","email":"vinay@digitalflake.com","first_name":"Vinay","id":3,"last_name":"Naik","middle_name":"Rao","mobile":"9958672413","pan_number":"VB48788","pancard_url":"/home/rushikesh/Nidhi-Bank-API/app/uploads/photo-1561731216-c3a4d99437d5.jpeg","password":"$2b$10$tNxuZtZejIzFy6JfcdCNMudPUAtiMBmjU3BSNNzsW.iTCzeR1mJdK","reg_date":"2021-11-22T00:00:00.000Z","status":0,"tenant_id":1,"update_date_time":"2021-12-22T10:18:31.000Z","user_id":103},"level":"info","message":"Customer","timestamp":"2022-01-03T12:15:36.584Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:15:36.584Z"}
+{"customer_id":3,"expire_time":"2022-01-03 17:49:32","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"8e739f99-2ee1-4fa8-9526-52c93e172001","tenant_id":"1","timestamp":"2022-01-03T12:15:36.584Z","trials":3}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:17:46.286Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:19:19.143Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:19:19.143Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:19:19.143Z"}
+{"customer_id":3,"expire_time":"2022-01-03 17:52:25","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"ff06d989-a514-4889-957a-2d6695cf7852","tenant_id":"1","timestamp":"2022-01-03T12:19:19.143Z","trials":3}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:19:19.143Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:19:19.143Z"}
+{"customer_id":3,"expire_time":"2022-01-03 17:52:28","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"ef62a756-467d-42ed-8820-3c3564f22508","tenant_id":"1","timestamp":"2022-01-03T12:19:19.143Z","trials":3}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:20:20.856Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:20:20.856Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:20:20.856Z"}
+{"customer_id":3,"expire_time":"2022-01-03 17:53:47","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"8fbbf66f-f9db-470b-a822-b6d85fd757ad","tenant_id":"1","timestamp":"2022-01-03T12:20:20.856Z","trials":3}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:21:24.230Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:22:04.973Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:22:04.973Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:22:04.973Z"}
+{"customer_id":3,"expire_time":"2022-01-03 17:55:07","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"223522f3-8488-49d6-9b0b-f9a3b63c6e5d","tenant_id":"1","timestamp":"2022-01-03T12:22:04.973Z","trials":3}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:22:38.315Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:22:38.315Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:22:38.315Z"}
+{"customer_id":3,"expire_time":"2022-01-03 17:55:41","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"199a3a98-debe-4b1a-a5aa-d86871543a00","tenant_id":"1","timestamp":"2022-01-03T12:22:38.315Z","trials":3}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:22:55.442Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:22:55.442Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:22:55.442Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:22:55.442Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:22:55.442Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:30:14.790Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:30:14.790Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:30:14.790Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:30:14.790Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:30:14.790Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:31:26.397Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:31:26.397Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:31:26.397Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:31:59.117Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:32:46.964Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:32:46.964Z"}
+{"0":{"aadhar_number":"9895558724","aadhar_url":"/home/rushikesh/Nidhi-Bank-API/app/uploads/71ZCJYuOqIL.png","address":"at goa tq goa dist south goa","create_date_time":"2021-12-22T10:18:31.000Z","dob":"1997-06-20T00:00:00.000Z","email":"vinay@digitalflake.com","first_name":"Vinay","id":3,"last_name":"Naik","middle_name":"Rao","mobile":"9958672413","pan_number":"VB48788","pancard_url":"/home/rushikesh/Nidhi-Bank-API/app/uploads/photo-1561731216-c3a4d99437d5.jpeg","password":"$2b$10$tNxuZtZejIzFy6JfcdCNMudPUAtiMBmjU3BSNNzsW.iTCzeR1mJdK","reg_date":"2021-11-22T00:00:00.000Z","status":0,"tenant_id":1,"update_date_time":"2021-12-22T10:18:31.000Z","user_id":103},"level":"info","message":"Customer","timestamp":"2022-01-03T12:32:46.964Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:32:46.964Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:34:05.255Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:34:05.255Z"}
+{"0":{"aadhar_number":"9895558724","aadhar_url":"/home/rushikesh/Nidhi-Bank-API/app/uploads/71ZCJYuOqIL.png","address":"at goa tq goa dist south goa","create_date_time":"2021-12-22T10:18:31.000Z","dob":"1997-06-20T00:00:00.000Z","email":"vinay@digitalflake.com","first_name":"Vinay","id":3,"last_name":"Naik","middle_name":"Rao","mobile":"9958672413","pan_number":"VB48788","pancard_url":"/home/rushikesh/Nidhi-Bank-API/app/uploads/photo-1561731216-c3a4d99437d5.jpeg","password":"$2b$10$tNxuZtZejIzFy6JfcdCNMudPUAtiMBmjU3BSNNzsW.iTCzeR1mJdK","reg_date":"2021-11-22T00:00:00.000Z","status":0,"tenant_id":1,"update_date_time":"2021-12-22T10:18:31.000Z","user_id":103},"level":"info","message":"Customer","timestamp":"2022-01-03T12:34:05.255Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:34:05.255Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:34:42.121Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:34:42.121Z"}
+{"0":{"aadhar_number":"9895558724","aadhar_url":"/home/rushikesh/Nidhi-Bank-API/app/uploads/71ZCJYuOqIL.png","address":"at goa tq goa dist south goa","create_date_time":"2021-12-22T10:18:31.000Z","dob":"1997-06-20T00:00:00.000Z","email":"vinay@digitalflake.com","first_name":"Vinay","id":3,"last_name":"Naik","middle_name":"Rao","mobile":"9958672413","pan_number":"VB48788","pancard_url":"/home/rushikesh/Nidhi-Bank-API/app/uploads/photo-1561731216-c3a4d99437d5.jpeg","password":"$2b$10$tNxuZtZejIzFy6JfcdCNMudPUAtiMBmjU3BSNNzsW.iTCzeR1mJdK","reg_date":"2021-11-22T00:00:00.000Z","status":0,"tenant_id":1,"update_date_time":"2021-12-22T10:18:31.000Z","user_id":103},"level":"info","message":"Customer","timestamp":"2022-01-03T12:34:42.121Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:34:42.121Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:34:42.121Z"}
+{"0":{"aadhar_number":"9895558724","aadhar_url":"/home/rushikesh/Nidhi-Bank-API/app/uploads/71ZCJYuOqIL.png","address":"at goa tq goa dist south goa","create_date_time":"2021-12-22T10:18:31.000Z","dob":"1997-06-20T00:00:00.000Z","email":"vinay@digitalflake.com","first_name":"Vinay","id":3,"last_name":"Naik","middle_name":"Rao","mobile":"9958672413","pan_number":"VB48788","pancard_url":"/home/rushikesh/Nidhi-Bank-API/app/uploads/photo-1561731216-c3a4d99437d5.jpeg","password":"$2b$10$tNxuZtZejIzFy6JfcdCNMudPUAtiMBmjU3BSNNzsW.iTCzeR1mJdK","reg_date":"2021-11-22T00:00:00.000Z","status":0,"tenant_id":1,"update_date_time":"2021-12-22T10:18:31.000Z","user_id":103},"level":"info","message":"Customer","timestamp":"2022-01-03T12:34:42.121Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:34:42.121Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:36:55.349Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:36:55.349Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:36:55.349Z"}
+{"customer_id":3,"expire_time":"2022-01-03 18:09:59","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"21478560-d026-4dfa-9ff7-7ebbc249ed95","tenant_id":"1","timestamp":"2022-01-03T12:36:55.349Z","trials":3}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:38:39.239Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:38:39.239Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:38:39.239Z"}
+{"customer_id":3,"expire_time":"2022-01-03 18:11:44","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"0eb1b70a-4e90-4dee-9d8c-80a073e03ecb","tenant_id":"1","timestamp":"2022-01-03T12:38:39.239Z","trials":3}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:39:20.248Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:39:40.835Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:39:40.835Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:39:40.835Z"}
+{"customer_id":3,"expire_time":"2022-01-03 18:12:59","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"82d03090-62d2-4415-95aa-c50a154c5c85","tenant_id":"1","timestamp":"2022-01-03T12:39:40.835Z","trials":3}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:41:40.713Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:41:40.713Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T12:41:40.713Z"}
+{"customer_id":3,"expire_time":"2022-01-03 18:14:53","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"e95d9de3-6195-4ae8-bc3d-904673a44815","tenant_id":"1","timestamp":"2022-01-03T12:41:40.713Z","trials":3}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:44:03.745Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:44:10.379Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-03T12:44:10.379Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:47:51.394Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:55:08.107Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T12:56:44.929Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T13:00:31.097Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T13:02:35.208Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T13:03:51.120Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"2","timestamp":"2022-01-03T13:03:51.120Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"2","timestamp":"2022-01-03T13:03:51.120Z"}
+{"level":"info","message":111,"mobile":7845123265,"tenant_id":"2","timestamp":"2022-01-03T13:03:51.120Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T13:14:36.984Z"}
+{"level":"info","message":111,"mobile":7845123265,"tenant_id":"2","timestamp":"2022-01-03T13:14:36.984Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T13:15:25.716Z"}
+{"level":"info","message":111,"mobile":7845123265,"tenant_id":"2","timestamp":"2022-01-03T13:15:25.716Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-03T13:15:25.716Z"}
+{"customer_id":1,"expire_time":"2022-01-03 18:48:29","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"a34a3ec8-e7f7-4f11-b27a-7919fda85a30","tenant_id":"2","timestamp":"2022-01-03T13:15:25.716Z","trials":3}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-03T13:15:41.996Z"}
+{"level":"info","message":111,"mobile":7845123265,"tenant_id":"2","timestamp":"2022-01-03T13:15:41.996Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-04T04:44:14.566Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-04T05:56:01.418Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-04T06:41:07.159Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-04T06:41:27.594Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-04T09:48:47.873Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T06:52:01.887Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T06:54:26.155Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T06:54:26.155Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T06:56:26.554Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T06:56:26.554Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T06:57:27.899Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T06:57:27.899Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T06:58:01.882Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T06:58:14.196Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T06:58:14.196Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:00:55.073Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:00:55.073Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:02:31.932Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:02:31.932Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:03:31.765Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:03:31.765Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:04:52.286Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:04:52.286Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:05:29.323Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:05:29.323Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:06:15.134Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:06:15.134Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:13:49.789Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:14:50.754Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:16:53.822Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:17:17.459Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:17:17.459Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:32:30.210Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:35:48.608Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:38:03.637Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:39:13.858Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:40:08.656Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:43:29.266Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:44:49.056Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:47:50.850Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:47:50.850Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:48:38.802Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:48:38.802Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:51:27.601Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:52:59.907Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:52:59.907Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:52:59.907Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:55:16.868Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:55:16.868Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:56:09.020Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:56:09.020Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:57:08.718Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T07:57:08.718Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T07:59:57.078Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:00:11.250Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T08:00:11.250Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T08:00:11.250Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:46:49.639Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:48:50.687Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T08:48:50.687Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:49:47.762Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:52:29.003Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T08:52:29.003Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:53:05.328Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:53:27.075Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T08:53:27.075Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:54:58.186Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T08:54:58.186Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:58:02.010Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:58:17.315Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T08:58:17.315Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T08:59:14.734Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T08:59:14.734Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:00:14.079Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T09:00:14.079Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:13:35.323Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T09:13:35.323Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:14:00.773Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T09:14:00.773Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:15:31.906Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T09:15:31.906Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:16:51.132Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T09:16:51.132Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:18:42.930Z"}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T09:18:42.930Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:21:19.799Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:22:09.980Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T09:23:41.940Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T10:03:14.641Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T10:03:47.715Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T10:04:09.814Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T10:04:57.700Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":1,"level":"info","message":"TransHistInformation->","serverStatus":2,"timestamp":"2022-01-05T10:04:57.700Z","warningStatus":0}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":2,"level":"info","message":"TransHistInformation->","serverStatus":2,"timestamp":"2022-01-05T10:04:57.700Z","warningStatus":0}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":3,"level":"info","message":"TransHistInformation->","serverStatus":2,"timestamp":"2022-01-05T10:04:57.700Z","warningStatus":0}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T10:15:05.165Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":4,"level":"info","message":"TransHistInformation->","serverStatus":2,"timestamp":"2022-01-05T10:15:05.165Z","warningStatus":0}
+{"level":"info","message":"TransactionHist--->","timestamp":"2022-01-05T10:15:05.165Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T10:17:22.036Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T10:52:50.503Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T11:18:00.092Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T11:19:17.554Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T11:43:06.338Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T11:49:52.978Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T11:52:19.361Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T11:53:07.923Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T11:59:23.281Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T12:00:11.109Z"}
+{"level":"info","message":"addBalanceService--->","timestamp":"2022-01-05T12:00:11.109Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T12:03:22.858Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":5,"level":"info","message":"addBalanceService->","serverStatus":2,"timestamp":"2022-01-05T12:03:22.858Z","warningStatus":0}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T12:18:05.130Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T12:19:03.687Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-05T12:33:52.843Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-06T04:05:50.890Z"}

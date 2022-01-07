@@ -88,8 +88,11 @@ const fetchCustomerById = async (id: any, tenant_id:any ) => {
 const loginCustomer=async (data: any) => {
     try {
         LOGGER.info(111, data);
+        let status = await new CustomerModel().getCustomerStatus(data.mobile, data.tenant_id)
+        console.log(status);
+        if(status[0] !== 1) throw new Error("Your Account is not active");
         let customer = await new CustomerModel().getCustomer(data.mobile, data.tenant_id);
-        LOGGER.info("Customer", customer);
+        // LOGGER.info("Customer", customer);
         if (customer.length === 0) throw new Error("No Such Customer exits");
         // const otp = Math.floor(100000 + Math.random() * 900000);
         //todo need to integrate sms
@@ -102,8 +105,8 @@ const loginCustomer=async (data: any) => {
         delete data.mobile;
         data.trials = 3;
         //todo fetch it from config
-        LOGGER.info(data);
-        console.log(data);
+        LOGGER.info("Data Before create OTP----->",data);
+        console.log("Data Before create OTP----->",data);
         await new CustomerModel().create_otp(data);
         return {request_id: data.req_id};
     } catch (e) {
@@ -149,14 +152,25 @@ const updateCustomerById = async (data:any) => {
     }
 }
 
+const updateCustomerStatus = async (data:any) => {
+    try {
+        let customer = await new CustomerModel().updateCustomerStatus(data);
+        if (customer.length == 0) throw new Error("No customer");
+        return customer[0];
+    }
+    catch (e){
+        return e;
+    }
+}
+
+
+
 export default {
     createCustomer,
     fetchAllCustomers,
     loginCustomer,
     verify_customer_otp,
     fetchCustomerById,
-    updateCustomerById
+    updateCustomerById,
+    updateCustomerStatus
 }
-
-
-

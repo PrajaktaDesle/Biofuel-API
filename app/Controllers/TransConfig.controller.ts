@@ -9,17 +9,17 @@ import LOGGER from "../config/LOGGER";
 const createTransConfig: IController = async (req, res) => {
     req.body.tenant_id=req.headers["tenant-id"]
     await transConfigService.createTransInformation(req.body)
-        .then((TC : Object) => {
-            if(TC instanceof Error){
-                LOGGER.info("User 2", TC.message)
+        .then((transConfigInfo : Object) => {
+            if(transConfigInfo instanceof Error){
+                LOGGER.info("User 2", transConfigInfo.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
-                    TC.message
+                    transConfigInfo.message
                 );
             }else{
-                LOGGER.info("TC info->", TC)
-                apiResponse.result(res, TC, httpStatusCodes.OK);
+                LOGGER.info("TC info->", transConfigInfo)
+                apiResponse.result(res, transConfigInfo, httpStatusCodes.OK);
             }
         }).catch(err => {
             LOGGER.info("Error  ->", err);
