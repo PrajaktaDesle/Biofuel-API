@@ -11,11 +11,12 @@ import {AddBalanceModel} from "../Models/AddBalance/AddBalance.model";
 const createCustomer = async (req:any,tenant:any) =>{
     try{
         console.log("print data ---->",req)
-        let customerData, fields: any, newPath :any;
+        let customerData, fields : any, newPath : any
         let response = await processForm(req);
         if(response instanceof Error) throw response;
         // @ts-ignore
         fields = response.fields;
+        // @ts-ignore
         newPath = response.newPath;
         console.log("response", response);
         let hash = await new Encryption().generateHash(fields.password, 10);
@@ -105,7 +106,7 @@ const loginCustomer=async (data: any) => {
         LOGGER.info(111, data);
         let status = await new CustomerModel().getCustomerStatus(data.mobile, data.tenant_id)
         console.log(status);
-        if(status[0] !== 1) throw new Error("Your Account is not active");
+        if(status[0].status !== 1) throw new Error("Your Account is not active");
         let customer = await new CustomerModel().getCustomer(data.mobile, data.tenant_id);
         // LOGGER.info("Customer", customer);
         if (customer.length === 0) throw new Error("No Such Customer exits");

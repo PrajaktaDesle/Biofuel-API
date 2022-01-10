@@ -1126,3 +1126,48 @@
 {"level":"info","message":"Server running at 3000","timestamp":"2022-01-07T10:16:04.086Z"}
 {"level":"info","message":"Server running at 3000","timestamp":"2022-01-07T10:44:36.078Z"}
 {"level":"info","message":"Server running at 3000","timestamp":"2022-01-07T10:44:46.025Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-07T10:47:53.643Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-07T12:40:38.921Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-07T12:55:28.440Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-07T12:56:51.691Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-07T12:57:51.713Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-07T12:59:21.162Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-07T12:59:37.922Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-07T13:01:28.358Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-08T03:35:28.681Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-08T03:36:46.114Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-08T05:58:49.209Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-08T06:01:13.486Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":1,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2022-01-07T15:11:50.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2022-01-08T06:01:13.486Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T04:40:58.011Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T04:44:56.070Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T04:45:51.809Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T04:46:23.181Z"}
+{"level":"info","message":111,"mobile":9890599259,"tenant_id":"1","timestamp":"2022-01-10T04:46:23.181Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T04:47:50.031Z"}
+{"level":"info","message":111,"mobile":9890599259,"tenant_id":"1","timestamp":"2022-01-10T04:47:50.031Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-10T04:47:50.031Z"}
+{"customer_id":2,"expire_time":"2022-01-10 10:21:13","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"8bd94d46-fe53-4105-85f0-480a8feb3487","tenant_id":"1","timestamp":"2022-01-10T04:47:50.031Z","trials":3}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-10T04:47:50.031Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-10T04:47:50.031Z"}
+{"customer_id":3,"expire_time":"2022-01-10 10:55:01","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"de4e74f0-f1fe-4fab-9707-f4f0014d0235","tenant_id":"1","timestamp":"2022-01-10T04:47:50.031Z","trials":3}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-10T04:47:50.031Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-10T04:47:50.031Z"}
+{"customer_id":3,"expire_time":"2022-01-10 10:55:13","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"96376bdf-3c81-4e7b-9011-7e206218eeae","tenant_id":"1","timestamp":"2022-01-10T04:47:50.031Z","trials":3}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T05:23:26.780Z"}
+{"level":"info","message":111,"mobile":9958672413,"tenant_id":"1","timestamp":"2022-01-10T05:23:26.780Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-10T05:23:26.780Z"}
+{"customer_id":3,"expire_time":"2022-01-10 10:56:37","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"56ecb70a-c4b0-4975-b7ce-ac0bdc8d79ed","tenant_id":"1","timestamp":"2022-01-10T05:23:26.780Z","trials":3}
+{"level":"info","message":111,"mobile":7845123265,"tenant_id":"1","timestamp":"2022-01-10T05:23:26.780Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-10T05:23:26.780Z"}
+{"customer_id":1,"expire_time":"2022-01-10 10:57:04","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"eeab11ad-cb61-4e77-ae5f-429142cb6798","tenant_id":"1","timestamp":"2022-01-10T05:23:26.780Z","trials":3}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T05:27:13.990Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T05:27:21.885Z"}
+{"level":"info","message":111,"mobile":7845123265,"tenant_id":"1","timestamp":"2022-01-10T05:27:21.885Z"}
+{"level":"info","message":111,"mobile":7276871245,"tenant_id":"1","timestamp":"2022-01-10T05:27:21.885Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-10T05:27:21.885Z"}
+{"customer_id":4,"expire_time":"2022-01-10 11:00:52","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"b9355161-4876-44c2-9af3-a61a07b9ec40","tenant_id":"1","timestamp":"2022-01-10T05:27:21.885Z","trials":3}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T05:32:05.013Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T05:33:37.831Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T05:33:59.338Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T05:39:39.796Z"}

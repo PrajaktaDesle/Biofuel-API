@@ -5,8 +5,6 @@ import userSchema from '../../Constants/Schema/User.schema';
 
 const router = express.Router();
 import { celebrate } from 'celebrate';
-import customerSchema from "../../Constants/Schema/Customer.schema";
-import customerController from "../../Controllers/Customer.controller";
 
 router.post(
     '/register',
