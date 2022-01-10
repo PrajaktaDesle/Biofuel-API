@@ -24,7 +24,7 @@ export default {
             "tenant-id": Joi.number().min(1).required()
         }).unknown()
     },
-    login: {
+    login: { 
         [Segments.BODY]: {
             mobile: Joi.number().min(10).required()
         },

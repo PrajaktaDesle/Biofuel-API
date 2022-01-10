@@ -12,7 +12,9 @@ const createCustomer = async (req:any,tenant:any) =>{
     try{
         console.log("print data ---->",req)
         let customerData, fields: any, newPath :any;
-        let response:any = await processForm(req)
+        let response = await processForm(req);
+        if(response instanceof Error) throw response;
+        // @ts-ignore
         fields = response.fields;
         newPath = response.newPath;
         console.log("response", response);
@@ -61,6 +63,7 @@ const processForm = async(req : any) => {
             const data: any [] = [];
             const data_path: string [] = [];
             const images = Object.keys(files)
+            if(images.length == 0) reject(new Error("No files are uploaded"));
             for (let i = 0; i < images.length; i++) {
                 data.push(files[images[i]]);
                 data_path[i] = data[i].filepath;
