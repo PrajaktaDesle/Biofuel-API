@@ -11,11 +11,12 @@ import {AddBalanceModel} from "../Models/AddBalance/AddBalance.model";
 const createCustomer = async (req:any,tenant:any) =>{
     try{
         console.log("print data ---->",req)
-        let customerData, fields: any, newPath :any;
+        let customerData, fields : any, newPath : any
         let response = await processForm(req);
         if(response instanceof Error) throw response;
         // @ts-ignore
         fields = response.fields;
+        // @ts-ignore
         newPath = response.newPath;
         console.log("response", response);
         let hash = await new Encryption().generateHash(fields.password, 10);
