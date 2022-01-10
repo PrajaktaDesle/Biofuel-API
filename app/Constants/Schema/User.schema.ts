@@ -8,9 +8,9 @@ export default {
             email: Joi.string().email().required(),
             password: Joi.string().min(6).max(32).required(),
             confirm_password: Joi.string().min(6).max(32).required(),
-            mobile: Joi.string().min(10).max(10).required(),
+            mobile: Joi.string().min(10).required(),
             user_id: Joi.number().required(),
-            status: Joi.number().min(1).max(1).required()
+            status: Joi.number().max(1).required()
         },
         [Segments.HEADERS]:Joi.object({
             "tenant-id": Joi.string().min(1).required()

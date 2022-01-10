@@ -69,7 +69,7 @@ export default {
 
     updateCustomerStatus: {
         [Segments.BODY]: {
-            status: Joi.number().min(1).max(1).required(),
+            status: Joi.number().min(1).required(),
             id: Joi.number().min(1).required()
         },
         [Segments.HEADERS]:Joi.object({
