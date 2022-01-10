@@ -31,11 +31,8 @@ async function loginUser(data:any) {
 }
 
 const userDetails = async (data : any) =>{
-    let userData;
-    userData = await new UserModel().findUsers(data)
-    // console.log("details returned from model------>", userData)
+    let userData = await new UserModel().findUsers(data)
     if (userData[0] == null) throw new Error("details did not match");
-    // console.log("details returned from model------>", userData)
     return userData;
 }
 

@@ -20,5 +20,5 @@ export default {
         [Segments.HEADERS]:Joi.object({
             "tenant-id": Joi.number().required()
         }).unknown()
-    }
+    },
 };

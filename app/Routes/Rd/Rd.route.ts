@@ -13,6 +13,12 @@ router.post(
 );
 
 router.get(
+    '/info',
+    celebrate(rdSchema.fetchRd),
+    rdController.fetchRd
+);
+
+router.get(
     '/',
     celebrate(rdSchema.fetchRd),
     rdController.fetchRd

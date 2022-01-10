@@ -21,15 +21,15 @@ export default {
             address:Joi.string().required(),
         },
         [Segments.HEADERS]: Joi.object({
-            "tenant-id": Joi.number().required()
+            "tenant-id": Joi.number().min(1).required()
         }).unknown()
     },
     login: {
         [Segments.BODY]: {
-            mobile: Joi.number().required()
+            mobile: Joi.number().min(10).required()
         },
         [Segments.HEADERS]:Joi.object({
-            "tenant-id": Joi.string().required()
+            "tenant-id": Joi.string().min(1).required()
         }).unknown()
     },
     verify_otp: {
@@ -38,23 +38,23 @@ export default {
             request_id: Joi.string().required()
         },
         [Segments.HEADERS]:Joi.object({
-            "tenant-id": Joi.string().required()
+            "tenant-id": Joi.string().min(1).required()
         }).unknown()
 
     },
 
     fetchAllCustomers: {
         [Segments.HEADERS]: Joi.object({
-            "tenant-id": Joi.number().required()
+            "tenant-id": Joi.number().min(1).required()
         }).unknown()
 
     },
     fetchCustomerById:{
         [Segments.QUERY]:{
-            id:Joi.number().required()
+            id:Joi.number().min(1).required()
         },
         [Segments.HEADERS]: Joi.object({
-            "tenant-id": Joi.number().required()
+            "tenant-id": Joi.number().min(1).required()
         }).unknown()
     },
     updateCustomerById: {
@@ -69,11 +69,11 @@ export default {
 
     updateCustomerStatus: {
         [Segments.BODY]: {
-            status: Joi.number().required(),
-            id: Joi.number().required()
+            status: Joi.number().min(1).max(1).required(),
+            id: Joi.number().min(1).required()
         },
         [Segments.HEADERS]:Joi.object({
-            "tenant-id": Joi.string().required()
+            "tenant-id": Joi.string().min(1).required()
         }).unknown()
     },
 

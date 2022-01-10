@@ -34,13 +34,13 @@ router.post(
     customerController.verify_otp,
 );
 router.put(
-    '/change',
+    '/put-mobile',
     celebrate(customerSchema.updateCustomerById),
     customerController.updateCustomerById
 );
 
 router.put(
-    '/change-status',
+    '/put-status',
     celebrate(customerSchema.updateCustomerStatus),
     customerController.updateCustomerStatus
 );

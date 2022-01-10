@@ -11,8 +11,8 @@ const router = Router();
 router.use('/User', userRoute);
 router.use('/Customer', customerRoute);
 router.use('/Rd-transactions', rdRoute);
-router.use('/transaction-config',tcRoute)
+router.use('/Transaction-config',tcRoute)
 router.use('/Fd-transactions',fdRoute)
-router.use('/add-balance',addBalanceRoute)
+router.use('/Add-balance',addBalanceRoute)
 
 export default router;

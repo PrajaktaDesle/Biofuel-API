@@ -102,7 +102,7 @@ const loginCustomer=async (data: any) => {
         LOGGER.info(111, data);
         let status = await new CustomerModel().getCustomerStatus(data.mobile, data.tenant_id)
         console.log(status);
-        if(status[0] !== 1) throw new Error("Your Account is not active");
+        if(status[0].status !== 1) throw new Error("Your Account is not active");
         let customer = await new CustomerModel().getCustomer(data.mobile, data.tenant_id);
         // LOGGER.info("Customer", customer);
         if (customer.length === 0) throw new Error("No Such Customer exits");
