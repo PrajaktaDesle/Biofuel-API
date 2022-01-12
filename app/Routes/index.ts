@@ -13,6 +13,6 @@ router.use('/Customer', customerRoute);
 router.use('/Rd-transactions', rdRoute);
 router.use('/Transaction-config',tcRoute)
 router.use('/Fd-transactions',fdRoute)
-router.use('/Add-balance',addBalanceRoute)
+router.use('/Add-fund',addBalanceRoute)
 
 export default router;

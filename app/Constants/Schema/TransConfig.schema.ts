@@ -18,7 +18,7 @@ export default {
 
     fetchTransConfig: {
         [Segments.QUERY]: {
-            transaction_type: Joi.string()
+            transaction_type: Joi.string().required()
         },
         [Segments.HEADERS]: Joi.object({
             "tenant-id": Joi.number().required()

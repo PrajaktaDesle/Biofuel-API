@@ -1171,3 +1171,169 @@
 {"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T05:33:37.831Z"}
 {"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T05:33:59.338Z"}
 {"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T05:39:39.796Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T07:27:01.276Z"}
+{"0":{"amount":10000,"create_date_time":"2021-12-31T11:21:55.000Z","customer_id":1,"id":1,"roi":12,"start_date":"2021-11-29T00:00:00.000Z","tenant_id":1,"tenure":10,"update_date_time":"2022-01-07T14:00:55.000Z"},"level":"info","message":"transactionType ->","timestamp":"2022-01-10T07:27:01.276Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","customer_id":1,"id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenant_id":1,"tenure":20,"update_date_time":"2022-01-07T15:11:50.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2022-01-10T07:27:01.276Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T09:16:06.456Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T09:16:26.435Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":4,"level":"info","message":"addBalanceService->","serverStatus":2,"timestamp":"2022-01-10T09:16:26.435Z","warningStatus":0}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":5,"level":"info","message":"addBalanceService->","serverStatus":2,"timestamp":"2022-01-10T09:16:26.435Z","warningStatus":0}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T09:59:50.257Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T10:04:08.289Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T10:04:26.817Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T10:07:56.411Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T10:09:35.960Z"}
+{"0":{"amount":1000,"create_date_time":"2021-12-30T14:54:56.000Z","id":1,"maturity_amount":20000,"start_date":"2021-06-05T00:00:00.000Z","tenure":20,"update_date_time":"2022-01-07T15:11:50.000Z","user_id":2},"level":"info","message":"User 3","timestamp":"2022-01-10T10:09:35.960Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T10:12:19.730Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T10:14:51.694Z"}
+{"0":{"amount":500,"maturity_amount":5500,"tenure":10},"1":{"amount":1000,"maturity_amount":25000,"tenure":20},"level":"info","message":"transactionType ->","timestamp":"2022-01-10T10:14:51.694Z"}
+{"0":{"amount":10000,"create_date_time":"2021-12-31T11:21:55.000Z","customer_id":1,"id":1,"roi":12,"start_date":"2021-11-29T00:00:00.000Z","tenant_id":1,"tenure":10,"update_date_time":"2022-01-07T14:00:55.000Z"},"level":"info","message":"transactionType ->","timestamp":"2022-01-10T10:14:51.694Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T10:28:10.474Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T10:28:25.013Z"}
+{"amount":10000,"create_date_time":"2021-12-31T11:21:55.000Z","id":1,"level":"info","message":"transactionType ->","roi":12,"start_date":"2021-11-29T00:00:00.000Z","tenure":10,"timestamp":"2022-01-10T10:28:25.013Z","update_date_time":"2022-01-07T14:00:55.000Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T10:28:49.445Z"}
+{"0":{"amount":10000,"create_date_time":"2021-12-31T11:21:55.000Z","id":1,"roi":12,"start_date":"2021-11-29T00:00:00.000Z","tenure":10,"update_date_time":"2022-01-07T14:00:55.000Z"},"level":"info","message":"transactionType ->","timestamp":"2022-01-10T10:28:49.445Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T11:50:38.746Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T11:50:55.564Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T11:52:30.739Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-10T11:53:11.736Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T04:07:57.262Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T05:46:39.329Z"}
+{"level":"info","message":111,"mobile":9890599259,"tenant_id":"1","timestamp":"2022-01-11T05:46:39.329Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-11T05:46:39.329Z"}
+{"customer_id":2,"expire_time":"2022-01-11 11:21:26","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"22623409-f8e7-4523-8815-eebcabca9b42","tenant_id":"1","timestamp":"2022-01-11T05:46:39.329Z","trials":3}
+{"level":"info","message":111,"otp":123456,"request_id":"22623409-f8e7-4523-8815-eebcabca9b42","tenant_id":"2","timestamp":"2022-01-11T05:46:39.329Z"}
+{"level":"info","message":"login successful","timestamp":"2022-01-11T05:46:39.329Z"}
+{"level":"info","message":"Login Successful","timestamp":"2022-01-11T05:46:39.329Z"}
+{"level":"info","message":"User 2","timestamp":"2022-01-11T05:46:39.329Z"}
+{"affectedRows":1,"fieldCount":0,"info":"","insertId":3,"level":"info","message":"RD info->","serverStatus":2,"timestamp":"2022-01-11T05:46:39.329Z","warningStatus":0}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T07:15:35.977Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T09:18:13.368Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T09:21:56.205Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T09:22:07.525Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T09:22:45.697Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T09:24:57.536Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T09:33:28.188Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T09:58:57.776Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T10:00:49.728Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T10:02:57.125Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T10:04:28.243Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T10:07:34.144Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T10:22:34.755Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T10:25:01.063Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T10:37:35.407Z"}
+{"level":"info","message":"RD Transaction List","timestamp":"2022-01-11T10:37:35.407Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T10:40:48.942Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T10:43:01.286Z"}
+{"level":"info","message":"RD Transaction List","timestamp":"2022-01-11T10:43:01.286Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T10:44:49.551Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T10:45:25.595Z"}
+{"level":"info","message":"RD Transaction List","timestamp":"2022-01-11T10:45:25.595Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T10:47:06.758Z"}
+{"level":"info","message":"RD Transaction List","timestamp":"2022-01-11T10:47:06.758Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T10:51:22.277Z"}
+{"level":"info","message":"RD Transaction List","timestamp":"2022-01-11T10:51:22.277Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T11:06:37.248Z"}
+{"level":"info","message":"RD Transaction List","timestamp":"2022-01-11T11:06:37.248Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T11:08:57.951Z"}
+{"level":"info","message":"RD Transaction List","timestamp":"2022-01-11T11:08:57.951Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T11:09:58.885Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T11:10:07.098Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T11:10:59.998Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T11:15:50.068Z"}
+{"level":"info","message":"RD Transaction List","timestamp":"2022-01-11T11:15:50.068Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T11:17:18.277Z"}
+{"level":"info","message":"RD Transaction List","timestamp":"2022-01-11T11:17:18.277Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T11:18:15.117Z"}
+{"level":"info","message":"RD Transaction List","timestamp":"2022-01-11T11:18:15.117Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T11:19:16.537Z"}
+{"level":"info","message":"RD Transaction List","timestamp":"2022-01-11T11:19:16.537Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T11:20:21.582Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T11:21:18.900Z"}
+{"level":"info","message":"RD Transaction List","timestamp":"2022-01-11T11:21:18.900Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T11:23:14.723Z"}
+{"level":"info","message":"RD Transaction List","timestamp":"2022-01-11T11:23:14.723Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-11T11:42:32.489Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T03:42:38.401Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T04:04:55.205Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T04:06:51.865Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T04:24:39.782Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T04:31:01.945Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T04:49:29.030Z"}
+{"level":"info","message":"RD Transaction List","timestamp":"2022-01-12T04:49:29.030Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":{"date":"2022-01-12T10:44:24.000Z","paid_amount":500},"rd_id":1,"timestamp":"2022-01-12T04:49:29.030Z"}
+{"level":"info","message":"Error  -> value didnt match","stack":"Error: value didnt match\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:77:27\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2022-01-12T04:49:29.030Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T05:19:19.125Z"}
+{"level":"info","message":"User 3","timestamp":"2022-01-12T05:19:19.125Z"}
+{"level":"info","message":"Error  -> Cannot read property 'length' of undefined","stack":"TypeError: Cannot read property 'length' of undefined\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:74:30\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2022-01-12T05:19:19.125Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T05:21:01.983Z"}
+{"level":"info","message":"User 3","timestamp":"2022-01-12T05:21:01.983Z"}
+{"level":"info","message":"Error  -> Cannot read property '0' of undefined","stack":"TypeError: Cannot read property '0' of undefined\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:74:29\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2022-01-12T05:21:01.983Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T05:22:19.434Z"}
+{"level":"info","message":"User 3","timestamp":"2022-01-12T05:22:19.434Z"}
+{"level":"info","message":"Error  -> Cannot read property 'length' of undefined","stack":"TypeError: Cannot read property 'length' of undefined\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:74:30\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2022-01-12T05:22:19.434Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T05:23:32.915Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T05:24:44.026Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T05:25:11.839Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T05:25:37.335Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":{"date":"2022-01-12T10:44:24.000Z","paid_amount":1000},"rd_id":1,"timestamp":"2022-01-12T05:25:37.335Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T05:26:09.976Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":{"date":"2022-01-12T10:44:24.000Z","paid_amount":1000},"rd_id":1,"timestamp":"2022-01-12T05:26:09.976Z"}
+{"level":"info","message":"Error  -> value didnt match","stack":"Error: value didnt match\n    at /home/rushikesh/Nidhi-Bank-API/app/Controllers/Rd.contoller.ts:77:27\n    at process._tickCallback (internal/process/next_tick.js:68:7)","timestamp":"2022-01-12T05:26:09.976Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T05:26:38.888Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":{"date":"2022-01-12T10:44:24.000Z","paid_amount":1000},"rd_id":1,"timestamp":"2022-01-12T05:26:38.888Z"}
+{"level":"info","message":111,"mobile":7276871245,"tenant_id":"1","timestamp":"2022-01-12T05:26:38.888Z"}
+{"level":"info","message":123456,"timestamp":"2022-01-12T05:26:38.888Z"}
+{"customer_id":4,"expire_time":"2022-01-12 11:48:12","level":"info","message":"Data Before create OTP----->","otp":123456,"req_id":"9f97db49-a1b2-44ac-b0cf-0e2a088d7556","tenant_id":"1","timestamp":"2022-01-12T05:26:38.888Z","trials":3}
+{"level":"info","message":111,"otp":123456,"request_id":"9f97db49-a1b2-44ac-b0cf-0e2a088d7556","tenant_id":"2","timestamp":"2022-01-12T05:26:38.888Z"}
+{"level":"info","message":"login successful","timestamp":"2022-01-12T05:26:38.888Z"}
+{"level":"info","message":"Login Successful","timestamp":"2022-01-12T05:26:38.888Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":{"date":"2022-01-12T10:44:24.000Z","paid_amount":1000},"rd_id":1,"timestamp":"2022-01-12T05:26:38.888Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T06:20:53.620Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":{},"rd_id":1,"timestamp":"2022-01-12T06:20:53.620Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T06:35:09.739Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_id":1,"timestamp":"2022-01-12T06:35:09.739Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T06:37:25.632Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T06:41:40.614Z"}
+{"level":"info","message":"RD Transaction List","timestamp":"2022-01-12T06:41:40.614Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T06:42:12.676Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_collection":null,"rd_id":1,"timestamp":"2022-01-12T06:42:12.676Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T06:46:44.053Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_collection":null,"rd_id":1,"timestamp":"2022-01-12T06:46:44.053Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T06:48:59.566Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_collection":null,"rd_id":1,"timestamp":"2022-01-12T06:48:59.566Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T06:49:25.962Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_collection":null,"rd_id":1,"timestamp":"2022-01-12T06:49:25.962Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T06:50:08.734Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_collection":null,"rd_id":1,"timestamp":"2022-01-12T06:50:08.734Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T06:50:40.964Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_collection":null,"rd_id":1,"timestamp":"2022-01-12T06:50:40.964Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T06:52:19.910Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_collection":null,"rd_id":1,"timestamp":"2022-01-12T06:52:19.910Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T06:53:16.242Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_collection":null,"rd_id":1,"timestamp":"2022-01-12T06:53:16.242Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T06:54:47.628Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_id":1,"timestamp":"2022-01-12T06:54:47.628Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T06:59:32.518Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T07:01:40.623Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_collection":null,"rd_id":1,"timestamp":"2022-01-12T07:01:40.623Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T07:03:36.812Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T07:04:36.473Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_collection":null,"rd_id":1,"timestamp":"2022-01-12T07:04:36.473Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T07:05:38.976Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_collection":null,"rd_id":1,"timestamp":"2022-01-12T07:05:38.976Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T07:06:49.719Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_collection":null,"rd_id":1,"timestamp":"2022-01-12T07:06:49.719Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T07:08:03.773Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_collection":null,"rd_id":1,"timestamp":"2022-01-12T07:08:03.773Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T07:08:47.863Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_collection":2000,"rd_id":1,"timestamp":"2022-01-12T07:08:47.863Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T07:10:10.906Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T07:12:13.395Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_collection":2000,"rd_id":1,"timestamp":"2022-01-12T07:12:13.395Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T07:15:24.219Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T07:20:45.749Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T07:20:53.528Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T07:21:04.143Z"}
+{"RdEndDate":"2021-06-05T00:00:00.000Z","RdStart_date":"2021-06-05T00:00:00.000Z","amount":1000,"level":"info","message":"User 3","paidEntry":[{"date":"2022-01-12T10:44:24.000Z","debit":1000},{"date":"2022-01-12T11:44:23.000Z","debit":1000}],"rd_collection":2000,"rd_id":1,"timestamp":"2022-01-12T07:21:04.143Z"}
+{"level":"info","message":"Server running at 3000","timestamp":"2022-01-12T09:33:50.376Z"}

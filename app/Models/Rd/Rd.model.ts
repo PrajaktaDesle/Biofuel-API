@@ -16,4 +16,11 @@ export class RdModel extends BaseModel {
     async fetchRd(customer_id: any, tenant_id : number) {
         return await this._executeQuery("select * from rd_transactions where customer_id = ? and tenant_id = ?", [customer_id, tenant_id]);
     }
+    async fetchAmountStartDate(id: number, tenant_id : number) {
+        return await this._executeQuery("select id,amount,start_date from rd_transactions where id = ? and tenant_id = ?", [id,tenant_id]);
+    }
+
+    async fetchRdDetails(transaction_id: number) {
+        return await this._executeQuery("select debit, date from customers_transaction_history where transaction_id = ?", [transaction_id]);
+    }
 }

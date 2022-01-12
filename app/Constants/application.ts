@@ -16,6 +16,6 @@ export default {
         `${base}/customer/register`,
         `${base}/customer/login`,
         `${base}/customer/verify-OTP`,
-        `${base}/add-balance/`,
+        `${base}/add-fund`,
     ],
 };

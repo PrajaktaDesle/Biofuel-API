@@ -2,15 +2,15 @@ import { Joi, Segments } from 'celebrate';
 export default {
     register: {
         [Segments.BODY]: {
-            first_name: Joi.string().required(),
-            middle_name: Joi.string().required(),
-            last_name: Joi.string().required(),
+            first_name: Joi.string().min(1).required(),
+            middle_name: Joi.string().min(1).required(),
+            last_name: Joi.string().min(1).required(),
             email: Joi.string().email().required(),
             password: Joi.string().min(6).max(32).required(),
             confirm_password: Joi.string().min(6).max(32).required(),
             mobile: Joi.string().min(10).required(),
             user_id: Joi.number().required(),
-            status: Joi.number().max(1).required()
+            status: Joi.number().required()
         },
         [Segments.HEADERS]:Joi.object({
             "tenant-id": Joi.string().min(1).required()
@@ -19,7 +19,7 @@ export default {
     login: {
         [Segments.BODY]: {
             email: Joi.string().email().required(),
-            password: Joi.string().required()
+            password: Joi.string().min(6).max(32).required()
         },
         [Segments.HEADERS]:Joi.object({
             "tenant-id": Joi.string().min(1).required()

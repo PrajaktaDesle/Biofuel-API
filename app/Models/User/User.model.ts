@@ -15,7 +15,7 @@ export class UserModel extends BaseModel   {
 
     async findUsers(userData:any){
         const userResult= await this._executeQuery("select * from users where tenant_id = ? ",[userData] )
-        console.log("model data--->",userResult);
+        // console.log("model data--->",userResult);
         return userResult;
     }
 }
