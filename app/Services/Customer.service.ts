@@ -10,7 +10,6 @@ import {any} from "async";
 import {AddBalanceModel} from "../Models/AddBalance/AddBalance.model";
 const createCustomer = async (req:any,tenant:any) =>{
     try{
-        console.log("print data ---->",req)
         let customerData, fields : any, newPath : any
         let response = await processForm(req);
         if(response instanceof Error) throw response;
@@ -53,6 +52,8 @@ const fetchAllCustomers = async (tenant_id : any) =>{
     let customerData;
     customerData = await new CustomerModel().findAllCustomers(tenant_id)
     if (customerData == null) throw new Error("details did not match");
+    delete customerData[0].password;
+    delete customerData[0].tenant_id;
     return customerData;
 }
 
@@ -69,6 +70,7 @@ const processForm = async(req : any) => {
                 data.push(files[images[i]]);
                 data_path[i] = data[i].filepath;
                 // console.log("Into process form--->",data_path[i]);
+
                 newPath[i] = path.join(__dirname, '../uploads') + '/' + data[i].originalFilename;
                 let rawData = fs.readFileSync(data_path[i]);
                 fs.writeFile(newPath[i], rawData, function (err) {
@@ -94,6 +96,8 @@ const fetchCustomerById = async (id: any, tenant_id:any ) => {
         customer[0].Shares=shares;
         // console.log("customer----->",customer);
         if (customer.length == 0) throw new Error("No Customer");
+        delete customer[0].password;
+        delete customer[0].tenant_id;
         return customer[0];
     }
     catch (e){

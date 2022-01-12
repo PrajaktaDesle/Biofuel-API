@@ -3,7 +3,7 @@ export default {
     createFD:{[Segments.BODY]:{
             customer_id: Joi.number().required(),
             tenure: Joi.number().required(),
-            amount: Joi.number().required(),
+            amount: Joi.number().min(1).required(),
             start_date:  Joi.date().required(),
             transaction_type: Joi.string().required()
         },

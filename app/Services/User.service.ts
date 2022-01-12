@@ -19,6 +19,7 @@ const createUser = async (data : any) => {
 async function loginUser(data:any) {
     try{
         let user = await new UserModel().getUser(data);
+        if(user.length == 0) throw new Error("Invalid credentials");
         //password bcrypt
         const match =await new Encryption().verifypassword(data.password, user[0].password);
         if(!match) throw new Error("Invalid password");
@@ -33,6 +34,8 @@ async function loginUser(data:any) {
 const userDetails = async (data : any) =>{
     let userData = await new UserModel().findUsers(data)
     if (userData[0] == null) throw new Error("details did not match");
+    delete userData[0].password;
+    delete userData[0].tenant_id;
     return userData;
 }
 

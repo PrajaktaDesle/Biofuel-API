@@ -2,9 +2,9 @@ import { Joi, Segments } from 'celebrate';
 export default {
     register: {
         [Segments.BODY]: {
-            first_name: Joi.string().required(),
+            first_name: Joi.string().min(1).required(),
             middle_name: Joi.string().required(),
-            last_name: Joi.string().required(),
+            last_name: Joi.string().min(1).required(),
             email: Joi.string().email().required(),
             password: Joi.string().min(6).max(32).required(),
             confirm_password: Joi.string().min(6).max(32).required(),
@@ -29,7 +29,7 @@ export default {
             mobile: Joi.number().min(10).required()
         },
         [Segments.HEADERS]:Joi.object({
-            "tenant-id": Joi.string().min(1).required()
+            "tenant-id": Joi.string().required()
         }).unknown()
     },
     verify_otp: {
@@ -51,7 +51,7 @@ export default {
     },
     fetchCustomerById:{
         [Segments.QUERY]:{
-            id:Joi.number().min(1).required()
+            id:Joi.number().required()
         },
         [Segments.HEADERS]: Joi.object({
             "tenant-id": Joi.number().min(1).required()
@@ -63,14 +63,14 @@ export default {
             id: Joi.number().required()
         },
         [Segments.HEADERS]:Joi.object({
-            "tenant-id": Joi.string().required()
+            "tenant-id": Joi.string().min(1).required()
         }).unknown()
     },
 
     updateCustomerStatus: {
         [Segments.BODY]: {
-            status: Joi.number().min(1).required(),
-            id: Joi.number().min(1).required()
+            status: Joi.number().required(),
+            id: Joi.number().required()
         },
         [Segments.HEADERS]:Joi.object({
             "tenant-id": Joi.string().min(1).required()

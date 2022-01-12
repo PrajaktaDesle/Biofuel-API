@@ -3,7 +3,7 @@ export default {
     addBalance: {
         [Segments.BODY]: {
             customer_id: Joi.number().required(),
-            amount: Joi.number(),
+            amount: Joi.number().required(),
             transaction_type: Joi.string().required(),
             user_id: Joi.number().required(),
         }

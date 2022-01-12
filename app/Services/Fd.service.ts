@@ -23,6 +23,8 @@ async function fetchFdByCustomer(tenant_id: any, customer_id: any) {
         let fdDetail = await new FdModel().fetchFdByCustomer(tenant_id,customer_id);
         //if(fdDetail.length == 0)throw new Error("NO DATA");
         // console.log("at FD_service", fdDetail);
+        delete fdDetail[0].tenant_id;
+        delete fdDetail[0].customer_id;
         return fdDetail;
     } catch (e) {
         return e;
