@@ -6,11 +6,14 @@ import * as path from "path";
 import * as fs from "fs";
 const {v4 : uuidv4} = require('uuid');
 import formidable from "formidable";
+
 import {any} from "async";
 import {AddBalanceModel} from "../Models/AddBalance/AddBalance.model";
+import { uploadFile } from "./s3FileStore";
+
 const createCustomer = async (req:any,tenant:any) =>{
     try{
-        let customerData, fields : any, newPath : any
+        let customerData, fields, newPath
         let response = await processForm(req);
         if(response instanceof Error) throw response;
         // @ts-ignore
@@ -59,6 +62,7 @@ const fetchAllCustomers = async (tenant_id : any) =>{
 
 const processForm = async(req : any) => {
     let newPath: string [] = [];
+
     const form = new formidable.IncomingForm();
     return new Promise((resolve, reject) => {
         form.parse(req, (err: any, fields: any, files: any) => {
@@ -70,9 +74,11 @@ const processForm = async(req : any) => {
                 data.push(files[images[i]]);
                 data_path[i] = data[i].filepath;
                 // console.log("Into process form--->",data_path[i]);
-
                 newPath[i] = path.join(__dirname, '../uploads') + '/' + data[i].originalFilename;
+
                 let rawData = fs.readFileSync(data_path[i]);
+                const result = uploadFile(data[i]);
+                console.log("result----->",result);
                 fs.writeFile(newPath[i], rawData, function (err) {
                     if (err) console.log(err);
                 })
@@ -183,6 +189,16 @@ const updateCustomerStatus = async (data:any) => {
     }
 }
 
+const updateCustomerDetails = async (data:any) => {
+    try {
+        let customer = await new CustomerModel().updateCustomerDetails(data);
+        if (customer.length == 0) throw new Error("No customer");
+        return customer[0];
+    }
+    catch (e){
+        return e;
+    }
+}
 
 
 export default {
@@ -192,5 +208,6 @@ export default {
     verify_customer_otp,
     fetchCustomerById,
     updateCustomerById,
-    updateCustomerStatus
+    updateCustomerStatus,
+    updateCustomerDetails
 }

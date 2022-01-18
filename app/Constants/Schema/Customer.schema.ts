@@ -77,4 +77,19 @@ export default {
         }).unknown()
     },
 
+    updateCustomerDetails: {
+        [Segments.BODY]: {
+            first_name: Joi.string(),
+            middle_name: Joi.string(),
+            last_name: Joi.string(),
+            email: Joi.string().email(),
+            pan_number:Joi.string(),
+            aadhar_number:Joi.string(),
+            id: Joi.number()
+        },
+        [Segments.HEADERS]:Joi.object({
+            "tenant-id": Joi.string().min(1).required()
+        }).unknown()
+    },
+
 };

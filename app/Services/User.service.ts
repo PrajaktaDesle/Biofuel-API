@@ -39,8 +39,20 @@ const userDetails = async (data : any) =>{
     return userData;
 }
 
+const updateUserDetails = async (data:any) => {
+    try {
+        let user = await new UserModel().updateUserDetails(data);
+        if (user.length == 0) throw new Error("User did not update");
+        return user[0];
+    }
+    catch (e){
+        return e;
+    }
+}
+
 export default {
     createUser,
     loginUser,
-    userDetails
+    userDetails,
+    updateUserDetails
 };

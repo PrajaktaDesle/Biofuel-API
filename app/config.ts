@@ -13,5 +13,10 @@ export = {
         expiry : process.env.JWT_TOKEN_EXPIRY || '1d'
     },
 
+
     listPerPage: env.LIST_PER_PAGE || 10
 }
+    process.env.AWS_BUCKET_NAME = "digi-qa-s3",
+    process.env.AWS_BUCKET_REGION = "ap-south-1",
+    process.env.AWS_ACCESS_KEY = "AKIA4FVNO3EYUANR25WJ",
+    process.env.AWS_SECRET_KEY = "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"
