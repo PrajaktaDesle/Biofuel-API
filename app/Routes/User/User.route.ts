@@ -5,6 +5,8 @@ import userSchema from '../../Constants/Schema/User.schema';
 
 const router = express.Router();
 import { celebrate } from 'celebrate';
+import customerSchema from "../../Constants/Schema/Customer.schema";
+import customerController from "../../Controllers/Customer.controller";
 
 router.post(
     '/register',
@@ -21,6 +23,12 @@ router.get(
     '/all',
     celebrate(userSchema.fetch),
     userController.fetchUsers
+);
+
+router.put(
+    '/put-details',
+    celebrate(userSchema.updateUserDetails),
+    userController.updateUserDetails
 );
 
 export default router;

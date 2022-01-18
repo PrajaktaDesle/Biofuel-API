@@ -44,5 +44,10 @@ router.put(
     celebrate(customerSchema.updateCustomerStatus),
     customerController.updateCustomerStatus
 );
+router.put(
+    '/put-details',
+    celebrate(customerSchema.updateCustomerDetails),
+    customerController.updateCustomerDetails
+);
 
 export default router;

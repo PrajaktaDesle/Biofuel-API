@@ -34,5 +34,19 @@ export default {
         [Segments.HEADERS]:Joi.object({
             "tenant-id": Joi.string().min(1).required()
         }).unknown()
-    }
+    },
+
+    updateUserDetails: {
+        [Segments.BODY]: {
+            first_name: Joi.string(),
+            middle_name: Joi.string(),
+            last_name: Joi.string(),
+            email: Joi.string().email(),
+            mobile:Joi.number(),
+            id: Joi.number()
+        },
+        [Segments.HEADERS]:Joi.object({
+            "tenant-id": Joi.string().min(1).required()
+        }).unknown()
+    },
 };

@@ -64,7 +64,6 @@ const register: IController = async (req, res) => {
 };
 
 
-
 const fetchUsers: IController = async (req, res) => {
     const tenant=req.headers["tenant-id"]
     // req.body.tenant_id=tenant;
@@ -93,8 +92,34 @@ const fetchUsers: IController = async (req, res) => {
     });
 }
 
+
+const updateUserDetails: IController = async (req, res) => {
+    req.body.tenant_id = req.headers["tenant-id"]
+    userService.updateUserDetails(req.body)
+        .then( (user) => {
+            if(user instanceof Error){
+                console.log("user 2", user.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    user.message
+                );
+            }else{
+                console.log("user 3", user)
+                apiResponse.result(res, user, httpStatusCodes.OK);
+            }
+        }).catch(err => {
+        console.log("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+        );
+    });
+};
+
 export default {
     login,
     register,
-    fetchUsers
+    fetchUsers,
+    updateUserDetails
 };
