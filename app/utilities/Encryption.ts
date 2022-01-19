@@ -3,6 +3,14 @@ import {reject} from "async";
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const config = require("../config");
+import fs from "fs";
+import AWS from 'aws-sdk';
+
+const bucketName = process.env.AWS_BUCKET_NAME
+const region = process.env.AWS_BUCKET_REGION
+const accessKeyId = process.env.AWS_ACCESS_KEY
+const secretAccessKey = process.env.AWS_SECRET_KEY
+
 export default class Encryption {
     constructor() {
 
@@ -48,6 +56,29 @@ export default class Encryption {
                 }
                 reject(err);
             });
+        });
+    }
+
+    public async uploadFile (data: any):Promise<any>{
+        const s3 = new AWS.S3({
+            region,
+            accessKeyId,
+            secretAccessKey,
+        });
+        return new Promise((resolve, reject) => {
+        let fileStream = fs.createReadStream(data.filepath);
+        const params: any = {
+            Bucket: bucketName,
+            Body: fileStream,
+            Key: data.originalFilename
+        }
+        s3.upload(params, (s3Err:any, data:any) =>{
+            if (s3Err) {reject (s3Err)}
+            else {
+                console.log(`File uploaded successfully at ${data.Location}`)
+                resolve (data);
+            }
+        });
         });
     }
 }

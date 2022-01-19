@@ -75,9 +75,9 @@ const processForm = async(req : any) => {
                 data_path[i] = data[i].filepath;
                 // console.log("Into process form--->",data_path[i]);
                 newPath[i] = path.join(__dirname, '../uploads') + '/' + data[i].originalFilename;
-
                 let rawData = fs.readFileSync(data_path[i]);
-                const result = uploadFile(data[i]);
+                console.log("data----->",data[i]);
+                const result = new Encryption().uploadFile(data[i]);
                 console.log("result----->",result);
                 fs.writeFile(newPath[i], rawData, function (err) {
                     if (err) console.log(err);
