@@ -83,8 +83,6 @@ export default {
             middle_name: Joi.string(),
             last_name: Joi.string(),
             email: Joi.string().email(),
-            pan_number:Joi.string(),
-            aadhar_number:Joi.string(),
             id: Joi.number()
         },
         [Segments.HEADERS]:Joi.object({
