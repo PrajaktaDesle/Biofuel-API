@@ -9,7 +9,7 @@ import formidable from "formidable";
 
 import {any} from "async";
 import {AddBalanceModel} from "../Models/AddBalance/AddBalance.model";
-import { uploadFile } from "./s3FileStore";
+import { uploadFile } from "../utilities/s3FileStore";
 
 const createCustomer = async (req:any,tenant:any) =>{
     try{
@@ -76,8 +76,7 @@ const processForm = async(req : any) => {
                 // console.log("Into process form--->",data_path[i]);
                 newPath[i] = path.join(__dirname, '../uploads') + '/' + data[i].originalFilename;
                 let rawData = fs.readFileSync(data_path[i]);
-                console.log("data----->",data[i]);
-                const result = new Encryption().uploadFile(data[i]);
+                const result = uploadFile(data[i]);
                 console.log("result----->",result);
                 fs.writeFile(newPath[i], rawData, function (err) {
                     if (err) console.log(err);
@@ -192,14 +191,13 @@ const updateCustomerStatus = async (data:any) => {
 const updateCustomerDetails = async (data:any) => {
     try {
         let customer = await new CustomerModel().updateCustomerDetails(data);
-        if (customer.length == 0) throw new Error("No customer");
+        if (customer.length == 0) throw new Error("customer update failed");
         return customer[0];
     }
     catch (e){
         return e;
     }
 }
-
 
 export default {
     createCustomer,

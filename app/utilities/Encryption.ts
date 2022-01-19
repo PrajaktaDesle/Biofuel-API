@@ -58,27 +58,4 @@ export default class Encryption {
             });
         });
     }
-
-    public async uploadFile (data: any):Promise<any>{
-        const s3 = new AWS.S3({
-            region,
-            accessKeyId,
-            secretAccessKey,
-        });
-        return new Promise((resolve, reject) => {
-        let fileStream = fs.createReadStream(data.filepath);
-        const params: any = {
-            Bucket: bucketName,
-            Body: fileStream,
-            Key: data.originalFilename
-        }
-        s3.upload(params, (s3Err:any, data:any) =>{
-            if (s3Err) {reject (s3Err)}
-            else {
-                console.log(`File uploaded successfully at ${data.Location}`)
-                resolve (data);
-            }
-        });
-        });
-    }
 }
