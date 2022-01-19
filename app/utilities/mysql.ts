@@ -17,27 +17,20 @@ export default class MySQL{
         return this._instance || (this._instance = new this());
     }
 
-    public static getConnection(callback : Function){
-         this.instance.poolConnection.getConnection(function(err, connection){
-             if(!err){
-                 callback(null, connection);
-             }else{
-                 callback(err);
-             }
-         });
-    }
+    public static async getConnection(){
+        // @ts-ignore
+        return this.instance.poolConnection.getConnection()
+    };
 
     public static async execute_query( query:string, params : any){
-        /* this.instance.poolConnection.query(query, (err:Error, results: Object[], fields:[]) => {
-            if(err){
-                throw err;
-            } else{
-                //console.log("Mysql Results =>", results);
-                return results;
-            }
-        });*/
         // @ts-ignore
         const [rows,fields] = await this.instance.poolConnection.query(query, params);
+        return rows;
+    }
+
+    public static async execute_query_transaction( sqlClient : Connection, query:string, params : any){
+        // @ts-ignore
+        const [rows,fields] = await sqlClient.query(query, params);
         return rows;
     }
 

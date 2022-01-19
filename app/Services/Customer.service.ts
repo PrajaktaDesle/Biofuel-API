@@ -6,8 +6,8 @@ import * as path from "path";
 import * as fs from "fs";
 const {v4 : uuidv4} = require('uuid');
 import formidable from "formidable";
-import {any} from "async";
-import {AddBalanceModel} from "../Models/AddBalance/AddBalance.model";
+import {CustomerBalanceModel} from "../Models/AddBalance/CustomerBalance.model";
+
 const createCustomer = async (req:any,tenant:any) =>{
     try{
         let customerData, fields : any, newPath : any
@@ -38,9 +38,7 @@ const createCustomer = async (req:any,tenant:any) =>{
             address: String(fields.address)
         }
         customerData = await new CustomerModel().createCustomer(Customers)
-        // console.log("details returned from model  1------>", customerData)
         if (!customerData) throw new Error("Registration failed");
-        // console.log("details returned from model  2------>", customerData)
         return customerData;
     }catch(e){
         console.log("Execption ->", e);
@@ -69,8 +67,6 @@ const processForm = async(req : any) => {
             for (let i = 0; i < images.length; i++) {
                 data.push(files[images[i]]);
                 data_path[i] = data[i].filepath;
-                // console.log("Into process form--->",data_path[i]);
-
                 newPath[i] = path.join(__dirname, '../uploads') + '/' + data[i].originalFilename;
                 let rawData = fs.readFileSync(data_path[i]);
                 fs.writeFile(newPath[i], rawData, function (err) {
@@ -86,7 +82,7 @@ const fetchCustomerById = async (id: any, tenant_id:any ) => {
     try {
         let customer = await new CustomerModel().findCustomerById(id, tenant_id);
         const customer_id=id;
-        let customer_balance = await new AddBalanceModel().getCustomerBalance(customer_id);
+        let customer_balance = await new CustomerBalanceModel().getCustomerBalance(customer_id);
         let RecurringDeposit = await new CustomerModel().getCustomerRD(customer_id, tenant_id);
         let FixedDeposit = await new CustomerModel().getCustomerFD(customer_id, tenant_id);
         let shares= 2000;
