@@ -9,17 +9,17 @@ import formidable from "formidable";
 
 import {any} from "async";
 import {AddBalanceModel} from "../Models/AddBalance/AddBalance.model";
-import { uploadFile } from "../utilities/s3FileStore";
+import {uploadFile}  from "../utilities/s3FileStore";
 
 const createCustomer = async (req:any,tenant:any) =>{
     try{
-        let customerData, fields, newPath
+        let customerData, fields, s3Path
         let response = await processForm(req);
         if(response instanceof Error) throw response;
         // @ts-ignore
         fields = response.fields;
         // @ts-ignore
-        newPath = response.newPath;
+        s3Path = response.s3Path;
         console.log("response", response);
         let hash = await new Encryption().generateHash(fields.password, 10);
         let Customers = {
@@ -34,8 +34,8 @@ const createCustomer = async (req:any,tenant:any) =>{
             user_id: Number(fields.u_id),
             tenant_id: tenant,
             status: Number(fields.stat),
-            pancard_url: newPath[0],
-            aadhar_url: newPath[1],
+            pancard_url: s3Path[0],
+            aadhar_url: s3Path[1],
             pan_number: String(fields.pan_num),
             aadhar_number: String(fields.aadhar_num),
             address: String(fields.address)
@@ -62,26 +62,34 @@ const fetchAllCustomers = async (tenant_id : any) =>{
 
 const processForm = async(req : any) => {
     let newPath: string [] = [];
-
+    let s3Path:string []=[];
     const form = new formidable.IncomingForm();
     return new Promise((resolve, reject) => {
-        form.parse(req, (err: any, fields: any, files: any) => {
+        form.parse(req, async (err: any, fields: any, files: any) => {
             const data: any [] = [];
             const data_path: string [] = [];
             const images = Object.keys(files)
-            if(images.length == 0) reject(new Error("No files are uploaded"));
-            for (let i = 0; i < images.length; i++) {
-                data.push(files[images[i]]);
-                data_path[i] = data[i].filepath;
-                // console.log("Into process form--->",data_path[i]);
-                newPath[i] = path.join(__dirname, '../uploads') + '/' + data[i].originalFilename;
-                let rawData = fs.readFileSync(data_path[i]);
-                const result = uploadFile(data[i]);
-                console.log("result----->",result);
-                fs.writeFile(newPath[i], rawData, function (err) {
-                    if (err) console.log(err);
-                })
-                resolve({fields: fields, newPath : newPath});
+            if (images.length == 0) reject(new Error("No files are uploaded"));
+            try {
+                for (let i = 0; i < images.length; i++) {
+                    data.push(files[images[i]]);
+                    data_path[i] = data[i].filepath;
+                    // console.log("Into process form--->",data_path[i]);
+                    newPath[i] = path.join(__dirname, '../uploads') + '/' + data[i].originalFilename;
+                    let rawData = fs.readFileSync(data_path[i]);
+
+                    const result = await uploadFile(data[i]);
+                    if (result == 0 && result== undefined) throw new Error("upload didnt returned");
+                    console.log("result----->", result);
+                    s3Path[i]=result.Location;
+                    fs.writeFile(newPath[i], rawData, function (err) {
+                        if (err) console.log(err);
+                    })
+                }
+                resolve({fields: fields, s3Path: s3Path});
+            }catch(e)
+            {
+                return e
             }
         });
     });
@@ -112,25 +120,21 @@ const fetchCustomerById = async (id: any, tenant_id:any ) => {
 
 const loginCustomer=async (data: any) => {
     try {
-        LOGGER.info(111, data);
-        let status = await new CustomerModel().getCustomerStatus(data.mobile, data.tenant_id)
-        console.log(status);
-        if(status[0].status !== 1) throw new Error("Your Account is not active");
         let customer = await new CustomerModel().getCustomer(data.mobile, data.tenant_id);
-        // LOGGER.info("Customer", customer);
-        if (customer.length === 0) throw new Error("No Such Customer exits");
+        if (customer.length === 0) throw new Error("Invalid mobile or tenant_id");
+        if(customer[0].status !== 1) throw new Error("Your Account is not active");
         // const otp = Math.floor(100000 + Math.random() * 900000);
         //todo need to integrate sms
         const otp = 123456;
         LOGGER.info(otp);
         data.otp = otp;
         data.customer_id = customer[0].id;
+        data.status = customer[0].status;
         data.req_id = uuidv4();
         data.expire_time = moment().add(3, "minutes").format("YYYY-MM-DD HH:mm:ss");
         delete data.mobile;
         data.trials = 3;
         //todo fetch it from config
-        LOGGER.info("Data Before create OTP----->",data);
         console.log("Data Before create OTP----->",data);
         await new CustomerModel().create_otp(data);
         return {request_id: data.req_id};

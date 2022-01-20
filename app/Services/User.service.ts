@@ -25,6 +25,8 @@ async function loginUser(data:any) {
         if(!match) throw new Error("Invalid password");
         const token = await Encryption.generateJwtToken({id : user[0].id, tenant_id:user[0].tenant_id});
         user[0].token = token;
+        delete user[0].password;
+        delete user[0].tenant_id;
         return user;
     }catch(e){
         return e;
