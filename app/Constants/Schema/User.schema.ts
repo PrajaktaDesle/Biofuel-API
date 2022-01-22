@@ -50,4 +50,14 @@ export default {
             "tenant-id": Joi.string().min(1).required()
         }).unknown()
     },
+
+    updateUserStatus: {
+        [Segments.BODY]: {
+            status:Joi.number().required(),
+            id: Joi.number().required()
+        },
+        [Segments.HEADERS]:Joi.object({
+            "tenant-id": Joi.string().min(1).required()
+        }).unknown()
+    },
 };

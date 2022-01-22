@@ -117,9 +117,34 @@ const updateUserDetails: IController = async (req, res) => {
     });
 };
 
+const updateUserStatus: IController = async (req, res) => {
+    req.body.tenant_id = req.headers["tenant-id"]
+    userService.updateUserStatus(req.body)
+        .then( (user) => {
+            if(user instanceof Error){
+                console.log("user 2", user.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    user.message
+                );
+            }else{
+                console.log("user 3", user)
+                apiResponse.result(res, user, httpStatusCodes.OK);
+            }
+        }).catch(err => {
+        console.log("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+        );
+    });
+};
+
 export default {
     login,
     register,
     fetchUsers,
-    updateUserDetails
+    updateUserDetails,
+    updateUserStatus
 };
