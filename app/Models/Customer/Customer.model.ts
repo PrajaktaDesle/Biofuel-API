@@ -35,7 +35,7 @@ export class CustomerModel extends BaseModel
     }
 
     async updateCustomerDetails(data:any){
-        return await this._executeQuery("update customers set first_name = ?, middle_name = ?, last_name = ?, email = ? where id = ? and tenant_id = ? ", [data.first_name, data.middle_name, data.last_name, data.email, data.id, data.tenant_id]);
+        return await this._executeQuery("update customers set first_name = ?, middle_name = ?, last_name = ?, email = ?,status = ? where id = ? and tenant_id = ? ", [data.first_name, data.middle_name, data.last_name, data.email,data.status, data.id, data.tenant_id]);
     }
 
     // async getCustomerStatus(mobile:string, tenant_id : number){
@@ -47,5 +47,9 @@ export class CustomerModel extends BaseModel
     }
     async getCustomerFD(customer_id: number, tenant_id: number ){
         return await this._executeQuery("select amount from fd_transactions where customer_id = ? and tenant_id = ? ", [customer_id, tenant_id]);
+    }
+
+    async fetchTransactionHistoryById(customer_id: number){
+        return await this._executeQuery("select debit,credit,transaction_type,date from customers_transaction_history where customer_id = ?", [customer_id]);
     }
 }

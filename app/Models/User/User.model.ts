@@ -20,6 +20,6 @@ export class UserModel extends BaseModel   {
     }
 
     async updateUserDetails(data:any){
-        return await this._executeQuery("update users set first_name = ?, middle_name = ?, last_name = ?, email = ?, mobile = ? where id = ? and tenant_id = ? ", [data.first_name, data.middle_name, data.last_name, data.email, data.mobile, data.id, data.tenant_id]);
+        return await this._executeQuery("update users set first_name = ?, middle_name = ?, last_name = ?, email = ?, mobile = ?,status = ? where id = ? and tenant_id = ? ", [data.first_name, data.middle_name, data.last_name, data.email, data.mobile, data.status, data.id, data.tenant_id]);
     }
 }

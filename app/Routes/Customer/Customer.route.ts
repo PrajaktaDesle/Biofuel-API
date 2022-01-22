@@ -50,4 +50,10 @@ router.put(
     customerController.updateCustomerDetails
 );
 
+router.get(
+    '/transaction-history',
+    celebrate(customerSchema.fetchTransactionHistoryById),
+    customerController.fetchTransactionHistoryById
+);
+
 export default router;

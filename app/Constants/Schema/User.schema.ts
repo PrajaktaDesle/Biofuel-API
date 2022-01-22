@@ -43,6 +43,7 @@ export default {
             last_name: Joi.string(),
             email: Joi.string().email(),
             mobile:Joi.number(),
+            status:Joi.number().optional(),
             id: Joi.number()
         },
         [Segments.HEADERS]:Joi.object({

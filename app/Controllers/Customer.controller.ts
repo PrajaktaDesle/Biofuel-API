@@ -208,6 +208,29 @@ const updateCustomerDetails: IController = async (req, res) => {
     });
 };
 
+const fetchTransactionHistoryById: IController = async (req, res) => {
+    customerService.fetchTransactionHistoryById(req.query.customer_id)
+        .then( (customer_history) => {
+            if(customer_history instanceof Error){
+                console.log("User 2", customer_history.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    customer_history.message
+                );
+            }else{
+                // console.log("User 3", customer)
+                apiResponse.result(res, customer_history, httpStatusCodes.OK);
+            }
+        }).catch(err => {
+        console.log("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+        );
+    });
+};
+
 export default {
     register,
     fetchAllCustomers,
@@ -216,5 +239,6 @@ export default {
     fetchCustomerById,
     updateCustomerById,
     updateCustomerStatus,
-    updateCustomerDetails
+    updateCustomerDetails,
+    fetchTransactionHistoryById
 };
