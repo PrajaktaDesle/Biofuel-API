@@ -83,10 +83,20 @@ export default {
             middle_name: Joi.string(),
             last_name: Joi.string(),
             email: Joi.string().email(),
-            id: Joi.number()
+            id: Joi.number(),
+            status:Joi.number().optional()
         },
         [Segments.HEADERS]:Joi.object({
             "tenant-id": Joi.string().min(1).required()
+        }).unknown()
+    },
+
+    fetchTransactionHistoryById:{
+        [Segments.QUERY]:{
+            customer_id:Joi.number().required()
+        },
+        [Segments.HEADERS]: Joi.object({
+            // "tenant-id": Joi.number().min(1).required()
         }).unknown()
     },
 

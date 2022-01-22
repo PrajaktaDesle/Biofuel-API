@@ -7,7 +7,7 @@ async function createRd(data: any) {
     try {
         // console.log(data)
         let rdDetail = await new RdModel().get_maturity_amount(data);
-        if(rdDetail.length == 0)throw new Error("NO DATA");
+        if(rdDetail.length == 0)throw new Error("RD Data did not match");
         data.maturity_amount = rdDetail[0].maturity_amount;
         console.log("at Rd service", data)
         delete data.transaction_type;

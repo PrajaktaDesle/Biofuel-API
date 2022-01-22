@@ -1,27 +1,29 @@
 import LOGGER from "../config/LOGGER";
 import {CustomerModel} from "../Models/Customer/Customer.model";
 import moment from 'moment';
-import Encryption from "../utilities/Encryption";
 import * as path from "path";
 import * as fs from "fs";
 const {v4 : uuidv4} = require('uuid');
 import formidable from "formidable";
-
 import {any} from "async";
 import {AddBalanceModel} from "../Models/AddBalance/AddBalance.model";
 import {uploadFile}  from "../utilities/s3FileStore";
+import Hashing from "../utilities/Hashing";
+import Encryption from "../utilities/Encryption";
 
 const createCustomer = async (req:any,tenant:any) =>{
     try{
-        let customerData, fields, s3Path
+        let customerData, fields, s3Path,key
         let response = await processForm(req);
         if(response instanceof Error) throw response;
         // @ts-ignore
         fields = response.fields;
         // @ts-ignore
         s3Path = response.s3Path;
+        // @ts-ignore
+        // key=response.key
         console.log("response", response);
-        let hash = await new Encryption().generateHash(fields.password, 10);
+        let hash = await new Hashing().generateHash(fields.password, 10);
         let Customers = {
             first_name: String(fields.f_name),
             middle_name: String(fields.m_name),
@@ -41,10 +43,9 @@ const createCustomer = async (req:any,tenant:any) =>{
             address: String(fields.address)
         }
         customerData = await new CustomerModel().createCustomer(Customers)
-        // console.log("details returned from model  1------>", customerData)
         if (!customerData) throw new Error("Registration failed");
         // console.log("details returned from model  2------>", customerData)
-        return customerData;
+        return customerData ;
     }catch(e){
         console.log("Execption ->", e);
         throw e;
@@ -63,6 +64,7 @@ const fetchAllCustomers = async (tenant_id : any) =>{
 const processForm = async(req : any) => {
     let newPath: string [] = [];
     let s3Path:string []=[];
+    // let key:string []=[];
     const form = new formidable.IncomingForm();
     return new Promise((resolve, reject) => {
         form.parse(req, async (err: any, fields: any, files: any) => {
@@ -77,11 +79,12 @@ const processForm = async(req : any) => {
                     // console.log("Into process form--->",data_path[i]);
                     newPath[i] = path.join(__dirname, '../uploads') + '/' + data[i].originalFilename;
                     let rawData = fs.readFileSync(data_path[i]);
-
+                    // upload file to s3Bucket
                     const result = await uploadFile(data[i]);
-                    if (result == 0 && result== undefined) throw new Error("upload didnt returned");
-                    console.log("result----->", result);
+                    if (result == 0 && result== undefined) throw new Error("file upload return failed");
+                    // console.log("result----->", result);
                     s3Path[i]=result.Location;
+                    // key[i]=result.key
                     fs.writeFile(newPath[i], rawData, function (err) {
                         if (err) console.log(err);
                     })
@@ -98,6 +101,8 @@ const processForm = async(req : any) => {
 const fetchCustomerById = async (id: any, tenant_id:any ) => {
     try {
         let customer = await new CustomerModel().findCustomerById(id, tenant_id);
+        if (customer.length == 0) throw new Error("No Customer found");
+        // console.log("customer----->",customer);
         const customer_id=id;
         let customer_balance = await new AddBalanceModel().getCustomerBalance(customer_id);
         let RecurringDeposit = await new CustomerModel().getCustomerRD(customer_id, tenant_id);
@@ -107,8 +112,6 @@ const fetchCustomerById = async (id: any, tenant_id:any ) => {
         customer[0].FixedDeposit=FixedDeposit[0].amount;
         customer[0].SavingBalance=customer_balance[0].balance;
         customer[0].Shares=shares;
-        // console.log("customer----->",customer);
-        if (customer.length == 0) throw new Error("No Customer");
         delete customer[0].password;
         delete customer[0].tenant_id;
         return customer[0];
@@ -203,6 +206,30 @@ const updateCustomerDetails = async (data:any) => {
     }
 }
 
+const fetchTransactionHistoryById = async (customer_id: any) => {
+    try {
+        let customerHistory = await new CustomerModel().fetchTransactionHistoryById(customer_id);
+        if (customerHistory.length == 0) throw new Error("Customers transaction history not found");
+        for(let i=0;i< customerHistory.length;i++) {
+            if (customerHistory[i].credit > 0 && customerHistory[i].credit != null) {
+                customerHistory[i].type = "cr";
+                customerHistory[i].Amount = customerHistory[i].credit;
+            }else
+            if (customerHistory[i].debit > 0 && customerHistory[i].debit != null) {
+                customerHistory[i].type = "db";
+                customerHistory[i].Amount = customerHistory[i].debit;
+            }
+            delete customerHistory[i].debit;
+            delete customerHistory[i].credit;
+        }
+        console.log("customerHistory----->",customerHistory);
+        return customerHistory;
+    }
+    catch (e){
+        return e;
+    }
+}
+
 export default {
     createCustomer,
     fetchAllCustomers,
@@ -211,5 +238,6 @@ export default {
     fetchCustomerById,
     updateCustomerById,
     updateCustomerStatus,
-    updateCustomerDetails
+    updateCustomerDetails,
+    fetchTransactionHistoryById
 }
