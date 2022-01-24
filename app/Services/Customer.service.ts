@@ -6,8 +6,6 @@ import * as fs from "fs";
 const {v4 : uuidv4} = require('uuid');
 import formidable from "formidable";
 import {CustomerBalanceModel} from "../Models/AddBalance/CustomerBalance.model";
-import {any} from "async";
-import {AddBalanceModel} from "../Models/AddBalance/AddBalance.model";
 import {uploadFile}  from "../utilities/s3FileStore";
 import Hashing from "../utilities/Hashing";
 import Encryption from "../utilities/Encryption";
@@ -189,7 +187,7 @@ const fetchTransactionHistoryById = async (customer_id: any) => {
     try {
         let customerHistory = await new CustomerModel().fetchTransactionHistoryById(customer_id);
         if (customerHistory.length == 0) throw new Error("Customers transaction history not found");
-        let customer_balance = await new AddBalanceModel().getCustomerBalance(customer_id);
+        let customer_balance = await new CustomerBalanceModel().getCustomerBalance(customer_id);
         if (customer_balance.length == 0) throw new Error("Couldn't get Customer Balance");
         let CurrentBalance=customer_balance[0].balance;
         for(let i=0;i< customerHistory.length;i++) {
