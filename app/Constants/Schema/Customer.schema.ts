@@ -26,7 +26,7 @@ export default {
     },
     login: { 
         [Segments.BODY]: {
-            mobile: Joi.number().min(10).required()
+            mobile:Joi.string().required().min(10).message("mobile length should be 10").max(10).message("mobile length should be 10"),
         },
         [Segments.HEADERS]:Joi.object({
             "tenant-id": Joi.string().required()
@@ -57,34 +57,17 @@ export default {
             "tenant-id": Joi.number().min(1).required()
         }).unknown()
     },
-    updateCustomerById: {
-        [Segments.BODY]: {
-            mobile: Joi.string().required(),
-            id: Joi.number().required()
-        },
-        [Segments.HEADERS]:Joi.object({
-            "tenant-id": Joi.string().min(1).required()
-        }).unknown()
-    },
-
-    updateCustomerStatus: {
-        [Segments.BODY]: {
-            status: Joi.number().required(),
-            id: Joi.number().required()
-        },
-        [Segments.HEADERS]:Joi.object({
-            "tenant-id": Joi.string().min(1).required()
-        }).unknown()
-    },
 
     updateCustomerDetails: {
         [Segments.BODY]: {
-            first_name: Joi.string(),
-            middle_name: Joi.string(),
-            last_name: Joi.string(),
-            email: Joi.string().email(),
-            id: Joi.number(),
-            status:Joi.number().optional()
+            id: Joi.number().required(),
+            first_name: Joi.string().optional().min(1).message("Length should be greater than 1 character"),
+            middle_name: Joi.string().optional().min(1).message("Length should be greater than 1 character"),
+            last_name: Joi.string().optional().min(1).message("Length should be greater than 1 character"),
+            email: Joi.string().email().optional(),
+            password: Joi.string().optional().min(6).max(32),
+            mobile:Joi.string().optional().min(10).message("mobile length should be 10").max(10).message("mobile length should be 10"),
+            status:Joi.number().optional().min(0).message("minimum status should be 0 or 1").max(1).message("minimum status should be 0 or 1")
         },
         [Segments.HEADERS]:Joi.object({
             "tenant-id": Joi.string().min(1).required()
