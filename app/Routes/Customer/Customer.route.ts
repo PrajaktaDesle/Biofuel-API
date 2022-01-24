@@ -34,15 +34,15 @@ router.post(
     customerController.verify_otp,
 );
 router.put(
-    '/put-mobile',
-    celebrate(customerSchema.updateCustomerById),
-    customerController.updateCustomerById
+    '/put-details',
+    celebrate(customerSchema.updateCustomerDetails),
+    customerController.updateCustomerDetails
 );
 
-router.put(
-    '/put-status',
-    celebrate(customerSchema.updateCustomerStatus),
-    customerController.updateCustomerStatus
+router.get(
+    '/transaction-history',
+    celebrate(customerSchema.fetchTransactionHistoryById),
+    customerController.fetchTransactionHistoryById
 );
 
 export default router;

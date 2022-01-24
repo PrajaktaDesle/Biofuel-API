@@ -134,11 +134,9 @@ const verify_otp: IController = async (req, res) => {
     });
 };
 
-
-const updateCustomerById: IController = async (req, res) => {
-    let tenant_id=req.headers["tenant-id"]
-    req.body.tenant_id=tenant_id;
-    customerService.updateCustomerById(req.body)
+const updateCustomerDetails: IController = async (req, res) => {
+    req.body.tenant_id = req.headers["tenant-id"]
+    customerService.updateCustomerDetails(req.body)
         .then( (customer) => {
             if(customer instanceof Error){
                 console.log("user 2", customer.message)
@@ -160,20 +158,19 @@ const updateCustomerById: IController = async (req, res) => {
     });
 };
 
-const updateCustomerStatus: IController = async (req, res) => {
-    req.body.tenant_id=req.headers["tenant-id"]
-    customerService.updateCustomerStatus(req.body)
-        .then( (customer) => {
-            if(customer instanceof Error){
-                console.log("user 2", customer.message)
+const fetchTransactionHistoryById: IController = async (req, res) => {
+    customerService.fetchTransactionHistoryById(req.query.customer_id)
+        .then( (customer_history:any) => {
+            if(customer_history instanceof Error){
+                console.log("User 2", customer_history.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
-                    customer.message
+                    customer_history.message
                 );
             }else{
-                console.log("user 3", customer)
-                apiResponse.result(res, customer, httpStatusCodes.OK);
+                // console.log("User 3", customer)
+                apiResponse.result(res, customer_history, httpStatusCodes.OK);
             }
         }).catch(err => {
         console.log("Error  ->", err);
@@ -190,6 +187,6 @@ export default {
     login,
     verify_otp,
     fetchCustomerById,
-    updateCustomerById,
-    updateCustomerStatus
+    updateCustomerDetails,
+    fetchTransactionHistoryById
 };

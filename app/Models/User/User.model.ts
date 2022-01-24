@@ -18,4 +18,9 @@ export class UserModel extends BaseModel   {
         // console.log("model data--->",userResult);
         return userResult;
     }
+
+    async updateUserDetails(data:any){
+        return await this._executeQuery("update users set ? where id = ? and tenant_id = ? ", [data, data.id, data.tenant_id]);
+    }
+
 }

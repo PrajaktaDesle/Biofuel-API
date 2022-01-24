@@ -1,24 +1,30 @@
 import LOGGER from "../config/LOGGER";
 import {CustomerModel} from "../Models/Customer/Customer.model";
 import moment from 'moment';
-import Encryption from "../utilities/Encryption";
 import * as path from "path";
 import * as fs from "fs";
 const {v4 : uuidv4} = require('uuid');
 import formidable from "formidable";
 import {CustomerBalanceModel} from "../Models/AddBalance/CustomerBalance.model";
+import {any} from "async";
+import {AddBalanceModel} from "../Models/AddBalance/AddBalance.model";
+import {uploadFile}  from "../utilities/s3FileStore";
+import Hashing from "../utilities/Hashing";
+import Encryption from "../utilities/Encryption";
 
 const createCustomer = async (req:any,tenant:any) =>{
     try{
-        let customerData, fields : any, newPath : any
+        let customerData, fields, s3Path,key
         let response = await processForm(req);
         if(response instanceof Error) throw response;
         // @ts-ignore
         fields = response.fields;
         // @ts-ignore
-        newPath = response.newPath;
+        s3Path = response.s3Path;
+        // @ts-ignore
+        // key=response.key
         console.log("response", response);
-        let hash = await new Encryption().generateHash(fields.password, 10);
+        let hash = await new Hashing().generateHash(fields.password, 10);
         let Customers = {
             first_name: String(fields.f_name),
             middle_name: String(fields.m_name),
@@ -31,8 +37,8 @@ const createCustomer = async (req:any,tenant:any) =>{
             user_id: Number(fields.u_id),
             tenant_id: tenant,
             status: Number(fields.stat),
-            pancard_url: newPath[0],
-            aadhar_url: newPath[1],
+            pancard_url: s3Path[0],
+            aadhar_url: s3Path[1],
             pan_number: String(fields.pan_num),
             aadhar_number: String(fields.aadhar_num),
             address: String(fields.address)
@@ -57,22 +63,36 @@ const fetchAllCustomers = async (tenant_id : any) =>{
 
 const processForm = async(req : any) => {
     let newPath: string [] = [];
+    let s3Path:string []=[];
+    // let key:string []=[];
     const form = new formidable.IncomingForm();
     return new Promise((resolve, reject) => {
-        form.parse(req, (err: any, fields: any, files: any) => {
+        form.parse(req, async (err: any, fields: any, files: any) => {
             const data: any [] = [];
             const data_path: string [] = [];
             const images = Object.keys(files)
-            if(images.length == 0) reject(new Error("No files are uploaded"));
-            for (let i = 0; i < images.length; i++) {
-                data.push(files[images[i]]);
-                data_path[i] = data[i].filepath;
-                newPath[i] = path.join(__dirname, '../uploads') + '/' + data[i].originalFilename;
-                let rawData = fs.readFileSync(data_path[i]);
-                fs.writeFile(newPath[i], rawData, function (err) {
-                    if (err) console.log(err);
-                })
-                resolve({fields: fields, newPath : newPath});
+            if (images.length == 0) reject(new Error("No files are uploaded"));
+            try {
+                for (let i = 0; i < images.length; i++) {
+                    data.push(files[images[i]]);
+                    data_path[i] = data[i].filepath;
+                    // console.log("Into process form--->",data_path[i]);
+                    newPath[i] = path.join(__dirname, '../uploads') + '/' + data[i].originalFilename;
+                    let rawData = fs.readFileSync(data_path[i]);
+                    // upload file to s3Bucket
+                    const result = await uploadFile(data[i]);
+                    if (result == 0 && result== undefined) throw new Error("file upload return failed");
+                    // console.log("result----->", result);
+                    s3Path[i]=result.Location;
+                    // key[i]=result.key
+                    fs.writeFile(newPath[i], rawData, function (err) {
+                        if (err) console.log(err);
+                    })
+                }
+                resolve({fields: fields, s3Path: s3Path});
+            }catch(e)
+            {
+                return e
             }
         });
     });
@@ -81,6 +101,8 @@ const processForm = async(req : any) => {
 const fetchCustomerById = async (id: any, tenant_id:any ) => {
     try {
         let customer = await new CustomerModel().findCustomerById(id, tenant_id);
+        if (customer.length == 0) throw new Error("No Customer found");
+        // console.log("customer----->",customer);
         const customer_id=id;
         let customer_balance = await new CustomerBalanceModel().getCustomerBalance(customer_id);
         let RecurringDeposit = await new CustomerModel().getCustomerRD(customer_id, tenant_id);
@@ -90,8 +112,6 @@ const fetchCustomerById = async (id: any, tenant_id:any ) => {
         customer[0].FixedDeposit=FixedDeposit[0].amount;
         customer[0].SavingBalance=customer_balance[0].balance;
         customer[0].Shares=shares;
-        // console.log("customer----->",customer);
-        if (customer.length == 0) throw new Error("No Customer");
         delete customer[0].password;
         delete customer[0].tenant_id;
         return customer[0];
@@ -103,25 +123,21 @@ const fetchCustomerById = async (id: any, tenant_id:any ) => {
 
 const loginCustomer=async (data: any) => {
     try {
-        LOGGER.info(111, data);
-        let status = await new CustomerModel().getCustomerStatus(data.mobile, data.tenant_id)
-        console.log(status);
-        if(status[0].status !== 1) throw new Error("Your Account is not active");
         let customer = await new CustomerModel().getCustomer(data.mobile, data.tenant_id);
-        // LOGGER.info("Customer", customer);
-        if (customer.length === 0) throw new Error("No Such Customer exits");
+        if (customer.length === 0) throw new Error("Invalid mobile or tenant_id");
+        if(customer[0].status !== 1) throw new Error("Your Account is not active");
         // const otp = Math.floor(100000 + Math.random() * 900000);
         //todo need to integrate sms
         const otp = 123456;
         LOGGER.info(otp);
         data.otp = otp;
         data.customer_id = customer[0].id;
+        data.status = customer[0].status;
         data.req_id = uuidv4();
         data.expire_time = moment().add(3, "minutes").format("YYYY-MM-DD HH:mm:ss");
         delete data.mobile;
         data.trials = 3;
         //todo fetch it from config
-        LOGGER.info("Data Before create OTP----->",data);
         console.log("Data Before create OTP----->",data);
         await new CustomerModel().create_otp(data);
         return {request_id: data.req_id};
@@ -157,10 +173,10 @@ const verify_customer_otp = async(data: any) => {
     }
 }
 
-const updateCustomerById = async (data:any) => {
+const updateCustomerDetails = async (data:any) => {
     try {
-        let customer = await new CustomerModel().updateCustomerById(data);
-        if (customer.length == 0) throw new Error("No customer");
+        let customer = await new CustomerModel().updateCustomerDetails(data);
+        if (customer.length == 0) throw new Error("customer update failed");
         return customer[0];
     }
     catch (e){
@@ -168,18 +184,37 @@ const updateCustomerById = async (data:any) => {
     }
 }
 
-const updateCustomerStatus = async (data:any) => {
+const fetchTransactionHistoryById = async (customer_id: any) => {
+
     try {
-        let customer = await new CustomerModel().updateCustomerStatus(data);
-        if (customer.length == 0) throw new Error("No customer");
-        return customer[0];
+        let customerHistory = await new CustomerModel().fetchTransactionHistoryById(customer_id);
+        if (customerHistory.length == 0) throw new Error("Customers transaction history not found");
+        let customer_balance = await new AddBalanceModel().getCustomerBalance(customer_id);
+        if (customer_balance.length == 0) throw new Error("Couldn't get Customer Balance");
+        let CurrentBalance=customer_balance[0].balance;
+        for(let i=0;i< customerHistory.length;i++) {
+            if (customerHistory[i].credit > 0 && customerHistory[i].credit != null) {
+                customerHistory[i].type = "cr";
+                customerHistory[i].Amount = customerHistory[i].credit;
+            }else
+            if (customerHistory[i].debit > 0 && customerHistory[i].debit != null) {
+                customerHistory[i].type = "db";
+                customerHistory[i].Amount = customerHistory[i].debit;
+            }
+            delete customerHistory[i].debit;
+            delete customerHistory[i].credit;
+        }
+        // console.log("customerHistory----->",customerHistory);
+        let BankStatement={
+            customerHistory,
+            CurrentBalance
+        };
+        return BankStatement;
     }
     catch (e){
         return e;
     }
 }
-
-
 
 export default {
     createCustomer,
@@ -187,6 +222,6 @@ export default {
     loginCustomer,
     verify_customer_otp,
     fetchCustomerById,
-    updateCustomerById,
-    updateCustomerStatus
+    updateCustomerDetails,
+    fetchTransactionHistoryById
 }
