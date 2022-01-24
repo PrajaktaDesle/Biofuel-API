@@ -12,8 +12,8 @@ async function createTransHistory(data: any) {
         //Begin Transaction
         await sqlConnection.beginTransaction;
         let customer_balance = await customerBalModel.getCustomerBalanceLock(sqlConnection, data.customer_id);
-        if (data.amount < 0 && data.amount !== null && (customer_balance[0].balance + data.amount) < 0 ) throw new Error("Insufficient Balance");
-        data.pre_balance =  customer_balance[0].balance + data.amount;
+        if ((data.amount < 0) && ((customer_balance[0].balance + data.amount) < 0) ) throw new Error("Insufficient Balance");
+        data.new_balance =  customer_balance[0].balance + data.amount;
         if (data.amount > 0 && data.amount !== null){
             data.credit = data.amount;
         }else{
@@ -21,8 +21,7 @@ async function createTransHistory(data: any) {
         }
         delete data.amount;
         let TransHistDetail = await customerBalModel.createTransactionHistory(sqlConnection, data);
-        data.customer_balance= data.new_balance;
-        const customerBalanceInfo = await customerBalModel.updateCustomerBalance(sqlConnection, data.customer_id, data.customer_balance);
+        const customerBalanceInfo = await customerBalModel.updateCustomerBalance(sqlConnection, data.customer_id, data.data.new_balance);
         // Commit Transaction
         await sqlConnection.commit();
         await sqlConnection.release();
