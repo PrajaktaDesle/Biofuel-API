@@ -27,20 +27,10 @@ export class CustomerModel extends BaseModel
     async findCustomerById(id: any, tenant_id: any ){
         return await this._executeQuery("select * from customers where id = ? and tenant_id = ? ", [id, tenant_id]);
     }
-    async updateCustomerById(data:any){
-        return await this._executeQuery("update customers set mobile = ? where id = ? and tenant_id = ? ", [data.mobile,data.id, data.tenant_id]);
-    }
-    async updateCustomerStatus(data:any){
-        return await this._executeQuery("update customers set status = ? where id = ? and tenant_id = ? ", [data.status,data.id, data.tenant_id]);
-    }
 
     async updateCustomerDetails(data:any){
-        return await this._executeQuery("update customers set first_name = ?, middle_name = ?, last_name = ?, email = ?,status = ? where id = ? and tenant_id = ? ", [data.first_name, data.middle_name, data.last_name, data.email,data.status, data.id, data.tenant_id]);
+        return await this._executeQuery("update customers set ? where id = ? and tenant_id = ? ", [data, data.id, data.tenant_id]);
     }
-
-    // async getCustomerStatus(mobile:string, tenant_id : number){
-    //     return await this._executeQuery("select status from customers where mobile = ? and tenant_id = ? ", [mobile, tenant_id]);
-    // }
 
     async getCustomerRD(customer_id: number, tenant_id: number ){
         return await this._executeQuery("select amount from rd_transactions where customer_id = ? and tenant_id = ? ", [customer_id, tenant_id]);

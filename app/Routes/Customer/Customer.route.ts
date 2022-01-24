@@ -34,17 +34,6 @@ router.post(
     customerController.verify_otp,
 );
 router.put(
-    '/put-mobile',
-    celebrate(customerSchema.updateCustomerById),
-    customerController.updateCustomerById
-);
-
-router.put(
-    '/put-status',
-    celebrate(customerSchema.updateCustomerStatus),
-    customerController.updateCustomerStatus
-);
-router.put(
     '/put-details',
     celebrate(customerSchema.updateCustomerDetails),
     customerController.updateCustomerDetails

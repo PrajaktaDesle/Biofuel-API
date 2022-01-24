@@ -173,28 +173,6 @@ const verify_customer_otp = async(data: any) => {
     }
 }
 
-const updateCustomerById = async (data:any) => {
-    try {
-        let customer = await new CustomerModel().updateCustomerById(data);
-        if (customer.length == 0) throw new Error("No customer");
-        return customer[0];
-    }
-    catch (e){
-        return e;
-    }
-}
-
-const updateCustomerStatus = async (data:any) => {
-    try {
-        let customer = await new CustomerModel().updateCustomerStatus(data);
-        if (customer.length == 0) throw new Error("No customer");
-        return customer[0];
-    }
-    catch (e){
-        return e;
-    }
-}
-
 const updateCustomerDetails = async (data:any) => {
     try {
         let customer = await new CustomerModel().updateCustomerDetails(data);
@@ -207,9 +185,13 @@ const updateCustomerDetails = async (data:any) => {
 }
 
 const fetchTransactionHistoryById = async (customer_id: any) => {
+
     try {
         let customerHistory = await new CustomerModel().fetchTransactionHistoryById(customer_id);
         if (customerHistory.length == 0) throw new Error("Customers transaction history not found");
+        let customer_balance = await new AddBalanceModel().getCustomerBalance(customer_id);
+        if (customer_balance.length == 0) throw new Error("Couldn't get Customer Balance");
+        let CurrentBalance=customer_balance[0].balance;
         for(let i=0;i< customerHistory.length;i++) {
             if (customerHistory[i].credit > 0 && customerHistory[i].credit != null) {
                 customerHistory[i].type = "cr";
@@ -222,8 +204,12 @@ const fetchTransactionHistoryById = async (customer_id: any) => {
             delete customerHistory[i].debit;
             delete customerHistory[i].credit;
         }
-        console.log("customerHistory----->",customerHistory);
-        return customerHistory;
+        // console.log("customerHistory----->",customerHistory);
+        let BankStatement={
+            customerHistory,
+            CurrentBalance
+        };
+        return BankStatement;
     }
     catch (e){
         return e;
@@ -236,8 +222,6 @@ export default {
     loginCustomer,
     verify_customer_otp,
     fetchCustomerById,
-    updateCustomerById,
-    updateCustomerStatus,
     updateCustomerDetails,
     fetchTransactionHistoryById
 }

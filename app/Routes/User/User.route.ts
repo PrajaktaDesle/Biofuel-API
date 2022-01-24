@@ -31,10 +31,4 @@ router.put(
     userController.updateUserDetails
 );
 
-router.put(
-    '/put-status',
-    celebrate(userSchema.updateUserStatus),
-    userController.updateUserStatus
-);
-
 export default router;
