@@ -5,6 +5,7 @@ import * as path from "path";
 import * as fs from "fs";
 const {v4 : uuidv4} = require('uuid');
 import formidable from "formidable";
+import {CustomerBalanceModel} from "../Models/AddBalance/CustomerBalance.model";
 import {any} from "async";
 import {AddBalanceModel} from "../Models/AddBalance/AddBalance.model";
 import {uploadFile}  from "../utilities/s3FileStore";
@@ -44,8 +45,7 @@ const createCustomer = async (req:any,tenant:any) =>{
         }
         customerData = await new CustomerModel().createCustomer(Customers)
         if (!customerData) throw new Error("Registration failed");
-        // console.log("details returned from model  2------>", customerData)
-        return customerData ;
+        return customerData;
     }catch(e){
         console.log("Execption ->", e);
         throw e;
@@ -104,7 +104,7 @@ const fetchCustomerById = async (id: any, tenant_id:any ) => {
         if (customer.length == 0) throw new Error("No Customer found");
         // console.log("customer----->",customer);
         const customer_id=id;
-        let customer_balance = await new AddBalanceModel().getCustomerBalance(customer_id);
+        let customer_balance = await new CustomerBalanceModel().getCustomerBalance(customer_id);
         let RecurringDeposit = await new CustomerModel().getCustomerRD(customer_id, tenant_id);
         let FixedDeposit = await new CustomerModel().getCustomerFD(customer_id, tenant_id);
         let shares= 2000;

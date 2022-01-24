@@ -1,5 +1,4 @@
 import IController from "../Types/IController";
-import userService from "../Services/User.service";
 import constants from "../Constants";
 import apiResponse from "../utilities/ApiResponse";
 import httpStatusCodes from "http-status-codes";
@@ -28,6 +27,7 @@ const addBalance: IController = async (req, res) => {
             );
         });
 }
+
 export default {
     addBalance
 };
