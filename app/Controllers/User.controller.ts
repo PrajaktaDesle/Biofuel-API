@@ -8,7 +8,6 @@ import LOGGER from "../config/LOGGER";
 import customerService from "../Services/Customer.service";
 
 const login: IController = async (req, res) => {
-    console.log(1)
     const tenant=req.headers["tenant-id"]
     req.body.tenant_id=tenant;
     userService.loginUser(req.body)

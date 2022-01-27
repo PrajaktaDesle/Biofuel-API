@@ -43,6 +43,9 @@ const createCustomer = async (req:any,tenant:any) =>{
         }
         customerData = await new CustomerModel().createCustomer(Customers)
         if (!customerData) throw new Error("Registration failed");
+        let addBalance = { balance:0,
+        customer_id:customerData.insertId};
+        let balanceInfo = await new CustomerModel().addCustomerBalance(addBalance);
         return customerData;
     }catch(e){
         console.log("Execption ->", e);
@@ -54,8 +57,10 @@ const fetchAllCustomers = async (tenant_id : any) =>{
     let customerData;
     customerData = await new CustomerModel().findAllCustomers(tenant_id)
     if (customerData == null) throw new Error("details did not match");
-    delete customerData[0].password;
-    delete customerData[0].tenant_id;
+    for(let i=0;i< customerData.length;i++) {
+        delete customerData[i].password;
+        delete customerData[i].tenant_id;
+    }
     return customerData;
 }
 
@@ -79,7 +84,7 @@ const processForm = async(req : any) => {
                     let rawData = fs.readFileSync(data_path[i]);
                     // upload file to s3Bucket
                     const result = await uploadFile(data[i]);
-                    if (result == 0 && result== undefined) throw new Error("file upload return failed");
+                    if (result == 0 && result == undefined) throw new Error("file upload return failed");
                     // console.log("result----->", result);
                     s3Path[i]=result.Location;
                     // key[i]=result.key
@@ -103,12 +108,15 @@ const fetchCustomerById = async (id: any, tenant_id:any ) => {
         // console.log("customer----->",customer);
         const customer_id=id;
         let customer_balance = await new CustomerBalanceModel().getCustomerBalance(customer_id);
+        if(customer_balance == 0) throw new Error("Customer BalanceNot found")
         let RecurringDeposit = await new CustomerModel().getCustomerRD(customer_id, tenant_id);
+        if(RecurringDeposit.length == 0) throw new Error("RD Not found")
         let FixedDeposit = await new CustomerModel().getCustomerFD(customer_id, tenant_id);
+        if(FixedDeposit == 0) throw new Error("FD Not found")
         let shares= 2000;
+        customer[0].SavingBalance=customer_balance[0].balance;
         customer[0].RecurringDeposit=RecurringDeposit[0].amount;
         customer[0].FixedDeposit=FixedDeposit[0].amount;
-        customer[0].SavingBalance=customer_balance[0].balance;
         customer[0].Shares=shares;
         delete customer[0].password;
         delete customer[0].tenant_id;
@@ -191,11 +199,11 @@ const fetchTransactionHistoryById = async (customer_id: any) => {
         if (customer_balance.length == 0) throw new Error("Couldn't get Customer Balance");
         let CurrentBalance=customer_balance[0].balance;
         for(let i=0;i< customerHistory.length;i++) {
-            if (customerHistory[i].credit > 0 && customerHistory[i].credit != null) {
+            if (customerHistory[i].credit > 0 && customerHistory[i].credit !== null) {
                 customerHistory[i].type = "cr";
                 customerHistory[i].Amount = customerHistory[i].credit;
             }else
-            if (customerHistory[i].debit > 0 && customerHistory[i].debit != null) {
+            if (customerHistory[i].debit < 0 && customerHistory[i].debit !== null) {
                 customerHistory[i].type = "db";
                 customerHistory[i].Amount = customerHistory[i].debit;
             }

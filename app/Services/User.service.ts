@@ -23,7 +23,7 @@ async function loginUser(data:any) {
         //password bcrypt
         const match =await new Hashing().verifypassword(data.password, user[0].password);
         if(!match) throw new Error("Invalid password");
-        const token = await Encryption.generateJwtToken({id : user[0].id, tenant_id:user[0].tenant_id});
+        const token = await Encryption.generateJwtToken({id : user[0].user_id, tenant_id:user[0].tenant_id});
         user[0].token = token;
         delete user[0].password;
         delete user[0].tenant_id;

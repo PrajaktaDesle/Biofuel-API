@@ -5,7 +5,7 @@ export default {
             customer_id: Joi.number().required(),
             amount: Joi.number().required(),
             transaction_type: Joi.string().required(),
-            user_id: Joi.number().required(),
+            user_id: Joi.number().optional().default(0),
             transaction_id: Joi.number().optional()
         }
     },
