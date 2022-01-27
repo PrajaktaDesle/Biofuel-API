@@ -45,4 +45,10 @@ router.get(
     customerController.fetchTransactionHistoryById
 );
 
+router.put(
+    '/formidable/put-details',
+    // celebrate(customerSchema.register),
+    customerController.formidableUpdateDetails
+);
+
 export default router;
