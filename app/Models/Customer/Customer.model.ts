@@ -1,4 +1,5 @@
 import BaseModel from "../BaseModel";
+import {Connection} from "mysql2";
 
 export class CustomerModel extends BaseModel
 {
@@ -14,6 +15,9 @@ export class CustomerModel extends BaseModel
     }
     async create_otp(data: any){
         return await this._executeQuery("insert into customer_login set ?", [data]);
+    }
+    async addCustomerBalance(addBalance:any) {
+        return await this._executeQuery("insert into customer_balance set ?", [addBalance]);
     }
     async getCustomer_otp(data: any){
         return await this._executeQuery("select * from customer_login where req_id = ? ", [data.request_id]);
@@ -40,6 +44,6 @@ export class CustomerModel extends BaseModel
     }
 
     async fetchTransactionHistoryById(customer_id: number){
-        return await this._executeQuery("select debit,credit,transaction_type,date from customers_transaction_history where customer_id = ?", [customer_id]);
+        return await this._executeQuery("select debit,credit,transaction_type,date from customers_transaction_history where customer_id = ? order by date desc", [customer_id]);
     }
 }
