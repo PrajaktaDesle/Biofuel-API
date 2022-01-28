@@ -181,6 +181,34 @@ const fetchTransactionHistoryById: IController = async (req, res) => {
     });
 };
 
+
+const formidableUpdateDetails : IController = async (req, res) => {
+    let updatedCustomer: any;
+    try {
+        let tenant = req.headers["tenant-id"];
+        console.log("entry into formidableUpdate---->")
+        updatedCustomer = await customerService.formidableUpdateDetails(req, tenant);
+        console.log('Customer at controller-----> ', updatedCustomer);
+        if (updatedCustomer instanceof Error) {
+            console.log("error", updatedCustomer)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+            apiResponse.result(res, updatedCustomer, httpStatusCodes.CREATED);
+        }
+    } catch (e) {
+        console.log("controller ->", e)
+        if (e) {
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+            );
+            return;
+        }
+    }
+};
+
+
+
 export default {
     register,
     fetchAllCustomers,
@@ -188,5 +216,6 @@ export default {
     verify_otp,
     fetchCustomerById,
     updateCustomerDetails,
-    fetchTransactionHistoryById
+    fetchTransactionHistoryById,
+    formidableUpdateDetails
 };

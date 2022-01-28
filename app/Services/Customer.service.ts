@@ -222,6 +222,45 @@ const fetchTransactionHistoryById = async (customer_id: any) => {
     }
 }
 
+const formidableUpdateDetails = async (req:any,tenant:any) =>{
+    try{
+        let updatedCustomerData, fields, s3Path
+        let updatedResponse = await  processForm(req);
+        if(updatedResponse instanceof Error) throw updatedResponse;
+        // @ts-ignore
+        fields = updatedResponse.fields;
+        // @ts-ignore
+        s3Path = updatedResponse.s3Path;
+        // @ts-ignore
+        console.log("updatedResponse", updatedResponse);
+        let hash = await new Hashing().generateHash(fields.password, 10);
+        let id=Number(fields.id);
+        let updatedCustomers = {
+            first_name: String(fields.f_name),
+            middle_name: String(fields.m_name),
+            last_name: String(fields.l_name),
+            mobile: String(fields.mobile),
+            email: String(fields.email),
+            password: hash,
+            dob: String(fields.dob),
+            reg_date: String(fields.r_date),
+            user_id: Number(fields.u_id),
+            status: Number(fields.stat),
+            pancard_url: s3Path[0],
+            aadhar_url: s3Path[1],
+            pan_number: String(fields.pan_num),
+            aadhar_number: String(fields.aadhar_num),
+            address: String(fields.address)
+        }
+        updatedCustomerData = await new CustomerModel().formidableUpdateDetails(updatedCustomers,id,tenant)
+        if (!updatedCustomerData) throw new Error("Update Customer failed");
+        return updatedCustomerData;
+    }catch(e){
+        console.log("Execption ->", e);
+        throw e;
+    }
+}
+
 export default {
     createCustomer,
     fetchAllCustomers,
@@ -229,5 +268,6 @@ export default {
     verify_customer_otp,
     fetchCustomerById,
     updateCustomerDetails,
-    fetchTransactionHistoryById
+    fetchTransactionHistoryById,
+    formidableUpdateDetails
 }

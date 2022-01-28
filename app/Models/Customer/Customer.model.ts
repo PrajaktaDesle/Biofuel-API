@@ -46,4 +46,8 @@ export class CustomerModel extends BaseModel
     async fetchTransactionHistoryById(customer_id: number){
         return await this._executeQuery("select debit,credit,transaction_type,date from customers_transaction_history where customer_id = ? order by date desc", [customer_id]);
     }
+
+    async formidableUpdateDetails(updatedCustomerData:any,id:number,tenant:number){
+        return await this._executeQuery("update customers set ? where id = ? and tenant_id = ?", [updatedCustomerData,id,tenant]);
+    }
 }
