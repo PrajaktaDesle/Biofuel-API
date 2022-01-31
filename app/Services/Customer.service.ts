@@ -73,26 +73,25 @@ const processForm = async(req : any) => {
         form.parse(req, async (err: any, fields: any, files: any) => {
             const data: any [] = [];
             const data_path: string [] = [];
-            const images = Object.keys(files)
-            if (images.length == 0) reject(new Error("No files are uploaded"));
             try {
-                for (let i = 0; i < images.length; i++) {
-                    data.push(files[images[i]]);
-                    data_path[i] = data[i].filepath;
-                    // console.log("Into process form--->",data_path[i]);
-                    newPath[i] = path.join(__dirname, '../uploads') + '/' + data[i].originalFilename;
-                    let rawData = fs.readFileSync(data_path[i]);
-                    // upload file to s3Bucket
-                    const result = await uploadFile(data[i]);
-                    if (result == 0 && result == undefined) throw new Error("file upload return failed");
-                    // console.log("result----->", result);
-                    s3Path[i]=result.Location;
-                    // key[i]=result.key
-                    fs.writeFile(newPath[i], rawData, function (err) {
-                        if (err) console.log(err);
-                    })
-                }
-                resolve({fields: fields, s3Path: s3Path});
+                const images = Object.keys(files)
+                if (images.length == 0) resolve({fields: fields, s3Path: s3Path});
+                    // reject(new Error("No files are uploaded"));
+                    for (let i = 0; i < images.length; i++) {
+                        data.push(files[images[i]]);
+                        data_path[i] = data[i].filepath;
+                        // console.log("Into process form--->",data_path[i]);
+                        newPath[i] = path.join(__dirname, '../uploads') + '/' + data[i].originalFilename;
+                        let rawData = fs.readFileSync(data_path[i]);
+                        fs.writeFile(newPath[i], rawData, function (err) {
+                            if (err) console.log(err);
+                        })
+                        // upload file to s3Bucket
+                        const result = await uploadFile(data[i]);
+                        if (result == 0 && result == undefined) throw new Error("file upload return failed");
+                        s3Path[i] = result.Location;
+                    }
+                    resolve({fields: fields, s3Path: s3Path});
             }catch(e)
             {
                 return e
@@ -222,7 +221,7 @@ const fetchTransactionHistoryById = async (customer_id: any) => {
     }
 }
 
-const formidableUpdateDetails = async (req:any,tenant:any) =>{
+const formidableUpdateDetails = async (req:any) =>{
     try{
         let updatedCustomerData, fields, s3Path
         let updatedResponse = await  processForm(req);
@@ -233,30 +232,54 @@ const formidableUpdateDetails = async (req:any,tenant:any) =>{
         s3Path = updatedResponse.s3Path;
         // @ts-ignore
         console.log("updatedResponse", updatedResponse);
+        let tenant = req.headers["tenant-id"];
         let hash = await new Hashing().generateHash(fields.password, 10);
         let id=Number(fields.id);
-        let updatedCustomers = {
-            first_name: String(fields.f_name),
-            middle_name: String(fields.m_name),
-            last_name: String(fields.l_name),
-            mobile: String(fields.mobile),
-            email: String(fields.email),
-            password: hash,
-            dob: String(fields.dob),
-            reg_date: String(fields.r_date),
-            user_id: Number(fields.u_id),
-            status: Number(fields.stat),
-            pancard_url: s3Path[0],
-            aadhar_url: s3Path[1],
-            pan_number: String(fields.pan_num),
-            aadhar_number: String(fields.aadhar_num),
-            address: String(fields.address)
-        }
+
+        let updatedCustomers : any = {};
+            // first_name: String,
+            // middle_name: String,
+            // last_name: String,
+            // password: String,
+            // pancard_url:String,
+            // aadhar_url: String,
+            // pan_number: String,
+            // aadhar_number: String,
+            // address: String
+
+        if(fields.f_name !== undefined && fields.f_name !== null && fields.f_name !== "") updatedCustomers.first_name=fields.f_name;
+
+        if(fields.m_name !== undefined && fields.m_name !== null && fields.m_name !== "") updatedCustomers.middle_name=fields.m_name;
+
+        if(fields.l_name !== undefined && fields.l_name !== null && fields.l_name !== "") updatedCustomers.last_name=fields.l_name;
+
+        if(fields.mobile !== undefined && fields.mobile !== null && fields.mobile !== "") updatedCustomers.mobile=fields.mobile;
+
+        if(fields.email !== undefined && fields.email !== null && fields.email !== "") updatedCustomers.email=fields.email;
+
+        if(fields.password !== undefined && fields.password !== null && fields.password !== "") updatedCustomers.password=hash;
+
+        if(fields.dob !== undefined && fields.dob !== null && fields.dob !== "") updatedCustomers.dob=fields.dob;
+
+        if(fields.r_date !== undefined && fields.r_date !== null && fields.r_date !== "") updatedCustomers.reg_date=fields.r_date;
+
+        if(fields.stat !== undefined && fields.stat !== null && fields.stat !== "") updatedCustomers.status=fields.stat;
+
+        if(s3Path[0] !== undefined && s3Path[0] !== null && s3Path[0] !== "") updatedCustomers.pancard_url=s3Path[0];
+
+        if(s3Path[1] !== undefined && s3Path[1] !== null && s3Path[1] !== "") updatedCustomers.aadhar_url=s3Path[1];
+
+        if(fields.pan_num !== undefined && fields.pan_num !== null && fields.pan_num !== "") updatedCustomers.pan_number=fields.pan_num;
+
+        if(fields.aadhar_num !== undefined && fields.aadhar_num !== null && fields.aadhar_num !== "") updatedCustomers.aadhar_number=fields.aadhar_num;
+
+        if(fields.address !== undefined && fields.address !== null && fields.address !== "") updatedCustomers.address=fields.address;
+
         updatedCustomerData = await new CustomerModel().formidableUpdateDetails(updatedCustomers,id,tenant)
         if (!updatedCustomerData) throw new Error("Update Customer failed");
         return updatedCustomerData;
     }catch(e){
-        console.log("Execption ->", e);
+        console.log("Exception ->", e);
         throw e;
     }
 }
