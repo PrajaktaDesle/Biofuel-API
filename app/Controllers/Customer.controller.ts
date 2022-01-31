@@ -183,11 +183,8 @@ const fetchTransactionHistoryById: IController = async (req, res) => {
 
 
 const formidableUpdateDetails : IController = async (req, res) => {
-    let updatedCustomer: any;
     try {
-        let tenant = req.headers["tenant-id"];
-        console.log("entry into formidableUpdate---->")
-        updatedCustomer = await customerService.formidableUpdateDetails(req, tenant);
+        let updatedCustomer = await customerService.formidableUpdateDetails(req);
         console.log('Customer at controller-----> ', updatedCustomer);
         if (updatedCustomer instanceof Error) {
             console.log("error", updatedCustomer)
@@ -197,13 +194,11 @@ const formidableUpdateDetails : IController = async (req, res) => {
         }
     } catch (e) {
         console.log("controller ->", e)
-        if (e) {
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
             );
             return;
-        }
     }
 };
 
