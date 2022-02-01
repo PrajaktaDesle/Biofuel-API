@@ -223,6 +223,7 @@ const fetchTransactionHistoryById = async (customer_id: any) => {
 
 const formidableUpdateDetails = async (req:any) =>{
     try{
+        let hash
         let updatedCustomerData, fields, s3Path
         let updatedResponse = await  processForm(req);
         if(updatedResponse instanceof Error) throw updatedResponse;
@@ -233,9 +234,9 @@ const formidableUpdateDetails = async (req:any) =>{
         // @ts-ignore
         console.log("updatedResponse", updatedResponse);
         let tenant = req.headers["tenant-id"];
-        let hash = await new Hashing().generateHash(fields.password, 10);
+        if(fields.password !== undefined && fields.password !== null && fields.password !== "")  hash = await new Hashing().generateHash(fields.password, 10);
         let id=Number(fields.id);
-
+        console.log("hash---->",hash);
         let updatedCustomers : any = {};
             // first_name: String,
             // middle_name: String,
