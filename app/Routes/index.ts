@@ -6,15 +6,17 @@ import tcRoute from './Transaction-config/TransConfig.route'
 import fdRoute from './Fd/Fd.route'
 import addBalanceRoute from './Add-Balance/AddBalance.route'
 import sukanyaYojnaRoute from "./Sukanya-yojna/Sukanya.route";
+import lakhpatiYojnaRoute from "./Lakhpati-yojna/Lakhpati.route";
 
 const router = Router();
 
 router.use('/User', userRoute);
 router.use('/Customer', customerRoute);
 router.use('/Rd-transactions', rdRoute);
-router.use('/Transaction-config',tcRoute)
-router.use('/Fd-transactions',fdRoute)
-router.use('/Add-fund',addBalanceRoute)
-router.use('/sukanya', sukanyaYojnaRoute);
+router.use('/Transaction-config',tcRoute);
+router.use('/Fd-transactions',fdRoute);
+router.use('/Add-fund',addBalanceRoute);
+router.use('/sukanyaYojna', sukanyaYojnaRoute);
+router.use('/lakhpatiYojna', lakhpatiYojnaRoute);
 
 export default router;

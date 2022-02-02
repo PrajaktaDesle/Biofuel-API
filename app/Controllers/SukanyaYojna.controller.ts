@@ -31,8 +31,8 @@ const createSukanyaYojna : IController = async (req, res) => {
         });
 }
 
-const fetchSukanyaByCustomerId: IController = async (req, res) => {
-    await sukanyaYojnaService.fetchSukanyaByCustomerId(req.headers["tenant-id"],req.query.customer_id)
+const fetchByCustomerId: IController = async (req, res) => {
+    await sukanyaYojnaService.fetchByCustomerId(req.headers["tenant-id"],req.query.customer_id)
         .then((SukanyaInformation:any) => {
             if(SukanyaInformation instanceof Error){
                 LOGGER.info("SukanyaYojna", SukanyaInformation.message)
@@ -57,5 +57,5 @@ const fetchSukanyaByCustomerId: IController = async (req, res) => {
 
 export default {
     createSukanyaYojna,
-    fetchSukanyaByCustomerId
+    fetchByCustomerId
 };
