@@ -3,13 +3,13 @@ import IController from '../Types/IController';
 import apiResponse from '../utilities/ApiResponse';
 
 import LOGGER from "../config/LOGGER";
-import lakhpatiYojnaService from "../Services/LakhpatiYojna.service";
+import lakhpatiSchemeService from "../Services/LakhpatiYojna.service";
 
 
 
-const createLakhpatiYojna : IController = async (req, res) => {
+const createLakhpatiScheme : IController = async (req, res) => {
     req.body.tenant_id=req.headers["tenant-id"]
-    await lakhpatiYojnaService.createLakhpatiYojna(req.body)
+    await lakhpatiSchemeService.createLakhpatiScheme(req.body)
         .then((LakhpatiInformation : any) => {
             if(LakhpatiInformation instanceof Error){
                 LOGGER.info("SukanyaYojna", LakhpatiInformation.message)
@@ -32,10 +32,10 @@ const createLakhpatiYojna : IController = async (req, res) => {
 }
 
 const fetchByCustomerId: IController = async (req, res) => {
-    await lakhpatiYojnaService.fetchByCustomerId(req.headers["tenant-id"],req.query.customer_id)
+    await lakhpatiSchemeService.fetchByCustomerId(req.headers["tenant-id"],req.query.customer_id)
         .then((LakhpatiInformation:any) => {
             if(LakhpatiInformation instanceof Error){
-                LOGGER.info("SukanyaYojna", LakhpatiInformation.message)
+                LOGGER.info("LakhpatiScheme", LakhpatiInformation.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
@@ -56,6 +56,6 @@ const fetchByCustomerId: IController = async (req, res) => {
 }
 
 export default {
-    createLakhpatiYojna,
+    createLakhpatiScheme,
     fetchByCustomerId
 };

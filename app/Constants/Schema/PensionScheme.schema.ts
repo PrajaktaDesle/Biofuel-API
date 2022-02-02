@@ -1,14 +1,15 @@
-import { Joi, Segments } from 'celebrate';
+
+import { Joi, Segments } from 'celebrate'
+
 export default {
-    createSukanyaYojna:{[Segments.BODY]:{
-            // id: Joi.number(),
+    createPensionScheme:{[Segments.BODY]:{
             customer_id: Joi.number().required(),
             start_date:  Joi.date().required(),
             tenure: Joi.number().required(),
             amount: Joi.number().required(),
             transaction_type: Joi.string().required(),
             status: Joi.number(),
-            user_id: Joi.number(),
+            user_id: Joi.number().optional(),
         },
         [Segments.HEADERS]: Joi.object({
             "tenant-id": Joi.number().required()
@@ -23,7 +24,7 @@ export default {
         }).unknown()
     },
 
-    fetchRdDetails:{[Segments.QUERY]:{
+    fetchPensionDetails:{[Segments.QUERY]:{
             transaction_id: Joi.number().integer().required(),
         },
         [Segments.HEADERS]:Joi.object({

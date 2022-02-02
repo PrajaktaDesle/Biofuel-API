@@ -1,26 +1,26 @@
 import express from 'express';
 
-import lakhpatiYojnaController from "../../Controllers/LakhpatiYojna.controller";
-import LakhpatiYojnaSchema from "../../Constants/Schema/LakhpatiYojna.schema";
+import lakhpatiSchemeController from "../../Controllers/LakhpatiYojna.controller";
+import LakhpatiSchemeSchema from "../../Constants/Schema/LakhpatiYojna.schema";
 const router = express.Router();
 import { celebrate } from 'celebrate';
 
 router.post(
     '/',
-    celebrate(LakhpatiYojnaSchema.createLakhpatiYojna),
-    lakhpatiYojnaController.createLakhpatiYojna
+    celebrate(LakhpatiSchemeSchema.createLakhpatiYojna),
+    lakhpatiSchemeController.createLakhpatiScheme
 );
 
 router.get(
     '/',
-    celebrate(LakhpatiYojnaSchema.fetchByCustomerId),
-    lakhpatiYojnaController.fetchByCustomerId
+    celebrate(LakhpatiSchemeSchema.fetchByCustomerId),
+    lakhpatiSchemeController.fetchByCustomerId
 );
 
 // router.get(
 //     '/details',
-//     // celebrate(SukanyaSchema.fetchSukanyaDetails),
-//     sukanyaYojnaController.fetchSukanyaDetails
+//     // celebrate(LakhpatiSchemeSchema.fetchLakhpatiDetails),
+//     lakhpatiSchemeController.fetchLakhpatiDetails
 // );
 
 export default router;

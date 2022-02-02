@@ -3,13 +3,13 @@ import IController from '../Types/IController';
 import apiResponse from '../utilities/ApiResponse';
 
 import LOGGER from "../config/LOGGER";
-import sukanyaYojnaService from "../Services/SukanyaYojna.service";
+import sukanyaSchemeService from "../Services/SukanyaScheme.service";
 
 
 
-const createSukanyaYojna : IController = async (req, res) => {
+const createSukanyaScheme : IController = async (req, res) => {
     req.body.tenant_id=req.headers["tenant-id"]
-    await sukanyaYojnaService.createSukanyaYojna(req.body)
+    await sukanyaSchemeService.createSukanyaScheme(req.body)
         .then((SukanyaInformation : any) => {
             if(SukanyaInformation instanceof Error){
                 LOGGER.info("SukanyaYojna", SukanyaInformation.message)
@@ -32,7 +32,7 @@ const createSukanyaYojna : IController = async (req, res) => {
 }
 
 const fetchByCustomerId: IController = async (req, res) => {
-    await sukanyaYojnaService.fetchByCustomerId(req.headers["tenant-id"],req.query.customer_id)
+    await sukanyaSchemeService.fetchByCustomerId(req.headers["tenant-id"],req.query.customer_id)
         .then((SukanyaInformation:any) => {
             if(SukanyaInformation instanceof Error){
                 LOGGER.info("SukanyaYojna", SukanyaInformation.message)
@@ -56,6 +56,6 @@ const fetchByCustomerId: IController = async (req, res) => {
 }
 
 export default {
-    createSukanyaYojna,
+    createSukanyaScheme,
     fetchByCustomerId
 };

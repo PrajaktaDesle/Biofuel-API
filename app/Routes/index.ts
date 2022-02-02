@@ -5,8 +5,9 @@ import rdRoute from './Rd/Rd.route';
 import tcRoute from './Transaction-config/TransConfig.route'
 import fdRoute from './Fd/Fd.route'
 import addBalanceRoute from './Add-Balance/AddBalance.route'
-import sukanyaYojnaRoute from "./Sukanya-yojna/Sukanya.route";
+import sukanyaYojnaRoute from "./Sukanya-yojna/SukanyaScheme.route";
 import lakhpatiYojnaRoute from "./Lakhpati-yojna/Lakhpati.route";
+import pensionSchemeRoute from "./PensionScheme/PensionScheme.route";
 
 const router = Router();
 
@@ -16,7 +17,8 @@ router.use('/Rd-transactions', rdRoute);
 router.use('/Transaction-config',tcRoute);
 router.use('/Fd-transactions',fdRoute);
 router.use('/Add-fund',addBalanceRoute);
-router.use('/sukanyaYojna', sukanyaYojnaRoute);
-router.use('/lakhpatiYojna', lakhpatiYojnaRoute);
+router.use('/sukanyaScheme', sukanyaYojnaRoute);
+router.use('/lakhpatiScheme', lakhpatiYojnaRoute);
+router.use('/pensionScheme', pensionSchemeRoute);
 
 export default router;
