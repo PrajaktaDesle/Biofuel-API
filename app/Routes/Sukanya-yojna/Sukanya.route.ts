@@ -1,19 +1,20 @@
 import express from 'express';
 
 import sukanyaYojnaController from "../../Controllers/SukanyaYojna.controller";
+import SukanyaSchema from "../../Constants/Schema/SukanyaYojna.schema"
 const router = express.Router();
 import { celebrate } from 'celebrate';
 
 router.post(
     '/',
-    // celebrate(SukanyaSchema.createSukanya),
+    celebrate(SukanyaSchema.createSukanyaYojna),
     sukanyaYojnaController.createSukanyaYojna
 );
 
 router.get(
     '/',
-    // celebrate(SukanyaSchema.fetchSukanyaSchemeById),
-    sukanyaYojnaController.fetchSukanyaByCustomerId
+    celebrate(SukanyaSchema.fetchByCustomerId),
+    sukanyaYojnaController.fetchByCustomerId
 );
 
 // router.get(

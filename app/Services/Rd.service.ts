@@ -62,6 +62,7 @@ async function fetchRdDetailsByTransactionId(transaction_id: any, tenant_id: any
         return e;
     }
 }
+
 export default {
     createRd,
     fetchRdByCustomerId,
