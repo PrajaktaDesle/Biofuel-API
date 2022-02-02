@@ -24,7 +24,7 @@ export const uploadFile = async(data: any):Promise<any> => {
     }
     return s3.upload(params, (s3Err:any, data:any) =>{
         if (s3Err) throw new  s3Err
-        console.log(`File uploaded successfully at ${data.Location}`)
+        console.log(`File uploaded successfully at ${data.Location}`);
     }).promise()
 }
 

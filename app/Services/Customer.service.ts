@@ -12,7 +12,7 @@ import Encryption from "../utilities/Encryption";
 
 const createCustomer = async (req:any,tenant:any) =>{
     try{
-        let customerData, fields, s3Path,key
+        let customerData, fields, s3Path
         let response = await processForm(req);
         if(response instanceof Error) throw response;
         // @ts-ignore
@@ -35,8 +35,10 @@ const createCustomer = async (req:any,tenant:any) =>{
             user_id: Number(fields.u_id),
             tenant_id: tenant,
             status: Number(fields.stat),
-            pancard_url: s3Path[0],
-            aadhar_url: s3Path[1],
+            aadharFront_url: s3Path[0],
+            aadharBack_url : s3Path[1],
+            pancard_url: s3Path[2],
+            selfie_url : s3Path[3],
             pan_number: String(fields.pan_num),
             aadhar_number: String(fields.aadhar_num),
             address: String(fields.address)
