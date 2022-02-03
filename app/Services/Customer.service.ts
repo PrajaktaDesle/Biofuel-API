@@ -21,6 +21,7 @@ const createCustomer = async (req:any,tenant:any) =>{
         s3Path = response.s3Path;
         // @ts-ignore
         // key=response.key
+        if(s3Path.length !== 4) throw new Error("Files field is missing")
         console.log("response", response);
         let hash = await new Hashing().generateHash(fields.password, 10);
         let Customers = {
@@ -50,8 +51,8 @@ const createCustomer = async (req:any,tenant:any) =>{
         let balanceInfo = await new CustomerModel().addCustomerBalance(addBalance);
         return customerData;
     }catch(e){
-        console.log("Execption ->", e);
-        throw e;
+        console.log("Exception ->", e);
+        return e;
     }
 }
 
@@ -77,6 +78,7 @@ const processForm = async(req : any) => {
             const data_path: string [] = [];
             try {
                 const images = Object.keys(files)
+                console.log("Key value of images----->",images);
                 if (images.length == 0) resolve({fields: fields, s3Path: s3Path});
                     // reject(new Error("No files are uploaded"));
                     for (let i = 0; i < images.length; i++) {
@@ -200,11 +202,11 @@ const fetchTransactionHistoryById = async (customer_id: any) => {
         if (customer_balance.length == 0) throw new Error("Couldn't get Customer Balance");
         let CurrentBalance=customer_balance[0].balance;
         for(let i=0;i< customerHistory.length;i++) {
-            if (customerHistory[i].credit > 0 && customerHistory[i].credit !== null) {
+            if (customerHistory[i].credit !== null && customerHistory[i].credit > 0 ) {
                 customerHistory[i].type = "cr";
                 customerHistory[i].Amount = customerHistory[i].credit;
             }else
-            if (customerHistory[i].debit < 0 && customerHistory[i].debit !== null) {
+            if (customerHistory[i].debit !== null && customerHistory[i].debit < 0) {
                 customerHistory[i].type = "db";
                 customerHistory[i].Amount = customerHistory[i].debit;
             }
@@ -238,7 +240,6 @@ const formidableUpdateDetails = async (req:any) =>{
         let tenant = req.headers["tenant-id"];
         if(fields.password !== undefined && fields.password !== null && fields.password !== "")  hash = await new Hashing().generateHash(fields.password, 10);
         let id=Number(fields.id);
-        console.log("hash---->",hash);
         let updatedCustomers : any = {};
             // first_name: String,
             // middle_name: String,
@@ -266,24 +267,28 @@ const formidableUpdateDetails = async (req:any) =>{
 
         if(fields.r_date !== undefined && fields.r_date !== null && fields.r_date !== "") updatedCustomers.reg_date=fields.r_date;
 
-        if(fields.stat !== undefined && fields.stat !== null && fields.stat !== "") updatedCustomers.status=fields.stat;
+        if(fields.stat !== undefined && fields.stat !== null && fields.stat !== "") updatedCustomers.status=fields.stat
 
-        if(s3Path[0] !== undefined && s3Path[0] !== null && s3Path[0] !== "") updatedCustomers.pancard_url=s3Path[0];
+        if(s3Path[0] !== undefined && s3Path[0] !== null && s3Path[0] !== "") updatedCustomers.aadharFront_url=s3Path[0];
 
-        if(s3Path[1] !== undefined && s3Path[1] !== null && s3Path[1] !== "") updatedCustomers.aadhar_url=s3Path[1];
+        if(s3Path[1] !== undefined && s3Path[1] !== null && s3Path[1] !== "") updatedCustomers.aadharBack_url=s3Path[1];
+
+        if(s3Path[2] !== undefined && s3Path[2] !== null && s3Path[2] !== "") updatedCustomers.pancard_url=s3Path[2];
+
+        if(s3Path[3] !== undefined && s3Path[3] !== null && s3Path[3] !== "") updatedCustomers.selfie_url=s3Path[3];
 
         if(fields.pan_num !== undefined && fields.pan_num !== null && fields.pan_num !== "") updatedCustomers.pan_number=fields.pan_num;
 
         if(fields.aadhar_num !== undefined && fields.aadhar_num !== null && fields.aadhar_num !== "") updatedCustomers.aadhar_number=fields.aadhar_num;
 
         if(fields.address !== undefined && fields.address !== null && fields.address !== "") updatedCustomers.address=fields.address;
-
+        // console.log("updatedCustomers ---->", updatedCustomers);
         updatedCustomerData = await new CustomerModel().formidableUpdateDetails(updatedCustomers,id,tenant)
         if (!updatedCustomerData) throw new Error("Update Customer failed");
         return updatedCustomerData;
     }catch(e){
         console.log("Exception ->", e);
-        throw e;
+        return e;
     }
 }
 
