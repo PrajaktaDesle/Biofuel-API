@@ -20,7 +20,7 @@ const register: IController = async (req, res) => {
                 customer
             }, httpStatusCodes.CREATED);
         }
-    } catch (e) {
+    } catch (e:any) {
         console.log("controller ->", e)
         // @ts-ignore
         if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
@@ -29,8 +29,15 @@ const register: IController = async (req, res) => {
                 httpStatusCodes.BAD_REQUEST,
                 'EMAIL_ALREADY_EXISTS',
             );
-            return;
         }
+        else{
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+        }
+        return;
     }
 };
 

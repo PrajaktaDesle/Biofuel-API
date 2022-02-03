@@ -52,7 +52,7 @@ const createCustomer = async (req:any,tenant:any) =>{
         return customerData;
     }catch(e){
         console.log("Exception ->", e);
-        return e;
+        throw e;
     }
 }
 
@@ -98,7 +98,7 @@ const processForm = async(req : any) => {
                     resolve({fields: fields, s3Path: s3Path});
             }catch(e)
             {
-                return e
+                throw e
             }
         });
     });
@@ -288,7 +288,7 @@ const formidableUpdateDetails = async (req:any) =>{
         return updatedCustomerData;
     }catch(e){
         console.log("Exception ->", e);
-        return e;
+        throw e;
     }
 }
 
