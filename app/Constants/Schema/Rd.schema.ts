@@ -30,4 +30,10 @@ export default {
             "tenant-id": Joi.number().required()
         }).unknown()
     },
+
+    fetchAllRdByTenant:{
+        [Segments.HEADERS]:Joi.object({
+            "tenant-id": Joi.number().required()
+        }).unknown()
+    },
 };

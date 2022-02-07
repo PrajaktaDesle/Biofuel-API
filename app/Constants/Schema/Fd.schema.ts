@@ -19,5 +19,11 @@ export default {
         [Segments.HEADERS]:Joi.object({
             "tenant-id": Joi.number().required()
         }).unknown()
-    }
+    },
+
+    fetchAllFdByTenant:{
+        [Segments.HEADERS]:Joi.object({
+            "tenant-id": Joi.number().required()
+        }).unknown()
+    },
 };

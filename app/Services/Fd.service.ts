@@ -51,7 +51,18 @@ async function fetchFdByCustomer(tenant_id: any, customer_id: any) {
     }
 }
 
+async function fetchAllFdByTenant(tenant_id:number) {
+    try {
+        let fdAll = await new FdModel().fetchAllFdByTenant(tenant_id);
+        if(fdAll.length == 0)throw new Error("No FD data found");
+        return fdAll;
+    } catch (e) {
+        throw e;
+    }
+}
+
 export default {
     createFD,
-    fetchFdByCustomer
+    fetchFdByCustomer,
+    fetchAllFdByTenant
 }

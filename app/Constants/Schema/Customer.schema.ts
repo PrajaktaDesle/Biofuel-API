@@ -65,7 +65,6 @@ export default {
             middle_name: Joi.string().optional().min(1).message("Length should be greater than 1 character"),
             last_name: Joi.string().optional().min(1).message("Length should be greater than 1 character"),
             email: Joi.string().email().optional(),
-            password: Joi.string().optional().min(6).max(32),
             mobile:Joi.string().optional().min(10).message("mobile length should be 10").max(10).message("mobile length should be 10"),
             status:Joi.number().optional().min(0).message("minimum status should be 0 or 1").max(1).message("minimum status should be 0 or 1")
         },

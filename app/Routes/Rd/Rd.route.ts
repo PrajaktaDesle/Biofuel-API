@@ -24,4 +24,10 @@ router.get(
     rdController.fetchRdDetails
 );
 
+router.get(
+    '/all',
+    celebrate(rdSchema.fetchAllRdByTenant),
+    rdController.fetchAllRdByTenant
+);
+
 export default router;

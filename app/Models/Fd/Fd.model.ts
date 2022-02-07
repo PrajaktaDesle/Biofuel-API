@@ -21,4 +21,8 @@ export class FdModel extends BaseModel {
         return await this._executeQuery("select * from rd_transaction where customer_id = ? and tenant_id = ?", [data.customer_id, data.tenant_id]);
     }
 
+    async fetchAllFdByTenant(tenant_id : number) {
+        return await this._executeQuery("select fd_transactions.customer_id, customers.first_name,customers.middle_name,customers.last_name, fd_transactions.start_date, fd_transactions.amount,fd_transactions.tenure,fd_transactions.roi from fd_transactions LEFT JOIN customers ON fd_transactions.customer_id = customers.id WHERE customers.tenant_id and fd_transactions.tenant_id = ?", [tenant_id]);
+    }
+
 }

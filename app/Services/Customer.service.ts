@@ -109,12 +109,11 @@ const fetchCustomerById = async (id: any, tenant_id:any ) => {
         let customer = await new CustomerModel().findCustomerById(id, tenant_id);
         if (customer.length == 0) throw new Error("No Customer found");
         // console.log("customer----->",customer);
-        const customer_id=id;
-        let customer_balance = await new CustomerBalanceModel().getCustomerBalance(customer_id);
+        let customer_balance = await new CustomerBalanceModel().getCustomerBalance(id);
         if(customer_balance == 0) throw new Error("Customer BalanceNot found")
-        let RecurringDeposit = await new CustomerModel().getCustomerRD(customer_id, tenant_id);
+        let RecurringDeposit = await new CustomerModel().getCustomerRD(id, tenant_id);
         if(RecurringDeposit.length == 0) throw new Error("RD Not found")
-        let FixedDeposit = await new CustomerModel().getCustomerFD(customer_id, tenant_id);
+        let FixedDeposit = await new CustomerModel().getCustomerFD(id, tenant_id);
         if(FixedDeposit == 0) throw new Error("FD Not found")
         let shares= 2000;
         customer[0].SavingBalance=customer_balance[0].balance;
@@ -189,7 +188,7 @@ const updateCustomerDetails = async (data:any) => {
         return customer[0];
     }
     catch (e){
-        return e;
+        throw e;
     }
 }
 
@@ -221,7 +220,7 @@ const fetchTransactionHistoryById = async (customer_id: any) => {
         return BankStatement;
     }
     catch (e){
-        return e;
+        throw e;
     }
 }
 
@@ -241,15 +240,6 @@ const formidableUpdateDetails = async (req:any) =>{
         if(fields.password !== undefined && fields.password !== null && fields.password !== "")  hash = await new Hashing().generateHash(fields.password, 10);
         let id=Number(fields.id);
         let updatedCustomers : any = {};
-            // first_name: String,
-            // middle_name: String,
-            // last_name: String,
-            // password: String,
-            // pancard_url:String,
-            // aadhar_url: String,
-            // pan_number: String,
-            // aadhar_number: String,
-            // address: String
 
         if(fields.f_name !== undefined && fields.f_name !== null && fields.f_name !== "") updatedCustomers.first_name=fields.f_name;
 
