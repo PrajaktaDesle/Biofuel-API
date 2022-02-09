@@ -63,8 +63,22 @@ async function fetchRdDetailsByTransactionId(transaction_id: any, tenant_id: any
     }
 }
 
+
+async function fetchAllRdByTenant(tenant_id: number) {
+    try {
+        let rdAll = await new RdModel().fetchAllRdByTenant(tenant_id);
+        if(rdAll.length == 0) throw new Error("Rd details not found");
+        // console.log("RD List ",rdList);
+        // delete rdAll[0].tenant_id;
+        return rdAll;
+    } catch (e) {
+        throw e;
+    }
+}
+
 export default {
     createRd,
     fetchRdByCustomerId,
     fetchRdDetailsByTransactionId,
+    fetchAllRdByTenant,
 }

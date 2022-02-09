@@ -53,7 +53,32 @@ const fetchFdByCustomer: IController = async (req, res) => {
         });
 }
 
+const fetchAllFdByTenant: IController = async (req, res) => {
+    await fdService.fetchAllFdByTenant(Number(req.headers["tenant-id"]))
+        .then((FdAllDetails  : any) => {
+            if(FdAllDetails instanceof Error){
+                LOGGER.info("FD", FdAllDetails.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    FdAllDetails.message
+                );
+            }else{
+                if(FdAllDetails.length == 0) throw new Error("Value mismatched")
+                LOGGER.info("transactionType ->", FdAllDetails)
+                apiResponse.result(res, FdAllDetails, httpStatusCodes.OK);
+            }
+        }).catch(err => {
+            LOGGER.info("Error  ->", err);
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+            );
+        });
+}
+
 export default {
     createFd,
-    fetchFdByCustomer
+    fetchFdByCustomer,
+    fetchAllFdByTenant
 };

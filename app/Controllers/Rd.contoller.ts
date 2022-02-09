@@ -86,9 +86,38 @@ const fetchRdDetails: IController = async (req, res) => {
         });
 }
 
+const fetchAllRdByTenant: IController = async (req, res) => {
+
+    await rdService.fetchAllRdByTenant(Number(req.headers["tenant-id"]))
+        .then((RdAll:any) => {
+            if(RdAll instanceof Error){
+                LOGGER.info("RD All List", RdAll.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    RdAll.message
+                );
+            }else{
+                LOGGER.info("User 3", RdAll)
+                if(RdAll.length != 0 )
+                    apiResponse.result(res, RdAll, httpStatusCodes.OK);
+                else{
+                    throw new Error("value didnt match");
+                }
+            }
+        }).catch(err => {
+            LOGGER.info("Error  ->", err);
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+            );
+        });
+}
+
 
 export default {
     fetchRd,
     createRd,
     fetchRdDetails,
+    fetchAllRdByTenant
 };

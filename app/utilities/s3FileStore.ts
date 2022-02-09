@@ -14,14 +14,15 @@ const s3 = new AWS.S3({
     accessKeyId,
     secretAccessKey,
 });
-export const uploadFile = async(data: any):Promise<any> => {
-
+export const uploadFile = async(data: any, name : string):Promise<any> => {
+//todo buffer stream need to be used
     let fileStream = fs.createReadStream(data.filepath);
     const params: any = {
         Bucket: bucketName,
         Body: fileStream,
-        Key: data.originalFilename
+        Key: name
     }
+    // console.log("Params--->",params);
     return s3.upload(params, (s3Err:any, data:any) =>{
         if (s3Err) throw new  s3Err
         console.log(`File uploaded successfully at ${data.Location}`);
