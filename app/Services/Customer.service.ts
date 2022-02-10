@@ -9,42 +9,59 @@ import {CustomerBalanceModel} from "../Models/AddBalance/CustomerBalance.model";
 import {uploadFile}  from "../utilities/s3FileStore";
 import Hashing from "../utilities/Hashing";
 import Encryption from "../utilities/Encryption";
+let config = require("../config");
 
 const createCustomer = async (req:any,tenant:any) =>{
     try{
-        let customerData, fields, s3Path
+        let customerData, fields, s3Path;
         let response = await processForm(req);
         if(response instanceof Error) throw response;
         // @ts-ignore
         fields = response.fields;
         // @ts-ignore
         s3Path = response.s3Path;
-        // @ts-ignore
-        // key=response.key
-        if(s3Path.length !== 4) throw new Error("Files field is missing")
         console.log("response", response);
         let hash = await new Hashing().generateHash(fields.password, 10);
+        let Customers:any = {};
+        if(fields.f_name == undefined || fields.f_name == null || fields.f_name == "") throw new Error("f_name required");
+        Customers.first_name=fields.f_name;
+        if(fields.m_name == undefined || fields.m_name == null || fields.m_name == "") throw new Error("m_name required");
+        Customers.middle_name=fields.m_name;
+        if(fields.l_name == undefined || fields.l_name == null || fields.l_name == "") throw new Error("l_name required");
+        Customers.last_name=fields.l_name;
+        if(fields.mobile == undefined || fields.mobile == null || fields.mobile == "") throw new Error("mobile is required");
+        Customers.mobile=fields.mobile;
+        if(fields.email == undefined || fields.email == null || fields.email == "") throw new Error("email required");
+        Customers.email=fields.email;
+        if(fields.password == undefined || fields.password == null || fields.password == "") throw new Error("password required");
+        Customers.password=hash;
+        if(fields.dob == undefined || fields.dob == null || fields.dob == "") throw new Error("dob required");
+        Customers.dob=fields.dob;
+        if(fields.r_date == undefined || fields.r_date == null || fields.r_date == "") throw new Error("r_date required");
+        Customers.reg_date=fields.r_date;
+        if(fields.u_id == undefined || fields.u_id == null || fields.u_id == "") throw new Error("u_id required");
+        Customers.user_id=fields.u_id;
+        if(tenant == undefined || tenant == null || tenant == "") throw new Error("tenant required");
+        Customers.tenant_id=tenant;
+        if(fields.stat == undefined || fields.stat == null || fields.stat == "") throw new Error("status required");
+        Customers.status=fields.stat;
 
-        let Customers = {
-            first_name: String(fields.f_name),
-            middle_name: String(fields.m_name),
-            last_name: String(fields.l_name),
-            mobile: String(fields.mobile),
-            email: String(fields.email),
-            password: hash,
-            dob: String(fields.dob),
-            reg_date: String(fields.r_date),
-            user_id: Number(fields.u_id),
-            tenant_id: tenant,
-            status: Number(fields.stat),
-            aadharFront_url: s3Path[0],
-            aadharBack_url : s3Path[1],
-            pancard_url: s3Path[2],
-            selfie_url : s3Path[3],
-            pan_number: String(fields.pan_num),
-            aadhar_number: String(fields.aadhar_num),
-            address: String(fields.address)
-        }
+        if(s3Path.aadharFront == undefined || s3Path.aadharFront == null || s3Path.aadharFront == "") throw new Error("aadharFront required");
+        Customers.aadharFront_url=s3Path.aadharFront;
+        if(s3Path.aadharBack == undefined || s3Path.aadharBack == null || s3Path.aadharBack == "") throw new Error("aadharBack required");
+        Customers.aadharBack_url=s3Path.aadharBack;
+        if(s3Path.pancard == undefined || s3Path.pancard == null || s3Path.pancard == "") throw new Error("pancard required");
+        Customers.pancard_url=s3Path.pancard;
+        if(s3Path.selfie == undefined || s3Path.selfie == null || s3Path.selfie == "") throw new Error("selfie required");
+        Customers.selfie_url=s3Path.selfie;
+
+        if(fields.pan_num == undefined || fields.pan_num == null || fields.pan_num == "") throw new Error("pan_num required");
+        Customers.pan_number=fields.pan_num;
+        if(fields.aadhar_num == undefined || fields.aadhar_num == null || fields.aadhar_num == "") throw new Error("aadhar_num required");
+        Customers.aadhar_number=fields.aadhar_num;
+        if(fields.address == undefined || fields.address == null || fields.address == "") throw new Error("address required");
+        Customers.address=fields.address;
+
         customerData = await new CustomerModel().createCustomer(Customers)
         if (!customerData) throw new Error("Registration failed");
         let addBalance = { balance:0,
@@ -64,29 +81,32 @@ const fetchAllCustomers = async (tenant_id : any) =>{
     for(let i=0;i< customerData.length;i++) {
         delete customerData[i].password;
         delete customerData[i].tenant_id;
+        customerData[i].pancard_url= config.baseUrl + "/" + customerData[i].pancard_url;
+        customerData[i].aadharFront_url= config.baseUrl + "/" + customerData[i].aadharFront_url;
+        customerData[i].aadharBack_url= config.baseUrl + "/" + customerData[i].aadharBack_url;
+        customerData[i].selfie_url = config.baseUrl + "/" + customerData[i].selfie_url;
     }
     return customerData;
 }
 
 const processForm = async(req : any) => {
-    let newPath: string [] = [];
-    let s3Path:string []=[];
-    // let key:string []=[];
+    let s3Path:any = {};
     const form = new formidable.IncomingForm();
     return new Promise((resolve, reject) => {
         form.parse(req, async (err: any, fields: any, files: any) => {
             try {
-                const images = Object.keys(files)
+                const images:any = Object.keys(files)
                 console.log("Key value of images----->",images);
                 if (images.length == 0) resolve({fields: fields, s3Path: s3Path});
                     for (let i = 0; i < images.length; i++) {
                         // upload file to s3Bucket
-                        console.log("images ", images[i])
                         let name : string = "images/"+images[i]+"/"+  moment().unix() + "."+ files[images[i]].originalFilename.split(".").pop()
                         const result = await uploadFile(files[images[i]], name);
-                        if (result == 0 && result == undefined) throw new Error("file upload return failed");
-                        s3Path[i] = result.key;
+                        if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
+                        console.log(images[i])
+                        s3Path[images[i]] = result.key;
                     }
+                    console.log(s3Path)
                     resolve({fields: fields, s3Path: s3Path});
             }catch(e)
             {
@@ -114,6 +134,11 @@ const fetchCustomerById = async (id: any, tenant_id:any ) => {
         customer[0].Shares=shares;
         delete customer[0].password;
         delete customer[0].tenant_id;
+        customer[0].pancard_url= config.baseUrl + "/" + customer[0].pancard_url;
+        customer[0].aadharFront_url= config.baseUrl + "/" + customer[0].aadharFront_url;
+        customer[0].aadharBack_url= config.baseUrl + "/" + customer[0].aadharBack_url;
+        customer[0].selfie_url = config.baseUrl + "/" + customer[0].selfie_url;
+
         return customer[0];
     }
     catch (e){
