@@ -13,6 +13,7 @@ export class CustomerBalanceModel extends BaseModel {
         return await this._executeQuery("select balance from customer_balance where customer_id = ? ", [customer_id]);
     }
 
+
     async getCustomerBalanceLock(sqlConnection : Connection, customer_id: number) {
         return await this._executeQueryTransaction(sqlConnection, "select balance from customer_balance where customer_id = ? for update", [customer_id]);
     }

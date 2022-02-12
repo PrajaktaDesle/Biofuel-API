@@ -36,6 +36,26 @@ export default {
         }).unknown()
     },
 
+    getActiveUsers: {
+        // [Segments.BODY]: {
+        //     email: Joi.string().email().required(),
+        //     password: Joi.string().required()
+        // },
+        [Segments.HEADERS]:Joi.object({
+            "tenant-id": Joi.number().min(1).required()
+        }).unknown()
+    },
+    fetchUserById:{
+        [Segments.QUERY]:{
+            id:Joi.number().required()
+        },
+        [Segments.HEADERS]: Joi.object({
+            "tenant-id": Joi.number().min(1).required()
+        }).unknown()
+    },
+
+
+
     updateUserDetails: {
         [Segments.BODY]: {
             first_name: Joi.string().optional().min(1).message("Minimum 1 character required"),
