@@ -146,6 +146,7 @@ const fetchCustomerById = async (id: any, tenant_id:any ) => {
     }
 }
 
+
 const loginCustomer=async (data: any) => {
     try {
         let customer = await new CustomerModel().getCustomer(data.mobile, data.tenant_id);

@@ -24,6 +24,17 @@ router.get(
     celebrate(userSchema.fetch),
     userController.fetchUsers
 );
+router.get(
+    '/activeUsers',
+    celebrate(userSchema.getActiveUsers),
+    userController.getActiveUsers
+);
+
+router.get(
+    '/getUserById',
+    celebrate(userSchema.fetchUserById),
+    userController.fetchUserById
+);
 
 router.put(
     '/put-details',

@@ -4,6 +4,8 @@ import {UserModel} from "../Models/User/User.model";
 import Encryption from "../utilities/Encryption";
 import LOGGER from "../config/LOGGER";
 import Hashing from "../utilities/Hashing";
+import {CustomerBalanceModel} from "../Models/AddBalance/CustomerBalance.model";
+import config from "../config";
 
 const createUser = async (data : any) => {
     if(data.password!==data.confirm_password) throw new Error("password did not match");
@@ -33,6 +35,18 @@ async function loginUser(data:any) {
     }
 }
 
+const fetchUserById = async (id: number, tenant_id: number) => {
+    try {
+        let user = await new UserModel().fetchUserById(id, tenant_id);
+        if (user.length == 0) throw new Error("No User found");
+        // console.log("customer----->",customer);
+        return user[0];
+    }
+    catch (e){
+        throw e;
+    }
+}
+
 const userDetails = async (data : any) =>{
     let userData = await new UserModel().findUsers(data)
     if (userData[0] == null) throw new Error("details did not match");
@@ -41,6 +55,17 @@ const userDetails = async (data : any) =>{
     return userData;
 }
 
+
+const getActiveUsers = async (tenant_id : number) =>{
+    let userData = await new UserModel().getActiveUsers(tenant_id)
+    if (userData[0] == null) throw new Error("No Customer is active");
+    for(let i=0; i<userData.length;i++){
+        delete userData[i].password;
+        delete userData[i].tenant_id;
+    }
+
+    return userData;
+}
 const updateUserDetails = async (data:any) => {
     try {
         let user = await new UserModel().updateUserDetails(data);
@@ -57,5 +82,7 @@ export default {
     createUser,
     loginUser,
     userDetails,
+    fetchUserById,
+    getActiveUsers,
     updateUserDetails
 };

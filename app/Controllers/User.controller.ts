@@ -92,6 +92,58 @@ const fetchUsers: IController = async (req, res) => {
 }
 
 
+const getActiveUsers: IController = async (req, res) => {
+
+    // req.body.tenant_id=tenant;
+    userService.getActiveUsers(Number(req.headers["tenant-id"]))
+        .then( (activeUsers) => {
+            if(activeUsers instanceof Error){
+                console.log("User 2", activeUsers.message)
+                apiResponse.error(
+                    res,
+                    // response.send('Incorrect Username and/or Password!');
+                    httpStatusCodes.BAD_REQUEST,
+                    activeUsers.message
+                );
+            }else{
+                console.log("User 3", activeUsers.message)
+                // response.redirect('/home');
+                apiResponse.result(res, activeUsers, httpStatusCodes.OK);
+            }
+        }).catch(err => {
+        console.log("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+            //locale.INVALID_CREDENTIALS,
+        );
+    });
+}
+
+
+const fetchUserById: IController = async (req, res) => {
+    userService.fetchUserById(Number(req.query.id), Number( req.headers["tenant-id"]))
+        .then( (user) => {
+            if(user instanceof Error){
+                console.log("User 2", user.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    user.message
+                );
+            }else{
+                // console.log("User 3", customer)
+                apiResponse.result(res, user, httpStatusCodes.OK);
+            }
+        }).catch(err => {
+        console.log("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+        );
+    });
+};
+
 const updateUserDetails: IController = async (req, res) => {
     req.body.tenant_id = req.headers["tenant-id"]
     userService.updateUserDetails(req.body)
@@ -120,5 +172,7 @@ export default {
     login,
     register,
     fetchUsers,
+    getActiveUsers,
+    fetchUserById,
     updateUserDetails
 };

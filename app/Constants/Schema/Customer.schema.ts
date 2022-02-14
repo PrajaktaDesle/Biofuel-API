@@ -58,6 +58,7 @@ export default {
         }).unknown()
     },
 
+
     updateCustomerDetails: {
         [Segments.BODY]: {
             id: Joi.number().required(),

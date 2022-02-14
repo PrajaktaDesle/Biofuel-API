@@ -27,7 +27,8 @@ const register: IController = async (req, res) => {
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
-                'MOBILE_ALREADY_EXISTS',
+                'MOBILE_AND_EMAIL_ALREADY_EXISTS',
+
             );
         }
         else{
