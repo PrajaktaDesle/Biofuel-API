@@ -5,8 +5,8 @@ import * as path from "path";
 import * as fs from "fs";
 const {v4 : uuidv4} = require('uuid');
 import formidable from "formidable";
-import {CustomerBalanceModel} from "../Models/AddBalance/CustomerBalance.model";
-import {uploadFile}  from "../utilities/s3FileStore";
+// import {CustomerBalanceModel} from "../Models/AddBalance/CustomerBalance.model";
+import {uploadFile}  from "../utilities/S3Bucket";
 import Hashing from "../utilities/Hashing";
 import Encryption from "../utilities/Encryption";
 let config = require("../config");
@@ -121,16 +121,16 @@ const fetchCustomerById = async (id: any, tenant_id:any ) => {
         let customer = await new CustomerModel().findCustomerById(id, tenant_id);
         if (customer.length == 0) throw new Error("No Customer found");
         // console.log("customer----->",customer);
-        let customer_balance = await new CustomerBalanceModel().getCustomerBalance(id);
-        if(customer_balance == 0) throw new Error("Customer BalanceNot found")
-        let RecurringDeposit = await new CustomerModel().getCustomerRD(id, tenant_id);
-        if(RecurringDeposit.length == 0) throw new Error("RD Not found")
-        let FixedDeposit = await new CustomerModel().getCustomerFD(id, tenant_id);
-        if(FixedDeposit == 0) throw new Error("FD Not found")
+        // let customer_balance = await new CustomerBalanceModel().getCustomerBalance(id);
+        // if(customer_balance == 0) throw new Error("Customer BalanceNot found")
+        // let RecurringDeposit = await new CustomerModel().getCustomerRD(id, tenant_id);
+        // if(RecurringDeposit.length == 0) throw new Error("RD Not found")
+        // let FixedDeposit = await new CustomerModel().getCustomerFD(id, tenant_id);
+        // if(FixedDeposit == 0) throw new Error("FD Not found")
         let shares= 2000;
-        customer[0].SavingBalance=customer_balance[0].balance;
-        customer[0].RecurringDeposit=RecurringDeposit[0].amount;
-        customer[0].FixedDeposit=FixedDeposit[0].amount;
+        // customer[0].SavingBalance=customer_balance[0].balance;
+        // customer[0].RecurringDeposit=RecurringDeposit[0].amount;
+        // customer[0].FixedDeposit=FixedDeposit[0].amount;
         customer[0].Shares=shares;
         delete customer[0].password;
         delete customer[0].tenant_id;
@@ -210,37 +210,37 @@ const updateCustomerDetails = async (data:any) => {
     }
 }
 
-const fetchTransactionHistoryById = async (customer_id: any) => {
+// const fetchTransactionHistoryById = async (customer_id: any) => {
 
-    try {
-        let customerHistory = await new CustomerModel().fetchTransactionHistoryById(customer_id);
-        if (customerHistory.length == 0) throw new Error("Customers transaction history not found");
-        let customer_balance = await new CustomerBalanceModel().getCustomerBalance(customer_id);
-        if (customer_balance.length == 0) throw new Error("Couldn't get Customer Balance");
-        let CurrentBalance=customer_balance[0].balance;
-        for(let i=0;i< customerHistory.length;i++) {
-            if (customerHistory[i].credit !== null && customerHistory[i].credit > 0 ) {
-                customerHistory[i].type = "cr";
-                customerHistory[i].Amount = customerHistory[i].credit;
-            }else
-            if (customerHistory[i].debit !== null && customerHistory[i].debit < 0) {
-                customerHistory[i].type = "db";
-                customerHistory[i].Amount = customerHistory[i].debit;
-            }
-            delete customerHistory[i].debit;
-            delete customerHistory[i].credit;
-        }
-        // console.log("customerHistory----->",customerHistory);
-        let BankStatement={
-            customerHistory,
-            CurrentBalance
-        };
-        return BankStatement;
-    }
-    catch (e){
-        throw e;
-    }
-}
+//     try {
+//         let customerHistory = await new CustomerModel().fetchTransactionHistoryById(customer_id);
+//         if (customerHistory.length == 0) throw new Error("Customers transaction history not found");
+//         let customer_balance = await new CustomerBalanceModel().getCustomerBalance(customer_id);
+//         if (customer_balance.length == 0) throw new Error("Couldn't get Customer Balance");
+//         let CurrentBalance=customer_balance[0].balance;
+//         for(let i=0;i< customerHistory.length;i++) {
+//             if (customerHistory[i].credit !== null && customerHistory[i].credit > 0 ) {
+//                 customerHistory[i].type = "cr";
+//                 customerHistory[i].Amount = customerHistory[i].credit;
+//             }else
+//             if (customerHistory[i].debit !== null && customerHistory[i].debit < 0) {
+//                 customerHistory[i].type = "db";
+//                 customerHistory[i].Amount = customerHistory[i].debit;
+//             }
+//             delete customerHistory[i].debit;
+//             delete customerHistory[i].credit;
+//         }
+//         // console.log("customerHistory----->",customerHistory);
+//         let BankStatement={
+//             customerHistory,
+//             CurrentBalance
+//         };
+//         return BankStatement;
+//     }
+//     catch (e){
+//         throw e;
+//     }
+// }
 
 const formidableUpdateDetails = async (req:any) =>{
     try{
@@ -307,6 +307,6 @@ export default {
     verify_customer_otp,
     fetchCustomerById,
     updateCustomerDetails,
-    fetchTransactionHistoryById,
+    // fetchTransactionHistoryById,
     formidableUpdateDetails
 }

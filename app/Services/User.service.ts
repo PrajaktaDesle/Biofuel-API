@@ -4,7 +4,7 @@ import {UserModel} from "../Models/User/User.model";
 import Encryption from "../utilities/Encryption";
 import LOGGER from "../config/LOGGER";
 import Hashing from "../utilities/Hashing";
-import {CustomerBalanceModel} from "../Models/AddBalance/CustomerBalance.model";
+// import {CustomerBalanceModel} from "../Models/AddBalance/CustomerBalance.model";
 import config from "../config";
 
 const createUser = async (data : any) => {

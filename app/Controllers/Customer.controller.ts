@@ -69,7 +69,7 @@ const fetchAllCustomers: IController = async (req, res) => {
 
 const fetchCustomerById: IController = async (req, res) => {
     customerService.fetchCustomerById(req.query.id,  req.headers["tenant-id"])
-        .then( (customer) => {
+        .then( (customer : any) => {
             if(customer instanceof Error){
                 console.log("User 2", customer.message)
                 apiResponse.error(
@@ -81,7 +81,7 @@ const fetchCustomerById: IController = async (req, res) => {
                 // console.log("User 3", customer)
                 apiResponse.result(res, customer, httpStatusCodes.OK);
             }
-        }).catch(err => {
+        }).catch( (err : any) => {
         console.log("Error  ->", err);
         apiResponse.error(
             res,
@@ -166,28 +166,28 @@ const updateCustomerDetails: IController = async (req, res) => {
     });
 };
 
-const fetchTransactionHistoryById: IController = async (req, res) => {
-    customerService.fetchTransactionHistoryById(req.query.customer_id)
-        .then( (customer_history:any) => {
-            if(customer_history instanceof Error){
-                console.log("User 2", customer_history.message)
-                apiResponse.error(
-                    res,
-                    httpStatusCodes.BAD_REQUEST,
-                    customer_history.message
-                );
-            }else{
-                // console.log("User 3", customer)
-                apiResponse.result(res, customer_history, httpStatusCodes.OK);
-            }
-        }).catch(err => {
-        console.log("Error  ->", err);
-        apiResponse.error(
-            res,
-            httpStatusCodes.BAD_REQUEST,
-        );
-    });
-};
+// const fetchTransactionHistoryById: IController = async (req, res) => {
+//     customerService.fetchTransactionHistoryById(req.query.customer_id)
+//         .then( (customer_history:any) => {
+//             if(customer_history instanceof Error){
+//                 console.log("User 2", customer_history.message)
+//                 apiResponse.error(
+//                     res,
+//                     httpStatusCodes.BAD_REQUEST,
+//                     customer_history.message
+//                 );
+//             }else{
+//                 // console.log("User 3", customer)
+//                 apiResponse.result(res, customer_history, httpStatusCodes.OK);
+//             }
+//         }).catch(err => {
+//         console.log("Error  ->", err);
+//         apiResponse.error(
+//             res,
+//             httpStatusCodes.BAD_REQUEST,
+//         );
+//     });
+// };
 
 
 const formidableUpdateDetails : IController = async (req, res) => {
@@ -219,6 +219,6 @@ export default {
     verify_otp,
     fetchCustomerById,
     updateCustomerDetails,
-    fetchTransactionHistoryById,
+    // fetchTransactionHistoryById,
     formidableUpdateDetails
 };

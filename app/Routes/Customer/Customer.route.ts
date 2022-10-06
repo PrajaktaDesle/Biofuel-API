@@ -16,11 +16,11 @@ router.get(
     customerController.fetchAllCustomers
 );
 
-router.get(
-    '/',
-    celebrate(customerSchema.fetchCustomerById),
-    customerController.fetchCustomerById
-);
+// router.get(
+//     '/',
+//     celebrate(customerSchema.fetchCustomerById),
+//     customerController.fetchCustomerById
+// );
 
 router.post(
     '/login',
@@ -39,11 +39,11 @@ router.put(
     customerController.updateCustomerDetails
 );
 
-router.get(
-    '/transaction-history',
-    celebrate(customerSchema.fetchTransactionHistoryById),
-    customerController.fetchTransactionHistoryById
-);
+// router.get(
+//     '/transaction-history',
+//     celebrate(customerSchema.fetchTransactionHistoryById),
+//     customerController.fetchTransactionHistoryById
+// );
 
 router.put(
     '/formidable/put-details',

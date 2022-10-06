@@ -2,14 +2,18 @@ const env = process.env;
 
 export = {
     DB : { /* don't expose password or any sensitive info, done only for demo */
-        host: env.MASTER_DB_HOST || 'localhost',
-        user: env.MASTER_DB_USER || 'root',
-        password: env.MASTER_DB_PASSWORD || 'Sanku21897',
-        database: env.MASTER_DB_NAME || 'sys',
+        host: env.MASTER_DB_HOST || 'localhost'
+        ,
+        user: env.MASTER_DB_USER || 'root'
+        ,
+        password: env.MASTER_DB_PASSWORD  || 'root@123'
+        ,
+        database: env.MASTER_DB_NAME || 'db'
+        ,
         timezone: 'utc'
     },
     JwtToken: {
-        secretKey : process.env.JWT_TOKEN_SECRET_KEY || 'test',
+        secretKey : process.env.JWT_TOKEN_SECRET_KEY,
         expiry : process.env.JWT_TOKEN_EXPIRY || '1d'
     },
     baseUrl: "http://qa1.digitalflake.com",
