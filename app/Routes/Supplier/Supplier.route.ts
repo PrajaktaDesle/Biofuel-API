@@ -80,32 +80,20 @@ const imageUpload = multer({
     cb(undefined, true)
   }
 })
-const multiUpload = upload.fields([{name:'aadhar_img'}, {name:'pan_img'}, {name:'gst_img'}])
+
 router.post(
   '/register',
   // imageUpload.single('pan_img'),
-  // upload.fields([{name:'aadhar_img'}, {name:'pan_img'}, {name:'gst_img'}]),
+  upload.fields([{name:'aadhar_img'}, {name:'pan_img'}, {name:'gst_img'}]),
   // imageUpload.fields([{name:'aadhar_img'}, {name:'pan_img'}, {name:'gst_img'}]),
   //@ts-ignore
-  (req, res ) => {
+  (req, res, next) => {
     //@ts-ignore
-    multiUpload(req, res, function(err){
-      if (err) {
-        return res.json({
-          success: false,
-          errors: {
-            title: "Image Upload Error",
-            detail: err.message,
-            error: err,
-          },
-        });
-
-    
     var file = req.files
     var body = req.body
     console.log( "request files and body : ", file, body )
     // res.send(file)
-    // next()
+    next()
   },
   //@ts-ignore
   // (error, req, res, next) => {
