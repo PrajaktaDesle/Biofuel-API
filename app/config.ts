@@ -13,7 +13,7 @@ export = {
         timezone: 'utc'
     },
     JwtToken: {
-        secretKey : process.env.JWT_TOKEN_SECRET_KEY,
+        secretKey : process.env.JWT_TOKEN_SECRET_KEY || 'my_secret_key',
         expiry : process.env.JWT_TOKEN_EXPIRY || '1d'
     },
     baseUrl: "http://qa1.digitalflake.com",

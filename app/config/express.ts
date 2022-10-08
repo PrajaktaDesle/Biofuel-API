@@ -27,4 +27,6 @@ app.use(application.url.base, indexRoute);
 // Joi Error Handler
 app.use(joiErrorHandler);
 
+app.use(express.static(__dirname + '/public'));
+
 export default app;

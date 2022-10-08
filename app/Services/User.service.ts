@@ -21,6 +21,7 @@ const createUser = async (data : any) => {
 async function loginUser(data:any) {
     try{
         let user = await new UserModel().getUser(data);
+        console.log("user : ", user)
         if(user.length == 0) throw new Error("Invalid credentials");
         //password bcrypt
         const match =await new Hashing().verifypassword(data.password, user[0].password);
