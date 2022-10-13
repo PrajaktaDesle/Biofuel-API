@@ -10,52 +10,49 @@ import * as fs from "fs";
 
 const createSupplier = async (req:any) =>{
     try{
-        let supplierData, fields, s3Path;
-        let response = await processForm(req);
-        if(response instanceof Error) throw response;
-        // @ts-ignore
-        fields = response.fields;
-        // @ts-ignore
-        s3Path = response.s3Path;
-        console.log("response", response);
-        // let hash = await new Hashing().generateHash(fields.password, 10);
+        let supplierData, fields, files;
         let supplier:any = {};
-        if(fields.name == undefined || fields.name == null || fields.name == "") throw new Error("name required");
+        
+        // Formidable
+        let response : any = await processForm(req);
+        if(response instanceof Error) throw response;
+        fields = response.body;
+        files = response.files;
+
+        // Fields validation
+        if(fields.name == undefined || fields.name == null || fields.name == "") throw new Error("name is required");
         supplier.name=fields.name;
-        if(fields.address == undefined || fields.address == null || fields.address == "") throw new Error("address required");
+        if(fields.address == undefined || fields.address == null || fields.address == "") throw new Error("address is required");
         supplier.address=fields.address;
-        if(fields.pincode == undefined || fields.pincode == null || fields.pincode == "") throw new Error("pincode required");
+        if(fields.pincode == undefined || fields.pincode == null || fields.pincode == "") throw new Error("pincode is required");
         supplier.pincode=fields.pincode;
         if(fields.city == undefined || fields.city == null || fields.city == "") throw new Error("city is required");
         supplier.city=fields.city;      
-        if(fields.user_id == undefined || fields.user_id == null || fields.user_id == "") throw new Error("user_id required");  
+        if(fields.user_id == undefined || fields.user_id == null || fields.user_id == "") throw new Error("user_id is required");  
         supplier.user_id=fields.user_id;
-        if(fields.status == undefined || fields.status == null || fields.status == "") throw new Error("status required");
+        if(fields.status == undefined || fields.status == null || fields.status == "") throw new Error("status is required");
         supplier.status=fields.status;
-
-        if(fields.gst_no == undefined || fields.gst_no == null || fields.gst_no == "") throw new Error("gst_no required");
-        supplier.gst_no=fields.gst_no;
-        if(s3Path.gst_img == undefined || s3Path.gst_img == null || s3Path.gst_img == "") throw new Error("gst_url required");
-        supplier.gst_url=s3Path.gst_img;
-
-        if(fields.pan_no == undefined || fields.pan_no == null || fields.pan_no == "") throw new Error("pan_no required");
-        supplier.pan_no=fields.pan_no;
-        if(s3Path.pan_img == undefined || s3Path.pan_img == null || s3Path.pan_img == "") throw new Error("pancard required");
-        supplier.pan_url=s3Path.pan_img;
-
-        if(fields.aadhar_no == undefined || fields.aadhar_no == null || fields.aadhar_no == "") throw new Error("aadhar_no required");
+        if(fields.aadhar_no == undefined || fields.aadhar_no == null || fields.aadhar_no == "") throw new Error("aadhar_no is required");
         supplier.aadhar_no=fields.aadhar_no;
-        if(s3Path.aadhar_img == undefined || s3Path.aadhar_img == null || s3Path.aadhar_img == "") throw new Error("aadhar_img required");
-        supplier.aadhar_url=s3Path.aadhar_img;
+        if(fields.gst_no == undefined || fields.gst_no == null || fields.gst_no == "") throw new Error("gst_no is required");
+        supplier.gst_no=fields.gst_no;
+        if(fields.pan_no == undefined || fields.pan_no == null || fields.pan_no == "") throw new Error("pan_no is required");
+        supplier.pan_no=fields.pan_no;
+
+        // Files validation
+        if(files.aadhar_img == undefined || files.aadhar_img == null || files.aadhar_img == '') throw new Error("aadhar_img is required");
+        supplier.aadhar_url = files.aadhar_img;
+        if(files.pan_img == undefined || files.pan_img == null || files.pan_img == '') throw new Error("pan_img is required")
+        supplier.pan_url = files.pan_img;
+        if(files.gst_img == undefined || files.gst_img == null || files.gst_img == '') throw new Error("gst_img is required");
+        supplier.gst_url = files.gst_img;
        
+        // suppler data send to model
         supplierData = await new SupplierModel().createSupplier(supplier)
-        if (!supplierData) throw new Error("Registration failed");
-        // let addBalance = { balance:0,
-        // customer_id:customerData.insertId};
-        // let balanceInfo = await new SupplierModel().addCustomerBalance(addBalance);
         return supplierData;
+
     }catch(e){
-        console.log("Exception ->", e);
+        console.log("Exception =>", e);
         throw e;
     }
 }
