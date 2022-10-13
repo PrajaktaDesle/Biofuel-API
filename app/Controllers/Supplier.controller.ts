@@ -8,9 +8,9 @@ import LOGGER from "../config/LOGGER";
 const register: IController = async (req, res) => {
     let supplier: any;
     try {
-        console.log("entry")
         supplier = await supplierService.createSupplier(req);
         console.log('Supplier at controller-----> ', supplier);
+
         if (supplier instanceof Error) {
             console.log("error", supplier)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
@@ -19,6 +19,7 @@ const register: IController = async (req, res) => {
                 supplier
             }, httpStatusCodes.CREATED);
         }
+
     } catch (e:any) {
         console.log("controller ->", e)
         // @ts-ignore
@@ -27,7 +28,6 @@ const register: IController = async (req, res) => {
                 res,
                 httpStatusCodes.BAD_REQUEST,
                 'MOBILE_AND_EMAIL_ALREADY_EXISTS',
-
             );
         }
         else{
