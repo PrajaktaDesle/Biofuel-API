@@ -1,5 +1,6 @@
 import fs from "fs";
 import AWS from 'aws-sdk';
+import moment from 'moment';
 let config = require("../config");
 const bucketName = process.env.AWS_BUCKET_NAME
 const region = process.env.AWS_BUCKET_REGION
@@ -24,6 +25,20 @@ export const uploadFile = async (data: any, name: string): Promise<any> => {
         console.log(`File uploaded successfully at ${data.Location}`);
     }).promise()
 }
+
+export const uploadFiles = async ( files: any)=> {
+    const images:any = Object.keys(files)
+    let s3Path:any = {};
+    for (let i = 0; i < images.length; i++) {
+        let name : string = "images/"+images[i]+"/"+  moment().unix() + "."+ files[images[i]].originalFilename.split(".").pop()
+        const result = await uploadFile(files[images[i]], name);
+        if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
+        console.log(images[i])
+        s3Path[images[i]] = result.key;
+    }
+    return s3Path
+}
+
 
 // downloads file from s3
 export function getFileStream(fileKey: any) {

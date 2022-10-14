@@ -6,17 +6,22 @@ import express from 'express';
 const multer = require('multer')
 import path from 'path';
 const { celebrate, Joi, Segments } = require('celebrate');
+const { check, validationResult } = require('express-validator/check');
 const router = express.Router();
+import {registerRules} from '../../Constants/Schema/Supplier.schema'
+const { Validator } = require('node-input-validator');
+import formidable from "formidable";
 
 router.post(
   '/register',
-    supplierController.register
+  supplierController.register
 );
 
 router.put(
   '/update',
   supplierController.formidableUpdateDetails
 )
+
 
 router.get(
   '/fetch',

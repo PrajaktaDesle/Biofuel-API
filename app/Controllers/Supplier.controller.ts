@@ -117,19 +117,20 @@ const updateSupplierDetails: IController = async (req, res) => {
 
 const formidableUpdateDetails : IController = async (req, res) => {
     try {
-        let updatedSupplier = await supplierService.formidableUpdateDetails(req);
-        console.log('Supplier at controller-----> ', updatedSupplier);
-        if (updatedSupplier instanceof Error) {
-            console.log("error", updatedSupplier)
+        let supplier : any = await supplierService.formidableUpdateDetails(req);
+        console.log('Supplier at controller-----> ', supplier);
+        if (supplier instanceof Error) {
+            console.log("error", supplier)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
-            apiResponse.result(res, updatedSupplier, httpStatusCodes.CREATED);
+            apiResponse.result(res, supplier, httpStatusCodes.CREATED);
         }
-    } catch (e) {
+    } catch (e:any) {
         console.log("controller ->", e)
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
+                e.message
             );
             return;
     }
