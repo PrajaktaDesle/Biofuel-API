@@ -25,7 +25,7 @@ export class SupplierModel extends BaseModel
         return await this._executeQuery("update supplier set ? where id = ? ", [data, data.id]);
     }
 
-    async formidableUpdateDetails(updatedCustomerData:any,id:number){
-        return await this._executeQuery("update supplier set ? where id = ? ", [updatedCustomerData,id]);
+    async formidableUpdateDetails(updatedSupplierData:any,id:number){
+        return await this._executeQuery("update supplier set ? where id = ? ", [updatedSupplierData,id]);
     }
 }

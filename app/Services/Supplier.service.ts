@@ -37,21 +37,26 @@ const createSupplier = async (req:any) =>{
         supplier.gst_no=fields.gst_no;
         if(fields.pan_no == undefined || fields.pan_no == null || fields.pan_no == "") throw new Error("pan_no is required");
         supplier.pan_no=fields.pan_no;
-      
+        if(fields.longitude == undefined || fields.longitude == null || fields.longitude == "") throw new Error("longitude is required");
+        supplier.longitude=fields.longitude;
+        if(fields.latitude == undefined || fields.latitude == null || fields.latitude == "") throw new Error("latitude is required");
+        supplier.latitude=fields.latitude
+       
         // Files validation
         let s3Images:any = [];
         if(files.aadhar_img !== undefined && files.aadhar_img !== null && files.aadhar_img !== ""){
-        if(isFileValid(files.aadhar_img.mimetype))throw new Error("aadhar_img should be jpg or png type");s3Images['aadhar_img'] = files.aadhar_img}
+        if(isFileValid(files.aadhar_img.mimetype))throw new Error("Only .png, .jpg and .jpeg format allowed! for aadhar_img");s3Images['aadhar_img'] = files.aadhar_img}
         else{throw new Error("aadhar_img is required")}
 
         if(files.pan_img !== undefined && files.pan_img !== null && files.pan_img !== ""){
-        if(isFileValid(files.pan_img.mimetype))throw new Error("pan_img should be jpg or png type");s3Images['pan_img'] = files.pan_img}
+        if(isFileValid(files.pan_img.mimetype))throw new Error("Only .png, .jpg and .jpeg format allowed! for pan_img");s3Images['pan_img'] = files.pan_img}
         else{throw new Error("pan_img is required")}
 
         if(files.gst_img !== undefined && files.gst_img !== null && files.gst_img !== ""){
-        if(isFileValid(files.gst_img.mimetype))throw new Error("gst_img should be jpg or png type");s3Images['gst_img'] = files.gst_img}
+        if(isFileValid(files.gst_img.mimetype))throw new Error("Only .png, .jpg and .jpeg format allowed! for gst_img");s3Images['gst_img'] = files.gst_img}
         else{throw new Error("gst_img is required")}
     
+        // Multiple files upload to s3Bucket
         const s3Paths = await uploadFiles( s3Images )
         supplier = Object.assign(supplier, s3Paths);
 
@@ -118,7 +123,6 @@ const updateSupplierDetails = async (data:any) => {
 const formidableUpdateDetails = async (req:any) =>{
     try{
         let updatedSupplierData, fields, files;
-        let supplier:any = {};
         //@ts-ignore
         ({fields, files} = await new Promise((resolve) => {
             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
@@ -141,6 +145,7 @@ const formidableUpdateDetails = async (req:any) =>{
         updatedSupplier.pincode=fields.pincode;
         if(fields.latitude !== undefined && fields.latitude !== null && fields.latitude !== "") 
         updatedSupplier.latitude=fields.latitude;
+        // { if(Number(fields.latitude))updatedSupplier.latitude=fields.latitude;else throw new Error("latitude not integer value")}
         if(fields.longitude !== undefined && fields.longitude !== null && fields.longitude !== "") 
         updatedSupplier.longitude=fields.longitude;
         if(fields.status !== undefined && fields.status !== null && fields.status !== "") 
@@ -161,12 +166,12 @@ const formidableUpdateDetails = async (req:any) =>{
         if(files.gst_img !== undefined && files.gst_img !== null && files.gst_img !== ""){
         if(isFileValid(files.gst_img.mimetype))throw new Error("gst_img should be jpg or png type");s3Images['gst_img']=files.aadhar_img;}
 
-        // Upload multiple files to s3Bucket
+        // Multiple files upload to s3Bucket
         if(s3Images){ const s3Paths = await uploadFiles( s3Images )
             updatedSupplier = Object.assign(updatedSupplier, s3Paths);}
         console.log( "updatedSupplier : ",updatedSupplier)
 
-        updatedSupplierData = await new SupplierModel().formidableUpdateDetails(updatedSupplier,id)
+        updatedSupplierData = await new SupplierModel().formidableUpdateDetails(updatedSupplier,fields.id)
         if (!updatedSupplierData) throw new Error("Supplier updation failed.");
         return updatedSupplierData;
     }catch(e){

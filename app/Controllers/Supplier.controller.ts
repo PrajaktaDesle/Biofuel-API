@@ -118,7 +118,6 @@ const updateSupplierDetails: IController = async (req, res) => {
 const formidableUpdateDetails : IController = async (req, res) => {
     try {
         let supplier : any = await supplierService.formidableUpdateDetails(req);
-        console.log('Supplier at controller-----> ', supplier);
         if (supplier instanceof Error) {
             console.log("error", supplier)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);

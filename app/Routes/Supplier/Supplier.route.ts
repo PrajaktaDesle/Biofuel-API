@@ -22,7 +22,6 @@ router.put(
   supplierController.formidableUpdateDetails
 )
 
-
 router.get(
   '/fetch',
   supplierController.fetchSupplierById
