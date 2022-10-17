@@ -8,7 +8,7 @@ export class SupplierModel extends BaseModel
         super();
     }
     async getSupplier(mobile:string){
-        return await this._executeQuery("select * from customers where mobile = ? and tenant_id = ? ", [mobile]);
+        return await this._executeQuery("select * from customers where mobile = ? ", [mobile]);
     }
     async createSupplier(supplierData:any){
         return await this._executeQuery("insert into supplier set ?", [supplierData]);
