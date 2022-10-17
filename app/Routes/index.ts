@@ -1,7 +1,7 @@
 import  {Router} from 'express';
 import userRoute from './User/User.route';
 import customerRoute from './Customer/Customer.route';
-import supplierRoute from './Supplier/Supplier.route'
+import supplierRoute from './Supplier/Supplier.route';
 
 
 const router = Router();
