@@ -1,17 +1,12 @@
-const { check, validationResult } = require('express-validator/check');
+const { body, validationResult } = require('express-validator');
 const updateRules = [
-    check('id').not().isEmpty(),
+    body('id').not().isEmpty(),
   ]
 const registerRules = [
-    check('name').not().isEmpty(),
-    check('address').not().isEmpty(),
-    check('pincode').not().isEmpty(),
-    check('aadhar_img').custom((value:any) => {
-        if (isFileValid(value)) {
-          throw new Error('Password confirmation does not match password');
-        }}),
-    check('pan_img').not().isEmpty(),
-    check('gst_img').not().isEmpty(),
+    // body('name').not().isEmpty().withMessage('Name must have more than 5 characters'),
+    body('pincode').isNumeric()
+   
+   
 
 ]
 const isFileValid = (file:any) => {

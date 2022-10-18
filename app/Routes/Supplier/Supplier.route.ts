@@ -1,6 +1,5 @@
 import supplierController from '../../Controllers/Supplier.controller';
 import express from 'express';
-const multer = require('multer')
 import path from 'path';
 const router = express.Router();
 
