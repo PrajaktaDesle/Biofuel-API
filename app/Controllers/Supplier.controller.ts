@@ -4,6 +4,7 @@ import apiResponse from '../utilities/ApiResponse';
 import supplierService from '../Services/Supplier.service';
 import constants from "../Constants";
 import LOGGER from "../config/LOGGER";
+import { SupplierModel } from '../Models/Supplier/Supplier.model';
 
 const register: IController = async (req, res) => {
     let supplier: any;
@@ -40,6 +41,51 @@ const register: IController = async (req, res) => {
         return;
     }
 };
+
+const login:IController = async ( req : any, res : any ) => {
+    try{
+        const supplier =  await supplierService.loginSupplier( req.body )   
+        if ( supplier instanceof Error ){
+            console.log( "Controller Error : ", supplier.message )
+            apiResponse.error( 
+                res, 
+                httpStatusCodes.BAD_REQUEST,
+                supplier.message
+            )
+        }
+        else{
+            apiResponse.result( res, {supplier}, httpStatusCodes.OK );
+        }
+    }
+    catch( err ) {
+        console.log("Controller Error : ", err);
+        apiResponse.error( res ,
+                           httpStatusCodes.BAD_REQUEST );
+
+    }
+}
+
+const verify_otp : IController = async ( req, res) => {
+    try{
+        const result = await supplierService.verify_supplier_otp( req.body )
+        if ( result instanceof Error ){
+            LOGGER.info('Controller Error : ', result.message )
+            apiResponse.error( 
+                res, 
+                httpStatusCodes.BAD_REQUEST,
+                result.message
+            )
+        }
+        else{
+            LOGGER.info( "LOGIN SUCCESSFULL")
+            apiResponse.result( res,  {result}, httpStatusCodes.OK )
+        }
+    }
+    catch( error ){
+        LOGGER.info( "Controller Error : ", error )
+        apiResponse.error( res, httpStatusCodes.BAD_REQUEST )
+    }
+}
 
 const fetchAllSuppliers: IController = async (req, res) => {
     supplierService.fetchAllSuppliers()
@@ -139,6 +185,8 @@ const formidableUpdateDetails : IController = async (req, res) => {
 
 export default {
     register,
+    login,
+    verify_otp,
     fetchAllSuppliers,
     fetchSupplierById,
     updateSupplierDetails,

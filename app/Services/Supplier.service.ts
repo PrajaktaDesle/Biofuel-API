@@ -8,6 +8,7 @@ import * as path from "path";
 import moment from 'moment';
 import * as fs from "fs";
 import e from "express";
+import Encryption from "../utilities/Encryption";
 
 const createSupplier = async (req:any) =>{
     try{
@@ -180,10 +181,59 @@ const formidableUpdateDetails = async (req:any) =>{
     }
 }
 
+const loginSupplier = async ( data : any ) => {
+    try{
+        let supplier = await new SupplierModel().getSupplier( data.mobile )
+        console.log( " service.supplier : ", supplier )
+        if ( supplier.length === 0 ) throw new Error( "Invalid mobile number");
+        if ( supplier[0].status !== 1 ) throw new Error( "Your account is not active");
+        // const otp = Math.floor( 100000 + Math.random() * 900000 )
+        const otp  = "123456";
+        LOGGER.info( otp )
+        data.otp = otp;
+        data.supplier_id = supplier[0].id;
+        data.req_id = uuidv4();
+        data.expire_time = moment().add(1440, "minutes").format('YYYY-MM-DD HH:mm:ss');
+        delete data.mobile;
+        data.trials = 3;
+        console.log( "Data before create otp------->", data)
+        const otp_details = await new SupplierModel().createOtp(data)
+        console.log( "create Otp result : " ,  otp_details );
+        return { request_id : data.req_id };
+    } catch ( e ) {
+        return e;
+    }
+}
+
+const verify_supplier_otp = async ( data : any ) => {
+    try{
+        LOGGER.info( 111, data )
+        let otp_details = await new SupplierModel().getSupplierOtp( data )
+        console.log( "otp details service : ", otp_details )
+        if ( otp_details.length === 0 ) throw new Error( "Error in login" )
+        if ( otp_details[0].trials <= 0 ) throw new Error( "No more trials" )
+        if ( parseInt( data.otp ) !== otp_details[0].otp ){
+            otp_details[0].trials = otp_details[0].trials - 1;
+            await new SupplierModel().updateTrials( otp_details[0].req_id, otp_details[0].trials )
+            throw new Error( "Incorrect OTP ")
+        }
+        let now = moment().format("YYYY-MM-DD HH:mm:ss");
+        let expire_time = moment(otp_details[0].expire_time).utc().format("YYYY-MM-DD HH:mm:ss").toString();
+        if ( !(expire_time >= now) ) throw new Error( "OTP expired")
+        otp_details[0].token = await Encryption.generateJwtToken({ id : otp_details[0].supplier_id })
+        LOGGER.info("LOGIN SUCCESSFULL");
+        return {token : otp_details[0].token, supplier_id : otp_details[0].supplier_id}
+    }
+    catch( error ){
+        return error;
+    }
+}
 export default {
     createSupplier,
+    loginSupplier,
     fetchAllSuppliers,
     fetchSupplierById,
     updateSupplierDetails,
-    formidableUpdateDetails
+    formidableUpdateDetails,
+    verify_supplier_otp
 }

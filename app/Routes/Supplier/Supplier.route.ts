@@ -1,6 +1,8 @@
 import supplierController from '../../Controllers/Supplier.controller';
+import supplierSchema from '../../Constants/Schema/Supplier.schema';
 import express from 'express';
 import path from 'path';
+import { celebrate } from 'celebrate';
 const router = express.Router();
 
 router.post(
@@ -8,6 +10,18 @@ router.post(
   supplierController.register
 );
 
+router.post( 
+  '/login',
+  celebrate(supplierSchema.login),
+  supplierController.login
+)
+
+router.post(
+  '/verify-OTP',
+  celebrate( supplierSchema.verify_otp),
+  supplierController.verify_otp
+
+)
 router.put(
   '/update',
   supplierController.formidableUpdateDetails
@@ -15,6 +29,7 @@ router.put(
 
 router.get(
   '/fetch',
+  celebrate( supplierSchema.fetchSupplierById ),
   supplierController.fetchSupplierById
 )
 

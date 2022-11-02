@@ -16,6 +16,12 @@ export default {
         `${base}/customer/register`,
         `${base}/customer/login`,
         `${base}/customer/verify-OTP`,
-        `${base}/Supplier/register`,
+        `${base}/supplier/register`,
+        `${base}/supplier/login`,
+        `${base}/supplier/verify-OTP`,
+        `${base}/admin/login`,
+        `${base}/product/create`,
+        `public/sample7_image.jpg`
+
     ],
 };

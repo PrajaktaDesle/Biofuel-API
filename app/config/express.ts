@@ -6,6 +6,7 @@ import indexRoute from '../Routes/index';
 import joiErrorHandler from '../Middlewares/joiErrorHandler';
 import Authenticate from '../Middlewares/Authenticate';
 const app = express();
+import path from 'path';
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -20,11 +21,10 @@ app.use(function(req, res, next) {
 require('dotenv').config();
 app.use(bodyParser.json());
 app.use(morgan('dev'));
+app.use("/public",express.static(path.resolve(__dirname, '../../public/') ) );
 app.use(Authenticate);
-
 // Router
 app.use(application.url.base, indexRoute);
 // Joi Error Handler
 app.use(joiErrorHandler);
-
 export default app;
