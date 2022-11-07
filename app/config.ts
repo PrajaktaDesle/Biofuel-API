@@ -8,7 +8,7 @@ export = {
         ,
         password: env.MASTER_DB_PASSWORD  || 'root@123'
         ,
-        database: env.MASTER_DB_NAME || 'db'
+        database: env.MASTER_DB_NAME || 'biofuel'
         ,
         timezone: 'utc'
     },

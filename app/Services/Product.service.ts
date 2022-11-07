@@ -55,17 +55,8 @@ const createProduct = async ( req: any ) => {
          if(files.image !== undefined && files.image !== null && files.image !== ""){
          if(isFileValid(files.image.mimetype))throw new Error("Only .png, .jpg and .jpeg format allowed! for image");s3Image['image'] = files.image}
          else{throw new Error("image is required")}
-
-         var oldPath = files.image.filepath;
-         console.log( files.image.mimetype )
-         var rawData = fs.readFileSync(oldPath)
-         var newPath = 'public/images/' + files.image.originalFilename
-         fs.writeFile(newPath, rawData, (err:any) => { if (err) throw err } );
-        //  let name : string = "images/image/"+  moment().unix() + "."+ s3Image['image'].originalFilename.split(".").pop()
-         let name : string = "images/" + moment().unix() + "."+files.image.originalFilename.split(".").pop()
-        //  let name : string = "images/" + moment().unix() + "."+'jpg'
-         const result = await uploadFile( newPath , name );
-        //  const result = await uploadFile( s3Image['image'], name );
+         let name : string = "images/image/"+  moment().unix() + "."+ s3Image['image'].originalFilename.split(".").pop()
+         const result = await uploadFile( s3Image['image'], name );
          if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
          console.log( "s3 result  : ", result)
          s3Path['image'] = result.key;

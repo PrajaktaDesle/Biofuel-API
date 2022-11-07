@@ -15,7 +15,7 @@ const login : IController = async (req : any, res : any) => {
         }
         else{
             ApiResponse.result( res, 
-                               {admin},
+                               admin,
                                httpStatusCodes.CREATED )
         }
     }

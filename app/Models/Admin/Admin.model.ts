@@ -7,6 +7,6 @@ export class AdminModel extends BaseModel{
     }
 
     async getAdmin( data : any ){
-        return await this._executeQuery( "select * from admin where email = ? and password = ? ", [data.email, data.password])
+        return await this._executeQuery( "select * from user where email = ? and password = ? ", [data.email, data.password])
     }
 }

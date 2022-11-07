@@ -15,9 +15,9 @@ const createProduct: IController = async (req, res) => {
             console.log("error", product)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
-            apiResponse.result(res, {
-                product
-            }, httpStatusCodes.CREATED);
+            apiResponse.result(res, 
+            product,
+            httpStatusCodes.CREATED);
         }
 
     } catch (e:any) {

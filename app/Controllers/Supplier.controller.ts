@@ -16,9 +16,9 @@ const register: IController = async (req, res) => {
             console.log("error", supplier)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
-            apiResponse.result(res, {
-                supplier
-            }, httpStatusCodes.CREATED);
+            apiResponse.result(res,
+            supplier,
+            httpStatusCodes.CREATED);
         }
 
     } catch (e:any) {
@@ -44,7 +44,7 @@ const register: IController = async (req, res) => {
 
 const login:IController = async ( req : any, res : any ) => {
     try{
-        const supplier =  await supplierService.loginSupplier( req.body )   
+        const supplier : any =  await supplierService.loginSupplier( req.body )   
         if ( supplier instanceof Error ){
             console.log( "Controller Error : ", supplier.message )
             apiResponse.error( 
@@ -54,7 +54,7 @@ const login:IController = async ( req : any, res : any ) => {
             )
         }
         else{
-            apiResponse.result( res, {supplier}, httpStatusCodes.OK );
+            apiResponse.result( res, supplier , httpStatusCodes.OK );
         }
     }
     catch( err ) {
@@ -67,7 +67,7 @@ const login:IController = async ( req : any, res : any ) => {
 
 const verify_otp : IController = async ( req, res) => {
     try{
-        const result = await supplierService.verify_supplier_otp( req.body )
+        const result : any  = await supplierService.verify_supplier_otp( req.body )
         if ( result instanceof Error ){
             LOGGER.info('Controller Error : ', result.message )
             apiResponse.error( 
@@ -78,7 +78,7 @@ const verify_otp : IController = async ( req, res) => {
         }
         else{
             LOGGER.info( "LOGIN SUCCESSFULL")
-            apiResponse.result( res,  {result}, httpStatusCodes.OK )
+            apiResponse.result( res,  result, httpStatusCodes.OK )
         }
     }
     catch( error ){
@@ -91,14 +91,14 @@ const fetchAllSuppliers: IController = async (req, res) => {
     supplierService.fetchAllSuppliers()
         .then( (suppliers) => {
             if(suppliers instanceof Error){
-                console.log("User 2", suppliers.message)
+                // console.log("Error : ", suppliers.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
                     suppliers.message
                 );
             }else{
-                console.log("User 3", suppliers)
+                // console.log("suppplier : ", suppliers)
                 apiResponse.result(res, suppliers, httpStatusCodes.OK);
             }
         }).catch(err => {
@@ -137,8 +137,8 @@ const fetchSupplierById: IController = async (req, res) => {
 
 
 
-const updateSupplierDetails: IController = async (req, res) => {
-    supplierService.updateSupplierDetails(req.body)
+const updateSuppliersDetails: IController = async (req, res) => {
+    supplierService.updateSuppliersDetails( req.body )
         .then( (supplier) => {
             if(supplier instanceof Error){
                 console.log("user 2", supplier.message)
@@ -156,6 +156,8 @@ const updateSupplierDetails: IController = async (req, res) => {
         apiResponse.error(
             res,
             httpStatusCodes.BAD_REQUEST,
+            err.message
+
         );
     });
 };
@@ -168,6 +170,7 @@ const formidableUpdateDetails : IController = async (req, res) => {
             console.log("error", supplier)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
+
             apiResponse.result(res, supplier, httpStatusCodes.CREATED);
         }
     } catch (e:any) {
@@ -189,6 +192,6 @@ export default {
     verify_otp,
     fetchAllSuppliers,
     fetchSupplierById,
-    updateSupplierDetails,
+    updateSuppliersDetails,
     formidableUpdateDetails
 };

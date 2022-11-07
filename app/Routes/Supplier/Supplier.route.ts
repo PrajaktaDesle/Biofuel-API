@@ -27,6 +27,12 @@ router.put(
   supplierController.formidableUpdateDetails
 )
 
+router.put( 
+  '/update/status',
+  celebrate( supplierSchema.updateSupplierStatus ),
+  supplierController.updateSuppliersDetails
+)
+
 router.get(
   '/fetch',
   celebrate( supplierSchema.fetchSupplierById ),

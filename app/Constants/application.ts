@@ -21,7 +21,5 @@ export default {
         `${base}/supplier/verify-OTP`,
         `${base}/admin/login`,
         `${base}/product/create`,
-        `public/sample7_image.jpg`
-
     ],
 };

@@ -14,7 +14,7 @@ export interface ICookie {
 export default class ApiResponse {
     static result = (
         res: Response,
-        results: object,
+        result: object,
         status: number = 200,
         //cookie: ICookie = null,
     ) => {
@@ -22,8 +22,9 @@ export default class ApiResponse {
        /* if (cookie) {
             res.cookie(cookie.key, cookie.value);
         }*/
+        result = { "data" : result }
         res.json({
-            results,
+            result,
             success: true,
             status
         });
@@ -41,6 +42,7 @@ export default class ApiResponse {
                 message: error,
             },
             success: false,
+            status
         });
     };
 
