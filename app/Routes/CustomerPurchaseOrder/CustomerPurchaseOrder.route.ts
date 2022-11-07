@@ -1,31 +1,31 @@
 import express from 'express';
-import CPOController from '../../Controllers/CustomerPurchaseOrder.controller';
-import CPOSchema from '../../Constants/Schema/CustomerPurchaseOrder.schema';
+import customerPOController from '../../Controllers/CustomerPurchaseOrder.controller';
+import customerPOSchema from '../../Constants/Schema/CustomerPurchaseOrder.schema';
 
 const router = express.Router();
 import { celebrate } from 'celebrate';
 
 router.post(
     '/create',
-    celebrate(CPOSchema.createCPO),
-    CPOController.create
+    celebrate(customerPOSchema.createCPO),
+    customerPOController.createCustomerPO
 );
 
 router.get(
     '/all',
-    CPOController.fetchAllCustomers
+    customerPOController.fetchAllCustomerPO
 );
 
 router.get(
     '/fetch',
-    celebrate(CPOSchema.fetchCPOById),
-    CPOController.fetchCustomerById
+    celebrate(customerPOSchema.fetchCPOById),
+    customerPOController.fetchCustomerPOById
 );
 
 router.put(
     '/update',
-    celebrate(CPOSchema.updateCPOSDetails),
-    CPOController.updateCustomerDetails
+    celebrate(customerPOSchema.updateCPODetails),
+    customerPOController.updateCustomerPODetails
 );
 
 export default router;

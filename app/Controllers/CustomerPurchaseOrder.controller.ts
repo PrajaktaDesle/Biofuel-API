@@ -1,23 +1,23 @@
 import httpStatusCodes from 'http-status-codes';
 import IController from '../Types/IController';
 import apiResponse from '../utilities/ApiResponse';
-import customerService from '../Services/Customer.service';
+import customerPOService from '../Services/CustomerPurchaseOrder.service';
 import constants from "../Constants";
 import LOGGER from "../config/LOGGER";
 
-const create: IController = async (req, res) => {
+const createCustomerPO: IController = async (req, res) => {
     let customer: any;
     try {
         console.log("entry")
-        customer = await customerService.createCustomer(req.body);
+        customer = await customerPOService.createCustomerPO(req.body);
         console.log('Customer at controller-----> ', customer);
         if (customer instanceof Error) {
             console.log("error", customer)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
-            apiResponse.result(res, {
-                customer
-            }, httpStatusCodes.CREATED);
+            apiResponse.result(res, 
+            customer,
+            httpStatusCodes.CREATED);
         }
     } catch (e:any) {
         console.log("controller ->", e)
@@ -41,8 +41,8 @@ const create: IController = async (req, res) => {
     }
 };
 
-const fetchAllCustomers: IController = async (req, res) => {
-    customerService.fetchAllCustomers()
+const fetchAllCustomerPO: IController = async (req, res) => {
+    customerPOService.fetchAllCustomerPO()
         .then( (customers) => {
             if(customers instanceof Error){
                 console.log("User 2", customers.message)
@@ -66,8 +66,8 @@ const fetchAllCustomers: IController = async (req, res) => {
 };
 
 
-const fetchCustomerById: IController = async (req, res) => {
-    customerService.fetchCustomerById(req.query.id)
+const fetchCustomerPOById: IController = async (req, res) => {
+    customerPOService.fetchCustomerPOById(req.query.id)
         .then( (customer : any) => {
             if(customer instanceof Error){
                 console.log("User 2", customer.message)
@@ -91,9 +91,9 @@ const fetchCustomerById: IController = async (req, res) => {
 
 
 
-const updateCustomerDetails: IController = async (req, res) => {
+const updateCustomerPODetails: IController = async (req, res) => {
     req.body.tenant_id = req.headers["tenant-id"]
-    customerService.updateCustomerDetails(req.body)
+    customerPOService.updateCustomerPODetails(req.body)
         .then( (customer) => {
             if(customer instanceof Error){
                 console.log("user 2", customer.message)
@@ -111,6 +111,7 @@ const updateCustomerDetails: IController = async (req, res) => {
         apiResponse.error(
             res,
             httpStatusCodes.BAD_REQUEST,
+            
         );
     });
 };
@@ -119,8 +120,8 @@ const updateCustomerDetails: IController = async (req, res) => {
 
 
 export default {
-    create,
-    fetchAllCustomers,
-    fetchCustomerById,
-    updateCustomerDetails,
+    createCustomerPO,
+    fetchAllCustomerPO,
+    fetchCustomerPOById,
+    updateCustomerPODetails,
 };
