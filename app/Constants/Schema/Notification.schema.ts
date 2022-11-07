@@ -18,20 +18,6 @@ export default {
         }
     },
 
-
-    updateNotifictionDetails: {
-        [Segments.BODY]:  Joi.object().keys({
-            id: Joi.number().required(),
-            delivery_date: Joi.string().optional(),
-            order_no: Joi.number().integer().optional(),
-            product_name: Joi.string().optional().min(1).message("Length should be greater than 1 character"),
-            quantity: Joi.number().integer().optional(),
-            count_of_vehicles:Joi.number().integer().optional(),
-            user_id: Joi.number().integer().optional(),
-
-        }).unknown(),
-        
-    },
     updateNotficationStatus : {
         [Segments.BODY] : {
             id : Joi.number().required(),

@@ -11,12 +11,6 @@ router.post(
   notificationController.createNotification
 );
 
-router.put(
-  '/update',
-  celebrate( notificationSchema.updateNotifictionDetails),
-  notificationController.updateNotificationDetails
-)
-
 router.put( 
   '/update/status',
   celebrate( notificationSchema.updateNotficationStatus),

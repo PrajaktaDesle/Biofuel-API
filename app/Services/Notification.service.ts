@@ -1,25 +1,15 @@
 import { NotificationModel } from "../Models/Notification/Notification.model";
 const {v4 : uuidv4} = require('uuid');
-import LOGGER from "../config/LOGGER";
-import formidable from "formidable";
-let config = require("../config");
-import * as path from "path";
-import moment from 'moment';
-import * as fs from "fs";
-import e from "express";
-import Encryption from "../utilities/Encryption";
-import { notDeepEqual } from "assert";
 
 const createNotification = async ( data : any ) => {
     try{
         let notificationData : any = {};
-        if(data.supplier_id !== undefined && data.order_no !== null && data.supplier_id !== "") notificationData.supplier_id=data.supplier_id;
+        if(data.user_id !== undefined && data.order_no !== null && data.user_id !== "") notificationData.user_id=data.user_id;
         if(data.delivery_date !== undefined && data.delivery_date !== null && data.delivery_date !== "") notificationData.delivery_date=data.delivery_date;
-        if(data.product_name !== undefined && data.order_no !== null && data.order_no !== "") notificationData.spo_no=data.order_no;
+        if(data.product_name !== undefined && data.product_name !== null && data.product_name !== "") notificationData.product_name=data.product_name;
         if(data.order_no !== undefined && data.order_no !== null && data.order_no !== "") notificationData.spo_no=data.order_no;
-        if(data.quantity !== undefined && data.order_no !== null && data.order_no !== "") notificationData.spo_no=data.order_no;
-        if(data.order_no !== undefined && data.order_no !== null && data.order_no !== "") notificationData.spo_no=data.order_no;
-        if(data.count_of_vehicles !== undefined && data.order_no !== null && data.order_no !== "") notificationData.spo_no=data.order_no;
+        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "") notificationData.quantity=data.quantity;
+        if(data.count_of_vehicles !== undefined && data.count_of_vehicles !== null && data.count_of_vehicles !== "") notificationData.count_of_vehicles=data.count_of_vehicles;
         let notification = await new NotificationModel().createNotification( data );
         if ( notification.length == 0 ) throw new Error( "notification creation failed" )
         return notification
@@ -34,13 +24,7 @@ const createNotification = async ( data : any ) => {
 const updateNotificationDetails = async ( data:any ) => {
     try{
         let updatedNotification : any = {}
-        if(data.supplier_id !== undefined && data.order_no !== null && data.supplier_id !== "") updatedNotification.supplier_id=data.supplier_id;
-        if(data.delivery_date !== undefined && data.delivery_date !== null && data.delivery_date !== "") updatedNotification.delivery_date=data.delivery_date;
-        if(data.product_name !== undefined && data.order_no !== null && data.order_no !== "") updatedNotification.spo_no=data.order_no;
-        if(data.spo_no !== undefined && data.order_no !== null && data.order_no !== "") updatedNotification.spo_no=data.order_no;
-        if(data.quantity !== undefined && data.order_no !== null && data.order_no !== "") updatedNotification.spo_no=data.order_no;
-        if(data.order_no !== undefined && data.order_no !== null && data.order_no !== "") updatedNotification.spo_no=data.order_no;
-        if(data.count_of_vehicles !== undefined && data.order_no !== null && data.order_no !== "") updatedNotification.spo_no=data.order_no;
+        if(data.status !== undefined && data.status !== null && data.status !== "") updatedNotification.status=data.status;
         let notification = await new NotificationModel().updateNotificationDetails( updatedNotification );
         if ( notification.length == 0 ) throw new Error( "notification updation failed" )
         return notification
