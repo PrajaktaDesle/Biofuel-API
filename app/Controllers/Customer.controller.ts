@@ -92,7 +92,6 @@ const fetchCustomerById: IController = async (req, res) => {
 
 
 const updateCustomerDetails: IController = async (req, res) => {
-    req.body.tenant_id = req.headers["tenant-id"]
     customerService.updateCustomerDetails(req.body)
         .then( (customer) => {
             if(customer instanceof Error){

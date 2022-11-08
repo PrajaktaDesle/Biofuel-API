@@ -14,6 +14,12 @@ export class CustomerModel extends UserModel
     async createCustomerProfile(profileData:any){
         return await this._executeQuery("insert into users_profile set ?", [profileData]);
     }
+    async updateCustomersProfileDetails(customerData:any,id:number){
+        return await this._executeQuery("update users_profile set ? where user_id = ? ", [customerData,id]);
+    }
+    async updateCustomersAddressDetails(customerData:any,id:number){
+        return await this._executeQuery("update addressses set ? where user_id = ? ", [customerData,id]);
+    }
     async fetchCustomersProfileById(id: any ){
         return await this._executeQuery("select gstin_no from users_profile where user_id = ? ", [id]);
     }  

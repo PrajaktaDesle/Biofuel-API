@@ -69,9 +69,26 @@ const fetchCustomerById = async (id: any) => {
 
 const updateCustomerDetails = async (data:any) => {
     try {
-        let customer = await new CustomerModel().updateUserDetails( data, data.id, 2 );
-        if (customer.length == 0) throw new Error("customer updation failed");
-        return customer[0];
+        let customer : any = {};
+        let profile : any  = {};
+        let customerData;
+
+        let cs = await new CustomerModel().fetchUserById( data.id, 2 )
+        if ( cs.length == 0) throw new Error("customer not found ");
+
+        if(data.name !== undefined && data.name !== null && data.name !== "") 
+        customer.name=data.name;
+        if(data.email !== undefined && data.email !== null && data.email !== "") 
+        customer.email=data.email;
+        if(data.contact_no !== undefined && data.contact_no !== null && data.contact_no !== "") 
+        customer.mobile=data.contact_no;
+         
+        if(data.gstin_no !== undefined && data.gstin_no !== null && data.gstin_no !== "") 
+        profile.gstin_no=data.gstin_no;
+        if( customer ) {  customerData = await new CustomerModel().updateUserDetails( data, data.id, 2 ); }
+        if( profile ) { let profileData = await new CustomerModel().updateCustomersProfileDetails( data, data.id ); }
+        if( profile ) { let addressData = await new CustomerModel().updateCustomersAddressDetails( data, data.id ); }
+        return customerData[0];
     }
     catch (e){
         throw e;
