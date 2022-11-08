@@ -106,10 +106,11 @@ const isFileValid = (type:any) => {
 
 const fetchSupplierById = async (id: any) => {
     try {
-        let supplier = await new SupplierModel().fetchUserById( id, 4 );
+        let SupplierObj = new SupplierModel()
+        let supplier = await SupplierObj.fetchUserById( id, 4 );
         if (supplier.length == 0) throw new Error("No supplier found");
-        let suppliersProfile = await new SupplierModel().fetchSuppliersProfileById( id )
-        let suppliersAddress = await new SupplierModel().fetchSuppliersAddressById( id )
+        let suppliersProfile = await SupplierObj.fetchSuppliersProfileById( id )
+        let suppliersAddress = await SupplierObj.fetchSuppliersAddressById( id )
         Object.assign( supplier[0], suppliersProfile[0], suppliersAddress[0]);
 
         // Adding Baseurl to panurl from database
@@ -128,9 +129,10 @@ const fetchSupplierById = async (id: any) => {
 
 const updateSuppliersDetails = async (data:any) => {
     try {
-        let supplier = await new SupplierModel().fetchUserById( data.id, 4 )
+        let SupplierObj = new SupplierModel()
+        let supplier = await SupplierObj.fetchUserById( data.id, 4 )
         if( supplier.length == 0 ) throw new Error( "no supplier found")
-        let supplierData = await new SupplierModel().updateUserDetails(data, 1, 4);
+        let supplierData = await SupplierObj.updateUserDetails(data, 1, 4);
         LOGGER.info( "supplier details", supplierData )
         return supplierData;
     }
@@ -151,12 +153,13 @@ const formidableUpdateDetails = async (req:any) =>{
         let updatedSupplier : any = {};
         let profile : any = {};
         let address : any = {};
+        let SupplierObj = new SupplierModel();
 
         // id field validation
         if(fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
 
         // supplier exists or not
-        let supplier = await new SupplierModel().fetchUserById( fields.id, 4 )
+        let supplier = await SupplierObj.fetchUserById( fields.id, 4 )
         if( supplier.length == 0 ) throw new Error( "no supplier found" )
 
         // Fields validation
@@ -195,12 +198,12 @@ const formidableUpdateDetails = async (req:any) =>{
         // Multiple files upload to s3Bucket
         if( Object.keys(s3Images).length ){ const s3Paths = await uploadFiles( s3Images )
             Object.assign(profile, s3Paths);}
+       
+        if( Object.keys(updatedSupplier).length ){ updatedSupplierData = await SupplierObj.updateUserDetails(updatedSupplier,fields.id, 4) }
 
-        if( Object.keys(updatedSupplier).length ){ updatedSupplierData = await new SupplierModel().updateUserDetails(updatedSupplier,fields.id, 4) }
+        if( Object.keys(profile).length  ){ updatedSuppliersProfile = await SupplierObj.updateSuppliersProfileDetails(profile,fields.id) }
 
-        if( Object.keys(profile).length  ){ updatedSuppliersProfile = await new SupplierModel().updateSuppliersProfileDetails(profile,fields.id) }
-
-        if( Object.keys(address).length ){ updatedSuppliersAddress = await new SupplierModel().updateSuppliersAddressDetails(address,fields.id) }
+        if( Object.keys(address).length ){ updatedSuppliersAddress = await SupplierObj.updateSuppliersAddressDetails(address,fields.id) }
 
         return updatedSupplierData;
     }catch(e){
@@ -211,7 +214,8 @@ const formidableUpdateDetails = async (req:any) =>{
 
 const loginSupplier = async ( data : any ) => {
     try{
-        let supplier = await new SupplierModel().fetchUserByMobile( data.mobile, 4 )
+        let SupplierObj = new SupplierModel()
+        let supplier = await SupplierObj.fetchUserByMobile( data.mobile, 4 )
         LOGGER.info( "service.supplier", supplier )
         if ( supplier.length === 0 ) throw new Error( "Invalid mobile number");
         if ( supplier[0].status !== 1 ) throw new Error( "Your account is not active");
@@ -225,7 +229,7 @@ const loginSupplier = async ( data : any ) => {
         delete data.mobile;
         data.trials = 3;
         LOGGER.info( "Data before create otp", data)
-        const otp_details = await new SupplierModel().createOtp(data)
+        const otp_details = await SupplierObj.createOtp(data)
         LOGGER.info( "create Otp result", otp_details )
         return { request_id : data.req_id };
     } catch ( e ) {
@@ -236,12 +240,13 @@ const loginSupplier = async ( data : any ) => {
 const verify_supplier_otp = async ( data : any ) => {
     try{
         LOGGER.info( 111, data )
-        let otp_details = await new SupplierModel().getSupplierOtp( data )
+        let SupplierObj = new SupplierModel()
+        let otp_details = await SupplierObj.getSupplierOtp( data )
         if ( otp_details.length === 0 ) throw new Error( "Error in login" )
         if ( otp_details[0].trials <= 0 ) throw new Error( "No more trials" )
         if ( parseInt( data.otp ) !== otp_details[0].otp ){
             otp_details[0].trials = otp_details[0].trials - 1;
-            await new SupplierModel().updateTrials( otp_details[0].req_id, otp_details[0].trials )
+            await SupplierObj.updateTrials( otp_details[0].req_id, otp_details[0].trials )
             throw new Error( "Incorrect OTP ")
         }
         let now = moment().format("YYYY-MM-DD HH:mm:ss");

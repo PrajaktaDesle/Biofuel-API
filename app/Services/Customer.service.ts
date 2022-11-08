@@ -85,9 +85,10 @@ const updateCustomerDetails = async (data:any) => {
          
         if(data.gstin_no !== undefined && data.gstin_no !== null && data.gstin_no !== "") 
         profile.gstin_no=data.gstin_no;
-        if( customer ) {  customerData = await new CustomerModel().updateUserDetails( data, data.id, 2 ); }
-        if( profile ) { let profileData = await new CustomerModel().updateCustomersProfileDetails( data, data.id ); }
-        if( profile ) { let addressData = await new CustomerModel().updateCustomersAddressDetails( data, data.id ); }
+        let CustomerObj = new CustomerModel();
+        if( customer ) {  customerData = await CustomerObj.updateUserDetails( data, data.id, 2 ); }
+        if( profile ) { let profileData = await CustomerObj.updateCustomersProfileDetails( data, data.id ); }
+        if( profile ) { let addressData = await CustomerObj.updateCustomersAddressDetails( data, data.id ); }
         return customerData[0];
     }
     catch (e){
