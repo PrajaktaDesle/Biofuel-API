@@ -8,8 +8,9 @@ export default {
             billing_address: Joi.string().min(1).required(),
             email: Joi.string().email().required(),
             plant_address: Joi.string().required(),
+            city: Joi.string().required(),
             contact_no: Joi.string().required(),
-            gstin_no: Joi.number().required(),
+            gstin_no: Joi.number().required()
     }).unknown(),
     },
    
@@ -29,6 +30,7 @@ export default {
             plant_address: Joi.string().optional().min(1).message("Length should be greater than 1 character"),
             email: Joi.string().email().optional(),
             contact_no:Joi.string().optional().min(10).message("contact_no length should be 10").max(10).message("contact_no length should be 10"),
+            city:Joi.string().optional().min(1).message("Length should be greater than 1 character"),
             gstin_no : Joi.number().optional(),
             status:Joi.number().optional().min(0).message("minimum status should be 0 or 1").max(1).message("minimum status should be 0 or 1")
         }).unknown(),
