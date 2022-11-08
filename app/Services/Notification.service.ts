@@ -10,7 +10,7 @@ const createNotification = async ( data : any ) => {
         if(data.order_no !== undefined && data.order_no !== null && data.order_no !== "") notificationData.spo_no=data.order_no;
         if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "") notificationData.quantity=data.quantity;
         if(data.count_of_vehicles !== undefined && data.count_of_vehicles !== null && data.count_of_vehicles !== "") notificationData.count_of_vehicles=data.count_of_vehicles;
-        let notification = await new NotificationModel().createNotification( data );
+        let notification = await new NotificationModel().createNotification( notificationData );
         if ( notification.length == 0 ) throw new Error( "notification creation failed" )
         return notification
     }
