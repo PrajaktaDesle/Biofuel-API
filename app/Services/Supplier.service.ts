@@ -64,7 +64,7 @@ const createSupplier = async (req:any) =>{
         const s3Paths = await uploadFiles( s3Images )
         profile = Object.assign(profile, s3Paths);
 
-        suppliersData = await new SupplierModel().createSupplier( supplier )
+        suppliersData = await new SupplierModel().createUser( supplier )
         let user_id = suppliersData.insertId
         profile.user_id = user_id
         suppliersProfile = await new SupplierModel().createSuppliersProfile( profile )
@@ -82,7 +82,7 @@ const createSupplier = async (req:any) =>{
 
 const fetchAllSuppliers = async ( ) =>{
     let supplierData;
-    supplierData = await new SupplierModel().fetchAllSuppliers()
+    supplierData = await new SupplierModel().fetchAllUsers(4)
     if (supplierData == null) throw new Error("details did not match");
 
     // Adding Baseurl to panurl from database
@@ -107,7 +107,7 @@ const isFileValid = (type:any) => {
 
 const fetchSupplierById = async (id: any) => {
     try {
-        let supplier = await new SupplierModel().fetchSupplierById( id );
+        let supplier = await new SupplierModel().fetchUserById( id, 4 );
         let suppliersProfile = await new SupplierModel().fetchSuppliersProfileById( id )
         let suppliersAddress = await new SupplierModel().fetchSuppliersAddressById( id )
         Object.assign( supplier[0], suppliersProfile[0], suppliersAddress[0]);
@@ -129,9 +129,9 @@ const fetchSupplierById = async (id: any) => {
 
 const updateSuppliersDetails = async (data:any) => {
     try {
-        let supplier = await new SupplierModel().fetchSupplierById( data.id )
+        let supplier = await new SupplierModel().fetchUserById( data.id, 4 )
         if( supplier.length == 0 ) throw new Error( "no supplier found")
-        let supplierData = await new SupplierModel().updateSuppliersDetails(data, data.id);
+        let supplierData = await new SupplierModel().updateUserDetails(data, data.id, 4);
         if ( !Object.keys(supplierData).length ) throw new Error("supplier updatation failed");
         return { message : "Supplier updated Successfully" };
     }
@@ -193,7 +193,7 @@ const formidableUpdateDetails = async (req:any) =>{
         if( Object.keys(s3Images).length ){ const s3Paths = await uploadFiles( s3Images )
             Object.assign(profile, s3Paths);}
 
-        if( Object.keys(updatedSupplier).length ){ updatedSupplierData = await new SupplierModel().updateSuppliersDetails(updatedSupplier,fields.id)
+        if( Object.keys(updatedSupplier).length ){ updatedSupplierData = await new SupplierModel().updateUserDetails(updatedSupplier,fields.id, 4)
             if (!updatedSupplierData) throw new Error("Supplier updation failed.");  }
 
         if( Object.keys(profile).length  ){updatedSuppliersProfile = await new SupplierModel().updateSuppliersProfileDetails(profile,fields.id)
@@ -210,7 +210,7 @@ const formidableUpdateDetails = async (req:any) =>{
 
 const loginSupplier = async ( data : any ) => {
     try{
-        let supplier = await new SupplierModel().getSupplier( data.mobile )
+        let supplier = await new SupplierModel().fetchUserByMobile( data.mobile, 4 )
         console.log( " service.supplier : ", supplier )
         if ( supplier.length === 0 ) throw new Error( "Invalid mobile number");
         if ( supplier[0].status !== 1 ) throw new Error( "Your account is not active");

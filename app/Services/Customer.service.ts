@@ -23,7 +23,7 @@ const createCustomer = async (data:any) =>{
         customer.city=data.city;
         if(data.user_id !== undefined && data.user_id !== null && data.user_id !== "") 
         customer.user_id=data.user_id
-        customerData = await new CustomerModel().createCustomer(customer)
+        customerData = await new CustomerModel().createUser( customer )
         if (!customerData) throw new Error("Registration failed");
       
         return customerData;
@@ -35,7 +35,7 @@ const createCustomer = async (data:any) =>{
 
 const fetchAllCustomers = async () =>{
     let customerData;
-    customerData = await new CustomerModel().findAllcustomers()
+    customerData = await new CustomerModel().fetchAllUsers( 3 )
     if (customerData == null) throw new Error("details did not match");
     return customerData;
 }
@@ -43,7 +43,7 @@ const fetchAllCustomers = async () =>{
 
 const fetchCustomerById = async (id: any) => {
     try {
-        let customer = await new CustomerModel().findCustomerById(id);
+        let customer = await new CustomerModel().fetchUserById( id, 3);
         if (customer.length == 0) throw new Error("No Customer found");
         return customer[0];
     }
@@ -55,7 +55,7 @@ const fetchCustomerById = async (id: any) => {
 
 const updateCustomerDetails = async (data:any) => {
     try {
-        let customer = await new CustomerModel().updateCustomerDetails(data);
+        let customer = await new CustomerModel().updateUserDetails( data, data.id, 3);
         if (customer.length == 0) throw new Error("customer updation failed");
         return customer[0];
     }

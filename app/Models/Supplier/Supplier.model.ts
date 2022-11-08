@@ -1,19 +1,14 @@
-import BaseModel from "../BaseModel";
+import UserModel from "../User/User.model";
 import {Connection} from "mysql2";
 import { createECDH } from "crypto";
 
-export class SupplierModel extends BaseModel
+export class SupplierModel extends UserModel
 {
     constructor()
     {
         super();
     }
-    async getSupplier(mobile:string){
-        return await this._executeQuery("select * from user where mobile = ? ", [mobile]);
-    }
-    async createSupplier(supplierData:any){
-        return await this._executeQuery("insert into user set ?", [supplierData]);
-    }
+   
     async createSuppliersProfile(supplierData:any){
         return await this._executeQuery("insert into users_profile set ?", [supplierData]);
     }
@@ -21,25 +16,11 @@ export class SupplierModel extends BaseModel
         return await this._executeQuery("insert into addresses set ?", [supplierData]);
     }
    
-   
-    async fetchSupplierById(id: any ){
-        return await this._executeQuery("select * from user where id = ? ", [id]);
-    }
     async fetchSuppliersProfileById(id: any ){
         return await this._executeQuery("select * from users_profile where user_id = ? ", [id]);
     }  
     async fetchSuppliersAddressById(id: any ){
         return await this._executeQuery("select * from addresses where user_id = ? ", [id]);
-    }
-
-
-    async fetchAllSuppliers(){
-        return await this._executeQuery("select * from user where role_id = 4 ", []);
-    }
-
-    async updateSuppliersDetails(data:any, id : any){
-        console.log( data , id )
-        return await this._executeQuery("update user set ? where id = ? ", [data, id]);
     }
 
     async updateSuppliersProfileDetails(updatedSupplierData:any,id:number){

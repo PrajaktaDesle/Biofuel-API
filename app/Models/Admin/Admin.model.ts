@@ -1,6 +1,6 @@
-import BaseModel from "../BaseModel";
+import UserModel from "../User/User.model";
 
-export class AdminModel extends BaseModel{
+export class AdminModel extends UserModel{
     constructor()
     {
         super();

@@ -7,3 +7,5 @@ bin/
 package-lock.json
 combined.log
 error.log
+
+public/

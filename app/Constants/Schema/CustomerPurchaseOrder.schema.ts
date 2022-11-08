@@ -27,7 +27,7 @@ export default {
             id: Joi.number().required(),
             name: Joi.string().optional().min(1).message("Length should be greater than 1 character"),
             po_number: Joi.number().optional().min(1).message("Length should be greater than 1 character"),
-            po_code: Joi.number().optional().min(1).message("Length should be greater than 1 character"),
+            product_code: Joi.number().optional().min(1).message("Length should be greater than 1 character"),
             po_date: Joi.string().optional().min(1).message("Length should be greater than 1 character"),
             quantity: Joi.number().optional(),
             delivery_date: Joi.string().optional(),
