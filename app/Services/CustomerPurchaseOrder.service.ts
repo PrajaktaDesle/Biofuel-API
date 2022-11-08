@@ -44,7 +44,7 @@ const fetchAllCustomerPO = async () =>{
 const fetchCustomerPOById = async (id: any) => {
     try {
         let customer = await new CustomerPOModel().findCustomerPOById(id);
-        if (customer.length == 0) throw new Error("No Customer found");
+        if (customer.length == 0) throw new Error("Customers purchase order  not found");
         return customer[0];
     }
     catch (e){
