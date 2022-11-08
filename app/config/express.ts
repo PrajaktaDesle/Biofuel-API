@@ -22,8 +22,10 @@ require('dotenv').config();
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(Authenticate);
+
 // Router
 app.use(application.url.base, indexRoute);
 // Joi Error Handler
 app.use(joiErrorHandler);
+
 export default app;
