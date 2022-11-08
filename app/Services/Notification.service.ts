@@ -4,7 +4,7 @@ const {v4 : uuidv4} = require('uuid');
 const createNotification = async ( data : any ) => {
     try{
         let notificationData : any = {};
-        if(data.user_id !== undefined && data.order_no !== null && data.user_id !== "") notificationData.user_id=data.user_id;
+        if(data.user_id !== undefined && data.user_id !== null && data.user_id !== "") notificationData.user_id=data.user_id;
         if(data.delivery_date !== undefined && data.delivery_date !== null && data.delivery_date !== "") notificationData.delivery_date=data.delivery_date;
         if(data.product_name !== undefined && data.product_name !== null && data.product_name !== "") notificationData.product_name=data.product_name;
         if(data.order_no !== undefined && data.order_no !== null && data.order_no !== "") notificationData.spo_no=data.order_no;
