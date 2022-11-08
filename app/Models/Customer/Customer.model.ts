@@ -7,6 +7,18 @@ export class CustomerModel extends UserModel
     {
         super();
     }
- 
+
+    async createCustomerAddress(addressData:any){
+        return await this._executeQuery("insert into addresses set ?", [addressData]);
+    }
+    async createCustomerProfile(profileData:any){
+        return await this._executeQuery("insert into users_profile set ?", [profileData]);
+    }
+    async fetchCustomersProfileById(id: any ){
+        return await this._executeQuery("select gstin_no from users_profile where user_id = ? ", [id]);
+    }  
+    async fetchCustomersAddressById(id: number, type : string ){
+        return await this._executeQuery("select address, pincode, city from addresses where user_id = ? and address_type = ? ", [id, type]);
+    }
    
 }

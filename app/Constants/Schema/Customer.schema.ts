@@ -10,7 +10,6 @@ export default {
             plant_address: Joi.string().required(),
             contact_no: Joi.string().required(),
             gstin_no: Joi.number().required(),
-            user_id: Joi.number().required(),
     }).unknown(),
     },
    

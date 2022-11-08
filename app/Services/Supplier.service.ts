@@ -87,7 +87,6 @@ const fetchAllSuppliers = async ( ) =>{
 
     // Adding Baseurl to panurl from database
     for(let i=0;i< supplierData.length;i++) {
-        delete supplierData[i].role_id;
         let data = await new SupplierModel().fetchSuppliersProfileById( supplierData[i].id )
         data[0].pan_img= config.baseUrl + "/" + data[0].pan_img;
         data[0].aadhaar_img= config.baseUrl + "/" + data[0].aadhaar_img;
@@ -108,10 +107,10 @@ const isFileValid = (type:any) => {
 const fetchSupplierById = async (id: any) => {
     try {
         let supplier = await new SupplierModel().fetchUserById( id, 4 );
+        if (supplier.length == 0) throw new Error("No supplier found");
         let suppliersProfile = await new SupplierModel().fetchSuppliersProfileById( id )
         let suppliersAddress = await new SupplierModel().fetchSuppliersAddressById( id )
         Object.assign( supplier[0], suppliersProfile[0], suppliersAddress[0]);
-        if (supplier.length == 0) throw new Error("No supplier found");
 
         // Adding Baseurl to panurl from database
         supplier[0].pan_img= config.baseUrl + "/" + supplier[0].pan_img;
@@ -131,9 +130,9 @@ const updateSuppliersDetails = async (data:any) => {
     try {
         let supplier = await new SupplierModel().fetchUserById( data.id, 4 )
         if( supplier.length == 0 ) throw new Error( "no supplier found")
-        let supplierData = await new SupplierModel().updateUserDetails(data, data.id, 4);
-        if ( !Object.keys(supplierData).length ) throw new Error("supplier updatation failed");
-        return { message : "Supplier updated Successfully" };
+        let supplierData = await new SupplierModel().updateUserDetails(data, 1, 4);
+        LOGGER.info( "supplier details", supplierData )
+        return supplierData;
     }
     catch (e){
         throw e; 
@@ -155,7 +154,11 @@ const formidableUpdateDetails = async (req:any) =>{
 
         // id field validation
         if(fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
-        
+
+        // supplier exists or not
+        let supplier = await new SupplierModel().fetchUserById( fields.id, 4 )
+        if( supplier.length == 0 ) throw new Error( "no supplier found" )
+
         // Fields validation
         if(fields.name !== undefined && fields.name !== null && fields.name !== "") 
         updatedSupplier.name=fields.name;
@@ -193,14 +196,12 @@ const formidableUpdateDetails = async (req:any) =>{
         if( Object.keys(s3Images).length ){ const s3Paths = await uploadFiles( s3Images )
             Object.assign(profile, s3Paths);}
 
-        if( Object.keys(updatedSupplier).length ){ updatedSupplierData = await new SupplierModel().updateUserDetails(updatedSupplier,fields.id, 4)
-            if (!updatedSupplierData) throw new Error("Supplier updation failed.");  }
+        if( Object.keys(updatedSupplier).length ){ updatedSupplierData = await new SupplierModel().updateUserDetails(updatedSupplier,fields.id, 4) }
 
-        if( Object.keys(profile).length  ){updatedSuppliersProfile = await new SupplierModel().updateSuppliersProfileDetails(profile,fields.id)
-            if (!updatedSuppliersProfile) throw new Error("Suppliers profile details updation failed."); }
+        if( Object.keys(profile).length  ){ updatedSuppliersProfile = await new SupplierModel().updateSuppliersProfileDetails(profile,fields.id) }
 
-        if( Object.keys(address).length ){ updatedSuppliersAddress = await new SupplierModel().updateSuppliersAddressDetails(address,fields.id)
-            if (!updatedSuppliersAddress) throw new Error("Suppliers address details updation failed."); }
+        if( Object.keys(address).length ){ updatedSuppliersAddress = await new SupplierModel().updateSuppliersAddressDetails(address,fields.id) }
+
         return updatedSupplierData;
     }catch(e){
         console.log("Exception ->", e);
@@ -211,21 +212,21 @@ const formidableUpdateDetails = async (req:any) =>{
 const loginSupplier = async ( data : any ) => {
     try{
         let supplier = await new SupplierModel().fetchUserByMobile( data.mobile, 4 )
-        console.log( " service.supplier : ", supplier )
+        LOGGER.info( "service.supplier", supplier )
         if ( supplier.length === 0 ) throw new Error( "Invalid mobile number");
         if ( supplier[0].status !== 1 ) throw new Error( "Your account is not active");
         // const otp = Math.floor( 100000 + Math.random() * 900000 )
         const otp  = "123456";
-        LOGGER.info( otp )
+        LOGGER.info("otp", otp )
         data.otp = otp;
         data.user_id = supplier[0].id;
         data.req_id = uuidv4();
         data.expire_time = moment().add(1440, "minutes").format('YYYY-MM-DD HH:mm:ss');
         delete data.mobile;
         data.trials = 3;
-        console.log( "Data before create otp------->", data)
+        LOGGER.info( "Data before create otp", data)
         const otp_details = await new SupplierModel().createOtp(data)
-        console.log( "create Otp result : " ,  otp_details );
+        LOGGER.info( "create Otp result", otp_details )
         return { request_id : data.req_id };
     } catch ( e ) {
         return e;
@@ -236,7 +237,6 @@ const verify_supplier_otp = async ( data : any ) => {
     try{
         LOGGER.info( 111, data )
         let otp_details = await new SupplierModel().getSupplierOtp( data )
-        console.log( "otp details service : ", otp_details )
         if ( otp_details.length === 0 ) throw new Error( "Error in login" )
         if ( otp_details[0].trials <= 0 ) throw new Error( "No more trials" )
         if ( parseInt( data.otp ) !== otp_details[0].otp ){
