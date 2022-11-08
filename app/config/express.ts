@@ -27,5 +27,4 @@ app.use(Authenticate);
 app.use(application.url.base, indexRoute);
 // Joi Error Handler
 app.use(joiErrorHandler);
-
 export default app;
