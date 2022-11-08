@@ -24,6 +24,8 @@ const createNotification = async ( data : any ) => {
 const updateNotificationDetails = async ( data:any ) => {
     try{
         let updatedNotification : any = {}
+        let nf = await new NotificationModel().fetchNotification( data.id );
+        if ( nf.length == 0 ) throw new Error( "notification not found")
         if(data.status !== undefined && data.status !== null && data.status !== "") updatedNotification.status=data.status;
         let notification = await new NotificationModel().updateNotificationDetails( updatedNotification );
         if ( notification.length == 0 ) throw new Error( "notification updation failed" )
@@ -38,7 +40,7 @@ const updateNotificationDetails = async ( data:any ) => {
 
 const fetchNotificationById = async ( data:any ) => {
     try{
-        let notification = await new NotificationModel().fetchNotification( data );
+        let notification = await new NotificationModel().fetchNotification( data.id );
         if ( notification.length == 0 ) throw new Error( "No notification found " )
         return notification
     }
