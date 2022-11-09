@@ -41,9 +41,9 @@ const fetchAllCustomerPO = async () =>{
 }
 
 
-const fetchCustomerPOById = async (id: any) => {
+const fetchCustomersPO = async (id: any) => {
     try {
-        let customer = await new CustomerPOModel().findCustomerPOById(id);
+        let customer = await new CustomerPOModel().findCustomersPO(id);
         if (customer.length == 0) throw new Error("Customers purchase order  not found");
         return customer[0];
     }
@@ -55,7 +55,7 @@ const fetchCustomerPOById = async (id: any) => {
 
 const updateCustomerPODetails = async (data:any) => {
     try {
-        let cpo = await new CustomerPOModel().findCustomerPOById( data.id )
+        let cpo = await new CustomerPOModel().findCustomersPO( data.id )
         if ( cpo.length == 0 ) return new Error( "customer purchase order not found")
         let customer : any = {};
         if(data.id !== undefined && data.id !== null && data.id !== "") 
@@ -88,6 +88,6 @@ const updateCustomerPODetails = async (data:any) => {
 export default {
     createCustomerPO,
     fetchAllCustomerPO,
-    fetchCustomerPOById,
+    fetchCustomersPO,
     updateCustomerPODetails,
 }

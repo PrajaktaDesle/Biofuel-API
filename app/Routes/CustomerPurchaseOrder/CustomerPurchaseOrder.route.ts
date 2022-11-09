@@ -7,7 +7,7 @@ import { celebrate } from 'celebrate';
 
 router.post(
     '/create',
-    celebrate(customerPOSchema.createCPO),
+    celebrate(customerPOSchema.createCustomersPO),
     customerPOController.createCustomerPO
 );
 
@@ -18,13 +18,13 @@ router.get(
 
 router.get(
     '/fetch',
-    celebrate(customerPOSchema.fetchCPOById),
-    customerPOController.fetchCustomerPOById
+    celebrate(customerPOSchema.fetchCustomersPO),
+    customerPOController.fetchCustomersPO
 );
 
 router.put(
     '/update',
-    celebrate(customerPOSchema.updateCPODetails),
+    celebrate(customerPOSchema.updateCustomersPODetails),
     customerPOController.updateCustomerPODetails
 );
 

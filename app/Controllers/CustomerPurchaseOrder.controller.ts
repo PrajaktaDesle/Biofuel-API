@@ -66,8 +66,8 @@ const fetchAllCustomerPO: IController = async (req, res) => {
 };
 
 
-const fetchCustomerPOById: IController = async (req, res) => {
-    customerPOService.fetchCustomerPOById(req.query.id)
+const fetchCustomersPO: IController = async (req, res) => {
+    customerPOService.fetchCustomersPO(req.query.id)
         .then( (customer : any) => {
             if(customer instanceof Error){
                 console.log("User 2", customer.message)
@@ -122,6 +122,6 @@ const updateCustomerPODetails: IController = async (req, res) => {
 export default {
     createCustomerPO,
     fetchAllCustomerPO,
-    fetchCustomerPOById,
+    fetchCustomersPO,
     updateCustomerPODetails,
 };

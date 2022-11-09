@@ -1,7 +1,7 @@
 import { Joi, Segments } from 'celebrate';
 import { join } from 'path';
 export default {
-    createCPO: {
+    createCustomersPO: {
         [Segments.BODY]:  Joi.object().keys({
             customer: Joi.string().min(1).required(),
             po_number: Joi.number().required(),
@@ -14,14 +14,14 @@ export default {
     }).unknown(),
     },
    
-    fetchCPOById:{
+    fetchCustomersPO:{
         [Segments.QUERY]:{
             id:Joi.number().required()
         }
     },
 
 
-    updateCPODetails: {
+    updateCustomersPODetails: {
         [Segments.BODY]:  Joi.object().keys({
 
             id: Joi.number().required(),
