@@ -10,4 +10,14 @@ router.post(
   productController.createProduct
 );
 
+router.get( 
+  '/fetch',
+  productController.fetchProductById
+)
+
+router.put( 
+  '/update',
+  productController.updateProductById
+)
+
 export default router;

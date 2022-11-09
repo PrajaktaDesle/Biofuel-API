@@ -8,7 +8,7 @@ export class CustomerPOModel extends BaseModel
         super();
     }
     async getCustomersPOByPoNumber(po_number:string){
-        return await this._executeQuery("select * from customer_purchase_order where id = ?", [po_number]);
+        return await this._executeQuery("select * from customer_purchase_order where po_number = ?", [po_number]);
     }
     async createCustomerPO(customerData:any){
         return await this._executeQuery("insert into customer_purchase_order set ?", [customerData]);
