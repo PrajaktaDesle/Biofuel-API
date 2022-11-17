@@ -1,54 +1,30 @@
-import BaseModel from "../BaseModel";
+import UserModel from "../User/User.model";
 import {Connection} from "mysql2";
 
-export class CustomerModel extends BaseModel
+export class CustomerModel extends UserModel
 {
     constructor()
     {
         super();
     }
-    async getCustomer(mobile:string, tenant_id : number){
-        return await this._executeQuery("select * from customers where mobile = ? and tenant_id = ? ", [mobile, tenant_id]);
-    }
-    async createCustomer(customerData:any){
-        return await this._executeQuery("insert into customers set ?", [customerData]);
-    }
-    async create_otp(data: any){
-        return await this._executeQuery("insert into customer_login set ?", [data]);
-    }
-    async addCustomerBalance(addBalance:any) {
-        return await this._executeQuery("insert into customer_balance set ?", [addBalance]);
-    }
-    async getCustomer_otp(data: any){
-        return await this._executeQuery("select * from customer_login where req_id = ? ", [data.request_id]);
-    }
-    async update_trials(req_id: any, trials: any){
-        return await this._executeQuery("update customer_login set trials = ? WHERE req_id = ?", [trials, req_id]);
-    }
-    async findAllCustomers(customerData:any){
-        return await this._executeQuery("select * from customers where tenant_id = ?", [customerData]);
-    }
-    async findCustomerById(id: any, tenant_id: any ){
-        return await this._executeQuery("select * from customers where id = ? and tenant_id = ? ", [id, tenant_id]);
-    }
 
-
-    async updateCustomerDetails(data:any){
-        return await this._executeQuery("update customers set ? where id = ? and tenant_id = ? ", [data, data.id, data.tenant_id]);
+    async createCustomerAddress(addressData:any){
+        return await this._executeQuery("insert into addresses set ?", [addressData]);
     }
-
-    async getCustomerRD(customer_id: number, tenant_id: number ){
-        return await this._executeQuery("select amount from rd_transactions where customer_id = ? and tenant_id = ? ", [customer_id, tenant_id]);
+    async createCustomerProfile(profileData:any){
+        return await this._executeQuery("insert into users_profile set ?", [profileData]);
     }
-    async getCustomerFD(customer_id: number, tenant_id: number ){
-        return await this._executeQuery("select amount from fd_transactions where customer_id = ? and tenant_id = ? ", [customer_id, tenant_id]);
+    async updateCustomersProfileDetails(customerData:any,id:number){
+        return await this._executeQuery("update users_profile set ? where user_id = ? ", [customerData,id]);
     }
-
-    async fetchTransactionHistoryById(customer_id: number){
-        return await this._executeQuery("select debit,credit,transaction_type,date from customers_transaction_history where customer_id = ? order by date desc", [customer_id]);
+    async updateCustomersAddressDetails(customerData:any,id:number){
+        return await this._executeQuery("update addressses set ? where user_id = ? ", [customerData,id]);
     }
-
-    async formidableUpdateDetails(updatedCustomerData:any,id:number,tenant:number){
-        return await this._executeQuery("update customers set ? where id = ? and tenant_id = ?", [updatedCustomerData,id,tenant]);
+    async fetchCustomersProfileById(id: any ){
+        return await this._executeQuery("select gstin_no from users_profile where user_id = ? ", [id]);
+    }  
+    async fetchCustomersAddressById(id: number, type : string ){
+        return await this._executeQuery("select address, pincode, city from addresses where user_id = ? and address_type = ? ", [id, type]);
     }
+   
 }
