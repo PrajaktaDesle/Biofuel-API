@@ -35,6 +35,7 @@ export const uploadFiles = async ( files: any)=> {
         const result = await uploadFile(files[images[i]], name);
         if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
         console.log(images[i])
+        console.log( "result : ", result )
         s3Path[images[i]] = result.key;
     }
     return s3Path
