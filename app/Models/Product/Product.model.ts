@@ -8,13 +8,13 @@ export class ProductModel extends BaseModel
         super();
     }
     async createProduct( productData : any ){
-        return await this._executeQuery( "insert into product set ? ", [productData] )
+        return await this._executeQuery( "insert into products set ? ", [productData] )
     }
     async fetchProductById( id : any ){
-        return await this._executeQuery( "select * from product where id = ? ", [id] )
+        return await this._executeQuery( "select * from products where id = ? ", [id] )
     }
     async updateProductById( data : any, id : number ){
-        return await this._executeQuery( "update product set ? where id = ? ",[data,id] )
+        return await this._executeQuery( "update products set ? where id = ? ",[data,id] )
     }
 
 }
