@@ -4,73 +4,66 @@ const {v4 : uuidv4} = require('uuid');
 import LOGGER from "../config/LOGGER";
 import formidable from "formidable";
 let config = require("../config");
-import * as path from "path";
 import moment from 'moment';
-import * as fs from "fs";
-import e from "express";
 import Encryption from "../utilities/Encryption";
 
 const createSupplier = async (req:any) =>{
     try{
-        let suppliersData, suppliersProfile, suppliersAddress, fields, files;
-        let supplier:any = {};
-        let profile:any = {};
-        let address:any = {};
+        let suppliersData, suppliersProfile, suppliersAddress, fd, fl;
         //@ts-ignore
-        ({fields, files} = await new Promise((resolve) => {
+        ({fd, fl} = await new Promise((resolve) => {
             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
-                    resolve({fields: fields, files: files});})}));
+                    resolve({fd: fields, fl: files});})}));
         
-        // Fields validation
-        if(fields.name == undefined || fields.name == null || fields.name == "") throw new Error("name is required");
-        supplier.name=fields.name;
-        if(fields.mobile == undefined || fields.mobile == null || fields.mobile == "") throw new Error("mobile is required");
-        supplier.mobile=fields.mobile;
-        if(fields.address == undefined || fields.address == null || fields.address == "") throw new Error("address is required");
-        address.address=fields.address;
-        if(fields.pincode == undefined || fields.pincode == null || fields.pincode == "") throw new Error("pincode is required");
-        address.pincode=fields.pincode;
-        if(fields.city == undefined || fields.city == null || fields.city == "") throw new Error("city is required");
-        address.city=fields.city;      
-        if(fields.aadhaar_no == undefined || fields.aadhaar_no == null || fields.aadhaar_no == "") throw new Error("aadhaar_no is required");
-        profile.aadhaar_no=fields.aadhaar_no;
-        if(fields.gstin_no == undefined || fields.gstin_no == null || fields.gstin_no == "") throw new Error("gstin_no is required");
-        profile.gstin_no=fields.gstin_no;
-        if(fields.pan_no == undefined || fields.pan_no == null || fields.pan_no == "") throw new Error("pan_no is required");
-        profile.pan_no=fields.pan_no;
-        if(fields.longitude == undefined || fields.longitude == null || fields.longitude == "") throw new Error("longitude is required");
-        profile.longitude=fields.longitude;
-        if(fields.latitude == undefined || fields.latitude == null || fields.latitude == "") throw new Error("latitude is required");
-        profile.latitude=fields.latitude
+        // Profile Fields validation
+        if(fd.name == undefined || fd.name == null || fd.name == "") throw new Error("name is required");
+        if(fd.mobile == undefined || fd.mobile == null || fd.mobile == "") throw new Error("mobile is required");
+        if(fd.aadhaar_no == undefined || fd.aadhaar_no == null || fd.aadhaar_no == "") throw new Error("aadhaar_no is required");
+        if(fd.pan_no == undefined || fd.pan_no == null || fd.pan_no == "") throw new Error("pan_no is required");
+        if(fd.gstin_no == undefined || fd.gstin_no == null || fd.gstin_no == "") throw new Error("gstin_no is required");
+        if(fd.msme_no == undefined || fd.msme_no == null || fd.msme_no == "") throw new Error("msme_no is required");
        
+        // Address field validation
+        if(fd.billing_address == undefined || fd.billing_address == null || fd.billing_address == "") throw new Error("billing_address is required");
+        if(fd.source_address == undefined || fd.source_address == null || fd.source_address == "") throw new Error("source_address is required");
+        if(fd.pincode == undefined || fd.pincode == null || fd.pincode == "") throw new Error("pincode is required");
+        if(fd.city == undefined || fd.city == null || fd.city == "") throw new Error("city is required");
+        if(fd.longitude == undefined || fd.longitude == null || fd.longitude == "") throw new Error("longitude is required");
+        if(fd.latitude == undefined || fd.latitude == null || fd.latitude == "") throw new Error("latitude is required");
+        if(fd.source_address == undefined || fd.source_address == null || fd.source_address == "") throw new Error("source_address is required");
+
         // Files validation
-        let s3Images:any = [];
-        if(files.aadhaar_img !== undefined && files.aadhaar_img !== null && files.aadhaar_img !== ""){
-        if(isFileValid(files.aadhaar_img.mimetype))throw new Error("Only .png, .jpg and .jpeg format allowed! for aadhaar_img");s3Images['aadhaar_img'] = files.aadhaar_img}
-        else{throw new Error("aadhaar_img is required")}
+        let s3Images:any;
+        if(fl.aadhaar_url !== undefined && fl.aadhaar_url !== null && fl.aadhaar_url !== ""){
+        if(isFileValid(fl.aadhaar_url.mimetype))throw new Error("Only .png, .jpg and .jpeg format allowed! for aadhaar_url")}
+        else{throw new Error("aadhaar_url is required")}
 
-        if(files.pan_img !== undefined && files.pan_img !== null && files.pan_img !== ""){
-        if(isFileValid(files.pan_img.mimetype))throw new Error("Only .png, .jpg and .jpeg format allowed! for pan_img");s3Images['pan_img'] = files.pan_img}
-        else{throw new Error("pan_img is required")}
+        if(fl.pan_url !== undefined && fl.pan_url !== null && fl.pan_url !== ""){
+        if(isFileValid(fl.pan_url.mimetype))throw new Error("Only .png, .jpg and .jpeg format allowed! for pan_url")}
+        else{throw new Error("pan_url is required")}
 
-        if(files.gstin_img !== undefined && files.gstin_img !== null && files.gstin_img !== ""){
-        if(isFileValid(files.gstin_img.mimetype))throw new Error("Only .png, .jpg and .jpeg format allowed! for gstin_img");s3Images['gstin_img'] = files.gstin_img}
-        else{throw new Error("gstin_img is required")}
-        
-        // role_id for supplier is 4
-        supplier.role_id = 4;
+        if(fl.gstin_url !== undefined && fl.gstin_url !== null && fl.gstin_url !== ""){
+        if(isFileValid(fl.gstin_url.mimetype))throw new Error("Only .png, .jpg and .jpeg format allowed! for gstin_url")}
+        else{throw new Error("gstin_url is required")}
 
-        // Multiple files upload to s3Bucket
+        if(fl.msme_url !== undefined && fl.msme_url !== null && fl.msme_url !== ""){
+        if(isFileValid(fl.msme_url.mimetype))throw new Error("Only .png, .jpg and .jpeg format allowed! for msme_url")}
+        else{throw new Error("msme_url is required")}
+
+        // Multiple fl upload to s3Bucket
+        s3Images = {"aadhaar_url":fl.aadhaar_url,"pan_url":fl.pan_url,"gstin_url":fl.gstin_url,"msme_url":fl.msme_url}
         const s3Paths = await uploadFiles( s3Images )
-        profile = Object.assign(profile, s3Paths);
 
-        suppliersData = await new SupplierModel().createUser( supplier )
+        let user = {"name":fd.name,"mobile":fd.mobile,"email":fd.email,"role_id":3}
+        suppliersData = await new SupplierModel().createUser( user )
         let user_id = suppliersData.insertId
-        profile.user_id = user_id
+        let profile = {"aadhaar_no":fd.aadhaar_no,"pan_no":fd.pan_no,"gstin_no":fd.gstin_no,"msme_no":fd.msme_no,"user_id":user_id}
+        Object.assign( profile, s3Paths );
         suppliersProfile = await new SupplierModel().createSuppliersProfile( profile )
-        address.address_type = "address";
-        address.user_id = user_id;
-        suppliersAddress = await new SupplierModel().createSuppliersAddress( address )
+        let addressB = {"address_type":"billing","address":fd.billing_address,"pincode":fd.pincode,"city":fd.city,"longitude":fd.longitude,"latitude":fd.latitude,"user_type":1,"user_id":user_id} 
+        suppliersAddress = await new SupplierModel().createSuppliersAddress( addressB )
+        let addressS = {"address_type":"source","address":fd.source_address,"user_type":1,"user_id":user_id}
+        suppliersAddress = await new SupplierModel().createSuppliersAddress( addressS )
 
         return suppliersData;
 
@@ -88,12 +81,12 @@ const fetchAllSuppliers = async ( ) =>{
     // Adding Baseurl to panurl from database
     for(let i=0;i< supplierData.length;i++) {
         let data = await new SupplierModel().fetchSuppliersProfileById( supplierData[i].id )
-        data[0].pan_img= config.baseUrl + "/" + data[0].pan_img;
-        data[0].aadhaar_img= config.baseUrl + "/" + data[0].aadhaar_img;
-        data[0].gstin_img = config.baseUrl + "/" + data[0].gstin_img;
+        data[0].pan_url= config.baseUrl + "/" + data[0].pan_url;
+        data[0].aadhaar_url= config.baseUrl + "/" + data[0].aadhaar_url;
+        data[0].gstin_url = config.baseUrl + "/" + data[0].gstin_url;
         Object.assign( supplierData[i] , data[0] );
-        let address = await new SupplierModel().fetchSuppliersAddressById( supplierData[i].id )
-        Object.assign( supplierData[i] , address[0] )
+        let addressB = await new SupplierModel().fetchSuppliersAddressById( supplierData[i].id )
+        Object.assign( supplierData[i] , addressB[0] )
     }
     return supplierData;
 }
@@ -114,9 +107,9 @@ const fetchSupplierById = async (id: any) => {
         Object.assign( supplier[0], suppliersProfile[0], suppliersAddress[0]);
 
         // Adding Baseurl to panurl from database
-        supplier[0].pan_img= config.baseUrl + "/" + supplier[0].pan_img;
-        supplier[0].aadhaar_img= config.baseUrl + "/" + supplier[0].aadhaar_img;
-        supplier[0].gstin_img= config.baseUrl + "/" + supplier[0].gstin_img;
+        supplier[0].pan_url= config.baseUrl + "/" + supplier[0].pan_url;
+        supplier[0].aadhaar_url= config.baseUrl + "/" + supplier[0].aadhaar_url;
+        supplier[0].gstin_url= config.baseUrl + "/" + supplier[0].gstin_url;
 
         return supplier[0];
     }
@@ -143,67 +136,67 @@ const updateSuppliersDetails = async (data:any) => {
 
 const formidableUpdateDetails = async (req:any) =>{
     try{
-        let updatedSupplierData, updatedSuppliersProfile,updatedSuppliersAddress, fields, files;
+        let updatedSupplierData, updatedSuppliersProfile,updatedSuppliersAddress, fd, fl;
         //@ts-ignore
-        ({fields, files} = await new Promise((resolve) => {
-            new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
-                    resolve({fields: fields, files: files});})}));
+        ({fd, fl} = await new Promise((resolve) => {
+            new formidable.IncomingForm().parse(req, async (err: any, fd: any, fl: any) => {
+                    resolve({fd: fd, fl: fl});})}));
         
-        let id=Number(fields.id);
+        let id=Number(fd.id);
         let updatedSupplier : any = {};
         let profile : any = {};
-        let address : any = {};
+        let addressB : any = {};
         let SupplierObj = new SupplierModel();
 
         // id field validation
-        if(fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
+        if(fd.id == undefined || fd.id == null || fd.id == "") throw new Error("id is missing");
 
         // supplier exists or not
-        let supplier = await SupplierObj.fetchUserById( fields.id, 4 )
+        let supplier = await SupplierObj.fetchUserById( fd.id, 4 )
         if( supplier.length == 0 ) throw new Error( "no supplier found" )
 
         // Fields validation
-        if(fields.name !== undefined && fields.name !== null && fields.name !== "") 
-        updatedSupplier.name=fields.name;
-        if(fields.mobile !== undefined && fields.mobile !== null && fields.mobile !== "") 
-        updatedSupplier.mobile=fields.mobile;
-        if(fields.address !== undefined && fields.address !== null && fields.address !== "")
-        address.address=fields.aaddress;
-        if(fields.city !== undefined && fields.city !== null && fields.city !== "") 
-        address.city=fields.city;
-        if(fields.pincode !== undefined && fields.pincode !== null && fields.pincode !== "") 
-        address.pincode=fields.pincode;
-        if(fields.latitude !== undefined && fields.latitude !== null && fields.latitude !== "") 
-        profile.latitude=fields.latitude;
-        // { if(Number(fields.latitude))updatedSupplier.latitude=fields.latitude;else throw new Error("latitude not integer value")}
-        if(fields.longitude !== undefined && fields.longitude !== null && fields.longitude !== "") 
-        profile.longitude=fields.longitude;
+        if(fd.name !== undefined && fd.name !== null && fd.name !== "") 
+        updatedSupplier.name=fd.name;
+        if(fd.mobile !== undefined && fd.mobile !== null && fd.mobile !== "") 
+        updatedSupplier.mobile=fd.mobile;
+        if(fd.addressB !== undefined && fd.addressB !== null && fd.addressB !== "")
+        addressB.addressB=fd.aaddress;
+        if(fd.city !== undefined && fd.city !== null && fd.city !== "") 
+        addressB.city=fd.city;
+        if(fd.pincode !== undefined && fd.pincode !== null && fd.pincode !== "") 
+        addressB.pincode=fd.pincode;
+        if(fd.latitude !== undefined && fd.latitude !== null && fd.latitude !== "") 
+        profile.latitude=fd.latitude;
+        // { if(Number(fd.latitude))updatedSupplier.latitude=fd.latitude;else throw new Error("latitude not integer value")}
+        if(fd.longitude !== undefined && fd.longitude !== null && fd.longitude !== "") 
+        profile.longitude=fd.longitude;
        
-        if(fields.aadhaar_no !== undefined && fields.aadhaar_no !== null && fields.aadhaar_no !== "") 
-        profile.aadhaar_no=fields.aadhaar_no;
-        if(fields.pan_no !== undefined && fields.pan_no !== null && fields.pan_no !== "") 
-        profile.pan_no=fields.pan_no;
-        if(fields.gstin_no !== undefined && fields.gstin_no !== null && fields.gstin_no !== "") 
-        profile.gstin_no=fields.gstin_no;
+        if(fd.aadhaar_no !== undefined && fd.aadhaar_no !== null && fd.aadhaar_no !== "") 
+        profile.aadhaar_no=fd.aadhaar_no;
+        if(fd.pan_no !== undefined && fd.pan_no !== null && fd.pan_no !== "") 
+        profile.pan_no=fd.pan_no;
+        if(fd.gstin_no !== undefined && fd.gstin_no !== null && fd.gstin_no !== "") 
+        profile.gstin_no=fd.gstin_no;
  
         // Files validation
         let s3Images:any = [];
-        if(files.aadhaar_img !== undefined && files.aadhaar_img !== null && files.aadhaar_img !== ""){
-        if(isFileValid(files.aadhaar_img.mimetype))throw new Error("aadhaar_img should be jpg or png type");s3Images['aadhaar_img']=files.aadhaar_img;}
-        if(files.pan_img !== undefined && files.pan_img !== null && files.pan_img !== ""){
-        if(isFileValid(files.pan_img.mimetype))throw new Error("pan_img should be jpg or png type");s3Images['pan_img']=files.pan_img;}
-        if(files.gstin_img !== undefined && files.gstin_img !== null && files.gstin_img !== ""){
-        if(isFileValid(files.gstin_img.mimetype))throw new Error("gstin_img should be jpg or png type");s3Images['gstin_img']=files.gstin_img;}
+        if(fl.aadhaar_url !== undefined && fl.aadhaar_url !== null && fl.aadhaar_url !== ""){
+        if(isFileValid(fl.aadhaar_url.mimetype))throw new Error("aadhaar_url should be jpg or png type");s3Images['aadhaar_url']=fl.aadhaar_url;}
+        if(fl.pan_url !== undefined && fl.pan_url !== null && fl.pan_url !== ""){
+        if(isFileValid(fl.pan_url.mimetype))throw new Error("pan_url should be jpg or png type");s3Images['pan_url']=fl.pan_url;}
+        if(fl.gstin_url !== undefined && fl.gstin_url !== null && fl.gstin_url !== ""){
+        if(isFileValid(fl.gstin_url.mimetype))throw new Error("gstin_url should be jpg or png type");s3Images['gstin_url']=fl.gstin_url;}
 
-        // Multiple files upload to s3Bucket
+        // Multiple fl upload to s3Bucket
         if( Object.keys(s3Images).length ){ const s3Paths = await uploadFiles( s3Images )
             Object.assign(profile, s3Paths);}
        
-        if( Object.keys(updatedSupplier).length ){ updatedSupplierData = await SupplierObj.updateUserDetails(updatedSupplier,fields.id, 4) }
+        if( Object.keys(updatedSupplier).length ){ updatedSupplierData = await SupplierObj.updateUserDetails(updatedSupplier,fd.id, 4) }
 
-        if( Object.keys(profile).length  ){ updatedSuppliersProfile = await SupplierObj.updateSuppliersProfileDetails(profile,fields.id) }
+        if( Object.keys(profile).length  ){ updatedSuppliersProfile = await SupplierObj.updateSuppliersProfileDetails(profile,fd.id) }
 
-        if( Object.keys(address).length ){ updatedSuppliersAddress = await SupplierObj.updateSuppliersAddressDetails(address,fields.id) }
+        if( Object.keys(addressB).length ){ updatedSuppliersAddress = await SupplierObj.updateSuppliersAddressDetails(addressB,fd.id) }
 
         return updatedSupplierData;
     }catch(e){

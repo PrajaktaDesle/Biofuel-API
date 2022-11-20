@@ -17,7 +17,7 @@ export class SupplierModel extends UserModel
     }
    
     async fetchSuppliersProfileById(id: any ){
-        return await this._executeQuery("select aadhaar_no, aadhaar_img, pan_no, pan_img, gstin_no, gstin_img, latitude, longitude from users_profile where user_id = ? ", [id]);
+        return await this._executeQuery("select aadhaar_no, aadhaar_url, pan_no, pan_url, gstin_no, gstin_url, msme_no, msme_url from users_profile where user_id = ? ", [id]);
     }  
     async fetchSuppliersAddressById(id: any ){
         return await this._executeQuery("select address, pincode, city from addresses where user_id = ? ", [id]);
