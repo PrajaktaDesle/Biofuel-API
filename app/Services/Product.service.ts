@@ -10,6 +10,7 @@ import path, { resolve } from "path";
 import { off } from "process";
 const fs = require('fs')
 import AWS from 'aws-sdk';
+let units:any = {"MTS":1,"Tons":2, "Kg":3,"Number":4}, categories:any = {"briquetts":1}
 
 
 const createProduct = async (req: any) => {
@@ -38,7 +39,7 @@ const createProduct = async (req: any) => {
         if (fields.user_id == undefined || fields.user_id == null || fields.user_id == "") throw new Error("user_id is required");
         product.user_id = fields.user_id;
         if (fields.unit == undefined || fields.unit == null || fields.unit == "") throw new Error("unit is required");
-        if( Object.keys(units).includes(fields.unit) ) product.unit_id = units[fields.unit]
+        product.unit_id = units[fields.unit]
         if (fields.status == undefined || fields.status == null || fields.status == "") throw new Error("status is required");
         product.status = fields.status;
        
@@ -80,7 +81,11 @@ const fetchProductById = async (id: number) => {
         if (product.length == 0) {
             throw new Error("Product not found!")
         }
+        product[0].usage_unit = Object.keys(units)[product[0].usage_unit_id]
+        delete product[0].usage_unit_id
+        console.log( "product : ", product )
         return product;
+
     }
     catch (error: any) {
         return error
@@ -99,12 +104,12 @@ const updateProductById = async (req: any) => {
                 resolve({ fields: fields, files: files })
             })
         }))
-
+        let units:any = {"MTS":1,"Tons":2, "Kg":3,"Number":4}, categories:any = {"briquetts":1}
         if (fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
 
         // supplier exists or not
         let pd = await new ProductModel().fetchProductById(fields.id)
-        if (pd.length == 0) throw new Error("no product found!")
+        if (pd.length == 0) throw new Error("Product not found!")
 
         // Fields validation
         if (fields.name !== undefined && fields.name !== null && fields.name !== "")
@@ -117,11 +122,11 @@ const updateProductById = async (req: any) => {
             product.packing = fields.packing;
         if (fields.gst !== undefined && fields.gst !== null && fields.gst !== "")
             product.gst = fields.gst;
-        if (fields.unit !== undefined && fields.unit !== null && fields.unit !== "")
-            product.unit = fields.unit;
-        let categories:any= {"briquetts":1}
-        if (fields.category !== undefined && fields.category !== null && fields.category !== "")
-        if( Object.keys(categories).includes(fields.category) ) product.category_id = categories[fields.category]
+        if (fields.unit !== undefined && fields.unit !== null && fields.unit !== ""){
+         product.usage_unit_id = units[fields.usage_unit]}
+        if (fields.category !== undefined && fields.category !== null && fields.category !== ""){
+        product.category_id=categories[fields.category]}
+        
         // Files validation
         if (files.image !== undefined && files.image !== null && files.image !== "") {
             if (fileNotValid(files.image.mimetype)){ throw new Error("Only .png, .jpg and .jpeg format allowed! for image") }
