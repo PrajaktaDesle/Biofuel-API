@@ -9,7 +9,7 @@ import Encryption from "../utilities/Encryption";
 
 const createSupplier = async (req:any) =>{
     try{
-        let suppliersData, suppliersProfile, suppliersAddress, fd, fl;
+        let suppliersData, suppliersProfile, suppliersAddress, material, fd, fl;
         //@ts-ignore
         ({fd, fl} = await new Promise((resolve) => {
             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
@@ -17,20 +17,22 @@ const createSupplier = async (req:any) =>{
         
         // Profile Fields validation
         if(fd.name == undefined || fd.name == null || fd.name == "") throw new Error("name is required");
-        if(fd.mobile == undefined || fd.mobile == null || fd.mobile == "") throw new Error("mobile is required");
+        if(fd.contact_no == undefined || fd.contact_no == null || fd.contact_no == "") throw new Error("contact_no is required");
         if(fd.aadhaar_no == undefined || fd.aadhaar_no == null || fd.aadhaar_no == "") throw new Error("aadhaar_no is required");
         if(fd.pan_no == undefined || fd.pan_no == null || fd.pan_no == "") throw new Error("pan_no is required");
         if(fd.gstin_no == undefined || fd.gstin_no == null || fd.gstin_no == "") throw new Error("gstin_no is required");
         if(fd.msme_no == undefined || fd.msme_no == null || fd.msme_no == "") throw new Error("msme_no is required");
+        if(fd.raw_material == undefined || fd.raw_material == null || fd.raw_material == "") throw new Error("raw_material is required");
+        if(fd.packaging == undefined || fd.packaging == null || fd.packaging == "") throw new Error("packaging is required");
        
         // Address field validation
         if(fd.billing_address == undefined || fd.billing_address == null || fd.billing_address == "") throw new Error("billing_address is required");
         if(fd.source_address == undefined || fd.source_address == null || fd.source_address == "") throw new Error("source_address is required");
-        if(fd.pincode == undefined || fd.pincode == null || fd.pincode == "") throw new Error("pincode is required");
-        if(fd.city == undefined || fd.city == null || fd.city == "") throw new Error("city is required");
+        if(fd.source_pincode == undefined || fd.source_pincode == null || fd.source_pincode == "") throw new Error("source_pincode is required");
+        if(fd.source_city == undefined || fd.source_city == null || fd.source_city == "") throw new Error("source_city is required");
         if(fd.longitude == undefined || fd.longitude == null || fd.longitude == "") throw new Error("longitude is required");
         if(fd.latitude == undefined || fd.latitude == null || fd.latitude == "") throw new Error("latitude is required");
-        if(fd.source_address == undefined || fd.source_address == null || fd.source_address == "") throw new Error("source_address is required");
+        if(fd.source_state == undefined || fd.source_state == null || fd.source_state == "") throw new Error("source_state is required");
 
         // Files validation
         let s3Images:any;
@@ -59,11 +61,14 @@ const createSupplier = async (req:any) =>{
         let user_id = suppliersData.insertId
         let profile = {"aadhaar_no":fd.aadhaar_no,"pan_no":fd.pan_no,"gstin_no":fd.gstin_no,"msme_no":fd.msme_no,"user_id":user_id}
         Object.assign( profile, s3Paths );
-        suppliersProfile = await new SupplierModel().createSuppliersProfile( profile )
-        let addressB = {"address_type":"billing","address":fd.billing_address,"pincode":fd.pincode,"city":fd.city,"longitude":fd.longitude,"latitude":fd.latitude,"user_type":1,"user_id":user_id} 
-        suppliersAddress = await new SupplierModel().createSuppliersAddress( addressB )
-        let addressS = {"address_type":"source","address":fd.source_address,"user_type":1,"user_id":user_id}
-        suppliersAddress = await new SupplierModel().createSuppliersAddress( addressS )
+        let SupplierObj = new SupplierModel()
+        await SupplierObj.supplierRawMaterialMapping({"supplier_id":user_id,"raw_material_id":fd.raw_material})
+        await SupplierObj.supplierPackagingMapping({"supplier_id":user_id,"packaging":fd.packaging})
+        suppliersProfile = await SupplierObj.createSuppliersProfile( profile )
+        let addressB = {"address_type":"billing","address":fd.billing_address,"user_type":1,"user_id":user_id} 
+        suppliersAddress = await SupplierObj.createSuppliersAddress( addressB )
+        let addressS = {"address_type":"source","address":fd.source_address,"pincode":fd.source_pincode,"city_id":fd.city,"longitude":fd.longitude,"latitude":fd.latitude,"user_type":1,"user_id":user_id}
+        suppliersAddress = await SupplierObj.createSuppliersAddress( addressS )
 
         return suppliersData;
 
@@ -88,6 +93,11 @@ const fetchAllSuppliers = async ( ) =>{
         // Object.assign( supplierData[i] , [0] );
         let addressB = await new SupplierModel().fetchSuppliersBillingAddressById( supplierData[i].id )
         let addressS = await new SupplierModel().fetchSuppliersSourceAddressById( supplierData[i].id )
+        let city = await new SupplierModel().getCityById(addressS[0].city_id)
+        let state = await new SupplierModel().getStateById(city[0].state_id)
+        addressS[0].city = city[0].name
+        addressS[0].state = state[0].name
+        delete addressS[0].city_id
         Object.assign( supplierData[i] , profile[0], addressB[0], addressS[0] )
     }
     return supplierData;
@@ -104,11 +114,15 @@ const fetchSupplierById = async (id: any) => {
         let SupplierObj = new SupplierModel()
         let supplier = await SupplierObj.fetchUserById( id, 3 );
         if (supplier.length == 0) throw new Error("Supplier not found");
+        let addressB = await new SupplierModel().fetchSuppliersBillingAddressById( supplier[0].id )
+        let addressS = await new SupplierModel().fetchSuppliersSourceAddressById( supplier[0].id )
+        let city = await new SupplierModel().getCityById(addressS[0].city_id)
+        let state = await new SupplierModel().getStateById(city[0].state_id)
+        addressS[0].city = city[0].name
+        addressS[0].state = state[0].name
+        delete addressS[0].city_id
         let suppliersProfile = await SupplierObj.fetchSuppliersProfileById( id )
-        let suppliersBAddress = await SupplierObj.fetchSuppliersBillingAddressById( id )
-        let suppliersSAddress = await SupplierObj.fetchSuppliersSourceAddressById( id )
-        console.log( suppliersSAddress )
-        Object.assign( supplier[0], suppliersProfile[0], suppliersBAddress[0], suppliersSAddress[0]);
+        Object.assign( supplier[0], suppliersProfile[0], addressS[0], addressB[0]);
 
         // Adding Baseurl to panurl from database
         supplier[0].pan_url= config.baseUrl + "/" + supplier[0].pan_url;
@@ -149,7 +163,7 @@ const formidableUpdateDetails = async (req:any) =>{
                     resolve({fd: fd, fl: fl});})}));
         
         let id=Number(fd.id);
-        let updatedSupplier : any = {}, profile : any = {}, addressB : any = {}, addressS:any = {}, result:any = {};
+        let updatedSupplier : any = {}, profile : any = {}, addressB : any = {}, addressS:any = {}, result:any = {}, city:any = {}, state:any = {};
         let Obj = new SupplierModel();
 
         // id field validation
@@ -162,22 +176,24 @@ const formidableUpdateDetails = async (req:any) =>{
         // Fields validation
         if(fd.name !== undefined && fd.name !== null && fd.name !== "") 
         updatedSupplier.name=fd.name;
-        if(fd.mobile !== undefined && fd.mobile !== null && fd.mobile !== "") 
-        updatedSupplier.mobile=fd.mobile;
+        if(fd.contact_no !== undefined && fd.contact_no !== null && fd.contact_no !== "") 
+        updatedSupplier.mobile=fd.contact_no;
         if(fd.email !== undefined && fd.email !== null && fd.email !== "") 
         updatedSupplier.email=fd.email;
         if(fd.billing_address !== undefined && fd.billing_address !== null && fd.billing_address !== "")
         addressB.address=fd.billing_address;
         if(fd.source_address !== undefined && fd.source_address !== null && fd.source_address !== "")
         addressS.address=fd.source_address;
-        if(fd.city !== undefined && fd.city !== null && fd.city !== "") 
-        addressB.city=fd.city;
-        if(fd.pincode !== undefined && fd.pincode !== null && fd.pincode !== "") 
-        addressB.pincode=fd.pincode;
+        if(fd.source_city !== undefined && fd.source_city !== null && fd.source_city !== "") 
+        addressS.city_id=fd.source_city;
+        // if(fd.source_state !== undefined && fd.source_state !== null && fd.source_state !== "") 
+        // addressS.state=fd.source_state;
+        if(fd.source_pincode !== undefined && fd.source_pincode !== null && fd.source_pincode !== "") 
+        addressS.pincode=fd.source_pincode;
         if(fd.latitude !== undefined && fd.latitude !== null && fd.latitude !== "") 
-        addressB.latitude=fd.latitude;
+        addressS.latitude=fd.latitude;
         if(fd.longitude !== undefined && fd.longitude !== null && fd.longitude !== "") 
-        addressB.longitude=fd.longitude;
+        addressS.longitude=fd.longitude;
        
         if(fd.aadhaar_no !== undefined && fd.aadhaar_no !== null && fd.aadhaar_no !== "") 
         profile.aadhaar_no=fd.aadhaar_no;
@@ -202,6 +218,8 @@ const formidableUpdateDetails = async (req:any) =>{
         // Multiple fl upload to s3Bucket
         if( Object.keys(s3Images).length ){ const s3Paths = await uploadFiles( s3Images ); Object.assign(profile, s3Paths); }
         console.log( "profile : ", profile )
+
+        // supplier Model calls
         if( Object.keys(updatedSupplier).length  ){ Obj.updateUserDetails(updatedSupplier,fd.id,3).then((data)=>{console.log("supplier details updated successfully")})}
         if( Object.keys(profile).length  ){ Obj.updateSuppliersProfileDetails(profile,fd.id).then((data)=>{console.log("supplier's profile details updated successfully")})}
         if( Object.keys(addressB).length ){ Obj.updateSuppliersAddressDetails(addressB,fd.id,"billing").then((data)=>{console.log("supplier's billing address details updated successfully")})}
@@ -261,6 +279,14 @@ const verify_supplier_otp = async ( data : any ) => {
         return error;
     }
 }
+const getAllCityWiseStates = async ( ) =>{
+    let data = await new SupplierModel().getAllCityWiseStates()
+    if (data.length == 0) {
+            throw new Error("City wise states not found!")
+        }
+    console.log( data )
+    return data 
+}
 
 export default {
     createSupplier,
@@ -269,5 +295,6 @@ export default {
     fetchSupplierById,
     updateSuppliersDetails,
     formidableUpdateDetails,
-    verify_supplier_otp
+    verify_supplier_otp,
+    getAllCityWiseStates
 }

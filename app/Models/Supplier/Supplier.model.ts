@@ -20,10 +20,10 @@ export class SupplierModel extends UserModel
         return await this._executeQuery("select aadhaar_no, aadhaar_url, pan_no, pan_url, gstin_no, gstin_url, msme_no, msme_url from users_profile where user_id = ? ", [id]);
     }  
     async fetchSuppliersBillingAddressById(id: any){
-        return await this._executeQuery("select user_type,address as `billing_address`, pincode, city, latitude, longitude from addresses where user_id = ? and address_type = ? ", [id, "billing"]);
+        return await this._executeQuery("select user_type,address as `billing_address` from addresses where user_id = ? and address_type = ? ", [id, "billing"]);
     }
     async fetchSuppliersSourceAddressById(id: any){
-        return await this._executeQuery("select address as `source_address` from addresses where user_id = ? and address_type = ? ", [id, "source"]);
+        return await this._executeQuery("select address as `source_address`,pincode, city_id, latitude, longitude from addresses where user_id = ? and address_type = ? ", [id, "source"]);
     }
 
     async updateSuppliersProfileDetails(updatedSupplierData:any,id:number){
@@ -44,5 +44,31 @@ export class SupplierModel extends UserModel
     async updateTrials( req_id : any, trials : any){
         return await this._executeQuery( "update users_login_logs set trials = ? where req_id = ?", [trials, req_id])
     }
+    async getRawMaterial(name:string){
+        return await this._executeQuery( "select id from product_raw_material where name = ?", [name])
+    }
+    async getPackaging(name:string){
+        return await this._executeQuery( "select id from product_packaging where name = ?", [name])
+    }
+    async supplierRawMaterialMapping( data : any){
+        return await this._executeQuery( "insert into supplier_raw_material_mapping set ?", [data])
+    }
+    async getCity(name:string){
+        return await this._executeQuery( "select id from address_city where name = ? ",[name])
+    }
+    async getCityById(id:number){
+        return await this._executeQuery( "select * from address_city where id = ? ",[id])
+    }
+    async getStateById(id:number){
+        return await this._executeQuery( "select * from address_state where id = ? ",[id])
+    }
+    async getState(name:string){
+        return await this._executeQuery( "select id from address_state where name = ?",[name])
+    }
+      async supplierPackagingMapping( data : any){
+        return await this._executeQuery( "insert into supplier_packaging_mapping set ?", [data])
+    }
+   
+
 
 }

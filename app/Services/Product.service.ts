@@ -10,7 +10,8 @@ import path, { resolve } from "path";
 import { off } from "process";
 const fs = require('fs')
 import AWS from 'aws-sdk';
-let units:any = {"MTS":1,"Tons":2, "Kg":3,"Number":4}, categories:any = {"briquetts":1}
+
+let units:any = {"MTS":1,"Tons":2, "Kg":3,"Number":4}, categories:any = {"Briquettes":1,"Pelletes":2, "Loose Biomass":3, "Cashew Doc":4}, status:any = {"active":1,"inactive":2}
 
 
 const createProduct = async (req: any) => {
@@ -22,24 +23,21 @@ const createProduct = async (req: any) => {
             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
                 resolve({ fields: fields, files: files });
             })}));
-        let units:any = {"MTS":1,"Tons":2, "Kg":3,"Number":4}, categories:any = {"briquetts":1}
         // Fields validation
         if (fields.name == undefined || fields.name == null || fields.name == "") throw new Error("name is required");
         product.name = fields.name;
         if (fields.category == undefined || fields.category == null || fields.category == "") throw new Error("category is required");
-        if( Object.keys(categories).includes(fields.category) ) product.category_id = categories[fields.category]
+        product.category_id = fields.category
         if (fields.description == undefined || fields.description == null || fields.description == "") throw new Error("description is required");
         product.description = fields.description;
         if (fields.hsn == undefined || fields.hsn == null || fields.hsn == "") throw new Error("hsn is required");
         product.hsn = fields.hsn;
-        if (fields.packing == undefined || fields.packing == null || fields.packing == "") throw new Error("packing is required");
-        product.packing = fields.packing;
         if (fields.gst == undefined || fields.gst == null || fields.gst == "") throw new Error("gst is required");
         product.gst = fields.gst;
         if (fields.user_id == undefined || fields.user_id == null || fields.user_id == "") throw new Error("user_id is required");
         product.user_id = fields.user_id;
-        if (fields.unit == undefined || fields.unit == null || fields.unit == "") throw new Error("unit is required");
-        product.unit_id = units[fields.unit]
+        if (fields.usage_unit == undefined || fields.usage_unit == null || fields.usage_unit == "") throw new Error("usage_unit is required");
+        product.usage_unit_id = fields.usage_unit
         if (fields.status == undefined || fields.status == null || fields.status == "") throw new Error("status is required");
         product.status = fields.status;
        
@@ -81,8 +79,11 @@ const fetchProductById = async (id: number) => {
         if (product.length == 0) {
             throw new Error("Product not found!")
         }
-        product[0].usage_unit = Object.keys(units)[product[0].usage_unit_id]
+        console.log( "product : ", product )
+        product[0].usage_unit = Object.keys(units)[product[0].usage_unit_id-1]
+        product[0].category = Object.keys(categories)[product[0].category_id-1]
         delete product[0].usage_unit_id
+        delete product[0].category_id
         console.log( "product : ", product )
         return product;
 
@@ -92,6 +93,65 @@ const fetchProductById = async (id: number) => {
     }
 
 }
+
+const fetchAllProductCategories= async () => {
+
+    try {
+        let productC = await new ProductModel().fetchAllProductCategories()
+        if (productC.length == 0) {
+            throw new Error("Product categories not found!")
+        }
+       
+        console.log( "product : ", productC )
+        return productC;
+
+    }
+    catch (error: any) {
+        return error
+    }
+
+}
+
+const fetchAllProductUsageUnits= async () => {
+
+    try {
+        let productUU = await new ProductModel().fetchAllProductUsageUnits()
+        if (productUU.length == 0) {
+            throw new Error("Product usagae units not found!")
+        }
+       
+        console.log( "product usage units : ", productUU )
+        return productUU;
+
+    }
+    catch (error: any) {
+        return error
+    }
+
+}
+const fetchAllProducts = async (id: number) => {
+
+    try {
+        let products = await new ProductModel().fetchAllProducts()
+        console.log( "products : ",  products )
+
+        for(let i=0;i< products.length;i++) {
+        products[i].image= config.baseUrl + "/" + products[i].image;
+        products[i].usage_unit = Object.keys(units)[products[i].usage_unit_id-1]
+        products[i].category = Object.keys(categories)[products[i].category_id-1]
+        delete products[i].usage_unit_id
+        delete products[i].category_id
+    }
+        console.log( "products : ", products )
+        return products;
+
+    }
+    catch (error: any) {
+        return error
+    }
+
+}
+
 
 const updateProductById = async (req: any) => {
 
@@ -104,7 +164,6 @@ const updateProductById = async (req: any) => {
                 resolve({ fields: fields, files: files })
             })
         }))
-        let units:any = {"MTS":1,"Tons":2, "Kg":3,"Number":4}, categories:any = {"briquetts":1}
         if (fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
 
         // supplier exists or not
@@ -122,10 +181,10 @@ const updateProductById = async (req: any) => {
             product.packing = fields.packing;
         if (fields.gst !== undefined && fields.gst !== null && fields.gst !== "")
             product.gst = fields.gst;
-        if (fields.unit !== undefined && fields.unit !== null && fields.unit !== ""){
-         product.usage_unit_id = units[fields.usage_unit]}
+        if (fields.usage_unit !== undefined && fields.usage_unit !== null && fields.usage_unit !== ""){
+         product.usage_unit_id = fields.usage_unit }
         if (fields.category !== undefined && fields.category !== null && fields.category !== ""){
-        product.category_id=categories[fields.category]}
+        product.category_id=fields.category }
         
         // Files validation
         if (files.image !== undefined && files.image !== null && files.image !== "") {
@@ -147,12 +206,33 @@ const updateProductById = async (req: any) => {
         return error
     }
 
-
 }
 
+
+const updateProductStatus = async (data: any) => {
+
+    try {
+        let ProductObj = new ProductModel()
+        let product = await new ProductModel().fetchProductById( data.id )
+        if( product.length == 0 ) throw new Error( "Product not found")
+        let productData = await new ProductModel().updateProductById(data, data.id);
+        LOGGER.info( "Product details", productData )
+        console.log( productData )
+        return {"changedRows":productData.changedRows};
+    }
+    catch (e){
+        throw e; 
+    }
+
+
+}
 
 export default {
     createProduct,
     fetchProductById,
-    updateProductById
+    updateProductById,
+    fetchAllProducts,
+    updateProductStatus,
+    fetchAllProductCategories,
+    fetchAllProductUsageUnits
 }

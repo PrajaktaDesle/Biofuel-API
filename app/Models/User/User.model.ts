@@ -35,5 +35,27 @@ export  default class UserModel extends BaseModel   {
     async updateUserDetails(data:any, id:number, role_id:number){
         return await this._executeQuery("update user set ? where id = ? and role_id = ? ", [data, id, role_id]);
     }
+    async updateCityDetails(data:any, id:number){
+        return await this._executeQuery("update address_city set ? where id = ?  ", [data, id]);
+    }
+
+    async getProductRawMaterials(){
+        return await this._executeQuery("select * from product_raw_material ", []);
+    }
+
+    async getProductPackaging(){
+        return await this._executeQuery("select * from product_packaging ", []);
+    }
+    async getAllCity(){
+        return await this._executeQuery("select id, name, state_id from address_city",[])
+    }
+    async getAllStates(){
+        return await this._executeQuery( "select id, name from address_state",[])
+    }
+    async getAllCityWiseStates(){
+        return await this._executeQuery("select act.id as city_id, act.name as city , ast.id as state_id, ast.name as state from address_state ast inner join address_city act ON  ast.id = act.state_id",[])
+    }
+    
+
 
 }
