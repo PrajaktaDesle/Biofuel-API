@@ -120,7 +120,6 @@ const fetchSupplierById = async (id: any) => {
         let state = await new SupplierModel().getStateById(city[0].state_id)
         addressS[0].source_city = city[0].name
         addressS[0].source_state = state[0].name
-        delete addressS[0].city_id
         let suppliersProfile = await new SupplierModel().fetchSuppliersProfileById( id )
         Object.assign( supplier[0], suppliersProfile[0], addressS[0], addressB[0]);
 
