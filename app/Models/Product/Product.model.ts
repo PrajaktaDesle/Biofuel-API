@@ -10,11 +10,11 @@ export class ProductModel extends BaseModel
     async createProduct( productData : any ){
         return await this._executeQuery( "insert into products set ? ", [productData] )
     }
-    async fetchProductById( id : any ){
+    async fetchProductById( id : any){
         return await this._executeQuery( "select * from products where id = ? ", [id] )
     }
     async fetchAllProducts(){
-        return await this._executeQuery( "select * from products ", [] )
+        return await this._executeQuery( "select * from products where status = 1", [] )
     }
     async updateProductById( data : any, id : number ){
         return await this._executeQuery( "update products set ? where id = ? ",[data,id] )

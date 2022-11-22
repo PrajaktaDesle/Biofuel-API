@@ -79,9 +79,9 @@ const fetchProductById = async (id: number) => {
         if (product.length == 0) {
             throw new Error("Product not found!")
         }
+        product[0].image= config.baseUrl + "/" + product[0].image;
         let category = await new ProductModel().fetchProductCategoryById(product[0].category_id)
         let usage_unit = await new ProductModel().fetchProductUsageUnitById(product[0].usage_unit_id)
-        console.log( "product : ", product )
         product[0].category = category[0].name
         product[0].usage_unit = usage_unit[0].name
         delete product[0].usage_unit_id
