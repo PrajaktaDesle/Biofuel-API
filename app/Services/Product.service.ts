@@ -84,8 +84,6 @@ const fetchProductById = async (id: number) => {
         console.log( "product : ", product )
         product[0].category = category[0].name
         product[0].usage_unit = usage_unit[0].name
-        // product[0].usage_unit = Object.keys(units)[product[0].usage_unit_id-1]
-        // product[0].category = Object.keys(categories)[product[0].category_id-1]
         delete product[0].usage_unit_id
         delete product[0].category_id
         return product;
@@ -178,8 +176,6 @@ const updateProductById = async (req: any) => {
             product.description = fields.description;
         if (fields.hsn !== undefined && fields.hsn !== null && fields.hsn !== "")
             product.hsn = fields.hsn;
-        if (fields.packing !== undefined && fields.packing !== null && fields.packing !== "")
-            product.packing = fields.packing;
         if (fields.gst !== undefined && fields.gst !== null && fields.gst !== "")
             product.gst = fields.gst;
         if (fields.usage_unit !== undefined && fields.usage_unit !== null && fields.usage_unit !== ""){
