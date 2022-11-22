@@ -184,6 +184,27 @@ const formidableUpdateDetails : IController = async (req, res) => {
     }
 };
 
+const getAllCityWiseStates: IController = async (req, res) => {
+    try {
+        let supplier : any = await supplierService.getAllCityWiseStates();
+        if (supplier instanceof Error) {
+            console.log("error", supplier)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+
+            apiResponse.result(res, supplier, httpStatusCodes.CREATED);
+        }
+    } catch (e:any) {
+        console.log("controller ->", e)
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+            return;
+    }
+};
+
 
 
 export default {
@@ -193,5 +214,6 @@ export default {
     fetchAllSuppliers,
     fetchSupplierById,
     updateSuppliersDetails,
-    formidableUpdateDetails
+    formidableUpdateDetails,
+    getAllCityWiseStates
 };

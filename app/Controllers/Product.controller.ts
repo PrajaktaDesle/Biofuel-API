@@ -60,6 +60,47 @@ const fetchProductById : IController = async ( req:any , res:any ) => {
     }
 }
 
+const fetchAllProducts : IController = async ( req:any , res:any ) => {
+    try{
+        let product = await productService.fetchAllProducts( req )
+        if ( product instanceof Error ){
+           return apiResponse.error( res,
+                                    httpStatusCodes.BAD_REQUEST,
+                                    product.message )
+        }
+        else{
+           return apiResponse.result( res,
+                                     product,
+                                     httpStatusCodes.OK )
+        }
+    }
+    catch ( error : any ) {
+        console.log( "Error => ", error )
+        return apiResponse.error( res,
+                                  httpStatusCodes.BAD_REQUEST )
+    }
+}
+
+const fetchAllProductCategories : IController = async ( req:any , res:any ) => {
+    try{
+        let product = await productService.fetchAllProductCategories(  )
+        if ( product instanceof Error ){
+           return apiResponse.error( res,
+                                    httpStatusCodes.BAD_REQUEST,
+                                    product.message )
+        }
+        else{
+           return apiResponse.result( res,
+                                     product,
+                                     httpStatusCodes.OK )
+        }
+    }
+    catch ( error : any ) {
+        console.log( "Error => ", error )
+        return apiResponse.error( res,
+                                  httpStatusCodes.BAD_REQUEST )
+    }
+}
 const updateProductById : IController = async ( req:any , res:any ) => {
     try{
         let product = await productService.updateProductById( req )
@@ -80,8 +121,54 @@ const updateProductById : IController = async ( req:any , res:any ) => {
                                   httpStatusCodes.BAD_REQUEST )
     }
 }
+
+const fetchAllProductUsageUnits : IController = async ( req:any , res:any ) => {
+    try{
+        let product = await productService.fetchAllProductUsageUnits(  )
+        if ( product instanceof Error ){
+           return apiResponse.error( res,
+                                    httpStatusCodes.BAD_REQUEST,
+                                    product.message )
+        }
+        else{
+           return apiResponse.result( res,
+                                     product,
+                                     httpStatusCodes.OK )
+        }
+    }
+    catch ( error : any ) {
+        console.log( "Error => ", error )
+        return apiResponse.error( res,
+                                  httpStatusCodes.BAD_REQUEST )
+    }
+}
+
+const updateProductStatus : IController = async ( req:any , res:any ) => {
+    try{
+        let product = await productService.updateProductStatus( req.body )
+        if ( product instanceof Error ){
+           return apiResponse.error( res,
+                                    httpStatusCodes.BAD_REQUEST,
+                                    product.message )
+        }
+        else{
+           return apiResponse.result( res,
+                                     product,
+                                     httpStatusCodes.OK )
+        }
+    }
+    catch ( error : any ) {
+        console.log( "Error => ", error )
+        return apiResponse.error( res,
+                                  httpStatusCodes.BAD_REQUEST )
+    }
+}
 export default {
     createProduct,
     fetchProductById,
-    updateProductById
+    updateProductById,
+    fetchAllProducts,
+    updateProductStatus,
+    fetchAllProductCategories,
+    fetchAllProductUsageUnits
 }
