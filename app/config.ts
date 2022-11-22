@@ -2,11 +2,11 @@ const env = process.env;
 
 export = {
     DB : { /* don't expose password or any sensitive info, done only for demo */
-        host: env.MASTER_DB_HOST || 'localhost'
+        host: env.MASTER_DB_HOST || 'biofuel-dev.cv4sxbnijnr7.ap-south-1.rds.amazonaws.com'
         ,
         user: env.MASTER_DB_USER || 'root'
         ,
-        password: env.MASTER_DB_PASSWORD  || 'root@123'
+        password: env.MASTER_DB_PASSWORD  || 'Biofuel#$789'
         ,
         database: env.MASTER_DB_NAME || 'biofuel'
         ,

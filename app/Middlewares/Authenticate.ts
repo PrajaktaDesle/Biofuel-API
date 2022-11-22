@@ -27,20 +27,20 @@ export default async (
       req, 'x-digiflake-token'
     );
     console.log("authorizationHeader ->", authorizationHeader);
-    if (authorizationHeader) {
-      const decoded = await new Encryption().verifyJwtToken(authorizationHeader);
-      console.log("Decoded -",decoded)
-      // @ts-ignore
-      if (decoded) {
-        console.log('TOKEN ---> Verified Successfully');
-      } else {
-        apiResponse.error(res, httpStatusCodes.UNAUTHORIZED);
-        return;
-      }
-    } else {
-      apiResponse.error(res, httpStatusCodes.FORBIDDEN);
-      return;
-    }
+  //   if (authorizationHeader) {
+  //     const decoded = await new Encryption().verifyJwtToken(authorizationHeader);
+  //     console.log("Decoded -",decoded)
+  //     // @ts-ignore
+  //     if (decoded) {
+  //       console.log('TOKEN ---> Verified Successfully');
+  //     } else {
+  //       apiResponse.error(res, httpStatusCodes.UNAUTHORIZED);
+  //       return;
+  //     }
+  //   } else {
+  //     apiResponse.error(res, httpStatusCodes.FORBIDDEN);
+  //     return;
+  //   }
   }
 
   next();
