@@ -283,6 +283,53 @@ const getAllCityWiseStates = async ( ) =>{
     console.log( data )
     return data 
 }
+const getAllCities = async ( ) =>{
+    let data = await new SupplierModel().getAllCities()
+    if (data.length == 0) {
+            throw new Error("Cities not found!")
+        }
+    console.log( data )
+    return data 
+}
+
+const getAllStates = async ( ) =>{
+    let data = await new SupplierModel().getAllStates()
+    if (data.length == 0) {
+            throw new Error("States not found!")
+        }
+    console.log( data )
+    return data 
+}
+
+const getAllRawMaterials = async ( ) =>{
+    let data = await new SupplierModel().getAllRawMaterials()
+    if (data.length == 0) {
+            throw new Error("Raw materials not found!")
+        }
+    console.log( data )
+    return data 
+}
+
+const getAllPackaging = async ( ) =>{
+    let data = await new SupplierModel().getAllPackaging()
+    if (data.length == 0) {
+            throw new Error("packaging not found!")
+        }
+    console.log( data )
+    return data 
+}
+
+const getHomePage = async ( ) =>{
+    let data = await new SupplierModel().getHomePage()
+    if (data.length == 0) {
+            throw new Error("Home Page not found!")
+        }
+    console.log( data )
+    return data 
+}
+
+
+
 
 export default {
     createSupplier,
@@ -292,5 +339,10 @@ export default {
     updateSuppliersDetails,
     formidableUpdateDetails,
     verify_supplier_otp,
-    getAllCityWiseStates
+    getAllCityWiseStates,
+    getAllCities,
+    getAllStates,
+    getAllRawMaterials,
+    getAllPackaging,
+    getHomePage
 }
