@@ -22,11 +22,10 @@ export default class ApiResponse {
        /* if (cookie) {
             res.cookie(cookie.key, cookie.value);
         }*/
-        result = { "data" : result }
         res.json({
-            result,
-            success: true,
-            status
+            status,
+            message: "SUCCESS",
+            result
         });
     };
 
@@ -38,11 +37,9 @@ export default class ApiResponse {
     ) => {
         res.status(status).json({
             //override,
-            error: {
-                message: error,
-            },
-            success: false,
-            status
+            status,
+            message: error,
+            result:null
         });
     };
 
