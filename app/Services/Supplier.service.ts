@@ -56,19 +56,19 @@ const createSupplier = async (req:any) =>{
         s3Images = {"aadhaar_url":fl.aadhaar_url,"pan_url":fl.pan_url,"gstin_url":fl.gstin_url,"msme_url":fl.msme_url}
         const s3Paths = await uploadFiles( s3Images )
 
-        let user = {"name":fd.name,"mobile":fd.mobile,"email":fd.email,"role_id":3}
+        // Saving supplier details to the database
+        let user = {"name":fd.name,"mobile":fd.contact_no,"email":fd.email,"role_id":3}
         suppliersData = await new SupplierModel().createUser( user )
         let user_id = suppliersData.insertId
-        let profile = {"aadhaar_no":fd.aadhaar_no,"pan_no":fd.pan_no,"gstin_no":fd.gstin_no,"msme_no":fd.msme_no,"user_id":user_id}
+        let profile = {"aadhaar_no":fd.aadhaar_no,"pan_no":fd.pan_no,"gstin":fd.gstin_no,"msme_no":fd.msme_no,"user_id":user_id}
         Object.assign( profile, s3Paths );
-        let SupplierObj = new SupplierModel()
-        await SupplierObj.supplierRawMaterialMapping({"supplier_id":user_id,"raw_material_id":fd.raw_material})
-        await SupplierObj.supplierPackagingMapping({"supplier_id":user_id,"packaging":fd.packaging})
-        suppliersProfile = await SupplierObj.createSuppliersProfile( profile )
+        await new SupplierModel().supplierRawMaterialMapping({"supplier_id":user_id,"raw_material_id":fd.raw_material})
+        await new SupplierModel().supplierPackagingMapping({"supplier_id":user_id,"packaging":fd.packaging})
+        suppliersProfile = await new SupplierModel().createSuppliersProfile( profile )
         let addressB = {"address_type":"billing","address":fd.billing_address,"user_type":1,"user_id":user_id} 
-        suppliersAddress = await SupplierObj.createSuppliersAddress( addressB )
+        suppliersAddress = await new SupplierModel().createSuppliersAddress( addressB )
         let addressS = {"address_type":"source","address":fd.source_address,"pincode":fd.source_pincode,"city_id":fd.city,"longitude":fd.longitude,"latitude":fd.latitude,"user_type":1,"user_id":user_id}
-        suppliersAddress = await SupplierObj.createSuppliersAddress( addressS )
+        suppliersAddress = await new SupplierModel().createSuppliersAddress( addressS )
 
         return suppliersData;
 
@@ -95,8 +95,8 @@ const fetchAllSuppliers = async ( ) =>{
         let addressS = await new SupplierModel().fetchSuppliersSourceAddressById( supplierData[i].id )
         let city = await new SupplierModel().getCityById(addressS[0].city_id)
         let state = await new SupplierModel().getStateById(city[0].state_id)
-        addressS[0].city = city[0].name
-        addressS[0].state = state[0].name
+        addressS[0].source_city = city[0].name
+        addressS[0].source_state = state[0].name
         delete addressS[0].city_id
         Object.assign( supplierData[i] , profile[0], addressB[0], addressS[0] )
     }
@@ -111,17 +111,16 @@ const isFileNotValid = (type:any) => {
 
 const fetchSupplierById = async (id: any) => {
     try {
-        let SupplierObj = new SupplierModel()
-        let supplier = await SupplierObj.fetchUserById( id, 3 );
+        let supplier = await new SupplierModel().fetchUserById( id, 3 );
         if (supplier.length == 0) throw new Error("Supplier not found");
         let addressB = await new SupplierModel().fetchSuppliersBillingAddressById( supplier[0].id )
         let addressS = await new SupplierModel().fetchSuppliersSourceAddressById( supplier[0].id )
         let city = await new SupplierModel().getCityById(addressS[0].city_id)
         let state = await new SupplierModel().getStateById(city[0].state_id)
-        addressS[0].city = city[0].name
-        addressS[0].state = state[0].name
+        addressS[0].source_city = city[0].name
+        addressS[0].source_state = state[0].name
         delete addressS[0].city_id
-        let suppliersProfile = await SupplierObj.fetchSuppliersProfileById( id )
+        let suppliersProfile = await new SupplierModel().fetchSuppliersProfileById( id )
         Object.assign( supplier[0], suppliersProfile[0], addressS[0], addressB[0]);
 
         // Adding Baseurl to panurl from database
@@ -141,10 +140,9 @@ const fetchSupplierById = async (id: any) => {
 
 const updateSuppliersDetails = async (data:any) => {
     try {
-        let SupplierObj = new SupplierModel()
-        let supplier = await SupplierObj.fetchUserById( data.id, 3 )
+        let supplier = await new SupplierModel().fetchUserById( data.id, 3 )
         if( supplier.length == 0 ) throw new Error( "no supplier found")
-        let supplierData = await SupplierObj.updateUserDetails(data, 1, 3);
+        let supplierData = await new SupplierModel().updateUserDetails(data, data.id, 3);
         LOGGER.info( "supplier details", supplierData )
         console.log( supplierData )
         return {"changedRows":supplierData.changedRows};
@@ -164,13 +162,12 @@ const formidableUpdateDetails = async (req:any) =>{
         
         let id=Number(fd.id);
         let updatedSupplier : any = {}, profile : any = {}, addressB : any = {}, addressS:any = {}, result:any = {}, city:any = {}, state:any = {};
-        let Obj = new SupplierModel();
 
         // id field validation
         if(fd.id == undefined || fd.id == null || fd.id == "") throw new Error("id is missing");
 
         // supplier exists or not
-        let supplier = await Obj.fetchUserById( fd.id, 3 )
+        let supplier = await new SupplierModel().fetchUserById( fd.id, 3 )
         if( supplier.length == 0 ) throw new Error( "Supplier not found" )
 
         // Fields validation
@@ -200,7 +197,7 @@ const formidableUpdateDetails = async (req:any) =>{
         if(fd.pan_no !== undefined && fd.pan_no !== null && fd.pan_no !== "") 
         profile.pan_no=fd.pan_no;
         if(fd.gstin_no !== undefined && fd.gstin_no !== null && fd.gstin_no !== "") 
-        profile.gstin_no=fd.gstin_no;
+        profile.gstin=fd.gstin_no;
         if(fd.msme_no !== undefined && fd.msme_no !== null && fd.msme_no !== "") 
         profile.msme_no=fd.msme_no;
  
@@ -219,11 +216,11 @@ const formidableUpdateDetails = async (req:any) =>{
         if( Object.keys(s3Images).length ){ const s3Paths = await uploadFiles( s3Images ); Object.assign(profile, s3Paths); }
         console.log( "profile : ", profile )
 
-        // supplier Model calls
-        if( Object.keys(updatedSupplier).length  ){ Obj.updateUserDetails(updatedSupplier,fd.id,3).then((data)=>{console.log("supplier details updated successfully")})}
-        if( Object.keys(profile).length  ){ Obj.updateSuppliersProfileDetails(profile,fd.id).then((data)=>{console.log("supplier's profile details updated successfully")})}
-        if( Object.keys(addressB).length ){ Obj.updateSuppliersAddressDetails(addressB,fd.id,"billing").then((data)=>{console.log("supplier's billing address details updated successfully")})}
-        if( Object.keys(addressS).length ){ Obj.updateSuppliersAddressDetails(addressS,fd.id,"source").then((data)=>{console.log("supplier's source address details updated successfully")})}
+        // Saving the data to the database
+        if( Object.keys(updatedSupplier).length  ){await new SupplierModel().updateUserDetails(updatedSupplier,fd.id,3).then((data)=>{console.log("supplier details updated successfully")})}
+        if( Object.keys(profile).length  ){ await new SupplierModel().updateSuppliersProfileDetails(profile,fd.id).then((data)=>{console.log("supplier's profile details updated successfully")})}
+        if( Object.keys(addressB).length ){ await new SupplierModel().updateSuppliersAddressDetails(addressB,fd.id,"billing").then((data)=>{console.log("supplier's billing address details updated successfully")})}
+        if( Object.keys(addressS).length ){ await new SupplierModel().updateSuppliersAddressDetails(addressS,fd.id,"source").then((data)=>{console.log("supplier's source address details updated successfully")})}
         return {"message" : "supplier updated successfully","changedRows":1};
     }catch(e){
         console.log("Exception ->", e);
@@ -233,8 +230,8 @@ const formidableUpdateDetails = async (req:any) =>{
 
 const loginSupplier = async ( data : any ) => {
     try{
-        let SupplierObj = new SupplierModel()
-        let supplier = await SupplierObj.fetchUserByMobile( data.mobile, 3 )
+        
+        let supplier = await new SupplierModel().fetchUserByMobile( data.mobile, 3 )
         LOGGER.info( "service.supplier", supplier )
         if ( supplier.length === 0 ) throw new Error( "User does not exist");
         if ( supplier[0].status !== 1 ) throw new Error( "Your account is not active");
@@ -248,7 +245,7 @@ const loginSupplier = async ( data : any ) => {
         delete data.mobile;
         data.trials = 3;
         LOGGER.info( "Data before create otp", data)
-        const otp_details = await SupplierObj.createOtp(data)
+        const otp_details = await new SupplierModel().createOtp(data)
         LOGGER.info( "create Otp result", otp_details )
         return { request_id : data.req_id };
     } catch ( e ) {
@@ -259,13 +256,12 @@ const loginSupplier = async ( data : any ) => {
 const verify_supplier_otp = async ( data : any ) => {
     try{
         LOGGER.info( 111, data )
-        let SupplierObj = new SupplierModel()
-        let otp_details = await SupplierObj.getSupplierOtp( data )
+        let otp_details = await new SupplierModel().getSupplierOtp( data )
         if ( otp_details.length === 0 ) throw new Error( "Error in login" )
         if ( otp_details[0].trials <= 0 ) throw new Error( "No more trials" )
         if ( parseInt( data.otp ) !== otp_details[0].otp ){
             otp_details[0].trials = otp_details[0].trials - 1;
-            await SupplierObj.updateTrials( otp_details[0].req_id, otp_details[0].trials )
+            await new SupplierModel().updateTrials( otp_details[0].req_id, otp_details[0].trials )
             throw new Error( "Incorrect OTP ")
         }
         let now = moment().format("YYYY-MM-DD HH:mm:ss");

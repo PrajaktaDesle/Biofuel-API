@@ -11,7 +11,7 @@ import { off } from "process";
 const fs = require('fs')
 import AWS from 'aws-sdk';
 
-let units:any = {"MTS":1,"Tons":2, "Kg":3,"Number":4}, categories:any = {"Briquettes":1,"Pelletes":2, "Loose Biomass":3, "Cashew Doc":4}, status:any = {"active":1,"inactive":2}
+let units:any = {"MTS":1,"Tons":2, "Kg":3,"Number":4}, categories:any = {"Briquettes":1,"Pelletes":2, "Loose Biomass":3, "Cashew DOC":4}, status:any = {"active":1,"inactive":2}
 
 
 const createProduct = async (req: any) => {
@@ -79,12 +79,15 @@ const fetchProductById = async (id: number) => {
         if (product.length == 0) {
             throw new Error("Product not found!")
         }
+        let category = await new ProductModel().fetchProductCategoryById(product[0].category_id)
+        let usage_unit = await new ProductModel().fetchProductUsageUnitById(product[0].usage_unit_id)
         console.log( "product : ", product )
-        product[0].usage_unit = Object.keys(units)[product[0].usage_unit_id-1]
-        product[0].category = Object.keys(categories)[product[0].category_id-1]
+        product[0].category = category[0].name
+        product[0].usage_unit = usage_unit[0].name
+        // product[0].usage_unit = Object.keys(units)[product[0].usage_unit_id-1]
+        // product[0].category = Object.keys(categories)[product[0].category_id-1]
         delete product[0].usage_unit_id
         delete product[0].category_id
-        console.log( "product : ", product )
         return product;
 
     }
@@ -102,7 +105,6 @@ const fetchAllProductCategories= async () => {
             throw new Error("Product categories not found!")
         }
        
-        console.log( "product : ", productC )
         return productC;
 
     }
@@ -120,7 +122,6 @@ const fetchAllProductUsageUnits= async () => {
             throw new Error("Product usagae units not found!")
         }
        
-        console.log( "product usage units : ", productUU )
         return productUU;
 
     }
@@ -133,16 +134,16 @@ const fetchAllProducts = async (id: number) => {
 
     try {
         let products = await new ProductModel().fetchAllProducts()
-        console.log( "products : ",  products )
 
         for(let i=0;i< products.length;i++) {
         products[i].image= config.baseUrl + "/" + products[i].image;
-        products[i].usage_unit = Object.keys(units)[products[i].usage_unit_id-1]
-        products[i].category = Object.keys(categories)[products[i].category_id-1]
+        let category = await new ProductModel().fetchProductCategoryById(products[i].category_id)
+        let usage_unit = await new ProductModel().fetchProductUsageUnitById(products[i].usage_unit_id)
+        products[i].category = category[0].name
+        products[i].usage_unit = usage_unit[0].name
         delete products[i].usage_unit_id
         delete products[i].category_id
     }
-        console.log( "products : ", products )
         return products;
 
     }
