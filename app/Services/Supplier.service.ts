@@ -67,7 +67,7 @@ const createSupplier = async (req:any) =>{
         suppliersProfile = await new SupplierModel().createSuppliersProfile( profile )
         let addressB = {"address_type":"billing","address":fd.billing_address,"user_type":1,"user_id":user_id} 
         suppliersAddress = await new SupplierModel().createSuppliersAddress( addressB )
-        let addressS = {"address_type":"source","address":fd.source_address,"pincode":fd.source_pincode,"city_id":fd.city,"longitude":fd.longitude,"latitude":fd.latitude,"user_type":1,"user_id":user_id}
+        let addressS = {"address_type":"source","address":fd.source_address,"pincode":fd.source_pincode,"city_id":fd.source_city,"longitude":fd.longitude,"latitude":fd.latitude,"user_type":1,"user_id":user_id}
         suppliersAddress = await new SupplierModel().createSuppliersAddress( addressS )
 
         return suppliersData;
@@ -115,6 +115,7 @@ const fetchSupplierById = async (id: any) => {
         if (supplier.length == 0) throw new Error("Supplier not found");
         let addressB = await new SupplierModel().fetchSuppliersBillingAddressById( supplier[0].id )
         let addressS = await new SupplierModel().fetchSuppliersSourceAddressById( supplier[0].id )
+        console.log( addressS )
         let city = await new SupplierModel().getCityById(addressS[0].city_id)
         let state = await new SupplierModel().getStateById(city[0].state_id)
         addressS[0].source_city = city[0].name
