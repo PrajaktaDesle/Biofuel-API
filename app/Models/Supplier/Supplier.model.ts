@@ -57,6 +57,7 @@ export class SupplierModel extends UserModel
         return await this._executeQuery( "select id from address_city where name = ? ",[name])
     }
     async getCityById(id:number){
+        console.log('in model--------->', id)
         return await this._executeQuery( "select * from address_city where id = ? ",[id])
     }
     async getStateById(id:number){
