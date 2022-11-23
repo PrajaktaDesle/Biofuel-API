@@ -1,17 +1,7 @@
 import { EstimateModel } from "../Models/Estimates/Estimates.Model";
-import { uploadFile, uploadFiles } from "../utilities/S3Bucket";
 const { v4: uuidv4 } = require('uuid');
-import LOGGER from '../config/LOGGER';
 let config = require('../config')
-import formidable from "formidable";
-import moment from 'moment';
-import Encryption from "../utilities/Encryption";
-import path, { resolve } from "path";
-import { off } from "process";
-const fs = require('fs')
-import AWS from 'aws-sdk';
 
-let units:any = {"MTS":1,"Tons":2, "Kg":3,"Number":4}, categories:any = {"Briquettes":1,"Pelletes":2, "Loose Biomass":3, "Cashew DOC":4}, status:any = {"active":1,"inactive":2}
 
 
 
@@ -24,6 +14,9 @@ const createEstimate = async (data: any) => {
 
         if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "") 
         estimate.estimate_no=data.estimate_id;
+
+        if(data.product !== undefined && data.product !== null && data.product !== "") 
+        estimate.product_id=data.product;
 
         if(data.estimate_date !== undefined && data.estimate_date !== null && data.estimate_date !== "") 
         estimate.estimate_date=data.estimate_date;
@@ -38,14 +31,13 @@ const createEstimate = async (data: any) => {
         estimate.raw_material_id=data.raw_material;
 
         if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "") 
-        estimate.packaging_id=data.estimate_date;
+        estimate.packaging_id=data.packaging;
 
         if(data.estimate_description !== undefined && data.estimate_description !== null && data.estimate_description !== "") 
         estimate.estimate_description=data.estimate_description;
 
         if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "") 
         estimate.quantity=data.quantity;
-
 
         if(data.rate !== undefined && data.rate !== null && data.rate !== "") 
         estimate.rate=data.rate;
@@ -62,29 +54,6 @@ const createEstimate = async (data: any) => {
         if(data.status !== undefined && data.status !== null && data.status !== "") 
         estimate.status=data.status;
         
-          // CREATE TABLE `customer_estimates` (
-    //     `id` int(11) NOT NULL AUTO_INCREMENT,
-    //     `customer_id` int(11) DEFAULT NULL,
-    //     `address_id` int(11) DEFAULT NULL,
-    //     `estimate_no` varchar(100) DEFAULT NULL,
-    //     `estimate_date` date DEFAULT NULL,
-    //     `expiry_date` date DEFAULT NULL,
-    //     `estimate_id` int(11) DEFAULT NULL,
-    //     `raw_material_id` int(11) DEFAULT NULL,
-    //     `packaging_id` int(11) DEFAULT NULL,
-    //     `estimate_description` text,
-    //     `quantity` double DEFAULT NULL COMMENT 'Default as TON\n',
-    //     `estimate_url` varchar(45) DEFAULT NULL,
-    //     `rate` double DEFAULT NULL COMMENT 'Per TON\n',
-    //     `adjustment_amount` double DEFAULT NULL COMMENT 'total_amount = (quantity * rate)  + adjustment_amount',
-    //     `customer_note` text,
-    //     `tnc` text,
-    //     `status` tinyint(1) DEFAULT NULL COMMENT 'Initial -> Draft\nSent for approval -> pending approval\nApproved -> approved\naddress click -> sent\nCustomer says yes -> accepted\nDeclined\nConvert to SO\n\n',
-    //     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-    //     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    //     PRIMARY KEY (`id`)
-    //   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-
         let estimateData = await new EstimateModel().createCustomerEstimate(estimate)
         return estimateData;
 
@@ -101,7 +70,7 @@ const updateEstimate = async (data: any) => {
         let estimate:any = {}, est:any;
         
         if(data.id !== undefined && data.id !== null && data.id !== "") 
-        est= await new EstimateModel().fetchCustomerEstimateById(data.id);
+        est= await new EstimateModel().estimateExistsOrNot(data.id);
         if (est.length == 0 ) throw new Error( "Estimate not found ")
 
         if(data.customer !== undefined && data.customer !== null && data.customer !== "") 
@@ -109,6 +78,9 @@ const updateEstimate = async (data: any) => {
 
         if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "") 
         estimate.estimate_no=data.estimate_id;
+
+        if(data.product !== undefined && data.product !== null && data.product !== "") 
+        estimate.product_id=data.product;
 
         if(data.estimate_date !== undefined && data.estimate_date !== null && data.estimate_date !== "") 
         estimate.estimate_date=data.estimate_date;
@@ -123,14 +95,13 @@ const updateEstimate = async (data: any) => {
         estimate.raw_material_id=data.raw_material;
 
         if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "") 
-        estimate.packaging_id=data.estimate_date;
+        estimate.packaging_id=data.packaging;
 
         if(data.estimate_description !== undefined && data.estimate_description !== null && data.estimate_description !== "") 
         estimate.estimate_description=data.estimate_description;
 
         if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "") 
         estimate.quantity=data.quantity;
-
 
         if(data.rate !== undefined && data.rate !== null && data.rate !== "") 
         estimate.rate=data.rate;
@@ -146,29 +117,6 @@ const updateEstimate = async (data: any) => {
 
         if(data.status !== undefined && data.status !== null && data.status !== "") 
         estimate.status=data.status;
-        
-          // CREATE TABLE `customer_estimates` (
-    //     `id` int(11) NOT NULL AUTO_INCREMENT,
-    //     `customer_id` int(11) DEFAULT NULL,
-    //     `address_id` int(11) DEFAULT NULL,
-    //     `estimate_no` varchar(100) DEFAULT NULL,
-    //     `estimate_date` date DEFAULT NULL,
-    //     `expiry_date` date DEFAULT NULL,
-    //     `estimate_id` int(11) DEFAULT NULL,
-    //     `raw_material_id` int(11) DEFAULT NULL,
-    //     `packaging_id` int(11) DEFAULT NULL,
-    //     `estimate_description` text,
-    //     `quantity` double DEFAULT NULL COMMENT 'Default as TON\n',
-    //     `estimate_url` varchar(45) DEFAULT NULL,
-    //     `rate` double DEFAULT NULL COMMENT 'Per TON\n',
-    //     `adjustment_amount` double DEFAULT NULL COMMENT 'total_amount = (quantity * rate)  + adjustment_amount',
-    //     `customer_note` text,
-    //     `tnc` text,
-    //     `status` tinyint(1) DEFAULT NULL COMMENT 'Initial -> Draft\nSent for approval -> pending approval\nApproved -> approved\naddress click -> sent\nCustomer says yes -> accepted\nDeclined\nConvert to SO\n\n',
-    //     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-    //     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    //     PRIMARY KEY (`id`)
-    //   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 
         let estimateData:any = await new EstimateModel().updateCustomerEstimateById(estimate, data.id )
         return estimateData;
