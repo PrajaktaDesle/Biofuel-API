@@ -151,8 +151,15 @@ const fetchCustomersById = async (id:any) => {
         let customers = await new  Customer().fetchCustomersDetailsById(id)
         if (customers.length == 0) throw new Error(" customer not found!")
         customers[0].gst= config.baseUrl + "/" + customers[0].gstin_url;
-        let address = await new  Customer().fetchCustomerAddress(id)
-        Object.assign(customers[0],address[0])
+        // let address = await new  Customer().fetchCustomerAddress(id)
+        let BAddress = await new Customer().fetchsBillingAddressById(id)
+        let SAddress = await new  Customer().fetchShippingAddressById(id)
+        let city = await new Customer().getCityById(SAddress[0].city_id)
+        let state = await new Customer().getStateById(city[0].state_id)
+        SAddress[0].shipping_city = city[0].name
+        SAddress[0].shipping_state = state[0].name
+        delete SAddress[0].city_id
+        Object.assign(customers[0],SAddress[0], BAddress[0])
         return customers[0];
     }
     catch (error: any) {
@@ -183,7 +190,6 @@ const fetchAll = async () => {
             let id = customers[i].id
             let BAddress = await new Customer().fetchsBillingAddressById(id)
             let SAddress = await new  Customer().fetchShippingAddressById(id)
-            console.log('----------> in service',SAddress)
             let city = await new Customer().getCityById(SAddress[0].city_id)
             let state = await new Customer().getStateById(city[0].state_id)
             SAddress[0].shipping_city = city[0].name
