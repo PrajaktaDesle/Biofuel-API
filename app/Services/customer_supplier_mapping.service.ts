@@ -31,11 +31,11 @@ const CreateCSMService = async(req:any)=>{
 const updateCSMService = async(req:any)=>{
     let result,CSM, data;
     try{
- 
+
         CSM = await new Customer_supplier_mapping_model().fetchCSM(req.body.customer_id,req.body.supplier_id)
         if(CSM.length == 0) throw new Error("id not found");
         data = {"status":req.body.status }
-        console.log("data in service------>", data)
+        // console.log("data in service------>", data)
         result = await new Customer_supplier_mapping_model().updateStatusById(data, req.body.customer_id,req.body.supplier_id)
         LOGGER.info( "Product details", result )
         console.log( result )
