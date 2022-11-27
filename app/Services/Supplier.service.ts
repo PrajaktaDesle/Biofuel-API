@@ -67,7 +67,7 @@ const createSupplier = async (req:any) =>{
         suppliersProfile = await new SupplierModel().createSuppliersProfile( profile )
         let addressB = {"address_type":"billing","address":fd.billing_address,"user_type":1,"user_id":user_id} 
         suppliersAddress = await new SupplierModel().createSuppliersAddress( addressB )
-        let addressS = {"address_type":"source","address":fd.source_address,"pincode":fd.source_pincode,"city_id":fd.city,"longitude":fd.longitude,"latitude":fd.latitude,"user_type":1,"user_id":user_id}
+        let addressS = {"address_type":"source","address":fd.source_address,"pincode":fd.source_pincode,"city_id":fd.source_city,"longitude":fd.longitude,"latitude":fd.latitude,"user_type":1,"user_id":user_id}
         suppliersAddress = await new SupplierModel().createSuppliersAddress( addressS )
 
         return suppliersData;
@@ -115,11 +115,11 @@ const fetchSupplierById = async (id: any) => {
         if (supplier.length == 0) throw new Error("Supplier not found");
         let addressB = await new SupplierModel().fetchSuppliersBillingAddressById( supplier[0].id )
         let addressS = await new SupplierModel().fetchSuppliersSourceAddressById( supplier[0].id )
+        console.log( addressS )
         let city = await new SupplierModel().getCityById(addressS[0].city_id)
         let state = await new SupplierModel().getStateById(city[0].state_id)
         addressS[0].source_city = city[0].name
         addressS[0].source_state = state[0].name
-        delete addressS[0].city_id
         let suppliersProfile = await new SupplierModel().fetchSuppliersProfileById( id )
         Object.assign( supplier[0], suppliersProfile[0], addressS[0], addressB[0]);
 
@@ -283,6 +283,53 @@ const getAllCityWiseStates = async ( ) =>{
     console.log( data )
     return data 
 }
+const getAllCities = async ( ) =>{
+    let data = await new SupplierModel().getAllCities()
+    if (data.length == 0) {
+            throw new Error("Cities not found!")
+        }
+    console.log( data )
+    return data 
+}
+
+const getAllStates = async ( ) =>{
+    let data = await new SupplierModel().getAllStates()
+    if (data.length == 0) {
+            throw new Error("States not found!")
+        }
+    console.log( data )
+    return data 
+}
+
+const getAllRawMaterials = async ( ) =>{
+    let data = await new SupplierModel().getAllRawMaterials()
+    if (data.length == 0) {
+            throw new Error("Raw materials not found!")
+        }
+    console.log( data )
+    return data 
+}
+
+const getAllPackaging = async ( ) =>{
+    let data = await new SupplierModel().getAllPackaging()
+    if (data.length == 0) {
+            throw new Error("packaging not found!")
+        }
+    console.log( data )
+    return data 
+}
+
+const getHomePage = async ( ) =>{
+    let data = await new SupplierModel().getHomePage()
+    if (data.length == 0) {
+            throw new Error("Home Page not found!")
+        }
+    console.log( data )
+    return data 
+}
+
+
+
 
 export default {
     createSupplier,
@@ -292,5 +339,10 @@ export default {
     updateSuppliersDetails,
     formidableUpdateDetails,
     verify_supplier_otp,
-    getAllCityWiseStates
+    getAllCityWiseStates,
+    getAllCities,
+    getAllStates,
+    getAllRawMaterials,
+    getAllPackaging,
+    getHomePage
 }

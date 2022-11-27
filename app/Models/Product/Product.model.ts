@@ -26,10 +26,10 @@ export class ProductModel extends BaseModel
         return await this._executeQuery( "select id, name from product_usage_unit ",[] )
     }
     async fetchProductCategoryById(id:number){
-        return await this._executeQuery( "select name from product_categories where id = ? ",[id])
+        return await this._executeQuery( "select id, name from product_categories where id = ? ",[id])
     }
     async fetchProductUsageUnitById(id:number){
-        return await this._executeQuery( "select name from product_usage_unit where id = ? ",   [id])
+        return await this._executeQuery( "select id, name from product_usage_unit where id = ? ",  [id])
 
     }
 

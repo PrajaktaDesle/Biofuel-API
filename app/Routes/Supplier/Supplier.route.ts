@@ -46,6 +46,26 @@ router.get(
 router.get(
   '/fetch/city/state',
   supplierController.getAllCityWiseStates
-)
+);
+router.get(
+  '/cities/all',
+  supplierController.getAllCities
+);
+router.get(
+  '/states/all',
+  supplierController.getAllStates
+);
+router.get(
+  '/raw_materials/all',
+  supplierController.getAllRawMaterials
+  )
+router.get(
+  '/packaging/all',
+  supplierController.getAllPackaging
+  )
+router.get(
+  '/home/page',
+  supplierController.getHomePage
+  )
 
 export default router;

@@ -84,8 +84,6 @@ const fetchProductById = async (id: number) => {
         let usage_unit = await new ProductModel().fetchProductUsageUnitById(product[0].usage_unit_id)
         product[0].category = category[0].name
         product[0].usage_unit = usage_unit[0].name
-        delete product[0].usage_unit_id
-        delete product[0].category_id
         return product;
 
     }

@@ -53,20 +53,12 @@ export class SupplierModel extends UserModel
     async supplierRawMaterialMapping( data : any){
         return await this._executeQuery( "insert into supplier_raw_material_mapping set ?", [data])
     }
-    async getCity(name:string){
-        return await this._executeQuery( "select id from address_city where name = ? ",[name])
-    }
-    async getCityById(id:number){
-        return await this._executeQuery( "select * from address_city where id = ? ",[id])
-    }
-    async getStateById(id:number){
-        return await this._executeQuery( "select * from address_state where id = ? ",[id])
-    }
-    async getState(name:string){
-        return await this._executeQuery( "select id from address_state where name = ?",[name])
-    }
-      async supplierPackagingMapping( data : any){
+  
+    async supplierPackagingMapping( data : any){
         return await this._executeQuery( "insert into supplier_packaging_mapping set ?", [data])
+    }
+    async getHomePage(){
+        return await this._executeQuery( "select id , name, image_url from app_homepage ",[])
     }
    
 
