@@ -1,5 +1,7 @@
 import * as bodyParser from 'body-parser';
 import express from 'express';
+import cors from 'cors';
+
 const morgan = require('morgan');
 import application from '../Constants/application';
 import indexRoute from '../Routes/index';
@@ -7,6 +9,8 @@ import joiErrorHandler from '../Middlewares/joiErrorHandler';
 import Authenticate from '../Middlewares/Authenticate';
 const app = express();
 import path from 'path';
+
+app.options('*', cors()) // include before other routes
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");

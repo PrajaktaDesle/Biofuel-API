@@ -17,6 +17,5 @@ export default {
         `${base}/admin/login`,
         `${base}/product/categories/all`,
         `${base}/product/usage/units/all`,
-        `${base}/supplier/fetch/city/state`
     ],
 };
