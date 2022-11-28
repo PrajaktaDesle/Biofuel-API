@@ -19,7 +19,12 @@ export class ProductModel extends BaseModel
             "where p.id = ? ", [id] )
     }
     async fetchAllProducts(){
-        return await this._executeQuery( "select * from products where status = 1", [] )
+        return await this._executeQuery( `select p.id , p.name as productName, p.description, p.hsn as hsnCode, p.gst, category_id, pc.name as category,
+                                          usage_unit_id, pu.name as usage_unit, p.status as productStatus 
+                                          from products p
+                                          inner join product_categories pc ON  p.category_id = pc.id
+                                          inner join product_usage_unit pu ON p.usage_unit_id = pu.id  
+                                          where p.status = 1 `, []  )
     }
     async updateProductById( data : any, id : number ){
         return await this._executeQuery( "update products set ? where id = ? ",[data,id] )

@@ -133,12 +133,12 @@ const fetchAllProducts = async (id: number) => {
 
         for(let i=0;i< products.length;i++) {
         products[i].image= config.baseUrl + "/" + products[i].image;
-        let category = await new ProductModel().fetchProductCategoryById(products[i].category_id)
-        let usage_unit = await new ProductModel().fetchProductUsageUnitById(products[i].usage_unit_id)
-        products[i].category = category[0].name
-        products[i].usage_unit = usage_unit[0].name
-        delete products[i].usage_unit_id
-        delete products[i].category_id
+        // let category = await new ProductModel().fetchProductCategoryById(products[i].category_id)
+        // let usage_unit = await new ProductModel().fetchProductUsageUnitById(products[i].usage_unit_id)
+        // products[i].category = category[0].name
+        // products[i].usage_unit = usage_unit[0].name
+        // delete products[i].usage_unit_id
+        // delete products[i].category_id
     }
         return products;
 
