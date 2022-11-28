@@ -20,7 +20,7 @@ export class SupplierModel extends UserModel
     async fetchSuppliersProfileById(id: any ){
         return await this._executeQuery("select aadhaar_no, aadhaar_url, pan_no, pan_url, gstin, gstin_url, msme_no, msme_url from users_profile where user_id = ? ", [id]);
     }  
-    
+
     async fetchSuppliersBillingAddressById(id: any){
         return await this._executeQuery("select user_type,address as `billing_address` from addresses where user_id = ? and address_type = ? ", [id, "billing"]);
     }
@@ -59,7 +59,5 @@ export class SupplierModel extends UserModel
     async getHomePage(){
         return await this._executeQuery( "select id , name, image_url from app_homepage ",[])
     }
-   
-
 
 }

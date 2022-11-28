@@ -29,19 +29,5 @@ router.put(
   estimateController.udpateEstimate
 );
 
-// router.put( 
-//   '/update/status',
-//   estimateController.updateProductStatus
-// );
-
-// router.get( 
-//   '/categories/all',
-//   estimateController.fetchAllProductCategories
-// );
-
-// router.get( 
-//   '/usage/units/all',
-//   estimateController.fetchAllProductUsageUnits
-// )
 
 export default router;

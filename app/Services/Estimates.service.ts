@@ -2,9 +2,6 @@ import { EstimateModel } from "../Models/Estimates/Estimates.Model";
 const { v4: uuidv4 } = require('uuid');
 let config = require('../config')
 
-
-
-
 const createEstimate = async (data: any) => {
     try {
         let customerData;
@@ -62,8 +59,6 @@ const createEstimate = async (data: any) => {
         throw e;
     }
 }
-
-
 
 const updateEstimate = async (data: any) => {
     try {
@@ -127,13 +122,6 @@ const updateEstimate = async (data: any) => {
     }
 }
 
-// const fileNotValid = (type: any) => {
-//     if (type == 'image/jpeg' || type == 'image/jpg' || type == 'image/png') {
-//         return false;
-//     }
-//     return true;
-// };
-
 const fetchEstimateById = async (id: number) => {
 
     try {
@@ -151,39 +139,6 @@ const fetchEstimateById = async (id: number) => {
 
 }
 
-// const fetchAllestimateCategories= async () => {
-
-//     try {
-//         let estimateC = await new estimateModel().fetchAllestimateCategories()
-//         if (estimateC.length == 0) {
-//             throw new Error("estimate categories not found!")
-//         }
-       
-//         return estimateC;
-
-//     }
-//     catch (error: any) {
-//         return error
-//     }
-
-// }
-
-// const fetchAllestimateUsageUnits= async () => {
-
-//     try {
-//         let estimateUU = await new estimateModel().fetchAllestimateUsageUnits()
-//         if (estimateUU.length == 0) {
-//             throw new Error("estimate usagae units not found!")
-//         }
-       
-//         return estimateUU;
-
-//     }
-//     catch (error: any) {
-//         return error
-//     }
-
-// }
 const fetchAllestimates = async () => {
 
     try {
@@ -202,86 +157,11 @@ const fetchAllestimates = async () => {
 }
 
 
-// const updateestimateById = async (req: any) => {
-
-//     try {
-//         let estimate: any = {}
-//         let fields, files;
-//         //@ts-ignore
-//         ({ fields, files } = await new Promise((resolve) => {
-//             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
-//                 resolve({ fields: fields, files: files })
-//             })
-//         }))
-//         if (fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
-
-//         // supplier exists or not
-//         let pd = await new estimateModel().fetchestimateById(fields.id)
-//         if (pd.length == 0) throw new Error("estimate not found!")
-
-//         // Fields validation
-//         if (fields.estimate !== undefined && fields.estimate !== null && fields.estimate !== "")
-//             estimate.estimate = fields.estimate;
-//         if (fields.description !== undefined && fields.description !== null && fields.description !== "")
-//             estimate.description = fields.description;
-//         if (fields.hsn !== undefined && fields.hsn !== null && fields.hsn !== "")
-//             estimate.hsn = fields.hsn;
-//         if (fields.gst !== undefined && fields.gst !== null && fields.gst !== "")
-//             estimate.gst = fields.gst;
-//         if (fields.usage_unit !== undefined && fields.usage_unit !== null && fields.usage_unit !== ""){
-//          estimate.usage_unit_id = fields.usage_unit }
-//         if (fields.category !== undefined && fields.category !== null && fields.category !== ""){
-//         estimate.category_id=fields.category }
-        
-//         // Files validation
-//         if (files.image !== undefined && files.image !== null && files.image !== "") {
-//             if (fileNotValid(files.image.mimetype)){ throw new Error("Only .png, .jpg and .jpeg format allowed! for image") }
-//             else{ 
-//                   let estimate: string = "images/image/" + moment().unix() + "." + files['image'].originalFilecustomer.split(".").pop()
-//                   const result = await uploadFile(files['image'], estimate);
-//                   if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
-//                   console.log("s3 result  : ", result)
-//                   estimate['image'] = result.key;
-//                 }
-//         }
-//         console.log( 'estimate : ',estimate )
-//         let estimateData = await new estimateModel().updateestimateById( estimate, fields.id )
-//         return estimateData;
-
-//     }
-//     catch (error: any) {
-//         return error
-//     }
-
-// }
-
-
-// const updateestimateStatus = async (data: any) => {
-
-//     try {
-//         let estimateObj = new estimateModel()
-//         let estimate = await new estimateModel().fetchestimateById( data.id )
-//         if( estimate.length == 0 ) throw new Error( "estimate not found")
-//         let estimateData = await new estimateModel().updateestimateById(data, data.id);
-//         LOGGER.info( "estimate details", estimateData )
-//         console.log( estimateData )
-//         return {"changedRows":estimateData.changedRows};
-//     }
-//     catch (e){
-//         throw e; 
-//     }
-
-
-// }
 
 export default {
     createEstimate,
     updateEstimate,
     fetchEstimateById,
     fetchAllestimates
-    // updateestimateById,
-    // fetchAllestimates,
-    // updateestimateStatus,
-    // fetchAllestimateCategories,
-    // fetchAllestimateUsageUnits
+   
 }
