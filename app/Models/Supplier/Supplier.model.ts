@@ -44,12 +44,12 @@ export class SupplierModel extends UserModel
     async updateTrials( req_id : any, trials : any){
         return await this._executeQuery( "update users_login_logs set trials = ? where req_id = ?", [trials, req_id])
     }
-    async getRawMaterial(name:string){
-        return await this._executeQuery( "select id from product_raw_material where name = ?", [name])
-    }
-    async getPackaging(name:string){
-        return await this._executeQuery( "select id from product_packaging where name = ?", [name])
-    }
+    // async getRawMaterial(name:string){
+    //     return await this._executeQuery( "select id from product_raw_material where name = ?", [name])
+    // }
+    // async getPackaging(name:string){
+    //     return await this._executeQuery( "select id from product_packaging where name = ?", [name])
+    // }
     async supplierRawMaterialMapping( data : any){
         return await this._executeQuery( "insert into supplier_raw_material_mapping set ?", [data])
     }

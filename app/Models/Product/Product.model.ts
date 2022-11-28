@@ -30,7 +30,25 @@ export class ProductModel extends BaseModel
     }
     async fetchProductUsageUnitById(id:number){
         return await this._executeQuery( "select id, name from product_usage_unit where id = ? ",  [id])
-
     }
+    async fetchAllProductPackaging(){
+        return await this._executeQuery( "select id, name from  product_packaging",[])
+    }
+    async fetchRawMaterialByName(name:string){
+        return await this._executeQuery( "select id from product_raw_material where name = ?", [name])
+    }
+    async fetchAllProductRawMaterials(){
+        return await this._executeQuery( "select id, name from  product_raw_material",[])
+    }
+    async fetchProductPackagingByName(name:string){
+        return await this._executeQuery( "select id from product_packaging where name = ?", [name])
+    }
+    // async getProductRawMaterials(){
+    //     return await this._executeQuery("select * from product_raw_material ", []);
+    // }
+
+    // async getProductPackaging(){
+    //     return await this._executeQuery("select * from product_packaging ", []);
+    // }
 
 }

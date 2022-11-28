@@ -39,25 +39,25 @@ export  default class UserModel extends BaseModel   {
         return await this._executeQuery("update address_city set ? where id = ?  ", [data, id]);
     }
 
-    async getProductRawMaterials(){
-        return await this._executeQuery("select * from product_raw_material ", []);
-    }
+    // async getProductRawMaterials(){
+    //     return await this._executeQuery("select * from product_raw_material ", []);
+    // }
 
-    async getProductPackaging(){
-        return await this._executeQuery("select * from product_packaging ", []);
-    }
+    // async getProductPackaging(){
+    //     return await this._executeQuery("select * from product_packaging ", []);
+    // }
     async getAllCities(){
         return await this._executeQuery("select id, name, state_id from address_city",[])
     }
     async getAllStates(){
         return await this._executeQuery( "select id, name from address_state",[])
     }
-    async getAllRawMaterials(){
-        return await this._executeQuery( "select id, name from  product_raw_material",[])
-    }
-    async getAllPackaging(){
-        return await this._executeQuery( "select id, name from  product_packaging",[])
-    }
+    // async getAllRawMaterials(){
+    //     return await this._executeQuery( "select id, name from  product_raw_material",[])
+    // }
+    // async getAllPackaging(){
+    //     return await this._executeQuery( "select id, name from  product_packaging",[])
+    // }
     async getAllCityWiseStates(){
         return await this._executeQuery("select act.id as city_id, act.name as city , ast.id as state_id, ast.name as state from address_state ast inner join address_city act ON  ast.id = act.state_id",[])
     }
@@ -73,6 +73,11 @@ export  default class UserModel extends BaseModel   {
     async getState(name:string){
         return await this._executeQuery( "select id from address_state where name = ?",[name])
     }
-
+    // async getRawMaterial(name:string){
+    //     return await this._executeQuery( "select id from product_raw_material where name = ?", [name])
+    // }
+    // async getPackaging(name:string){
+    //     return await this._executeQuery( "select id from product_packaging where name = ?", [name])
+    // }
 
 }

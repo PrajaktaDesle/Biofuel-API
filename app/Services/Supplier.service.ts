@@ -301,24 +301,6 @@ const getAllStates = async ( ) =>{
     return data 
 }
 
-const getAllRawMaterials = async ( ) =>{
-    let data = await new SupplierModel().getAllRawMaterials()
-    if (data.length == 0) {
-            throw new Error("Raw materials not found!")
-        }
-    console.log( data )
-    return data 
-}
-
-const getAllPackaging = async ( ) =>{
-    let data = await new SupplierModel().getAllPackaging()
-    if (data.length == 0) {
-            throw new Error("packaging not found!")
-        }
-    console.log( data )
-    return data 
-}
-
 const getHomePage = async ( ) =>{
     let data = await new SupplierModel().getHomePage()
     if (data.length == 0) {
@@ -342,7 +324,5 @@ export default {
     getAllCityWiseStates,
     getAllCities,
     getAllStates,
-    getAllRawMaterials,
-    getAllPackaging,
     getHomePage
 }

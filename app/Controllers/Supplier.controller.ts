@@ -247,47 +247,6 @@ const getAllStates: IController = async (req, res) => {
     }
 };
 
-const getAllRawMaterials: IController = async (req, res) => {
-    try {
-        let rawMaterials : any = await supplierService.getAllRawMaterials();
-        if (rawMaterials instanceof Error) {
-            console.log("error", rawMaterials)
-            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
-        } else {
-
-            apiResponse.result(res, rawMaterials, httpStatusCodes.OK);
-        }
-    } catch (e:any) {
-        console.log("controller ->", e)
-            apiResponse.error(
-                res,
-                httpStatusCodes.BAD_REQUEST,
-                e.message
-            );
-            return;
-    }
-};
-
-const getAllPackaging: IController = async (req, res) => {
-    try {
-        let packaging : any = await supplierService.getAllPackaging();
-        if (packaging instanceof Error) {
-            console.log("error", packaging)
-            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
-        } else {
-
-            apiResponse.result(res, packaging, httpStatusCodes.OK);
-        }
-    } catch (e:any) {
-        console.log("controller ->", e)
-            apiResponse.error(
-                res,
-                httpStatusCodes.BAD_REQUEST,
-                e.message
-            );
-            return;
-    }
-};
 const getHomePage: IController = async (req, res) => {
     try {
         let homePage : any = await supplierService.getHomePage();
@@ -324,7 +283,5 @@ export default {
     getAllCityWiseStates,
     getAllCities,
     getAllStates,
-    getAllRawMaterials,
-    getAllPackaging,
     getHomePage
 };
