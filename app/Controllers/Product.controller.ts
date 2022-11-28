@@ -43,14 +43,18 @@ const fetchProductById : IController = async ( req:any , res:any ) => {
     try{
         let product = await productService.fetchProductById( req.query.id )
         if ( product instanceof Error ){
-           return apiResponse.error( res,
+            return apiResponse.error( res,
                                     httpStatusCodes.BAD_REQUEST,
                                     product.message )
         }
-        else{
-           return apiResponse.result( res,
-                                     product,
+        else if(product.length > 0){
+            return apiResponse.result( res,
+                                     product[0],
                                      httpStatusCodes.OK )
+        }else{
+            return apiResponse.error( res,
+                httpStatusCodes.BAD_REQUEST,
+                "No Product Found");
         }
     }
     catch ( error : any ) {
