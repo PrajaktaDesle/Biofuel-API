@@ -43,12 +43,5 @@ export class ProductModel extends BaseModel
     async fetchProductPackagingByName(name:string){
         return await this._executeQuery( "select id from product_packaging where name = ?", [name])
     }
-    // async getProductRawMaterials(){
-    //     return await this._executeQuery("select * from product_raw_material ", []);
-    // }
-
-    // async getProductPackaging(){
-    //     return await this._executeQuery("select * from product_packaging ", []);
-    // }
 
 }
