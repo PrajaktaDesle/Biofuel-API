@@ -12,10 +12,10 @@ export class ProductModel extends BaseModel
     }
     async fetchProductById( id : any){
         return await this._executeQuery( "select p.id , p.name as productName, p.description, p.hsn as hsnCode, p.gst, category_id, pc.name as category,\n" +
-            "usage_unit_id, pu.name as usage_unit, p.status as productStatus \n" +
+            "usage_unit_id, pu.name as usage_unit, p.status \n" +
             "from products p\n" +
-            "inner join product_categories pc ON  p.category_id = pc.id\n" +
-            "inner join product_usage_unit pu ON p.usage_unit_id = pu.id  " +
+            "LEFT join product_categories pc ON  p.category_id = pc.id\n" +
+            "LEFT join product_usage_unit pu ON p.usage_unit_id = pu.id  " +
             "where p.id = ? ", [id] )
     }
     async fetchAllProducts(){
