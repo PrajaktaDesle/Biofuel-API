@@ -29,7 +29,6 @@ export class EstimateModel extends BaseModel
     async updateCustomerEstimateById( data : any, id : number ){
         return await this._executeQuery( "update customer_estimates set ? where id = ? ",[data,id] )
     }
-    
     async estimateExistsOrNot( id : number ){
         return await this._executeQuery( "select id from customer_estimates where id = ? ",[id] )
     }
