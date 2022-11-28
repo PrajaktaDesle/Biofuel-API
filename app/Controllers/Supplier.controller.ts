@@ -149,7 +149,7 @@ const updateSuppliersDetails: IController = async (req, res) => {
                 );
             }else{
                 console.log("user 3", supplier)
-                apiResponse.result(res, supplier, httpStatusCodes.OK);
+                apiResponse.result(res, supplier, httpStatusCodes.CREATED);
             }
         }).catch(err => {
         console.log("Error  ->", err);
@@ -192,7 +192,111 @@ const getAllCityWiseStates: IController = async (req, res) => {
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
 
-            apiResponse.result(res, supplier, httpStatusCodes.CREATED);
+            apiResponse.result(res, supplier, httpStatusCodes.OK);
+        }
+    } catch (e:any) {
+        console.log("controller ->", e)
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+            return;
+    }
+};
+
+const getAllCities: IController = async (req, res) => {
+    try {
+        let cities : any = await supplierService.getAllCities();
+        if (cities instanceof Error) {
+            console.log("error", cities)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+
+            apiResponse.result(res, cities, httpStatusCodes.OK);
+        }
+    } catch (e:any) {
+        console.log("controller ->", e)
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+            return;
+    }
+};
+
+const getAllStates: IController = async (req, res) => {
+    try {
+        let states : any = await supplierService.getAllStates();
+        if (states instanceof Error) {
+            console.log("error", states)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+
+            apiResponse.result(res, states, httpStatusCodes.OK);
+        }
+    } catch (e:any) {
+        console.log("controller ->", e)
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+            return;
+    }
+};
+
+const getAllRawMaterials: IController = async (req, res) => {
+    try {
+        let rawMaterials : any = await supplierService.getAllRawMaterials();
+        if (rawMaterials instanceof Error) {
+            console.log("error", rawMaterials)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+
+            apiResponse.result(res, rawMaterials, httpStatusCodes.OK);
+        }
+    } catch (e:any) {
+        console.log("controller ->", e)
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+            return;
+    }
+};
+
+const getAllPackaging: IController = async (req, res) => {
+    try {
+        let packaging : any = await supplierService.getAllPackaging();
+        if (packaging instanceof Error) {
+            console.log("error", packaging)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+
+            apiResponse.result(res, packaging, httpStatusCodes.OK);
+        }
+    } catch (e:any) {
+        console.log("controller ->", e)
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+            return;
+    }
+};
+const getHomePage: IController = async (req, res) => {
+    try {
+        let homePage : any = await supplierService.getHomePage();
+        if (homePage instanceof Error) {
+            console.log("error", homePage)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+
+            apiResponse.result(res, homePage, httpStatusCodes.OK);
         }
     } catch (e:any) {
         console.log("controller ->", e)
@@ -207,6 +311,8 @@ const getAllCityWiseStates: IController = async (req, res) => {
 
 
 
+
+
 export default {
     register,
     login,
@@ -215,5 +321,10 @@ export default {
     fetchSupplierById,
     updateSuppliersDetails,
     formidableUpdateDetails,
-    getAllCityWiseStates
+    getAllCityWiseStates,
+    getAllCities,
+    getAllStates,
+    getAllRawMaterials,
+    getAllPackaging,
+    getHomePage
 };

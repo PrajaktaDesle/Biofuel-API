@@ -116,7 +116,7 @@ const updateProductById : IController = async ( req:any , res:any ) => {
         else{
            return apiResponse.result( res,
                                      product,
-                                     httpStatusCodes.OK )
+                                     httpStatusCodes.CREATED )
         }
     }
     catch ( error : any ) {
@@ -158,7 +158,7 @@ const updateProductStatus : IController = async ( req:any , res:any ) => {
         else{
            return apiResponse.result( res,
                                      product,
-                                     httpStatusCodes.OK )
+                                     httpStatusCodes.CREATED )
         }
     }
     catch ( error : any ) {
