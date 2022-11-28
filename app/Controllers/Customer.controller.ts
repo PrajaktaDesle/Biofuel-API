@@ -1,16 +1,14 @@
 import httpStatusCodes from 'http-status-codes';
 import IController from '../Types/IController';
 import apiResponse from '../utilities/ApiResponse';
-import customerService from '../Services/Customer.service';
 import constants from "../Constants";
 import LOGGER from "../config/LOGGER";
+import CustomerService from "../Services/Customer.service";
 
-const register: IController = async (req, res) => {
+const Create: IController = async (req, res) => {
     let customer: any;
     try {
-        console.log("entry")
-        customer = await customerService.createCustomer(req.body);
-        console.log('Customer at controller-----> ', customer);
+        customer = await CustomerService.createCustomer(req)
         if (customer instanceof Error) {
             console.log("error", customer)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
@@ -39,35 +37,9 @@ const register: IController = async (req, res) => {
         }
         return;
     }
-};
-
-const fetchAllCustomers: IController = async (req, res) => {
-    customerService.fetchAllCustomers()
-        .then( (customers) => {
-            if(customers instanceof Error){
-                console.log("User 2", customers.message)
-                apiResponse.error(
-                    res,
-                    httpStatusCodes.BAD_REQUEST,
-                    customers.message
-                );
-            }else{
-                console.log("User 3", customers)
-                apiResponse.result(res, customers, httpStatusCodes.OK);
-            }
-        }).catch(err => {
-        console.log("Error  ->", err);
-        apiResponse.error(
-            res,
-            httpStatusCodes.BAD_REQUEST,
-            //locale.INVALID_CREDENTIALS,
-        );
-    });
-};
-
-
+}
 const fetchCustomerById: IController = async (req, res) => {
-    customerService.fetchCustomerById(req.query.id)
+    await CustomerService.fetchCustomersById(req.query.id)
         .then( (customer : any) => {
             if(customer instanceof Error){
                 console.log("User 2", customer.message)
@@ -88,11 +60,8 @@ const fetchCustomerById: IController = async (req, res) => {
         );
     });
 };
-
-
-
 const updateCustomerDetails: IController = async (req, res) => {
-    customerService.updateCustomerDetails(req.body)
+     await CustomerService.updateCustomerdetails(req)
         .then( (customer) => {
             if(customer instanceof Error){
                 console.log("user 2", customer.message)
@@ -110,16 +79,133 @@ const updateCustomerDetails: IController = async (req, res) => {
         apiResponse.error(
             res,
             httpStatusCodes.BAD_REQUEST,
+            err.message
         );
     });
 };
 
+const updateCustomerStatus: IController = async (req, res) => {
+    CustomerService.updateCustomerstatus( req.body )
+        .then( (customer) => {
+            // @ts-ignore
+            if(customer instanceof Error){
+                console.log("user 2", customer.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    customer.message
+                );
+            }else{
+                console.log("user 3", customer)
+                // @ts-ignore
+                apiResponse.result(res, customer, httpStatusCodes.OK);
+            }
+        }).catch(err => {
+        console.log("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+            err.message
 
-
-
-export default {
-    register,
-    fetchAllCustomers,
-    fetchCustomerById,
-    updateCustomerDetails,
+        );
+    });
 };
+const fetchAllCustomers: IController = async (req, res) => {
+    await CustomerService.fetchAll()
+        .then( (customer : any) => {
+            if(customer instanceof Error){
+                console.log("User 2", customer.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    customer.message
+                );
+            }else{
+                // console.log("User 3", customer)
+                apiResponse.result(res, customer, httpStatusCodes.OK);
+            }
+        }).catch( (err : any) => {
+            console.log("Error  ->", err);
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+            );
+        });
+};
+// customer-supplier mapping
+const Create_customer_supplier: IController = async(req,res) => {
+    let CSM: any;
+    try {
+        CSM = await CustomerService.CreateCSMService(req) ;
+        if (CSM instanceof Error) {
+            console.log("error", CSM)
+            apiResponse.error( res,
+                httpStatusCodes.BAD_REQUEST );
+        }
+        else {
+            apiResponse.result( res,
+                CSM,
+                httpStatusCodes.CREATED );
+        }
+
+    } catch (e:any) {
+        console.log("controller ->", e)
+        // @ts-ignore
+        if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
+            apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST)
+        } else {
+            apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST)
+        }
+        return;
+    }
+};
+
+const updateCSMStatus:IController = async ( req, res) => {
+    let  result:any
+    try{
+        result = await  CustomerService.updateCSMService(req)
+        if(result instanceof Error ){
+            return apiResponse.error( res,
+                httpStatusCodes.BAD_REQUEST,
+                result.message )
+        }
+        else{
+            return apiResponse.result( res,
+                result,
+                httpStatusCodes.OK )
+        }
+    }
+    catch ( error : any ) {
+        console.log( "Error => ", error )
+        return apiResponse.error( res,
+            httpStatusCodes.BAD_REQUEST,
+            error.message)
+    }
+}
+const fetchAll_customers_suppliers:IController = async ( req:any , res:any ) => {
+    try{
+        let result = await CustomerService.fetchAllCSM()
+        if ( result instanceof Error ){
+            return apiResponse.error( res,
+                httpStatusCodes.BAD_REQUEST,
+                result.message )
+        }
+        else{
+            return apiResponse.result( res,
+                result,
+                httpStatusCodes.OK )
+        }
+    }
+    catch ( error : any ) {
+        console.log( "Error => ", error )
+        return apiResponse.error( res,
+            httpStatusCodes.BAD_REQUEST )
+    }
+}
+
+export default {Create,fetchCustomerById, updateCustomerDetails, updateCustomerStatus, fetchAllCustomers,
+    Create_customer_supplier, updateCSMStatus, fetchAll_customers_suppliers
+
+}

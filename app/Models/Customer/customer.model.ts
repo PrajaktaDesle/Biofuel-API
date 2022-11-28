@@ -1,11 +1,11 @@
 import BaseModel from "../BaseModel";
 import {Connection} from "mysql2";
-export default class Customer extends BaseModel {
+export default class CustomerModel extends BaseModel {
     constructor()
     {
         super();
     }
-    async createModel(data:any){
+    async createCustomerDetails(data:any){
         return await this._executeQuery("insert into customers set ?", [data]);
     }
     async updateCustomersDetails(customerData:any,id:number){
@@ -17,9 +17,9 @@ export default class Customer extends BaseModel {
     async createCustomerAddress(data:any){
         return await this._executeQuery("insert into addresses set ?", [data]);
     }
-    async fetchCustomerCity(data:any){
-        return await this._executeQuery("select id,name from address_city where name = ?", [data]);
-    }
+    // async fetchCustomerCity(data:any){
+    //     return await this._executeQuery("select id,name from address_city where name = ?", [data]);
+    // }
     async fetchCustomerState(data:any){
         return await this._executeQuery("select id,name from address_state where name = ?", [data]);
     }
@@ -37,7 +37,7 @@ export default class Customer extends BaseModel {
         return await this._executeQuery("update addresses set ? where user_id = ? ", [data, user_id]);
     }
     async  fetchAllCustomers(){
-        return await this._executeQuery("select * from  customers", []);
+        return await this._executeQuery("select * from  customers where status = 1 ", []);
     }
     async fetchsBillingAddressById(user_id: any){
         return await this._executeQuery("select user_type,address as `billing_address` from addresses where user_id = ? and address_type = ? ", [user_id, "billing"]);
@@ -50,5 +50,38 @@ export default class Customer extends BaseModel {
     }
     async getStateById(id:number){
         return await this._executeQuery( "select * from address_state where id = ? ",[id])
+    }
+    // customer-supplier mapping
+    async createCSM(data: any) {
+        return await this._executeQuery("insert into customer_supplier_mapping set ? ", [data]);
+
+    }
+    async fetchAddressID(customer_id:number){
+        return await this._executeQuery("select id, user_type,address as `shipping_address` from addresses where user_id =? and address_type = ? and status = 1", [customer_id, "shipping"])
+    }
+
+    async fetchSupplier(supplier_id:number){
+        return await this._executeQuery("select * from user where id = ? and status = 1 and role_id = 3", [supplier_id])
+    }
+    async fetchCustomers(customer_id:number){
+        return await this._executeQuery("select * from customers where id = ? and status = 1", [customer_id])
+    }
+    async fetchCSMById(id:any){
+        return await this._executeQuery("select * from customer_supplier_mapping where id = ? ", [id])
+    }
+    async updateStatusById(data : any, customer_id:number, supplier_id:number){
+        return await this._executeQuery( "update customer_supplier_mapping set ? where  customer_id  = ? and supplier_id = ? ",[data,customer_id,supplier_id] )
+    }
+    async fetchCSM(customer_id:any, supplier_id:any){
+        return await this._executeQuery("select * from customer_supplier_mapping where customer_id = ? and supplier_id = ? ", [customer_id, supplier_id])
+    }
+    async fetchAll(){
+        return await this._executeQuery("select * from customer_supplier_mapping where status = 1 ", [])
+    }
+    async fetchCity(address_id:number){
+        return await this._executeQuery("select id, city_id ,address from addresses where id = ?", [address_id])
+    }
+    async fetchCustomerCity(city_id:any){
+        return await this._executeQuery("select name from address_city where id = ?", [city_id]);
     }
 }
