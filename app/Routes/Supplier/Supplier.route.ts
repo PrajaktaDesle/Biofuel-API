@@ -20,25 +20,21 @@ router.post(
   '/verify-OTP',
   celebrate( supplierSchema.verify_otp),
   supplierController.verify_otp
-
 )
 router.put(
   '/update',
   supplierController.formidableUpdateDetails
 )
-
 router.put( 
   '/update/status',
   celebrate( supplierSchema.updateSupplierStatus ),
   supplierController.updateSuppliersDetails
 )
-
 router.get(
   '/fetch',
   celebrate( supplierSchema.fetchSupplierById ),
   supplierController.fetchSupplierById
-)
-
+);
 router.get(
   '/fetch/all',
   supplierController.fetchAllSuppliers
@@ -56,16 +52,8 @@ router.get(
   supplierController.getAllStates
 );
 router.get(
-  '/raw_materials/all',
-  supplierController.getAllRawMaterials
-  )
-router.get(
-  '/packaging/all',
-  supplierController.getAllPackaging
-  )
-router.get(
   '/home/page',
   supplierController.getHomePage
-  )
+);
 
 export default router;

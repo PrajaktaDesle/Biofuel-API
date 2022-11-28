@@ -218,8 +218,24 @@ const updateProductStatus = async (data: any) => {
     catch (e){
         throw e; 
     }
+}
 
+const fetchAllProductRawMaterials = async ( ) =>{
+    let data = await new ProductModel().fetchAllProductRawMaterials()
+    if (data.length == 0) {
+            throw new Error("Raw materials not found!")
+        }
+    console.log( data )
+    return data 
+}
 
+const fetchAllProductPackaging = async ( ) =>{
+    let data = await new ProductModel().fetchAllProductPackaging()
+    if (data.length == 0) {
+            throw new Error("packaging not found!")
+        }
+    console.log( data )
+    return data 
 }
 
 export default {
@@ -229,5 +245,8 @@ export default {
     fetchAllProducts,
     updateProductStatus,
     fetchAllProductCategories,
-    fetchAllProductUsageUnits
+    fetchAllProductUsageUnits,
+    fetchAllProductRawMaterials,
+    fetchAllProductPackaging
+
 }

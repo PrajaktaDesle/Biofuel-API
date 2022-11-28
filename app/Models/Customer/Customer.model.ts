@@ -8,23 +8,30 @@ export class CustomerModel extends UserModel
         super();
     }
 
-    async createCustomerAddress(addressData:any){
-        return await this._executeQuery("insert into addresses set ?", [addressData]);
+    async createCustomerEstimate( estimateData : any ){
+        return await this._executeQuery( "insert into customer_estimates set ? ", [estimateData] )
     }
-    async createCustomerProfile(profileData:any){
-        return await this._executeQuery("insert into users_profile set ?", [profileData]);
+   
+    async fetchCustomerEstimateById( id : any){
+        return await this._executeQuery( `SELECT es.id, customer_id, cs.name as customer,es.status, estimate_date, expiry_date, estimate_no ,product_id,p.name as product_name, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, adjustment_amount*rate as total_amount FROM biofuel.customer_estimates es
+                                          inner join biofuel.products p ON p.id=es.product_id
+                                          inner join biofuel.customers cs ON cs.id=es.customer_id
+                                          inner join biofuel.product_raw_material rm ON rm.id=es.raw_material_id
+                                          inner join biofuel.product_packaging pp ON pp.id=es.packaging_id
+                                          where es.id = ?;`, [id] )
     }
-    async updateCustomersProfileDetails(customerData:any,id:number){
-        return await this._executeQuery("update users_profile set ? where user_id = ? ", [customerData,id]);
+    async fetchAllCustomerEstimates(){
+        return await this._executeQuery( `SELECT es.id, customer_id, cs.name as customer,es.status, estimate_date, expiry_date, estimate_no , es.id ,product_id,p.name as product_name, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, adjustment_amount*rate as total_amount FROM biofuel.customer_estimates es
+                                          inner join biofuel.products p ON p.id=es.product_id
+                                          inner join biofuel.customers cs ON cs.id=es.customer_id
+                                          inner join biofuel.product_raw_material rm ON rm.id=es.raw_material_id
+                                          inner join biofuel.product_packaging pp ON pp.id=es.packaging_id;`, [] )
     }
-    async updateCustomersAddressDetails(customerData:any,id:number){
-        return await this._executeQuery("update addressses set ? where user_id = ? ", [customerData,id]);
+    async updateCustomerEstimateById( data : any, id : number ){
+        return await this._executeQuery( "update customer_estimates set ? where id = ? ",[data,id] )
     }
-    async fetchCustomersProfileById(id: any ){
-        return await this._executeQuery("select gstin_no from users_profile where user_id = ? ", [id]);
-    }  
-    async fetchCustomersAddressById(id: number, type : string ){
-        return await this._executeQuery("select address, pincode, city from addresses where user_id = ? and address_type = ? ", [id, type]);
+    async estimateExistsOrNot( id : number ){
+        return await this._executeQuery( "select id from customer_estimates where id = ? ",[id] )
     }
    
 }

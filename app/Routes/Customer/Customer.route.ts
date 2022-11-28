@@ -5,26 +5,27 @@ const router = express.Router();
 import { celebrate } from 'celebrate';
 
 router.post(
-    '/register',
-    celebrate(customerSchema.register),
-    customerController.register
-);
-
-router.get(
-    '/all',
-    customerController.fetchAllCustomers
-);
-
-router.get(
-    '/fetch',
-    celebrate(customerSchema.fetchCustomerById),
-    customerController.fetchCustomerById
-);
-
-router.put(
-    '/update',
-    celebrate(customerSchema.updateCustomerDetails),
-    customerController.updateCustomerDetails
-);
+    '/estimate/create',
+    celebrate( customerSchema.createCustomerEstimate   ),
+    customerController.createCustomerEstimate
+  );
+  
+router.get( 
+    '/estimate/fetch',
+    celebrate( customerSchema.fetchCustomerEstimateById ),
+    customerController.fetchCustomerEstimateById
+  );
+  
+router.get( 
+    '/estimate/fetch/all',
+    customerController.fetchAllCustomerEstimates
+  );
+  
+router.put( 
+    '/estimate/update',
+    celebrate( customerSchema.updateCustomerEstimate ),
+    customerController.udpateCustomerEstimate
+  );
+  
 
 export default router;
