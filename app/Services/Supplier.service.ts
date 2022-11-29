@@ -65,10 +65,10 @@ const createSupplier = async (req:any) =>{
         await new SupplierModel().supplierRawMaterialMapping({"supplier_id":user_id,"raw_material_id":fd.raw_material})
         await new SupplierModel().supplierPackagingMapping({"supplier_id":user_id,"packaging":fd.packaging})
         suppliersProfile = await new SupplierModel().createSuppliersProfile( profile )
-        let addressB = {"address_type":"billing","address":fd.billing_address,"user_type":1,"user_id":user_id} 
-        suppliersAddress = await new SupplierModel().createSuppliersAddress( addressB )
-        let addressS = {"address_type":"source","address":fd.source_address,"pincode":fd.source_pincode,"city_id":fd.source_city,"longitude":fd.longitude,"latitude":fd.latitude,"user_type":1,"user_id":user_id}
-        suppliersAddress = await new SupplierModel().createSuppliersAddress( addressS )
+        let billing_address = {"address_type":"billing","address":fd.billing_address,"user_type":1,"user_id":user_id} 
+        suppliersAddress = await new SupplierModel().createSuppliersAddress( billing_address )
+        let source_address = {"address_type":"source","address":fd.source_address,"pincode":fd.source_pincode,"city_id":fd.source_city,"longitude":fd.longitude,"latitude":fd.latitude,"user_type":1,"user_id":user_id}
+        suppliersAddress = await new SupplierModel().createSuppliersAddress( source_address )
 
         return suppliersData;
 
@@ -147,7 +147,7 @@ const formidableUpdateDetails = async (req:any) =>{
                     resolve({fd: fd, fl: fl});})}));
         
         let id=Number(fd.id);
-        let updatedSupplier : any = {}, profile : any = {}, addressB : any = {}, addressS:any = {}, result:any = {}, city:any = {}, state:any = {};
+        let updatedSupplier : any = {}, profile : any = {}, billing_address : any = {}, source_address:any = {}, result:any = {}, city:any = {}, state:any = {};
 
         // id field validation
         if(fd.id == undefined || fd.id == null || fd.id == "") throw new Error("id is missing");
@@ -164,19 +164,19 @@ const formidableUpdateDetails = async (req:any) =>{
         if(fd.email !== undefined && fd.email !== null && fd.email !== "") 
         updatedSupplier.email=fd.email;
         if(fd.billing_address !== undefined && fd.billing_address !== null && fd.billing_address !== "")
-        addressB.address=fd.billing_address;
+        billing_address.address=fd.billing_address;
         if(fd.source_address !== undefined && fd.source_address !== null && fd.source_address !== "")
-        addressS.address=fd.source_address;
+        source_address.address=fd.source_address;
         if(fd.source_city !== undefined && fd.source_city !== null && fd.source_city !== "") 
-        addressS.city_id=fd.source_city;
+        source_address.city_id=fd.source_city;
         if(fd.source_state !== undefined && fd.source_state !== null && fd.source_state !== "") 
-        addressS.state=fd.source_state;
+        source_address.state=fd.source_state;
         if(fd.source_pincode !== undefined && fd.source_pincode !== null && fd.source_pincode !== "") 
-        addressS.pincode=fd.source_pincode;
+        source_address.pincode=fd.source_pincode;
         if(fd.latitude !== undefined && fd.latitude !== null && fd.latitude !== "") 
-        addressS.latitude=fd.latitude;
+        source_address.latitude=fd.latitude;
         if(fd.longitude !== undefined && fd.longitude !== null && fd.longitude !== "") 
-        addressS.longitude=fd.longitude;
+        source_address.longitude=fd.longitude;
        
         if(fd.aadhaar_no !== undefined && fd.aadhaar_no !== null && fd.aadhaar_no !== "") 
         profile.aadhaar_no=fd.aadhaar_no;
@@ -205,8 +205,8 @@ const formidableUpdateDetails = async (req:any) =>{
         // Saving the data to the database
         if( Object.keys(updatedSupplier).length  ){await new SupplierModel().updateUserDetails(updatedSupplier,fd.id,3).then((data)=>{console.log("supplier details updated successfully")})}
         if( Object.keys(profile).length  ){ await new SupplierModel().updateSuppliersProfileDetails(profile,fd.id).then((data)=>{console.log("supplier's profile details updated successfully")})}
-        if( Object.keys(addressB).length ){ await new SupplierModel().updateSuppliersAddressDetails(addressB,fd.id,"billing").then((data)=>{console.log("supplier's billing address details updated successfully")})}
-        if( Object.keys(addressS).length ){ await new SupplierModel().updateSuppliersAddressDetails(addressS,fd.id,"source").then((data)=>{console.log("supplier's source address details updated successfully")})}
+        if( Object.keys(billing_address).length ){ await new SupplierModel().updateSuppliersAddressDetails(billing_address,fd.id,"billing").then((data)=>{console.log("supplier's billing address details updated successfully")})}
+        if( Object.keys(source_address).length ){ await new SupplierModel().updateSuppliersAddressDetails(source_address,fd.id,"source").then((data)=>{console.log("supplier's source address details updated successfully")})}
         return {"message" : "supplier updated successfully","changedRows":1};
     }catch(e){
         console.log("Exception ->", e);

@@ -30,13 +30,6 @@ export class SupplierModel extends UserModel
         return await this._executeQuery("select user_type,address as `billing_address` from addresses where user_id = ? and address_type = ? ", [id, "billing"]);
     }
 
-    // async fetchSuppliersSourceAddressById(id: any){
-    //     return await this._executeQuery( `SELECT a.address as source_address, a.latitude, a.longitude, ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode, a.status FROM biofuel.addresses a
-    //                                       inner join biofuel.address_city ac ON ac.id=a.city_id
-    //                                       inner join biofuel.address_state ast ON ac.state_id=ast.id
-    //                                       where a.user_id=? and a.address_type=?`, [id, "source"]);
-    // }
-
     async updateSuppliersProfileDetails(updatedSupplierData:any,id:number){
         return await this._executeQuery("update users_profile set ? where user_id = ? ", [updatedSupplierData,id]);
     }

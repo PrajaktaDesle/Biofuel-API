@@ -25,11 +25,6 @@ router.put(
   productController.updateProductById
 );
 
-// router.put( 
-//   '/update/status',
-//   productController.updateProductStatus
-// );
-
 router.get( 
   '/categories/all',
   productController.fetchAllProductCategories
