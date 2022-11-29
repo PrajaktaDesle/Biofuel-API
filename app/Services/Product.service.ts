@@ -73,10 +73,15 @@ const fetchProductById = async (id: number) => {
             throw new Error("Product not found!")
         }
         product[0].image= config.baseUrl + "/" + product[0].image;
-        let category = await new ProductModel().fetchProductCategoryById(product[0].category_id)
-        let usage_unit = await new ProductModel().fetchProductUsageUnitById(product[0].usage_unit_id)
-        product[0].category = category[0].name
-        product[0].usage_unit = usage_unit[0].name
+        product[0].category = {label : product[0].category , value : product[0].category_id};
+        product[0].usageUnit = {label : product[0].usage_unit , value : product[0].usage_unit_id};
+        //product[0].imgList = [{file : product[0].image}]
+        product[0].imgList = [{ file :"https://picsum.photos/200/300"}]
+        if (product[0].status == 1){
+            product[0].productStatus = {value : 1, label : "Active"};
+        }else{
+            product[0].productStatus = {value : 0, label : "Inactive"};
+        }
         return product;
 
     }
