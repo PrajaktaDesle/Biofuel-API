@@ -5,8 +5,7 @@ let config = require("../config");
 import * as path from "path";
 import moment from 'moment';
 import * as fs from "fs";
-import CustomerModel from "../Models/Customer/customer.model";
-
+import { CustomerModel } from "../Models/Customer/Customer.model";
 const createCustomer = async (req:any)=> {
     try {
         let CustomerData,fields, files,customer_address;
@@ -409,14 +408,16 @@ const fetchAllCustomerEstimates = async () => {
 
 
 export default {
-    createCustomerEstimate,
-    updateCustomerEstimate,
-    fetchCustomerEstimateById,
-    fetchAllCustomerEstimates,
+    createCustomer,
     fetchCustomersById,
     updateCustomerdetails,
     fetchAll,
     CreateCSMService,
-    updateCSMService, 
-    fetchAllCSM
+    updateCSMService,
+    fetchAllCSM,
+    createCustomerEstimate,
+    updateCustomerEstimate,
+    fetchCustomerEstimateById,
+    fetchAllCustomerEstimates
+    
 }

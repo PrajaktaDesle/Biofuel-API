@@ -1,30 +1,66 @@
 import express from 'express';
-import customerController from '../../Controllers/Customer.controller';
-import customerSchema from '../../Constants/Schema/Customer.schema';
+import CustomerController from '../../Controllers/Customer.controller';
+import CustomerScheman from '../../Constants/Schema/Customer.schema';
 const router = express.Router();
 import { celebrate } from 'celebrate';
+router.post(
+    '/create',
+     CustomerController.Create
+);
+router.get(
+  '/fetch',
+   CustomerController.fetchCustomerById
+);
+
+router.put(
+  '/update',
+   CustomerController.updateCustomerDetails
+);
+
+router.get(
+  '/fetch-all',
+ CustomerController.fetchAllCustomers
+);
+
+// customer-supplier mapping
+router.post(
+  '/add',
+  celebrate(CustomerScheman.customer_supplier),
+  CustomerController.Create_customer_supplier
+);
+
+router.put(
+  '/update/status',
+  celebrate(CustomerScheman.updateStatus),
+  CustomerController.updateCSMStatus
+);
+
+router.get(
+  '/fetch/all',
+  CustomerController.fetchAll_customers_suppliers
+);
 
 router.post(
     '/estimate/create',
-    celebrate( customerSchema.createCustomerEstimate   ),
-    customerController.createCustomerEstimate
+    celebrate( CustomerScheman.createCustomerEstimate   ),
+    CustomerController.createCustomerEstimate
   );
   
 router.get( 
     '/estimate/fetch',
-    celebrate( customerSchema.fetchCustomerEstimateById ),
-    customerController.fetchCustomerEstimateById
+    celebrate( CustomerScheman.fetchCustomerEstimateById ),
+    CustomerController.fetchCustomerEstimateById
   );
   
 router.get( 
     '/estimate/fetch/all',
-    customerController.fetchAllCustomerEstimates
+    CustomerController.fetchAllCustomerEstimates
   );
   
 router.put( 
     '/estimate/update',
-    celebrate( customerSchema.updateCustomerEstimate ),
-    customerController.udpateCustomerEstimate
+    celebrate( CustomerScheman.updateCustomerEstimate ),
+    CustomerController.udpateCustomerEstimate
   );
   
 
