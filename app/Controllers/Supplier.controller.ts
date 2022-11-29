@@ -137,35 +137,11 @@ const fetchSupplierById: IController = async (req, res) => {
 
 
 
-const updateSuppliersDetails: IController = async (req, res) => {
-    supplierService.updateSuppliersDetails( req.body )
-        .then( (supplier) => {
-            if(supplier instanceof Error){
-                console.log("user 2", supplier.message)
-                apiResponse.error(
-                    res,
-                    httpStatusCodes.BAD_REQUEST,
-                    supplier.message
-                );
-            }else{
-                console.log("user 3", supplier)
-                apiResponse.result(res, supplier, httpStatusCodes.CREATED);
-            }
-        }).catch(err => {
-        console.log("Error  ->", err);
-        apiResponse.error(
-            res,
-            httpStatusCodes.BAD_REQUEST,
-            err.message
-
-        );
-    });
-};
 
 
-const formidableUpdateDetails : IController = async (req, res) => {
+const updateSupplierDetails : IController = async (req, res) => {
     try {
-        let supplier : any = await supplierService.formidableUpdateDetails(req);
+        let supplier : any = await supplierService.updateSupplierDetails(req);
         if (supplier instanceof Error) {
             console.log("error", supplier)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
@@ -278,8 +254,7 @@ export default {
     verify_otp,
     fetchAllSuppliers,
     fetchSupplierById,
-    updateSuppliersDetails,
-    formidableUpdateDetails,
+    updateSupplierDetails,
     getAllCityWiseStates,
     getAllCities,
     getAllStates,

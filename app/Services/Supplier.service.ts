@@ -123,22 +123,7 @@ const fetchSupplierById = async (id: any) => {
 }
 
 
-
-const updateSuppliersDetails = async (data:any) => {
-    try {
-        let supplier = await new SupplierModel().fetchUserById( data.id, 3 )
-        if( supplier.length == 0 ) throw new Error( "no supplier found")
-        let supplierData = await new SupplierModel().updateUserDetails(data, data.id, 3);
-        LOGGER.info( "supplier details", supplierData )
-        console.log( supplierData )
-        return {"changedRows":supplierData.changedRows};
-    }
-    catch (e){
-        throw e; 
-    }
-}
-
-const formidableUpdateDetails = async (req:any) =>{
+const updateSupplierDetails = async (req:any) =>{
     try{
         let updatedSupplierData, updatedSuppliersProfile,updatedSuppliersAddress, fd, fl;
         //@ts-ignore
@@ -304,8 +289,7 @@ export default {
     loginSupplier,
     fetchAllSuppliers,
     fetchSupplierById,
-    updateSuppliersDetails,
-    formidableUpdateDetails,
+    updateSupplierDetails,
     verify_supplier_otp,
     getAllCityWiseStates,
     getAllCities,
