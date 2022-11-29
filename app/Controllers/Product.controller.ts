@@ -147,27 +147,6 @@ const fetchAllProductUsageUnits : IController = async ( req:any , res:any ) => {
     }
 }
 
-const updateProductStatus : IController = async ( req:any , res:any ) => {
-    try{
-        let product = await productService.updateProductStatus( req.body )
-        if ( product instanceof Error ){
-           return apiResponse.error( res,
-                                    httpStatusCodes.BAD_REQUEST,
-                                    product.message )
-        }
-        else{
-           return apiResponse.result( res,
-                                     product,
-                                     httpStatusCodes.CREATED )
-        }
-    }
-    catch ( error : any ) {
-        console.log( "Error => ", error )
-        return apiResponse.error( res,
-                                  httpStatusCodes.BAD_REQUEST )
-    }
-}
-
 
 const fetchAllProductRawMaterials: IController = async (req, res) => {
     try {
@@ -215,7 +194,6 @@ export default {
     fetchProductById,
     updateProductById,
     fetchAllProducts,
-    updateProductStatus,
     fetchAllProductCategories,
     fetchAllProductUsageUnits,
     fetchAllProductRawMaterials,

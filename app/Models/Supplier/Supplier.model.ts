@@ -17,17 +17,25 @@ export class SupplierModel extends UserModel
         return await this._executeQuery("insert into addresses set ?", [supplierData]);
     }
    
-    async fetchSuppliersProfileById(id: any ){
-        return await this._executeQuery("select aadhaar_no, aadhaar_url, pan_no, pan_url, gstin, gstin_url, msme_no, msme_url from users_profile where user_id = ? ", [id]);
+    async fetchSuppliersProfileAndSourceAddressById(id: any ){
+        return await this._executeQuery(`SELECT up.aadhaar_no, up.aadhaar_url, up.pan_no, up.pan_url, up.gstin, up.gstin_url, up.msme_no, up.msme_url,a.address as source_address, a.latitude, a.longitude, ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode, a.status 
+                                         FROM biofuel.users_profile up
+                                         inner join biofuel.addresses a ON a.user_id=up.user_id
+                                         inner join biofuel.address_city ac ON ac.id=a.city_id
+                                         inner join biofuel.address_state ast ON ac.state_id=ast.id
+                                         where a.user_id=? and a.address_type="source";`, [id]);
     }  
 
     async fetchSuppliersBillingAddressById(id: any){
         return await this._executeQuery("select user_type,address as `billing_address` from addresses where user_id = ? and address_type = ? ", [id, "billing"]);
     }
 
-    async fetchSuppliersSourceAddressById(id: any){
-        return await this._executeQuery("select address as `source_address`,pincode, city_id, latitude, longitude from addresses where user_id = ? and address_type = ? ", [id, "source"]);
-    }
+    // async fetchSuppliersSourceAddressById(id: any){
+    //     return await this._executeQuery( `SELECT a.address as source_address, a.latitude, a.longitude, ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode, a.status FROM biofuel.addresses a
+    //                                       inner join biofuel.address_city ac ON ac.id=a.city_id
+    //                                       inner join biofuel.address_state ast ON ac.state_id=ast.id
+    //                                       where a.user_id=? and a.address_type=?`, [id, "source"]);
+    // }
 
     async updateSuppliersProfileDetails(updatedSupplierData:any,id:number){
         return await this._executeQuery("update users_profile set ? where user_id = ? ", [updatedSupplierData,id]);
@@ -55,9 +63,10 @@ export class SupplierModel extends UserModel
     async getCity(name:string){
         return await this._executeQuery( "select id from address_city where name = ? ",[name])
     }
-    async getCityById(id:number){
-        console.log('in model--------->', id)
-        return await this._executeQuery( "select * from address_city where id = ? ",[id])
+    async getCityStateById(id:number){
+        return await this._executeQuery( `SELECT ac.name as city, ac.state_id, a.name as state FROM biofuel.address_city ac
+                                          inner join biofuel.address_state a ON ac.state_id=a.id
+                                          where ac.id = ?`,[id] )
     }
     async getStateById(id:number){
         return await this._executeQuery( "select * from address_state where id = ? ",[id])

@@ -79,28 +79,21 @@ const createSupplier = async (req:any) =>{
 }
 
 const fetchAllSuppliers = async ( ) =>{
-    let supplierData;
-    supplierData = await new SupplierModel().fetchAllUsers(3)
-    if (supplierData == null) throw new Error("details did not match");
+    let suppliers;
+    suppliers = await new SupplierModel().fetchAllUsers(3)
+    if (suppliers == null) throw new Error("details did not match");
 
-    // Adding Baseurl to panurl from database
-    for(let i=0;i< supplierData.length;i++) {
-        let profile = await new SupplierModel().fetchSuppliersProfileById( supplierData[i].id )
-        profile[0].pan_url= config.baseUrl + "/" + profile[0].pan_url;
-        profile[0].aadhaar_url= config.baseUrl + "/" + profile[0].aadhaar_url;
-        profile[0].gstin_url = config.baseUrl + "/" + profile[0].gstin_url;
-        profile[0].msme_url = config.baseUrl + "/" + profile[0].msme_url;
-        // Object.assign( supplierData[i] , [0] );
-        let addressB = await new SupplierModel().fetchSuppliersBillingAddressById( supplierData[i].id )
-        let addressS = await new SupplierModel().fetchSuppliersSourceAddressById( supplierData[i].id )
-        let city = await new SupplierModel().getCityById(addressS[0].city_id)
-        let state = await new SupplierModel().getStateById(city[0].state_id)
-        addressS[0].source_city = city[0].name
-        addressS[0].source_state = state[0].name
-        delete addressS[0].city_id
-        Object.assign( supplierData[i] , profile[0], addressB[0], addressS[0] )
+    for(let i=0;i< suppliers.length;i++) {
+        let suppliersProfile = await new SupplierModel().fetchSuppliersProfileAndSourceAddressById( suppliers[i].id )
+        let billing_address = await new SupplierModel().fetchSuppliersBillingAddressById( suppliers[i].id )
+        Object.assign( suppliers[i] , suppliersProfile[0], billing_address[0] )
+        // Adding Baseurl to panurl from database
+        suppliersProfile[0].pan_url= config.baseUrl + "/" + suppliersProfile[0].pan_url;
+        suppliersProfile[0].aadhaar_url= config.baseUrl + "/" + suppliersProfile[0].aadhaar_url;
+        suppliersProfile[0].gstin_url = config.baseUrl + "/" + suppliersProfile[0].gstin_url;
+        suppliersProfile[0].msme_url = config.baseUrl + "/" + suppliersProfile[0].msme_url;
     }
-    return supplierData;
+    return suppliers;
 }
 const isFileNotValid = (type:any) => {
     if (type == 'image/jpeg' || type == 'image/jpg' || type == 'image/png') {
@@ -113,16 +106,9 @@ const fetchSupplierById = async (id: any) => {
     try {
         let supplier = await new SupplierModel().fetchUserById( id, 3 );
         if (supplier.length == 0) throw new Error("Supplier not found");
-        let addressB = await new SupplierModel().fetchSuppliersBillingAddressById( supplier[0].id )
-        let addressS = await new SupplierModel().fetchSuppliersSourceAddressById( supplier[0].id )
-        console.log( addressS )
-        let city = await new SupplierModel().getCityById(addressS[0].city_id)
-        let state = await new SupplierModel().getStateById(city[0].state_id)
-        addressS[0].source_city = city[0].name
-        addressS[0].source_state = state[0].name
-        let suppliersProfile = await new SupplierModel().fetchSuppliersProfileById( id )
-        Object.assign( supplier[0], suppliersProfile[0], addressS[0], addressB[0]);
-
+        let suppliersProfile = await new SupplierModel().fetchSuppliersProfileAndSourceAddressById( id )
+        let billing_address = await new SupplierModel().fetchSuppliersBillingAddressById( supplier[0].id )
+        Object.assign( supplier[0], suppliersProfile[0], billing_address[0]);
         // Adding Baseurl to panurl from database
         supplier[0].pan_url= config.baseUrl + "/" + supplier[0].pan_url;
         supplier[0].aadhaar_url= config.baseUrl + "/" + supplier[0].aadhaar_url;
@@ -183,8 +169,8 @@ const formidableUpdateDetails = async (req:any) =>{
         addressS.address=fd.source_address;
         if(fd.source_city !== undefined && fd.source_city !== null && fd.source_city !== "") 
         addressS.city_id=fd.source_city;
-        // if(fd.source_state !== undefined && fd.source_state !== null && fd.source_state !== "") 
-        // addressS.state=fd.source_state;
+        if(fd.source_state !== undefined && fd.source_state !== null && fd.source_state !== "") 
+        addressS.state=fd.source_state;
         if(fd.source_pincode !== undefined && fd.source_pincode !== null && fd.source_pincode !== "") 
         addressS.pincode=fd.source_pincode;
         if(fd.latitude !== undefined && fd.latitude !== null && fd.latitude !== "") 
