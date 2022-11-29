@@ -7,7 +7,7 @@ const createNotification = async ( data : any ) => {
         let notificationData :any = {};
         if(data.purchase_order_no !== undefined && data.purchase_order_no !== null && data.purchase_order_no !== "")
          spo= await new NotificationModel().fetchSPO(data.purchase_order_no)
-        console.log("spo-------->",spo)
+         console.log("spo-------->",spo)
          notificationData.purchase_order_id = spo[0].id
         if(data.delivery_date !== undefined && data.delivery_date !== null && data.delivery_date !== "") notificationData.delivery_date=data.delivery_date;
         // if(data.product_name !== undefined && data.product_name !== null && data.product_name !== "") notificationData.product_name=data.product_name;
