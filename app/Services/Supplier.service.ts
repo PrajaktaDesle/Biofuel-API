@@ -82,7 +82,7 @@ const fetchAllSuppliers = async ( ) =>{
     let suppliers;
     suppliers = await new SupplierModel().fetchAllUsers(3)
     if (suppliers == null) throw new Error("details did not match");
-
+    console.log( "suppliers : ", suppliers )
     for(let i=0;i< suppliers.length;i++) {
         let suppliersProfile = await new SupplierModel().fetchSuppliersProfileAndSourceAddressById( suppliers[i].id )
         let billing_address = await new SupplierModel().fetchSuppliersBillingAddressById( suppliers[i].id )
@@ -148,7 +148,7 @@ const updateSupplierDetails = async (req:any) =>{
         updatedSupplier.mobile=fd.contact_no;
         if(fd.email !== undefined && fd.email !== null && fd.email !== "") 
         updatedSupplier.email=fd.email;
-        if(fd.email !== undefined && fd.status !== null && fd.status !== "") 
+        if(fd.status !== undefined && fd.status !== null && fd.status !== "") 
         updatedSupplier.status=fd.status;
         if(fd.billing_address !== undefined && fd.billing_address !== null && fd.billing_address !== "")
         billing_address.address=fd.billing_address;

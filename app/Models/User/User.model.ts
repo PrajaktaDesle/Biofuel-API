@@ -20,7 +20,7 @@ export  default class UserModel extends BaseModel   {
     }
 
     async fetchAllUsers(role_id:number){
-        const userResult= await this._executeQuery("select id, name, email, mobile, status, created_at, updated_at from user where role_id = ? and status = 1  ",[role_id] )
+        const userResult= await this._executeQuery("select id, name, email, mobile, status, created_at, updated_at from user where role_id = ? order by status desc  ",[role_id] )
         return userResult;
     }
 

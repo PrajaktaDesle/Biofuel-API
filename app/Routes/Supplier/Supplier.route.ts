@@ -14,19 +14,18 @@ router.post(
   '/login',
   celebrate(supplierSchema.login),
   supplierController.login
-)
+);
 
 router.post(
   '/verify-OTP',
   celebrate( supplierSchema.verify_otp),
   supplierController.verify_otp
-)
+);
 
 router.put( 
   '/update',
-  celebrate( supplierSchema.updateSupplierStatus ),
   supplierController.updateSupplierDetails
-)
+);
 
 router.get(
   '/fetch',

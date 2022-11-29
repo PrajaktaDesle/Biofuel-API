@@ -97,7 +97,8 @@ export class CustomerModel extends UserModel
                                           inner join biofuel.products p ON p.id=es.product_id
                                           inner join biofuel.customers cs ON cs.id=es.customer_id
                                           inner join biofuel.product_raw_material rm ON rm.id=es.raw_material_id
-                                          inner join biofuel.product_packaging pp ON pp.id=es.packaging_id;`, [] )
+                                          inner join biofuel.product_packaging pp ON pp.id=es.packaging_id
+                                          order by es.status desc`, [] )
     }
     async updateCustomerEstimateById( data : any, id : number ){
         return await this._executeQuery( "update customer_estimates set ? where id = ? ",[data,id] )
