@@ -14,7 +14,7 @@ export default {
         `${base}/supplier/register`,
         `${base}/supplier/login`,
         `${base}/supplier/verify-OTP`,
-        `${base}/admin/login`,
+        `${base}/admin/sign-in`,
         `${base}/product/categories/all`,
         `${base}/product/usage/units/all`,
     ],
