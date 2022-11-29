@@ -148,14 +148,16 @@ const updateSupplierDetails = async (req:any) =>{
         updatedSupplier.mobile=fd.contact_no;
         if(fd.email !== undefined && fd.email !== null && fd.email !== "") 
         updatedSupplier.email=fd.email;
+        if(fd.email !== undefined && fd.status !== null && fd.status !== "") 
+        updatedSupplier.status=fd.status;
         if(fd.billing_address !== undefined && fd.billing_address !== null && fd.billing_address !== "")
         billing_address.address=fd.billing_address;
         if(fd.source_address !== undefined && fd.source_address !== null && fd.source_address !== "")
         source_address.address=fd.source_address;
         if(fd.source_city !== undefined && fd.source_city !== null && fd.source_city !== "") 
         source_address.city_id=fd.source_city;
-        if(fd.source_state !== undefined && fd.source_state !== null && fd.source_state !== "") 
-        source_address.state=fd.source_state;
+        // if(fd.source_state !== undefined && fd.source_state !== null && fd.source_state !== "") 
+        // source_address.state=fd.source_state;
         if(fd.source_pincode !== undefined && fd.source_pincode !== null && fd.source_pincode !== "") 
         source_address.pincode=fd.source_pincode;
         if(fd.latitude !== undefined && fd.latitude !== null && fd.latitude !== "") 
