@@ -1,6 +1,7 @@
 import express from "express"
 import {celebrate} from "celebrate";
 import CustomerController from "../../Controllers/Customer.controller"
+import CustomerSchema from "../../Constants/Schema/Customer.schema";
 const router = express.Router()
 
 router.post(
@@ -15,10 +16,6 @@ router.put(
     '/update',
      CustomerController.updateCustomerDetails
 )
-router.put(
-    '/update/customer-status',
-   CustomerController.updateCustomerStatus
-)
 router.get(
     '/fetch-all',
    CustomerController.fetchAllCustomers
@@ -26,12 +23,12 @@ router.get(
 // customer-supplier mapping
 router.post(
     '/add',
-    // celebrate(customer_supplier_mapSchema.customer_supplier),
+    celebrate(CustomerSchema.customer_supplier),
     CustomerController.Create_customer_supplier
 );
 router.put(
     '/update/status',
-    // celebrate(customer_supplier_mapSchema.updateStatus),
+    celebrate(CustomerSchema.updateStatus),
     CustomerController.updateCSMStatus
 );
 router.get(

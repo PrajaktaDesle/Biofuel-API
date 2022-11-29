@@ -84,32 +84,6 @@ const updateCustomerDetails: IController = async (req, res) => {
     });
 };
 
-const updateCustomerStatus: IController = async (req, res) => {
-    CustomerService.updateCustomerstatus( req.body )
-        .then( (customer) => {
-            // @ts-ignore
-            if(customer instanceof Error){
-                console.log("user 2", customer.message)
-                apiResponse.error(
-                    res,
-                    httpStatusCodes.BAD_REQUEST,
-                    customer.message
-                );
-            }else{
-                console.log("user 3", customer)
-                // @ts-ignore
-                apiResponse.result(res, customer, httpStatusCodes.OK);
-            }
-        }).catch(err => {
-        console.log("Error  ->", err);
-        apiResponse.error(
-            res,
-            httpStatusCodes.BAD_REQUEST,
-            err.message
-
-        );
-    });
-};
 const fetchAllCustomers: IController = async (req, res) => {
     await CustomerService.fetchAll()
         .then( (customer : any) => {
@@ -205,7 +179,8 @@ const fetchAll_customers_suppliers:IController = async ( req:any , res:any ) => 
     }
 }
 
-export default {Create,fetchCustomerById, updateCustomerDetails, updateCustomerStatus, fetchAllCustomers,
-    Create_customer_supplier, updateCSMStatus, fetchAll_customers_suppliers
 
+
+export default {Create,fetchCustomerById, updateCustomerDetails,fetchAllCustomers,
+    Create_customer_supplier, updateCSMStatus, fetchAll_customers_suppliers
 }

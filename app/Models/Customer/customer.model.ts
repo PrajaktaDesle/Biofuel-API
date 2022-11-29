@@ -29,15 +29,8 @@ export default class CustomerModel extends BaseModel {
     async updateCustomersAddress(customerData:any,user_id:number, add_type:string){
         return await this._executeQuery("update addresses set ? where user_id = ?  and address_type = ? ", [customerData,user_id, add_type]);
     }
-    async updateCustomerStatus(data:any, id:number){
-        return await this._executeQuery("update customers set ? where id = ? ", [data, id]);
-    }
-    async updateCustomerAddressStatus(data:any, user_id:number){
-        delete data.id
-        return await this._executeQuery("update addresses set ? where user_id = ? ", [data, user_id]);
-    }
     async  fetchAllCustomers(){
-        return await this._executeQuery("select * from  customers where status = 1 ", []);
+        return await this._executeQuery("select * from  customers", []);
     }
     async fetchsBillingAddressById(user_id: any){
         return await this._executeQuery("select user_type,address as `billing_address` from addresses where user_id = ? and address_type = ? ", [user_id, "billing"]);

@@ -78,15 +78,14 @@ const fileNotValid = (type: any) => {
 const updateCustomerdetails = async (req:any)=> {
     try {
         let CustomerData,customer_details,fields, files, customerBillingAddress, customerShippingAddress;
-        let customer: any = {};
-        let customer_address:any={};
-        let billing:any={};
+
         //@ts-ignore
         ({fields, files} = await new Promise((resolve) => {
             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
                 resolve({fields: fields, files: files});
             })
         }));
+        let customer: any = {"status":fields.status}, customer_address:any={"status":fields.status},billing:any={"status":fields.status};
         if(fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
         customer_details = await new CustomerModel().fetchCustomersDetailsById(fields.id)
         if (customer_details.length == 0) throw new Error("id not found!")
@@ -158,21 +157,6 @@ const fetchCustomersById = async (id:any) => {
     }
     catch (error: any) {
         return error
-    }
-
-}
-
-//update customer status - soft delete
-const updateCustomerstatus = async (data:any)=>{
-    let customers, result;
-    try {
-        customers = await new  CustomerModel().fetchCustomersDetailsById(data.id)
-        if (customers.length == 0) throw new Error("customer not found")
-        result= await new CustomerModel().updateCustomerStatus(data,data.id)
-        result  = await new CustomerModel().updateCustomerAddressStatus(data, data.id)
-        return {"message":"changed successfully","changedRows":result.changedRows};
-    }catch (e) {
-        throw e;
     }
 
 }
@@ -273,7 +257,6 @@ const fetchAllCSM = async()=>{
 
 export default {createCustomer,
     fetchCustomersById,
-    updateCustomerdetails,
-    updateCustomerstatus, fetchAll,
+    updateCustomerdetails,fetchAll,
     CreateCSMService,updateCSMService, fetchAllCSM
 }
