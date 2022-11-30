@@ -30,8 +30,6 @@ const createSupplier = async (req:any) =>{
         if(fd.source_address == undefined || fd.source_address == null || fd.source_address == "") throw new Error("source_address is required");
         if(fd.source_pincode == undefined || fd.source_pincode == null || fd.source_pincode == "") throw new Error("source_pincode is required");
         if(fd.source_city == undefined || fd.source_city == null || fd.source_city == "") throw new Error("source_city is required");
-        if(fd.longitude == undefined || fd.longitude == null || fd.longitude == "") throw new Error("longitude is required");
-        if(fd.latitude == undefined || fd.latitude == null || fd.latitude == "") throw new Error("latitude is required");
         if(fd.source_state == undefined || fd.source_state == null || fd.source_state == "") throw new Error("source_state is required");
 
         // Files validation
@@ -67,7 +65,9 @@ const createSupplier = async (req:any) =>{
         suppliersProfile = await new SupplierModel().createSuppliersProfile( profile )
         let billing_address = {"address_type":"billing","address":fd.billing_address,"user_type":1,"user_id":user_id} 
         suppliersAddress = await new SupplierModel().createSuppliersAddress( billing_address )
-        let source_address = {"address_type":"source","address":fd.source_address,"pincode":fd.source_pincode,"city_id":fd.source_city,"longitude":fd.longitude,"latitude":fd.latitude,"user_type":1,"user_id":user_id}
+        let source_address : any = {"address_type":"source","address":fd.source_address,"pincode":fd.source_pincode,"city_id":fd.source_city,"user_type":1,"user_id":user_id}
+        if(fd.longitude == undefined || fd.longitude == null || fd.longitude == "") source_address.longitude = fd.longitude;
+        if(fd.latitude == undefined || fd.latitude == null || fd.latitude == "") source_address.latitude = fd.latitude;
         suppliersAddress = await new SupplierModel().createSuppliersAddress( source_address )
 
         return suppliersData;
@@ -107,6 +107,11 @@ const fetchSupplierById = async (id: any) => {
         let supplier = await new SupplierModel().fetchUserById( id, 3 );
         if (supplier.length == 0) throw new Error("Supplier not found");
         let suppliersProfile = await new SupplierModel().fetchSuppliersProfileAndSourceAddressById( id )
+        suppliersProfile[0].city = {"label":suppliersProfile[0].city,"value":suppliersProfile[0].city_id}
+        suppliersProfile[0].state = {"label":suppliersProfile[0].state,"value":suppliersProfile[0].state_id}
+        if ( supplier[0].status == 0) supplier[0].status = {"label":"Pending","value":0};
+        if ( supplier[0].status == 1) supplier[0].status = {"label":"Approved", "value": 1};
+        if ( supplier[0].status == -1) supplier[0].status = {"label":"Rejected", "value": -1};
         let billing_address = await new SupplierModel().fetchSuppliersBillingAddressById( supplier[0].id )
         Object.assign( supplier[0], suppliersProfile[0], billing_address[0]);
         // Adding Baseurl to panurl from database

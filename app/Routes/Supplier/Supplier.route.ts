@@ -39,20 +39,6 @@ router.get(
 );
 
 router.get(
-  '/fetch/city/state',
-  supplierController.getAllCityWiseStates
-);
-
-router.get(
-  '/cities/all',
-  supplierController.getAllCities
-);
-router.get(
-  '/states/all',
-  supplierController.getAllStates
-);
-
-router.get(
   '/home/page',
   supplierController.getHomePage
 );

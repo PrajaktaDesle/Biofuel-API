@@ -3,7 +3,6 @@ import {celebrate} from "celebrate";
 import CustomerController from "../../Controllers/Customer.controller"
 import CustomerSchema from "../../Constants/Schema/Customer.schema";
 const router = express.Router()
-
 router.post(
     '/create',
        CustomerController.Create
