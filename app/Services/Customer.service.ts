@@ -297,10 +297,12 @@ const createCustomerEstimate = async (data: any) => {
         if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "") 
         estimate.tnc=data.tnc;
 
-        if(data.status !== undefined && data.status !== null && data.status !== "") 
-        estimate.status=data.status;
+        if(data.status !== undefined && data.status !== null && data.status !== "")estimate.status=data.status;
+        estimate.status=0
         
         let estimateData = await new CustomerModel().createCustomerEstimate(estimate)
+        let log : any = { "estimate_id" : estimateData.insertId, "stage":estimate.status,"user_id":data.user_id }
+        await new CustomerModel().createCustomerEstimateStagelog(log)
         return estimateData;
 
     } catch (e: any) {

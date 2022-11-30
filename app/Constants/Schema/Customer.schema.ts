@@ -16,7 +16,7 @@ export default {
             quantity: Joi.number().required(),
             customer_note: Joi.string().required(),
             tnc: Joi.string().required(),
-            status: Joi.number().required(),
+            status: Joi.number().optional(),
             user_id: Joi.number().required(),
     }).unknown(),
     },

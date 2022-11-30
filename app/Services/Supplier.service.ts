@@ -107,6 +107,11 @@ const fetchSupplierById = async (id: any) => {
         let supplier = await new SupplierModel().fetchUserById( id, 3 );
         if (supplier.length == 0) throw new Error("Supplier not found");
         let suppliersProfile = await new SupplierModel().fetchSuppliersProfileAndSourceAddressById( id )
+        suppliersProfile[0].city = {"label":suppliersProfile[0].city,"value":suppliersProfile[0].city_id}
+        suppliersProfile[0].state = {"label":suppliersProfile[0].state,"value":suppliersProfile[0].state_id}
+        if ( supplier[0].status == 0) supplier[0].status = {"label":"Pending","value":0};
+        if ( supplier[0].status == 1) supplier[0].status = {"label":"Approved", "value": 1};
+        if ( supplier[0].status == -1) supplier[0].status = {"label":"Rejected", "value": -1};
         let billing_address = await new SupplierModel().fetchSuppliersBillingAddressById( supplier[0].id )
         Object.assign( supplier[0], suppliersProfile[0], billing_address[0]);
         // Adding Baseurl to panurl from database
