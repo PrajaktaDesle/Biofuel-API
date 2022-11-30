@@ -20,59 +20,51 @@ export  default class UserModel extends BaseModel   {
     }
 
     async fetchAllUsers(role_id:number){
-        const userResult= await this._executeQuery("select id, name, email, mobile, status, created_at, updated_at from user where role_id = ? and status = 1  ",[role_id] )
-        // console.log("model data--->",userResult);
+        const userResult= await this._executeQuery("select id, name, email, mobile, status, created_at, updated_at from user where role_id = ? order by status desc  ",[role_id] )
         return userResult;
     }
 
-
     async getActiveUsers(role_id:number){
         return  await this._executeQuery("select * from user where status = 1 AND role_id = ?",[role_id] )
-        // console.log("model data--->",userResult);
-
     }
 
     async updateUserDetails(data:any, id:number, role_id:number){
         return await this._executeQuery("update user set ? where id = ? and role_id = ? ", [data, id, role_id]);
     }
+
     async updateCityDetails(data:any, id:number){
         return await this._executeQuery("update address_city set ? where id = ?  ", [data, id]);
     }
 
-    async getProductRawMaterials(){
-        return await this._executeQuery("select * from product_raw_material ", []);
+    async getAllCities(){
+        return await this._executeQuery("select id as value, name as label from address_city",[])
     }
 
-    async getProductPackaging(){
-        return await this._executeQuery("select * from product_packaging ", []);
-    }
-    async getAllCities(){
-        return await this._executeQuery("select id, name, state_id from address_city",[])
-    }
     async getAllStates(){
-        return await this._executeQuery( "select id, name from address_state",[])
+        return await this._executeQuery( "select id as value, name as label from address_state",[])
     }
-    async getAllRawMaterials(){
-        return await this._executeQuery( "select id, name from  product_raw_material",[])
+   
+    async getStateByCity(id:number){
+        return await this._executeQuery("select act.id as city_id, act.name as city , ast.id as state_id, ast.name as state from biofuel.address_city act inner join biofuel.address_state ast ON  act.state_id = ast.id where act.id = ?",[id])
     }
-    async getAllPackaging(){
-        return await this._executeQuery( "select id, name from  product_packaging",[])
+
+    async getCitiesByState(state_id:number){
+        return await this._executeQuery("select act.id as value, act.name as label from biofuel.address_city act inner join biofuel.address_state ast ON  act.state_id = ast.id where ast.id = ?",[state_id])
     }
-    async getAllCityWiseStates(){
-        return await this._executeQuery("select act.id as city_id, act.name as city , ast.id as state_id, ast.name as state from address_state ast inner join address_city act ON  ast.id = act.state_id",[])
-    }
-      async getCity(name:string){
+
+    async getCity(name:string){
         return await this._executeQuery( "select id from address_city where name = ? ",[name])
     }
+
     async getCityById(id:number){
         return await this._executeQuery( "select * from address_city where id = ? ",[id])
     }
+
     async getStateById(id:number){
         return await this._executeQuery( "select * from address_state where id = ? ",[id])
     }
     async getState(name:string){
         return await this._executeQuery( "select id from address_state where name = ?",[name])
     }
-
 
 }

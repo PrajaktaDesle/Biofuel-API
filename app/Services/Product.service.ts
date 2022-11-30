@@ -1,17 +1,10 @@
 import { ProductModel } from "../Models/Product/Product.model";
 import { uploadFile, uploadFiles } from "../utilities/S3Bucket";
-const { v4: uuidv4 } = require('uuid');
-import LOGGER from '../config/LOGGER';
 let config = require('../config')
 import formidable from "formidable";
 import moment from 'moment';
-import Encryption from "../utilities/Encryption";
-import path, { resolve } from "path";
-import { off } from "process";
 const fs = require('fs')
-import AWS from 'aws-sdk';
 
-let units:any = {"MTS":1,"Tons":2, "Kg":3,"Number":4}, categories:any = {"Briquettes":1,"Pelletes":2, "Loose Biomass":3, "Cashew DOC":4}, status:any = {"active":1,"inactive":2}
 
 
 const createProduct = async (req: any) => {
@@ -46,15 +39,14 @@ const createProduct = async (req: any) => {
         let s3Path: any = {}
         if (files.image !== undefined && files.image !== null && files.image !== "") {
             if (fileNotValid(files.image.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image"); s3Image['image'] = files.image
+            let name: string = "images/image/" + moment().unix() + "." + s3Image['image'].originalFilename.split(".").pop()
+            const result = await uploadFile(s3Image['image'], name);
+            if (result == 0 && result == undefined) throw new Error("Product image upload to s3 failed");
+            console.log("s3 result  : ", result)
+            s3Path['image'] = result.key;
+            product = Object.assign(product, s3Path);
         }
-        else { throw new Error("image is required") }
-        let name: string = "images/image/" + moment().unix() + "." + s3Image['image'].originalFilename.split(".").pop()
-        const result = await uploadFile(s3Image['image'], name);
-        if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
-        console.log("s3 result  : ", result)
-        s3Path['image'] = result.key;
-        product = Object.assign(product, s3Path);
- 
+       
         console.log( "product : ", product )
         productData = await new ProductModel().createProduct(product)
         return productData;
@@ -138,12 +130,7 @@ const fetchAllProducts = async (id: number) => {
 
         for(let i=0;i< products.length;i++) {
         products[i].image= config.baseUrl + "/" + products[i].image;
-        let category = await new ProductModel().fetchProductCategoryById(products[i].category_id)
-        let usage_unit = await new ProductModel().fetchProductUsageUnitById(products[i].usage_unit_id)
-        //products[i].category = category[0].name
-        //products[i].usage_unit = usage_unit[0].name
-        delete products[i].usage_unit_id
-        delete products[i].category_id
+       
     }
         return products;
 
@@ -181,6 +168,8 @@ const updateProductById = async (req: any) => {
             product.hsn = fields.hsn;
         if (fields.gst !== undefined && fields.gst !== null && fields.gst !== "")
             product.gst = fields.gst;
+        if (fields.status !== undefined && fields.status !== null && fields.status !== "")
+            product.status = fields.status;
         if (fields.usage_unit !== undefined && fields.usage_unit !== null && fields.usage_unit !== ""){
          product.usage_unit_id = fields.usage_unit }
         if (fields.category !== undefined && fields.category !== null && fields.category !== ""){
@@ -209,22 +198,23 @@ const updateProductById = async (req: any) => {
 }
 
 
-const updateProductStatus = async (data: any) => {
 
-    try {
-        let ProductObj = new ProductModel()
-        let product = await new ProductModel().fetchProductById( data.id )
-        if( product.length == 0 ) throw new Error( "Product not found")
-        let productData = await new ProductModel().updateProductById(data, data.id);
-        LOGGER.info( "Product details", productData )
-        console.log( productData )
-        return {"changedRows":productData.changedRows};
-    }
-    catch (e){
-        throw e; 
-    }
+const fetchAllProductRawMaterials = async ( ) =>{
+    let data = await new ProductModel().fetchAllProductRawMaterials()
+    if (data.length == 0) {
+            throw new Error("Raw materials not found!")
+        }
+    console.log( data )
+    return data 
+}
 
-
+const fetchAllProductPackaging = async ( ) =>{
+    let data = await new ProductModel().fetchAllProductPackaging()
+    if (data.length == 0) {
+            throw new Error("packaging not found!")
+        }
+    console.log( data )
+    return data 
 }
 
 export default {
@@ -232,7 +222,9 @@ export default {
     fetchProductById,
     updateProductById,
     fetchAllProducts,
-    updateProductStatus,
     fetchAllProductCategories,
-    fetchAllProductUsageUnits
+    fetchAllProductUsageUnits,
+    fetchAllProductRawMaterials,
+    fetchAllProductPackaging
+
 }

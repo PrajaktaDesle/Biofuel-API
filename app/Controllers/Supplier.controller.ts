@@ -137,35 +137,11 @@ const fetchSupplierById: IController = async (req, res) => {
 
 
 
-const updateSuppliersDetails: IController = async (req, res) => {
-    supplierService.updateSuppliersDetails( req.body )
-        .then( (supplier) => {
-            if(supplier instanceof Error){
-                console.log("user 2", supplier.message)
-                apiResponse.error(
-                    res,
-                    httpStatusCodes.BAD_REQUEST,
-                    supplier.message
-                );
-            }else{
-                console.log("user 3", supplier)
-                apiResponse.result(res, supplier, httpStatusCodes.CREATED);
-            }
-        }).catch(err => {
-        console.log("Error  ->", err);
-        apiResponse.error(
-            res,
-            httpStatusCodes.BAD_REQUEST,
-            err.message
-
-        );
-    });
-};
 
 
-const formidableUpdateDetails : IController = async (req, res) => {
+const updateSupplierDetails : IController = async (req, res) => {
     try {
-        let supplier : any = await supplierService.formidableUpdateDetails(req);
+        let supplier : any = await supplierService.updateSupplierDetails(req);
         if (supplier instanceof Error) {
             console.log("error", supplier)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
@@ -184,110 +160,7 @@ const formidableUpdateDetails : IController = async (req, res) => {
     }
 };
 
-const getAllCityWiseStates: IController = async (req, res) => {
-    try {
-        let supplier : any = await supplierService.getAllCityWiseStates();
-        if (supplier instanceof Error) {
-            console.log("error", supplier)
-            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
-        } else {
 
-            apiResponse.result(res, supplier, httpStatusCodes.OK);
-        }
-    } catch (e:any) {
-        console.log("controller ->", e)
-            apiResponse.error(
-                res,
-                httpStatusCodes.BAD_REQUEST,
-                e.message
-            );
-            return;
-    }
-};
-
-const getAllCities: IController = async (req, res) => {
-    try {
-        let cities : any = await supplierService.getAllCities();
-        if (cities instanceof Error) {
-            console.log("error", cities)
-            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
-        } else {
-
-            apiResponse.result(res, cities, httpStatusCodes.OK);
-        }
-    } catch (e:any) {
-        console.log("controller ->", e)
-            apiResponse.error(
-                res,
-                httpStatusCodes.BAD_REQUEST,
-                e.message
-            );
-            return;
-    }
-};
-
-const getAllStates: IController = async (req, res) => {
-    try {
-        let states : any = await supplierService.getAllStates();
-        if (states instanceof Error) {
-            console.log("error", states)
-            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
-        } else {
-
-            apiResponse.result(res, states, httpStatusCodes.OK);
-        }
-    } catch (e:any) {
-        console.log("controller ->", e)
-            apiResponse.error(
-                res,
-                httpStatusCodes.BAD_REQUEST,
-                e.message
-            );
-            return;
-    }
-};
-
-const getAllRawMaterials: IController = async (req, res) => {
-    try {
-        let rawMaterials : any = await supplierService.getAllRawMaterials();
-        if (rawMaterials instanceof Error) {
-            console.log("error", rawMaterials)
-            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
-        } else {
-
-            apiResponse.result(res, rawMaterials, httpStatusCodes.OK);
-        }
-    } catch (e:any) {
-        console.log("controller ->", e)
-            apiResponse.error(
-                res,
-                httpStatusCodes.BAD_REQUEST,
-                e.message
-            );
-            return;
-    }
-};
-
-const getAllPackaging: IController = async (req, res) => {
-    try {
-        let packaging : any = await supplierService.getAllPackaging();
-        if (packaging instanceof Error) {
-            console.log("error", packaging)
-            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
-        } else {
-
-            apiResponse.result(res, packaging, httpStatusCodes.OK);
-        }
-    } catch (e:any) {
-        console.log("controller ->", e)
-            apiResponse.error(
-                res,
-                httpStatusCodes.BAD_REQUEST,
-                e.message
-            );
-            return;
-    }
-};
 const getHomePage: IController = async (req, res) => {
     try {
         let homePage : any = await supplierService.getHomePage();
@@ -319,12 +192,6 @@ export default {
     verify_otp,
     fetchAllSuppliers,
     fetchSupplierById,
-    updateSuppliersDetails,
-    formidableUpdateDetails,
-    getAllCityWiseStates,
-    getAllCities,
-    getAllStates,
-    getAllRawMaterials,
-    getAllPackaging,
+    updateSupplierDetails,
     getHomePage
 };

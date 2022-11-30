@@ -1,105 +1,653 @@
+import {uploadFile, uploadFiles}  from "../utilities/S3Bucket";
 import LOGGER from "../config/LOGGER";
-import {CustomerModel} from "../Models/Customer/Customer.model";
-const {v4 : uuidv4} = require('uuid');
+import formidable from "formidable";
 let config = require("../config");
+import * as path from "path";
+import moment from 'moment';
+import * as fs from "fs";
+import { CustomerModel } from "../Models/Customer/Customer.model";
+const createCustomer = async (req:any)=> {
+    try {
+        let CustomerData,fields, files,customer_address;
+        let customer: any = {};
+        //@ts-ignore
+        ({fields, files} = await new Promise((resolve) => {
+            new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
+                resolve({fields: fields, files: files});
+            })
+        }));
+        // customer pedetails
+        if(fields.name == undefined || fields.name == null || fields.name == "") throw new Error("name is required");
+        customer.name=fields.name;
+        if(fields.contact_no == undefined || fields.contact_no == null || fields.contact_no == "") throw new Error("mobile is required");
+        customer.mobile=fields.contact_no;
+        if(fields.email == undefined || fields.email == null || fields.address == "") throw new Error("email is required");
+        customer.email=fields.email;
+        if(fields.gstin_no == undefined || fields.gstin_no == null || fields.gstin_no == "") throw new Error("gst_no is required");
+        customer.gstin=fields.gstin_no;
+        if(fields.payment_term== undefined || fields.payment_term == null || fields.payment_term  == "") throw new Error("payment_term is required");
+        let payment_term = Number(fields.payment_term)
+        customer.payment_term= payment_term;
 
-const createCustomer = async (data:any) =>{
+        // customer address
+        if(fields.shipping_state == undefined || fields.shipping_state == null || fields.shipping_state == "") throw new Error("shipping state is required");
+        if(fields.shipping_address == undefined || fields.shipping_address == null || fields.shipping_address == "") throw new Error(" address_type is required");
+        if(fields.billing_address == undefined || fields.billing_address == null || fields.billing_address == "") throw new Error("billing address is required");
+        if(fields.latitude == undefined || fields.latitude == null || fields.latitude == "") throw new Error("latitude is required");
+        if(fields.longitude == undefined || fields.longitude == null || fields.longitude == "") throw new Error("longitude is required");
+        if(fields.pincode == undefined || fields.pincode == null || fields.pincode == "") throw new Error("pin code is required");
+        if(fields.shipping_city == undefined || fields.shipping_city == null || fields.shipping_city == "") throw new Error(" city is required");
+
+        // file validation
+        let s3Image: any = {}
+        let s3Path: any = {}
+        if (files.gstin !== undefined && files.gstin !== null && files.gstin !== "") {
+            if (fileNotValid(files.gstin.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image"); s3Image['image'] = files.gstin
+        }
+        else{ throw new Error("image is required") }
+        let name: string = "images/image/" + moment().unix() + "." + s3Image['image'].originalFilename.split(".").pop()
+        const result = await uploadFile(s3Image['image'], name);
+        if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
+        console.log("s3 result  : ", result)
+        s3Path['gstin_url'] = result.key;
+        customer= Object.assign(customer, s3Path);
+        CustomerData = await new CustomerModel().createCustomerDetails(customer)
+        if(!CustomerData) throw Error("failed to create customer")
+        let user_id = CustomerData.insertId
+        // customer billing address
+        let addressB = {"address_type":"billing","address":fields.billing_address,"user_type":0,"user_id":user_id}
+        customer_address = await new CustomerModel().createCustomerAddress(addressB)
+        // customer shipping address
+        let addressS = {"address_type":"shipping","address":fields.shipping_address,"user_type":0, "user_id":user_id, "latitude":fields.latitude,"longitude":fields.longitude, "pincode":fields.pincode, "city_id":fields.shipping_city }
+        customer_address = await new CustomerModel().createCustomerAddress(addressS)
+        return {message:"added successfully ", InsertId:CustomerData.insertId};
+    }catch(e:any){
+    console.log("Exception =>", e.message);
+    throw e;
+}
+}
+const fileNotValid = (type: any) => {
+    if (type == 'image/jpeg' || type == 'image/jpg' || type == 'image/png') {
+        return false;
+    }
+    return true;
+};
+
+const updateCustomerdetails = async (req:any)=> {
+    try {
+        let CustomerData,customer_details,fields, files, customerBillingAddress, customerShippingAddress;
+
+        //@ts-ignore
+        ({fields, files} = await new Promise((resolve) => {
+            new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
+                resolve({fields: fields, files: files});
+            })
+        }));
+        let customer: any = {"status":fields.status}, customer_address:any={"status":fields.status},billing:any={"status":fields.status};
+        if(fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
+        customer_details = await new CustomerModel().fetchCustomersDetailsById(fields.id)
+        if (customer_details.length == 0) throw new Error("id not found!")
+        //  customer details validations
+        if(fields.name == undefined || fields.name == null || fields.name == "") throw new Error("name is required");
+        customer.name=fields.name;
+        if(fields.contact_no == undefined || fields.contact_no == null || fields.contact_no == "") throw new Error("mobile is required");
+        customer.mobile=fields.contact_no;
+        if(fields.email == undefined || fields.email == null || fields.address == "") throw new Error("email is required");
+        customer.email=fields.email;
+        if(fields.gstin_no == undefined || fields.gstin_no == null || fields.gstin_no == "") throw new Error("gst_no is required");
+        customer.gstin=fields.gstin_no;
+        if(fields.payment_term== undefined || fields.payment_term == null || fields.payment_term  == "") throw new Error("payment_term is required");
+        let payment_term = Number(fields.payment_term)
+        customer.payment_term= payment_term;
+        let s3Image: any = {}
+        let s3Path: any = {}
+        if (files.gstin !== undefined && files.gstin !== null && files.gstin !== "") {
+            if (fileNotValid(files.gstin.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image"); s3Image['image'] = files.gstin
+        }
+        else{ throw new Error("image is required") }
+        let name: string = "images/image/" + moment().unix() + "." + s3Image['image'].originalFilename.split(".").pop()
+        const result = await uploadFile(s3Image['image'], name);
+        if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
+        console.log("s3 result  : ", result)
+        s3Path['gstin_url'] = result.key;
+        customer= Object.assign(customer, s3Path);
+
+        // customer address validatitions
+        if(fields.billing_address  == undefined || fields.billing_address == null || fields.billing_address == "") throw new Error(" billing address is required");
+        billing.address=fields.billing_address;
+        if(fields.shipping_address == undefined || fields.shipping_address == null || fields.shipping_address == "") throw new Error("shipping address is required");
+        customer_address.address=fields.shipping_address;
+        if(fields.latitude == undefined || fields.latitude == null || fields.latitude == "") throw new Error("latitude is required");
+        customer_address.latitude=fields.latitude;
+        if(fields.longitude == undefined || fields.longitude == null || fields.longitude == "") throw new Error("longitude is required");
+        customer_address.longitude=fields.longitude;
+        if(fields.pincode == undefined || fields.pincode == null || fields.pincode == "") throw new Error("pin code is required");
+        customer_address.pincode=fields.pincode;
+        if(fields.shipping_state == undefined || fields.shipping_state == null || fields.shipping_state == "") throw new Error("shipping state is required");
+        let state_name =fields.shipping_state;
+        if(fields.shipping_city == undefined || fields.shipping_city == null || fields.shipping_city == "") throw new Error(" city is required");
+        customer_address.city_id =fields.shipping_city
+        CustomerData = await new CustomerModel().updateCustomersDetails(customer,fields.id)
+        customerBillingAddress= await new CustomerModel().updateCustomersAddress(billing ,fields.id, "billing")
+        customerShippingAddress = await new CustomerModel().updateCustomersAddress(customer_address,fields.id, "shipping")
+        return {message:"updated successfully ", CustomerData};
+    }catch(e:any){
+        console.log("Exception =>", e.message);
+        throw e;
+    }
+}
+const fetchCustomersById = async (id:any) => {
+
+    try {
+        let customers = await new  CustomerModel().fetchCustomersDetailsById(id)
+        if (customers.length == 0) throw new Error(" customer not found!")
+        customers[0].gst= config.baseUrl + "/" + customers[0].gstin_url;
+        // let address = await new Customer().fetchCustomerAddress(id)
+        let BAddress = await new CustomerModel().fetchsBillingAddressById(id)
+        let SAddress = await new  CustomerModel().fetchShippingAddressById(id)
+        let city = await new CustomerModel().getCityById(SAddress[0].city_id)
+        let state = await new CustomerModel().getStateById(city[0].state_id)
+        SAddress[0].shipping_city = city[0].name
+        SAddress[0].shipping_state = state[0].name
+        delete SAddress[0].city_id
+        Object.assign(customers[0],SAddress[0], BAddress[0])
+        return customers[0];
+    }
+    catch (error: any) {
+        return error
+    }
+
+}
+
+const fetchAll = async () => {
+    let Billing_address, shipping_address, city,state: any;
+    try {
+        // fetch all active customers
+        let customers = await new CustomerModel().fetchAllCustomers()
+        if (customers.length == 0) throw new Error(" customer not found!")
+        for (let i = 0; i < customers.length; i++) {
+            customers[i].gst= config.baseUrl + "/" + customers[0].gstin_url;
+            let id = customers[i].id
+            Billing_address = await new CustomerModel().fetchsBillingAddressById(id)
+            shipping_address = await new  CustomerModel().fetchShippingAddressById(id)
+            city = await new CustomerModel().getCityById(shipping_address[0].city_id)
+            state = await new CustomerModel().getStateById(city[0].state_id)
+            shipping_address[0].shipping_city = city[0].name
+            shipping_address[0].shipping_state = state[0].name
+            delete shipping_address[0].city_id
+            Object.assign(customers[i], shipping_address[0], shipping_address[0])
+        }
+        return customers;
+    }
+    catch (error: any) {
+        return error
+    }
+}
+
+// customer-supplier mapping
+const CreateCSMService = async(req:any)=>{
+    let result, customer, supplier, customer_address;
+    let data:any={}
     try{
+        if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
+            customer = await new  CustomerModel().fetchCustomers(req.body.customer_id)
+        if (customer.length == 0) throw new Error("customer not found");
+        // console.log('customers------------------>',customer)
+        customer_address = await new CustomerModel().fetchAddressID(req.body.customer_id)
+        if (customer_address.length == 0) throw new Error("id not found");
+        // console.log('in service customer_address_id------>', customer_address)
+        data.address_id = customer_address[0].id
+        if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
+            supplier = await new CustomerModel().fetchSupplier(req.body.supplier_id)
+        if (supplier.length == 0) throw new Error("Supplier not found");
+        data.customer_id = customer[0].id
+        data.supplier_id = supplier[0].id
+        let CSM = await new CustomerModel().fetchCSM(req.body.customer_id, req.body.supplier_id)
+        if(CSM.length !== 0) throw new Error(" id already present")
+        result = await new CustomerModel().createCSM(data)
+        return {message:"added successfully ",insertId:result.insertId}
+    }catch (e) {
+        throw e
+    }
+}
+
+const updateCSMService = async(req:any)=>{
+    let result,CSM, data;
+    try{
+
+        CSM = await new CustomerModel().fetchCSM(req.body.customer_id,req.body.supplier_id)
+        if(CSM.length == 0) throw new Error("id not found");
+        data = {"status":req.body.status }
+        // console.log("data in service------>", data)
+        result = await new CustomerModel().updateStatusById(data, req.body.customer_id,req.body.supplier_id)
+        LOGGER.info( "Product details", result )
+        console.log( result )
+        return {"changedRows":result.changedRows};
+    }catch (e) {
+        console.log("error----------->",e)
+        throw e
+    }
+}
+const fetchAllCSM = async()=>{
+    try {
+        let result, customer_name, suppiler_name, address;
+        result = await new CustomerModel().fetchAll()
+        for (let i = 0; i < result.length; i++) {
+            customer_name = await new CustomerModel().fetchCustomers(result[i].customer_id)
+            suppiler_name = await new CustomerModel().fetchSupplier(result[i].supplier_id)
+            address = await new CustomerModel().fetchCity(result[i].address_id)
+            let city = await new CustomerModel().fetchCustomerCity(address[0].city_id)
+            result[i].customer = customer_name[0].name
+            result[i].supplier = suppiler_name[0].name
+            result[i].city = city[0].name
+            result[i].address =address[0].address
+            delete result[i].customer_id
+            delete result[i].supplier_id
+            delete result[i].address_id
+        }
+        return result
+    }catch (e) {
+        throw e
+    }
+}
+
+const createCustomerEstimate = async (data: any) => {
+    try {
         let customerData;
-        let customer:any = {};
-        let profile:any = {};
-        let addressBill:any = {};
-        let addressPlant:any = {};
-        if(data.name !== undefined && data.name !== null && data.name !== "") 
-        customer.name=data.name;
-        if(data.email !== undefined && data.email !== null && data.email !== "") 
-        customer.email=data.email;
-        if(data.contact_no !== undefined && data.contact_no !== null && data.contact_no !== "") 
-        customer.mobile=data.contact_no;
+        let estimate:any = {};
+        if(data.customer !== undefined && data.customer !== null && data.customer !== "") 
+        estimate.customer_id=data.customer;
 
-        if(data.gstin_no !== undefined && data.gstin_no !== null && data.gstin_no !== "") 
-        profile.gstin_no=data.gstin_no;
+        if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "") 
+        estimate.estimate_no=data.estimate_id;
 
-        if(data.billing_address !== undefined && data.billing_address !== null && data.billing_address !== ""){addressBill.address=data.billing_address;addressBill.address_type="bill"; }
-        if(data.plant_address !== undefined && data.plant_address !== null && data.plant_address !== ""){ addressPlant.address=data.plant_address; addressPlant.address_type="plant"; }
-        if(data.pincode !== undefined && data.pincode !== null && data.pincode !== ""){ addressBill.pincode=data.pincode; addressPlant.pincode=data.pincode; } 
-        if(data.city !== undefined && data.city !== null && data.city !== ""){ addressBill.city=data.city; addressPlant.city=data.city; }
-        customer.role_id = 2;
-        customerData = await new CustomerModel().createUser( customer )
-        if (!customerData) throw new Error("Registration failed");
-        let id = customerData.insertId;
-        if ( profile ) profile['user_id'] = id; await new CustomerModel().createCustomerProfile( profile ); 
-        if ( addressBill )  addressBill['user_id'] = id; await new CustomerModel().createCustomerAddress( addressBill );
-        if ( addressPlant )  addressPlant['user_id'] = id; await new CustomerModel().createCustomerAddress( addressPlant );
-        return customerData;
-    }catch(e){
-        console.log("Exception ->", e);
+        if(data.product !== undefined && data.product !== null && data.product !== "") 
+        estimate.product_id=data.product;
+
+        if(data.estimate_date !== undefined && data.estimate_date !== null && data.estimate_date !== "") 
+        estimate.estimate_date=data.estimate_date;
+
+        if(data.expiry_date !== undefined && data.expiry_date !== null && data.expiry_date !== "") 
+        estimate.expiry_date=data.expiry_date;
+
+        if(data.estimate !== undefined && data.estimate !== null && data.estimate !== "") 
+        estimate.estimate_id=data.estimate;
+
+        if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "") 
+        estimate.raw_material_id=data.raw_material;
+
+        if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "") 
+        estimate.packaging_id=data.packaging;
+
+        if(data.estimate_description !== undefined && data.estimate_description !== null && data.estimate_description !== "") 
+        estimate.estimate_description=data.estimate_description;
+
+        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "") 
+        estimate.quantity=data.quantity;
+
+        if(data.rate !== undefined && data.rate !== null && data.rate !== "") 
+        estimate.rate=data.rate;
+
+        if(data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "") 
+        estimate.adjustment_amount=data.adjustment;
+
+        if(data.customer_note !== undefined && data.customer_note !== null && data.customer_note !== "") 
+        estimate.customer_note=data.customer_note;
+
+        if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "") 
+        estimate.tnc=data.tnc;
+
+        if(data.status !== undefined && data.status !== null && data.status !== "")estimate.status=data.status;
+        estimate.status=0
+        
+        let estimateData = await new CustomerModel().createCustomerEstimate(estimate)
+        let log : any = { "estimate_id" : estimateData.insertId, "stage":estimate.status,"user_id":data.user_id }
+        await new CustomerModel().createCustomerEstimateStagelog(log)
+        return estimateData;
+
+    } catch (e: any) {
+        console.log("Exception =>", e.message);
         throw e;
     }
 }
 
-const fetchAllCustomers = async () =>{
-    let customerData;
-    customerData = await new CustomerModel().fetchAllUsers( 2 )
-    if (customerData.length == 0) throw new Error("No Customer found");
-    
-    return customerData;
-}
-
-
-const fetchCustomerById = async (id: any) => {
+const updateCustomerEstimate = async (data: any) => {
     try {
-        let CustomerObj =  new CustomerModel()
-        let customer = await CustomerObj.fetchUserById( id, 2 );
-        if (customer.length == 0) throw new Error("No Customer found");
-        let profile = await CustomerObj.fetchCustomersProfileById( id )
-        let addressBill = await CustomerObj.fetchCustomersAddressById( id , 'bill' )
-        let addressPlant = await CustomerObj.fetchCustomersAddressById( id , 'plant' )
-        addressBill[0].billing_address = addressBill[0].address
-        addressPlant[0].plant_address = addressPlant[0].address
-        Object.assign( customer[0], profile[0], addressBill[0], addressPlant[0]);
-        delete customer[0].address;
-        return customer[0];
-    }
-    catch (e){
-        return e;
-    }
-}
+        let estimate:any = {}, est:any;
+        
+        if(data.id !== undefined && data.id !== null && data.id !== "") 
+        est = await new CustomerModel().estimateExistsOrNot(data.id);
+        if (est.length == 0 ) throw new Error( "Estimate not found" )
 
 
-const updateCustomerDetails = async (data:any) => {
-    try {
-        let customer : any = {};
-        let profile : any  = {};
-        let customerData;
+        if(data.customer !== undefined && data.customer !== null && data.customer !== "") 
+        estimate.customer_id=data.customer;
 
-        let cs = await new CustomerModel().fetchUserById( data.id, 2 )
-        if ( cs.length == 0) throw new Error("customer not found ");
+        if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "") 
+        estimate.estimate_no=data.estimate_id;
 
-        if(data.name !== undefined && data.name !== null && data.name !== "") 
-        customer.name=data.name;
-        if(data.email !== undefined && data.email !== null && data.email !== "") 
-        customer.email=data.email;
-        if(data.contact_no !== undefined && data.contact_no !== null && data.contact_no !== "") 
-        customer.mobile=data.contact_no;
-         
-        if(data.gstin_no !== undefined && data.gstin_no !== null && data.gstin_no !== "") 
-        profile.gstin_no=data.gstin_no;
-        let CustomerObj = new CustomerModel();
-        if( customer ) {  customerData = await CustomerObj.updateUserDetails( data, data.id, 2 ); }
-        if( profile ) { let profileData = await CustomerObj.updateCustomersProfileDetails( data, data.id ); }
-        if( profile ) { let addressData = await CustomerObj.updateCustomersAddressDetails( data, data.id ); }
-        return customerData[0];
-    }
-    catch (e){
+        if(data.product !== undefined && data.product !== null && data.product !== "") 
+        estimate.product_id=data.product;
+
+        if(data.estimate_date !== undefined && data.estimate_date !== null && data.estimate_date !== "") 
+        estimate.estimate_date=data.estimate_date;
+
+        if(data.expiry_date !== undefined && data.expiry_date !== null && data.expiry_date !== "") 
+        estimate.expiry_date=data.expiry_date;
+
+        if(data.estimate !== undefined && data.estimate !== null && data.estimate !== "") 
+        estimate.estimate_id=data.estimate;
+
+        if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "") 
+        estimate.raw_material_id=data.raw_material;
+
+        if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "") 
+        estimate.packaging_id=data.packaging;
+
+        if(data.product_description !== undefined && data.product_description !== null && data.product_description !== "") 
+        estimate.product_description=data.product_description;
+
+        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "") 
+        estimate.quantity=data.quantity;
+
+        if(data.rate !== undefined && data.rate !== null && data.rate !== "") 
+        estimate.rate=data.rate;
+
+        if(data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "") 
+        estimate.adjustment_amount=data.adjustment;
+
+        if(data.customer_note !== undefined && data.customer_note !== null && data.customer_note !== "") 
+        estimate.customer_note=data.customer_note;
+
+        if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "") 
+        estimate.tnc=data.tnc;
+        
+        if(data.status !== undefined && data.status !== null && data.status !== ""){
+            estimate.status=data.status;
+            let log : any = { "estimate_id" : data.id, "stage":data.status,"user_id":data.user_id }
+            if ( estimate.status==-1 ){
+                // Estimate declined by customer
+                console.log( "Estimate was declined" )
+            }
+            if ( estimate.status== 0 ){
+                // initial state of the estimate
+                console.log( "Estimate is in draft state" )
+            }
+            if ( estimate.status==1 ){
+                // need to integrate send an email functionaliey
+                console.log( "Pending for admin approval" )
+            }
+            if ( estimate.status==2 ){
+                console.log( "Approved by Admin." )
+            }
+            if ( estimate.status==3 ){
+                // need to integrate send an email functionaliey
+                console.log( "Email has been sent to the customer." )
+            }
+            if ( estimate.status==4 ){
+                // write code for estimate accespted by customer
+                console.log( "Accepted by Customer." )
+            }
+            if ( estimate.status==5 ){
+                console.log( "Ready to convert into sales_order." )
+            }
+            
+            await new CustomerModel().createCustomerEstimateStagelog(log)
+        }
+
+        let estimateData:any = await new CustomerModel().updateCustomerEstimateById(estimate, data.id )
+//   `stage`  -1 as declined, 0 as draft, 1 as pending approval, 2 as approved, 3 as sent, 4 as accepted, 5 as Convert to SO',
+       
+        return estimateData;
+
+    } catch (e: any) {
+        console.log("Exception =>", e.message);
         throw e;
     }
 }
 
+const fetchCustomerEstimateById = async (id: number) => {
+
+    try {
+        let estimate = await new CustomerModel().fetchCustomerEstimateById(id)
+        if (estimate.length == 0) {
+            throw new Error("estimate not found!")
+//   `stage` int(11) DEFAULT NULL COMMENT 'Enum \n-1 as declined, 0 as draft, 1 as pending approval, 2 as approved, 3 as sent, 4 as accepted, 5 as Convert to SO',
+        }
+        switch( estimate[0].status ){
+            case -1:
+                  estimate[0].status = { "value":-1, "label":"Declined" }
+                  break;
+            case 0:
+                  estimate[0].status = { "value":0, "label":"Draft" }
+                  break;
+            case 1:
+                  estimate[0].status = { "value":1, "label":"Pending for approval" }
+                  break;
+            case 2:
+                  estimate[0].status = { "value":2, "label":"Approved" }
+                  break;
+            case 3:
+                  estimate[0].status = { "value":3, "label":"Sent email" }
+                  break;
+            case 4:
+                  estimate[0].status = { "value":4, "label":"Accepted" }
+                  break;
+            case 5:
+                  estimate[0].status = { "value":5, "label":"convert to so" }
+                  break;
+        }
+        estimate[0].product = { "label":estimate[0].product, "value":estimate[0].product_id}
+        estimate[0].raw_material = { "label":estimate[0].raw_material, "value":estimate[0].raw_material_id}
+        estimate[0].packaging = { "label":estimate[0].packaging, "value":estimate[0].packaging_id}
+       
+        return estimate;
+
+    }
+    catch (error: any) {
+        return error
+    }
+
+}
+
+const fetchAllCustomerEstimates = async () => {
+
+    try {
+        let estimates = await new CustomerModel().fetchAllCustomerEstimates()
+        if( estimates.length == 0 ){
+            throw new Error( "Estimates not found")
+        }
+        return estimates;
+
+    }
+    catch (error: any) {
+        return error
+    }
+
+}
+
+const createCustomerSalesOrder = async (data: any) => {
+    try {
+        let sales_order:any = {};
+
+        if(data.customer !== undefined && data.customer !== null && data.customer !== "") 
+        sales_order.customer_id=data.customer;
+
+        if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "") 
+        sales_order.estimate_id=data.estimate_id;
+        
+        if(data.so_date !== undefined && data.so_date !== null && data.so_date !== "") 
+        sales_order.so_date=data.so_date;
+
+        if(data.delivery_date !== undefined && data.delivery_date !== null && data.delivery_date !== "") 
+        sales_order.delivery_date=data.delivery_date;
+
+        if(data.customer_so_number !== undefined && data.customer_so_number !== null && data.customer_so_number !== "") 
+        sales_order.sales_order_no=data.customer_so_number;
+
+        if(data.product !== undefined && data.product !== null && data.product !== "") 
+        sales_order.product_id=data.product;
+
+        if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "") 
+        sales_order.raw_material_id=data.raw_material;
+
+        if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "") 
+        sales_order.packaging_id=data.packaging;
+
+        if(data.product_description !== undefined && data.product_description !== null && data.product_description !== "") 
+        sales_order.product_description=data.product_description;
+
+        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "") 
+        sales_order.quantity=data.quantity;
+
+        if(data.rate !== undefined && data.rate !== null && data.rate !== "") 
+        sales_order.rate=data.rate;
+
+        if(data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "") 
+        sales_order.adjustment_amount=data.adjustment;
+
+        if(data.customer_note !== undefined && data.customer_note !== null && data.customer_note !== "") 
+        sales_order.customer_note=data.customer_note;
+
+        if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "") 
+        sales_order.tnc=data.tnc;
+        // payment_term
+        if(data.payment_term !== undefined && data.payment_term !== null && data.payment_term !== "") 
+        sales_order.payment_term=data.payment_term;
+
+        if(data.status !== undefined && data.status !== null && data.status !== "")sales_order.status=data.status;
+        sales_order.status=0
+        
+        console.log( "sales order : ", sales_order )
+        let sales_order_data = await new CustomerModel().createCustomerSalesOrder(sales_order)
+        let log : any = { "estimate_id" : sales_order.estimate_id, "stage":5,"user_id":data.user_id }
+        await new CustomerModel().createCustomerEstimateStagelog(log)
+        return sales_order_data;
+
+    } catch (e: any) {
+        console.log("Exception =>", e.message);
+        throw e;
+    }
+}
+
+const updateCustomerSalesOrder = async (data: any) => {
+    try {
+        let sales_order:any = {}, dt:any;
+        let id  = data.id;
+        console.log( "req.body : ",  data )
+        dt = await new CustomerModel().salesOrderExistsOrNot(id);
+        if (dt.length == 0 ) throw new Error( "customer sales order not found ")
+
+        if(data.customer !== undefined && data.customer !== null && data.customer !== "") 
+        sales_order.customer_id=data.customer;
+
+        if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "") 
+        sales_order.estimate_id=data.estimate_id;
+        
+        if(data.so_date !== undefined && data.so_date !== null && data.so_date !== "") 
+        sales_order.so_date=data.so_date;
+
+        if(data.delivery_date !== undefined && data.delivery_date !== null && data.delivery_date !== "") 
+        sales_order.delivery_date=data.delivery_date;
+
+        if(data.customer_so_number !== undefined && data.customer_so_number !== null && data.customer_so_number !== "") 
+        sales_order.sales_order_no=data.customer_so_number;
+
+        if(data.product !== undefined && data.product !== null && data.product !== "") 
+        sales_order.product_id=data.product;
+
+        if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "") 
+        sales_order.raw_material_id=data.raw_material;
+
+        if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "") 
+        sales_order.packaging_id=data.packaging;
+
+        if(data.product_description !== undefined && data.product_description !== null && data.product_description !== "") 
+        sales_order.product_description=data.product_description;
+
+        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "") 
+        sales_order.quantity=data.quantity;
+
+        if(data.rate !== undefined && data.rate !== null && data.rate !== "") 
+        sales_order.rate=data.rate;
+
+        if(data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "") 
+        sales_order.adjustment_amount=data.adjustment;
+
+        if(data.customer_note !== undefined && data.customer_note !== null && data.customer_note !== "") 
+        sales_order.customer_note=data.customer_note;
+
+        if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "") 
+        sales_order.tnc=data.tnc;
+        // payment_term
+        if(data.payment_term !== undefined && data.payment_term !== null && data.payment_term !== "") 
+        sales_order.payment_term=data.payment_term;
+
+        if(data.status !== undefined && data.status !== null && data.status !== "")
+        sales_order.status=data.status;
+        
+        console.log( "sales order : ", sales_order )
+        let sales_order_data = await new CustomerModel().updateCustomerSalesOrder(sales_order, id)
+        let log : any = { "estimate_id" : sales_order.estimate_id, "stage":5,"user_id":data.user_id }
+        await new CustomerModel().createCustomerEstimateStagelog(log)
+        return sales_order_data;
+
+    } catch (e: any) {
+        console.log("Exception =>", e.message);
+        throw e;
+    }
+}
+
+const fetchCustomerSalesOrderById = async (id: number) => {
+
+    try { 
+        let sales_order = await new CustomerModel().fetchCustomerSalesOrderById(id)
+        if (sales_order.length == 0) {
+            throw new Error("Sales order not found!")
+        }
+        sales_order[0].customer = { "label" : sales_order[0].customer, "value" : sales_order[0].customer_id }
+        sales_order[0].raw_material = { "label":sales_order[0].raw_material, "value":sales_order[0].raw_material_id }
+        sales_order[0].packaging = { "label":sales_order[0].packaging, "value":sales_order[0].packaging_id }
+        sales_order[0].product = { "label":sales_order[0].product, "value":sales_order[0].product_id }
+        return sales_order;
+
+    }
+    catch (error: any) {
+        return error
+    }
+
+}
+const fetchAllCustomerSalesOrders= async () => {
+
+    try {
+        let sales_order = await new CustomerModel().fetchAllCustomerSalesOrders()
+        if (sales_order.length == 0) {
+            throw new Error("Sales orders not found!")
+        }
+        return sales_order;
+
+    }
+    catch (error: any) {
+        return error
+    }
+
+}
 
 export default {
     createCustomer,
-    fetchAllCustomers,
-    fetchCustomerById,
-    updateCustomerDetails,
+    fetchCustomersById,
+    updateCustomerdetails,
+    fetchAll,
+    CreateCSMService,
+    updateCSMService,
+    fetchAllCSM,
+    createCustomerEstimate,
+    updateCustomerEstimate,
+    fetchCustomerEstimateById,
+    fetchAllCustomerEstimates,
+    createCustomerSalesOrder,
+    updateCustomerSalesOrder,
+    fetchCustomerSalesOrderById,
+    fetchAllCustomerSalesOrders
+    
 }
