@@ -37,11 +37,11 @@ export  default class UserModel extends BaseModel   {
     }
 
     async getAllCities(){
-        return await this._executeQuery("select id, name, state_id from address_city",[])
+        return await this._executeQuery("select id as value, name as label from address_city",[])
     }
 
     async getAllStates(){
-        return await this._executeQuery( "select id, name from address_state",[])
+        return await this._executeQuery( "select id as value, name as label from address_state",[])
     }
    
     async getAllCityWiseStates(){
