@@ -62,6 +62,29 @@ router.put(
     celebrate( CustomerSchema.updateCustomerEstimate ),
     CustomerController.udpateCustomerEstimate
   );
-  
+
+router.post(
+    '/sales/order/create',
+    celebrate( CustomerSchema.createCustomerSalesOrder   ),
+    CustomerController.createCustomerSalesOrder
+);  
+
+router.put( 
+  '/sales/order/update',
+  celebrate( CustomerSchema.updateCustomerSalesOrderById ),
+  CustomerController.updateCustomerSalesOrder
+);
+
+router.get( 
+  '/sales/order/fetch',
+  celebrate( CustomerSchema.fetchCustomerSalesOrderById ),
+  CustomerController.fetchCustomerSalesOrderById
+);
+
+router.get( 
+  '/sales/order/fetch/all',
+  CustomerController.fetchAllCustomerSalesOrders
+);
+
 
 export default router;
