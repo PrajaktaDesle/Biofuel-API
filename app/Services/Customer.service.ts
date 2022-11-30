@@ -383,6 +383,27 @@ const fetchCustomerEstimateById = async (id: number) => {
         let estimate = await new CustomerModel().fetchCustomerEstimateById(id)
         if (estimate.length == 0) {
             throw new Error("estimate not found!")
+//   `stage` int(11) DEFAULT NULL COMMENT 'Enum \n-1 as declined, 0 as draft, 1 as pending approval, 2 as approved, 3 as sent, 4 as accepted, 5 as Convert to SO',
+        }
+        switch( estimate[0].status ){
+            case -1:
+                  estimate[0].status = { "value":-1, "label":"Declined" }
+                  break;
+            case 0:
+                  estimate[0].status = { "value":0, "label":"Draft" }
+                  break;
+            case 1:
+                  estimate[0].status = { "value":1, "label":"Pending for approval" }
+                  break;
+            case 2:
+                  estimate[0].status = { "value":2, "label":"Approved" }
+                  break;
+            case 3:
+                  estimate[0].status = { "value":3, "label":"Sent" }
+                  break;
+            case 4:
+                  estimate[0].status = { "value":4, "label":"Accepted" }
+                  break;
         }
        
         return estimate;
