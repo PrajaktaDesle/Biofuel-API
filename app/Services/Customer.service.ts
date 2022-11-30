@@ -43,14 +43,14 @@ const createCustomer = async (req:any)=> {
         let s3Image: any = {}
         let s3Path: any = {}
         if (files.gstin !== undefined && files.gstin !== null && files.gstin !== "") {
-            if (fileNotValid(files.gstin.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image");else{s3Image['image'] = files.gstin
+            if (fileNotValid(files.gstin.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image");s3Image['image'] = files.gstin
         }
-
+        else {throw new Error(" gst_url is required")}
         let name: string = "images/image/" + moment().unix() + "." + s3Image['image'].originalFilename.split(".").pop()
         const result = await uploadFile(s3Image['image'], name);
         if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
         console.log("s3 result  : ", result)
-        s3Path['gstin_url'] = result.key;}
+        s3Path['gstin_url'] = result.key;
         customer= Object.assign(customer, s3Path);
         CustomerData = await new CustomerModel().createCustomerDetails(customer)
         if(!CustomerData) throw Error("failed to create customer")
