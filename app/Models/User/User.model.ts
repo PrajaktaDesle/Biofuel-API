@@ -44,8 +44,8 @@ export  default class UserModel extends BaseModel   {
         return await this._executeQuery( "select id as value, name as label from address_state",[])
     }
    
-    async getAllCityWiseStates(){
-        return await this._executeQuery("select act.id as city_id, act.name as city , ast.id as state_id, ast.name as state from address_state ast inner join address_city act ON  ast.id = act.state_id",[])
+    async getAllCityWiseStates(id:number){
+        return await this._executeQuery("select act.id as city_id, act.name as city , ast.id as state_id, ast.name as state from biofuel.address_city act inner join biofuel.address_state ast ON  act.state_id = ast.id where act.id = ?",[id])
     }
 
     async getCity(name:string){
