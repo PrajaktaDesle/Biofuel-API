@@ -47,7 +47,29 @@ const getAllStates: IController = async (req, res) => {
     }
 };
 
+const getCitiesByState: IController = async (req:any, res:any) => {
+    try {
+        let states : any = await addressService.getCitiesByState(req.query.state_id);
+        if (states instanceof Error) {
+            console.log("error", states)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+
+            apiResponse.result(res, states, httpStatusCodes.OK);
+        }
+    } catch (e:any) {
+        console.log("controller ->", e)
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+            return;
+    }
+};
+
 export default {
     getAllCities,
-    getAllStates
+    getAllStates,
+    getCitiesByState
 }
