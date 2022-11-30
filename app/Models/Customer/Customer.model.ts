@@ -85,7 +85,7 @@ export class CustomerModel extends UserModel
     }
    
     async fetchCustomerEstimateById( id : any){
-        return await this._executeQuery( `SELECT es.id, customer_id, cs.name as customer,es.status, estimate_date, expiry_date, estimate_no ,product_id,p.name as product_name, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, rate, customer_note, adjustment_amount*rate as total_amount FROM biofuel.customer_estimates es
+        return await this._executeQuery( `SELECT es.id, customer_id, cs.name as customer,es.status, estimate_date, expiry_date, estimate_no ,product_id,p.name as product, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, rate, customer_note, adjustment_amount*rate as total_amount FROM biofuel.customer_estimates es
                                           inner join biofuel.products p ON p.id=es.product_id
                                           inner join biofuel.customers cs ON cs.id=es.customer_id
                                           inner join biofuel.product_raw_material rm ON rm.id=es.raw_material_id

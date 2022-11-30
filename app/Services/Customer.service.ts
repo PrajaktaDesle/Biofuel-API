@@ -428,12 +428,18 @@ const fetchCustomerEstimateById = async (id: number) => {
                   estimate[0].status = { "value":2, "label":"Approved" }
                   break;
             case 3:
-                  estimate[0].status = { "value":3, "label":"Sent" }
+                  estimate[0].status = { "value":3, "label":"Sent email" }
                   break;
             case 4:
                   estimate[0].status = { "value":4, "label":"Accepted" }
                   break;
+            case 5:
+                  estimate[0].status = { "value":5, "label":"convert to so" }
+                  break;
         }
+        estimate[0].product = { "label":estimate[0].product, "value":estimate[0].product_id}
+        estimate[0].raw_material = { "label":estimate[0].raw_material, "value":estimate[0].raw_material_id}
+        estimate[0].packaging = { "label":estimate[0].packaging, "value":estimate[0].packaging_id}
        
         return estimate;
 
