@@ -3,7 +3,8 @@ import LOGGER from "../config/LOGGER";
 import formidable from "formidable";
 let config = require("../config");
 import moment from 'moment';
-import CustomerModel from "../Models/Customer/Customer.model";
+import * as fs from "fs";
+import { CustomerModel } from "../Models/Customer/Customer.model";
 import {SupplierModel} from "../Models/Supplier/Supplier.model";
 
 const createCustomer = async (req:any)=> {
@@ -141,14 +142,6 @@ const fetchCustomersById = async (id:any) => {
         let customers = await new  CustomerModel().fetchCustomersDetailsById(id)
         if (customers.length == 0) throw new Error(" customer not found!")
         customers[0].gst= config.baseUrl + "/" + customers[0].gstin_url;
-        // let BAddress = await new CustomerModel().fetchsBillingAddressById(id)
-        // let SAddress = await new  CustomerModel().fetchShippingAddressById(id)
-        // let city = await new CustomerModel().getCityById(SAddress[0].city_id)
-        // let state = await new CustomerModel().getStateById(city[0].state_id)
-        // SAddress[0].shipping_city = city[0].name
-        // SAddress[0].shipping_state = state[0].name
-        // delete SAddress[0].city_id
-        // Object.assign(customers[0],BAddress[0],SAddress[0])
         return customers[0];
     }
     catch (error: any) {
@@ -166,15 +159,6 @@ const fetchAll = async () => {
         for (let i = 0; i < customers.length; i++) {
             // adding base url to panurl from database
             customers[i].gst= config.baseUrl + "/" + customers[0].gstin_url;
-        //     let id = customers[i].id
-        //     Billing_address = await new CustomerModel().fetchsBillingAddressById(id)
-        //     shipping_address = await new  CustomerModel().fetchShippingAddressById(id)
-        //     city = await new CustomerModel().getCityById(shipping_address[0].city_id)
-        //     state = await new CustomerModel().getStateById(city[0].state_id)
-        //     shipping_address[0].shipping_city = city[0].name
-        //     shipping_address[0].shipping_state = state[0].name
-        //     delete shipping_address[0].city_id
-        //     Object.assign(customers[i], Billing_address[0], shipping_address[0])
         }
         return customers;
     }
@@ -248,10 +232,173 @@ const fetchAllCSM = async()=>{
     }
 }
 
+const createCustomerEstimate = async (data: any) => {
+    try {
+        let customerData;
+        let estimate:any = {};
+        if(data.customer !== undefined && data.customer !== null && data.customer !== "")
+        estimate.customer_id=data.customer;
+
+        if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "")
+        estimate.estimate_no=data.estimate_id;
+
+        if(data.product !== undefined && data.product !== null && data.product !== "")
+        estimate.product_id=data.product;
+
+        if(data.estimate_date !== undefined && data.estimate_date !== null && data.estimate_date !== "")
+        estimate.estimate_date=data.estimate_date;
+
+        if(data.expiry_date !== undefined && data.expiry_date !== null && data.expiry_date !== "")
+        estimate.expiry_date=data.expiry_date;
+
+        if(data.estimate !== undefined && data.estimate !== null && data.estimate !== "")
+        estimate.estimate_id=data.estimate;
+
+        if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "")
+        estimate.raw_material_id=data.raw_material;
+
+        if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "")
+        estimate.packaging_id=data.packaging;
+
+        if(data.estimate_description !== undefined && data.estimate_description !== null && data.estimate_description !== "")
+        estimate.estimate_description=data.estimate_description;
+
+        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "")
+        estimate.quantity=data.quantity;
+
+        if(data.rate !== undefined && data.rate !== null && data.rate !== "")
+        estimate.rate=data.rate;
+
+        if(data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "")
+        estimate.adjustment_amount=data.adjustment;
+
+        if(data.customer_note !== undefined && data.customer_note !== null && data.customer_note !== "")
+        estimate.customer_note=data.customer_note;
+
+        if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "")
+        estimate.tnc=data.tnc;
+
+        if(data.status !== undefined && data.status !== null && data.status !== "")
+        estimate.status=data.status;
+
+        let estimateData = await new CustomerModel().createCustomerEstimate(estimate)
+        return estimateData;
+
+    } catch (e: any) {
+        console.log("Exception =>", e.message);
+        throw e;
+    }
+}
+
+const updateCustomerEstimate = async (data: any) => {
+    try {
+        let estimate:any = {}, est:any;
+
+        if(data.id !== undefined && data.id !== null && data.id !== "")
+        est= await new CustomerModel().estimateExistsOrNot(data.id);
+        if (est.length == 0 ) throw new Error( "Estimate not found" )
 
 
-export default {createCustomer,
+        if(data.customer !== undefined && data.customer !== null && data.customer !== "")
+        estimate.customer_id=data.customer;
+
+        if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "")
+        estimate.estimate_no=data.estimate_id;
+
+        if(data.product !== undefined && data.product !== null && data.product !== "")
+        estimate.product_id=data.product;
+
+        if(data.estimate_date !== undefined && data.estimate_date !== null && data.estimate_date !== "")
+        estimate.estimate_date=data.estimate_date;
+
+        if(data.expiry_date !== undefined && data.expiry_date !== null && data.expiry_date !== "")
+        estimate.expiry_date=data.expiry_date;
+
+        if(data.estimate !== undefined && data.estimate !== null && data.estimate !== "")
+        estimate.estimate_id=data.estimate;
+
+        if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "")
+        estimate.raw_material_id=data.raw_material;
+
+        if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "")
+        estimate.packaging_id=data.packaging;
+
+        if(data.estimate_description !== undefined && data.estimate_description !== null && data.estimate_description !== "")
+        estimate.estimate_description=data.estimate_description;
+
+        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "")
+        estimate.quantity=data.quantity;
+
+        if(data.rate !== undefined && data.rate !== null && data.rate !== "")
+        estimate.rate=data.rate;
+
+        if(data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "")
+        estimate.adjustment_amount=data.adjustment;
+
+        if(data.customer_note !== undefined && data.customer_note !== null && data.customer_note !== "")
+        estimate.customer_note=data.customer_note;
+
+        if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "")
+        estimate.tnc=data.tnc;
+
+        if(data.status !== undefined && data.status !== null && data.status !== "")
+        estimate.status=data.status;
+
+        let estimateData:any = await new CustomerModel().updateCustomerEstimateById(estimate, data.id )
+        return estimateData;
+
+    } catch (e: any) {
+        console.log("Exception =>", e.message);
+        throw e;
+    }
+}
+
+const fetchCustomerEstimateById = async (id: number) => {
+
+    try {
+        let estimate = await new CustomerModel().fetchCustomerEstimateById(id)
+        if (estimate.length == 0) {
+            throw new Error("estimate not found!")
+        }
+
+        return estimate;
+
+    }
+    catch (error: any) {
+        return error
+    }
+
+}
+
+const fetchAllCustomerEstimates = async () => {
+
+    try {
+        let estimates = await new CustomerModel().fetchAllCustomerEstimates()
+        if( estimates.length == 0 ){
+            throw new Error( "Estimates not found")
+        }
+
+        return estimates;
+
+    }
+    catch (error: any) {
+        return error
+    }
+
+}
+
+
+export default {
+    createCustomer,
     fetchCustomersById,
-    updateCustomerdetails,fetchAll,
-    CreateCSMService,updateCSMService, fetchAllCSM
+    updateCustomerdetails,
+    fetchAll,
+    CreateCSMService,
+    updateCSMService,
+    fetchAllCSM,
+    createCustomerEstimate,
+    updateCustomerEstimate,
+    fetchCustomerEstimateById,
+    fetchAllCustomerEstimates
+
 }

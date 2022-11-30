@@ -18,13 +18,7 @@ export default {
         [Segments.QUERY]:{
             id:Joi.number().required()
         }
-    },
-
-    updateSupplierStatus : {
-        [Segments.BODY] : {
-            id : Joi.number().required(),
-            status : Joi.number().required().min(-1).message("status should be -1,0 or 1").max(1).message("status should be -1,0 or 1")
-        }
     }
+
 
 };

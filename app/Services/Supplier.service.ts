@@ -65,10 +65,10 @@ const createSupplier = async (req:any) =>{
         await new SupplierModel().supplierRawMaterialMapping({"supplier_id":user_id,"raw_material_id":fd.raw_material})
         await new SupplierModel().supplierPackagingMapping({"supplier_id":user_id,"packaging":fd.packaging})
         suppliersProfile = await new SupplierModel().createSuppliersProfile( profile )
-        let addressB = {"address_type":"billing","address":fd.billing_address,"user_type":1,"user_id":user_id} 
-        suppliersAddress = await new SupplierModel().createSuppliersAddress( addressB )
-        let addressS = {"address_type":"source","address":fd.source_address,"pincode":fd.source_pincode,"city_id":fd.source_city,"longitude":fd.longitude,"latitude":fd.latitude,"user_type":1,"user_id":user_id}
-        suppliersAddress = await new SupplierModel().createSuppliersAddress( addressS )
+        let billing_address = {"address_type":"billing","address":fd.billing_address,"user_type":1,"user_id":user_id} 
+        suppliersAddress = await new SupplierModel().createSuppliersAddress( billing_address )
+        let source_address = {"address_type":"source","address":fd.source_address,"pincode":fd.source_pincode,"city_id":fd.source_city,"longitude":fd.longitude,"latitude":fd.latitude,"user_type":1,"user_id":user_id}
+        suppliersAddress = await new SupplierModel().createSuppliersAddress( source_address )
 
         return suppliersData;
 
@@ -79,28 +79,21 @@ const createSupplier = async (req:any) =>{
 }
 
 const fetchAllSuppliers = async ( ) =>{
-    let supplierData;
-    supplierData = await new SupplierModel().fetchAllUsers(3)
-    if (supplierData == null) throw new Error("details did not match");
-
-    // Adding Baseurl to panurl from database
-    for(let i=0;i< supplierData.length;i++) {
-        let profile = await new SupplierModel().fetchSuppliersProfileById( supplierData[i].id )
-        profile[0].pan_url= config.baseUrl + "/" + profile[0].pan_url;
-        profile[0].aadhaar_url= config.baseUrl + "/" + profile[0].aadhaar_url;
-        profile[0].gstin_url = config.baseUrl + "/" + profile[0].gstin_url;
-        profile[0].msme_url = config.baseUrl + "/" + profile[0].msme_url;
-        // Object.assign( supplierData[i] , [0] );
-        let addressB = await new SupplierModel().fetchSuppliersBillingAddressById( supplierData[i].id )
-        let addressS = await new SupplierModel().fetchSuppliersSourceAddressById( supplierData[i].id )
-        let city = await new SupplierModel().getCityById(addressS[0].city_id)
-        let state = await new SupplierModel().getStateById(city[0].state_id)
-        addressS[0].source_city = city[0].name
-        addressS[0].source_state = state[0].name
-        delete addressS[0].city_id
-        Object.assign( supplierData[i] , profile[0], addressB[0], addressS[0] )
+    let suppliers;
+    suppliers = await new SupplierModel().fetchAllUsers(3)
+    if (suppliers == null) throw new Error("details did not match");
+    console.log( "suppliers : ", suppliers )
+    for(let i=0;i< suppliers.length;i++) {
+        let suppliersProfile = await new SupplierModel().fetchSuppliersProfileAndSourceAddressById( suppliers[i].id )
+        let billing_address = await new SupplierModel().fetchSuppliersBillingAddressById( suppliers[i].id )
+        Object.assign( suppliers[i] , suppliersProfile[0], billing_address[0] )
+        // Adding Baseurl to panurl from database
+        suppliersProfile[0].pan_url= config.baseUrl + "/" + suppliersProfile[0].pan_url;
+        suppliersProfile[0].aadhaar_url= config.baseUrl + "/" + suppliersProfile[0].aadhaar_url;
+        suppliersProfile[0].gstin_url = config.baseUrl + "/" + suppliersProfile[0].gstin_url;
+        suppliersProfile[0].msme_url = config.baseUrl + "/" + suppliersProfile[0].msme_url;
     }
-    return supplierData;
+    return suppliers;
 }
 const isFileNotValid = (type:any) => {
     if (type == 'image/jpeg' || type == 'image/jpg' || type == 'image/png') {
@@ -113,16 +106,9 @@ const fetchSupplierById = async (id: any) => {
     try {
         let supplier = await new SupplierModel().fetchUserById( id, 3 );
         if (supplier.length == 0) throw new Error("Supplier not found");
-        let addressB = await new SupplierModel().fetchSuppliersBillingAddressById( supplier[0].id )
-        let addressS = await new SupplierModel().fetchSuppliersSourceAddressById( supplier[0].id )
-        console.log( addressS )
-        let city = await new SupplierModel().getCityById(addressS[0].city_id)
-        let state = await new SupplierModel().getStateById(city[0].state_id)
-        addressS[0].source_city = city[0].name
-        addressS[0].source_state = state[0].name
-        let suppliersProfile = await new SupplierModel().fetchSuppliersProfileById( id )
-        Object.assign( supplier[0], suppliersProfile[0], addressS[0], addressB[0]);
-
+        let suppliersProfile = await new SupplierModel().fetchSuppliersProfileAndSourceAddressById( id )
+        let billing_address = await new SupplierModel().fetchSuppliersBillingAddressById( supplier[0].id )
+        Object.assign( supplier[0], suppliersProfile[0], billing_address[0]);
         // Adding Baseurl to panurl from database
         supplier[0].pan_url= config.baseUrl + "/" + supplier[0].pan_url;
         supplier[0].aadhaar_url= config.baseUrl + "/" + supplier[0].aadhaar_url;
@@ -137,22 +123,7 @@ const fetchSupplierById = async (id: any) => {
 }
 
 
-
-const updateSuppliersDetails = async (data:any) => {
-    try {
-        let supplier = await new SupplierModel().fetchUserById( data.id, 3 )
-        if( supplier.length == 0 ) throw new Error( "no supplier found")
-        let supplierData = await new SupplierModel().updateUserDetails(data, data.id, 3);
-        LOGGER.info( "supplier details", supplierData )
-        console.log( supplierData )
-        return {"changedRows":supplierData.changedRows};
-    }
-    catch (e){
-        throw e; 
-    }
-}
-
-const formidableUpdateDetails = async (req:any) =>{
+const updateSupplierDetails = async (req:any) =>{
     try{
         let updatedSupplierData, updatedSuppliersProfile,updatedSuppliersAddress, fd, fl;
         //@ts-ignore
@@ -161,7 +132,7 @@ const formidableUpdateDetails = async (req:any) =>{
                     resolve({fd: fd, fl: fl});})}));
         
         let id=Number(fd.id);
-        let updatedSupplier : any = {}, profile : any = {}, addressB : any = {}, addressS:any = {}, result:any = {}, city:any = {}, state:any = {};
+        let updatedSupplier : any = {}, profile : any = {}, billing_address : any = {}, source_address:any = {}, result:any = {}, city:any = {}, state:any = {};
 
         // id field validation
         if(fd.id == undefined || fd.id == null || fd.id == "") throw new Error("id is missing");
@@ -177,20 +148,22 @@ const formidableUpdateDetails = async (req:any) =>{
         updatedSupplier.mobile=fd.contact_no;
         if(fd.email !== undefined && fd.email !== null && fd.email !== "") 
         updatedSupplier.email=fd.email;
+        if(fd.status !== undefined && fd.status !== null && fd.status !== "") 
+        updatedSupplier.status=fd.status;
         if(fd.billing_address !== undefined && fd.billing_address !== null && fd.billing_address !== "")
-        addressB.address=fd.billing_address;
+        billing_address.address=fd.billing_address;
         if(fd.source_address !== undefined && fd.source_address !== null && fd.source_address !== "")
-        addressS.address=fd.source_address;
+        source_address.address=fd.source_address;
         if(fd.source_city !== undefined && fd.source_city !== null && fd.source_city !== "") 
-        addressS.city_id=fd.source_city;
+        source_address.city_id=fd.source_city;
         // if(fd.source_state !== undefined && fd.source_state !== null && fd.source_state !== "") 
-        // addressS.state=fd.source_state;
+        // source_address.state=fd.source_state;
         if(fd.source_pincode !== undefined && fd.source_pincode !== null && fd.source_pincode !== "") 
-        addressS.pincode=fd.source_pincode;
+        source_address.pincode=fd.source_pincode;
         if(fd.latitude !== undefined && fd.latitude !== null && fd.latitude !== "") 
-        addressS.latitude=fd.latitude;
+        source_address.latitude=fd.latitude;
         if(fd.longitude !== undefined && fd.longitude !== null && fd.longitude !== "") 
-        addressS.longitude=fd.longitude;
+        source_address.longitude=fd.longitude;
        
         if(fd.aadhaar_no !== undefined && fd.aadhaar_no !== null && fd.aadhaar_no !== "") 
         profile.aadhaar_no=fd.aadhaar_no;
@@ -219,8 +192,8 @@ const formidableUpdateDetails = async (req:any) =>{
         // Saving the data to the database
         if( Object.keys(updatedSupplier).length  ){await new SupplierModel().updateUserDetails(updatedSupplier,fd.id,3).then((data)=>{console.log("supplier details updated successfully")})}
         if( Object.keys(profile).length  ){ await new SupplierModel().updateSuppliersProfileDetails(profile,fd.id).then((data)=>{console.log("supplier's profile details updated successfully")})}
-        if( Object.keys(addressB).length ){ await new SupplierModel().updateSuppliersAddressDetails(addressB,fd.id,"billing").then((data)=>{console.log("supplier's billing address details updated successfully")})}
-        if( Object.keys(addressS).length ){ await new SupplierModel().updateSuppliersAddressDetails(addressS,fd.id,"source").then((data)=>{console.log("supplier's source address details updated successfully")})}
+        if( Object.keys(billing_address).length ){ await new SupplierModel().updateSuppliersAddressDetails(billing_address,fd.id,"billing").then((data)=>{console.log("supplier's billing address details updated successfully")})}
+        if( Object.keys(source_address).length ){ await new SupplierModel().updateSuppliersAddressDetails(source_address,fd.id,"source").then((data)=>{console.log("supplier's source address details updated successfully")})}
         return {"message" : "supplier updated successfully","changedRows":1};
     }catch(e){
         console.log("Exception ->", e);
@@ -301,24 +274,6 @@ const getAllStates = async ( ) =>{
     return data 
 }
 
-const getAllRawMaterials = async ( ) =>{
-    let data = await new SupplierModel().getAllRawMaterials()
-    if (data.length == 0) {
-            throw new Error("Raw materials not found!")
-        }
-    console.log( data )
-    return data 
-}
-
-const getAllPackaging = async ( ) =>{
-    let data = await new SupplierModel().getAllPackaging()
-    if (data.length == 0) {
-            throw new Error("packaging not found!")
-        }
-    console.log( data )
-    return data 
-}
-
 const getHomePage = async ( ) =>{
     let data = await new SupplierModel().getHomePage()
     if (data.length == 0) {
@@ -336,13 +291,10 @@ export default {
     loginSupplier,
     fetchAllSuppliers,
     fetchSupplierById,
-    updateSuppliersDetails,
-    formidableUpdateDetails,
+    updateSupplierDetails,
     verify_supplier_otp,
     getAllCityWiseStates,
     getAllCities,
     getAllStates,
-    getAllRawMaterials,
-    getAllPackaging,
     getHomePage
 }
