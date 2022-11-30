@@ -364,7 +364,11 @@ const updateCustomerEstimate = async (data: any) => {
         estimate.status=data.status;
 
         let estimateData:any = await new CustomerModel().updateCustomerEstimateById(estimate, data.id )
-        await new CustomerModel().
+//   `estimate_id` int(11) DEFAULT NULL,
+//   `stage` int(11) DEFAULT NULL COMMENT 'Enum \n-1 as declined, 0 as draft, 1 as pending approval, 2 as approved, 3 as sent, 4 as accepted, 5 as Convert to SO',
+//   `user_id` varchar(45) DEFAULT NULL,
+        let log : any = { "estimate_id" : data.id, "stage":data.status,"user_id":data.user_id }
+        await new CustomerModel().createCustomerEstimateStagelog(log)
         return estimateData;
 
     } catch (e: any) {
