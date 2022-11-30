@@ -364,6 +364,7 @@ const updateCustomerEstimate = async (data: any) => {
         estimate.status=data.status;
 
         let estimateData:any = await new CustomerModel().updateCustomerEstimateById(estimate, data.id )
+        await new CustomerModel().
         return estimateData;
 
     } catch (e: any) {

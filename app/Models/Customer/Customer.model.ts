@@ -106,5 +106,11 @@ export class CustomerModel extends UserModel
     async estimateExistsOrNot( id : number ){
         return await this._executeQuery( "select id from customer_estimates where id = ? ",[id] )
     }
+    async createCustomerEstimateStagelog( data : any ){
+        return await this._executeQuery( "insert into customer_estimate_stage_logs set ? ", [data])
+    }
+    async createCustomerSalesOrder( data : any ){
+        return await this._executeQuery( "insert into customer_sales_order set ? ", [data])
+    }
    
 }
