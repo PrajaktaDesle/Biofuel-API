@@ -12,7 +12,13 @@ export default class CustomerModel extends BaseModel {
         return await this._executeQuery("update customers set ? where id = ? ", [customerData,id]);
     }
     async fetchCustomersDetailsById(id: any ){
-        return await this._executeQuery("select * from customers where id = ? ", [id]);
+        // return await this._executeQuery("select * from customers where id = ? ", [id]);
+        return await this._executeQuery(`SELECT cs.id, cs.name as customer, cs.email, cs.mobile as contact_no,cs.payment_term,cs.status,cs.gstin, cs.gstin_url,a.address as shipping_address,a.address as billing_address,a.latitude, a.longitude, ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode,cs.created_at,cs.updated_at
+                                         FROM biofuel.customers cs
+                                         inner join biofuel.addresses a ON a.user_id=cs.id
+                                         inner join biofuel.address_city ac ON ac.id=a.city_id
+                                         inner join biofuel.address_state ast ON ac.state_id=ast.id
+                                          where a.user_id =? and a.address_type="shipping";`,[id])
     }
     async createCustomerAddress(data:any){
         return await this._executeQuery("insert into addresses set ?", [data]);
@@ -30,10 +36,15 @@ export default class CustomerModel extends BaseModel {
         return await this._executeQuery("update addresses set ? where user_id = ?  and address_type = ? ", [customerData,user_id, add_type]);
     }
     async  fetchAllCustomers(){
-        return await this._executeQuery("select * from  customers", []);
+        // return await this._executeQuery("select * from  customers", []);
+        return await this._executeQuery("SELECT cs.id, cs.name as customer, cs.email, cs.mobile as contact_no,cs.payment_term,cs.status,cs.gstin, cs.gstin_url,a.address as shipping_address,a.address as billing_address,a.latitude, a.longitude, ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode\n" +
+            "                                         FROM biofuel.customers cs\n" +
+            "                                         inner join biofuel.addresses a ON a.user_id=cs.id\n" +
+            "                                         inner join biofuel.address_city ac ON ac.id=a.city_id\n" +
+            "                                         inner join biofuel.address_state ast ON ac.state_id=ast.id;\n",[])
     }
     async fetchsBillingAddressById(user_id: any){
-        return await this._executeQuery("select user_type,address as `billing_address` from addresses where user_id = ? and address_type = ? ", [user_id, "billing"]);
+        return await this._executeQuery("select user_type ,address as `billing_address` from addresses where user_id = ? and address_type = ? ", [user_id, "billing"]);
     }
     async fetchShippingAddressById(id: any){
         return await this._executeQuery("select address as `shipping_address`,pincode, city_id, latitude, longitude from addresses where user_id = ? and address_type = ? ", [id, "shipping"]);
