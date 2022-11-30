@@ -1,6 +1,6 @@
 import express from 'express';
 import CustomerController from '../../Controllers/Customer.controller';
-import CustomerScheman from '../../Constants/Schema/Customer.schema';
+import CustomerSchema from '../../Constants/Schema/Customer.schema';
 const router = express.Router();
 import { celebrate } from 'celebrate';
 router.post(
@@ -25,13 +25,13 @@ router.get(
 // customer-supplier mapping
 router.post(
   '/add',
-  celebrate(CustomerScheman.customer_supplier),
+  celebrate(CustomerSchema.customer_supplier),
   CustomerController.Create_customer_supplier
 );
 
 router.put(
   '/update/status',
-  celebrate(CustomerScheman.updateStatus),
+  celebrate(CustomerSchema.updateStatus),
   CustomerController.updateCSMStatus
 );
 
@@ -42,13 +42,13 @@ router.get(
 
 router.post(
     '/estimate/create',
-    celebrate( CustomerScheman.createCustomerEstimate   ),
+    celebrate( CustomerSchema.createCustomerEstimate   ),
     CustomerController.createCustomerEstimate
   );
   
 router.get( 
     '/estimate/fetch',
-    celebrate( CustomerScheman.fetchCustomerEstimateById ),
+    celebrate( CustomerSchema.fetchCustomerEstimateById ),
     CustomerController.fetchCustomerEstimateById
   );
   
@@ -59,7 +59,7 @@ router.get(
   
 router.put( 
     '/estimate/update',
-    celebrate( CustomerScheman.updateCustomerEstimate ),
+    celebrate( CustomerSchema.updateCustomerEstimate ),
     CustomerController.udpateCustomerEstimate
   );
   
