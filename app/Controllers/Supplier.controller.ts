@@ -160,68 +160,6 @@ const updateSupplierDetails : IController = async (req, res) => {
     }
 };
 
-const getAllCityWiseStates: IController = async (req, res) => {
-    try {
-        let supplier : any = await supplierService.getAllCityWiseStates();
-        if (supplier instanceof Error) {
-            console.log("error", supplier)
-            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
-        } else {
-
-            apiResponse.result(res, supplier, httpStatusCodes.OK);
-        }
-    } catch (e:any) {
-        console.log("controller ->", e)
-            apiResponse.error(
-                res,
-                httpStatusCodes.BAD_REQUEST,
-                e.message
-            );
-            return;
-    }
-};
-
-const getAllCities: IController = async (req, res) => {
-    try {
-        let cities : any = await supplierService.getAllCities();
-        if (cities instanceof Error) {
-            console.log("error", cities)
-            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
-        } else {
-
-            apiResponse.result(res, cities, httpStatusCodes.OK);
-        }
-    } catch (e:any) {
-        console.log("controller ->", e)
-            apiResponse.error(
-                res,
-                httpStatusCodes.BAD_REQUEST,
-                e.message
-            );
-            return;
-    }
-};
-
-const getAllStates: IController = async (req, res) => {
-    try {
-        let states : any = await supplierService.getAllStates();
-        if (states instanceof Error) {
-            console.log("error", states)
-            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
-        } else {
-
-            apiResponse.result(res, states, httpStatusCodes.OK);
-        }
-    } catch (e:any) {
-        console.log("controller ->", e)
-            apiResponse.error(
-                res,
-                httpStatusCodes.BAD_REQUEST,
-                e.message
-            );
-            return;
-    }
-};
 
 const getHomePage: IController = async (req, res) => {
     try {
@@ -255,8 +193,5 @@ export default {
     fetchAllSuppliers,
     fetchSupplierById,
     updateSupplierDetails,
-    getAllCityWiseStates,
-    getAllCities,
-    getAllStates,
     getHomePage
 };

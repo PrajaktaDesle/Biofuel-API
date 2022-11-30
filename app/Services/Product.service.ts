@@ -39,15 +39,14 @@ const createProduct = async (req: any) => {
         let s3Path: any = {}
         if (files.image !== undefined && files.image !== null && files.image !== "") {
             if (fileNotValid(files.image.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image"); s3Image['image'] = files.image
+            let name: string = "images/image/" + moment().unix() + "." + s3Image['image'].originalFilename.split(".").pop()
+            const result = await uploadFile(s3Image['image'], name);
+            if (result == 0 && result == undefined) throw new Error("Product image upload to s3 failed");
+            console.log("s3 result  : ", result)
+            s3Path['image'] = result.key;
+            product = Object.assign(product, s3Path);
         }
-        else { throw new Error("image is required") }
-        let name: string = "images/image/" + moment().unix() + "." + s3Image['image'].originalFilename.split(".").pop()
-        const result = await uploadFile(s3Image['image'], name);
-        if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
-        console.log("s3 result  : ", result)
-        s3Path['image'] = result.key;
-        product = Object.assign(product, s3Path);
- 
+       
         console.log( "product : ", product )
         productData = await new ProductModel().createProduct(product)
         return productData;
