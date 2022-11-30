@@ -36,4 +36,28 @@ router.get(
     CustomerController.fetchAll_customers_suppliers
 );
 
+router.post(
+    '/estimate/create',
+    celebrate( CustomerSchema.createCustomerEstimate   ),
+    CustomerController.createCustomerEstimate
+);
+
+router.get(
+    '/estimate/fetch',
+    celebrate( CustomerSchema.fetchCustomerEstimateById ),
+    CustomerController.fetchCustomerEstimateById
+);
+
+router.get(
+    '/estimate/fetch/all',
+    CustomerController.fetchAllCustomerEstimates
+);
+
+router.put(
+    '/estimate/update',
+    celebrate( CustomerSchema.updateCustomerEstimate ),
+    CustomerController.udpateCustomerEstimate
+);
+
+
 export default router;
