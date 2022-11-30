@@ -142,6 +142,14 @@ const fetchCustomersById = async (id:any) => {
         let customers = await new  CustomerModel().fetchCustomersDetailsById(id)
         if (customers.length == 0) throw new Error(" customer not found!")
         customers[0].gst= config.baseUrl + "/" + customers[0].gstin_url;
+        customers[0].imgList = [{file : customers[0].gstin_url}]
+        customers[0].city = {label : customers[0].city , value : customers[0].city_id};
+        customers[0].state = {label : customers[0].state , value : customers[0].state_id};
+        if (customers[0].status == 1){
+            customers[0].customerStatus = {value : 1, label : "Active"};
+        }else{
+            customers[0].customerStatus = {value : 0, label : "Inactive"};
+        }
         return customers[0];
     }
     catch (error: any) {
