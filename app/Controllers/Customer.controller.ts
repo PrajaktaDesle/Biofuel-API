@@ -182,10 +182,10 @@ const createCustomerEstimate: IController = async (req, res) => {
     let estimate: any;
     try {
         estimate = await CustomerService.createCustomerEstimate(req.body);
-        console.log('estimate at controller-----> ', estimate);
+        LOGGER.info('estimate at controller-----> ', estimate);
 
         if (estimate instanceof Error) {
-            console.log("error", estimate)
+            LOGGER.info("error", estimate)
             apiResponse.error( res, 
                                httpStatusCodes.BAD_REQUEST );
         } 
@@ -196,7 +196,7 @@ const createCustomerEstimate: IController = async (req, res) => {
         }
 
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
         // @ts-ignore
         if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
             apiResponse.error( res,
@@ -217,7 +217,7 @@ const udpateCustomerEstimate: IController = async (req, res) => {
     let estimate: any;
     try {
         estimate = await CustomerService.updateCustomerEstimate(req.body);
-        console.log('estimate at controller-----> ', estimate);
+        LOGGER.info('estimate at controller-----> ', estimate);
 
         if (estimate instanceof Error) {
             LOGGER.info("error", estimate)
