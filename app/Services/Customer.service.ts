@@ -285,8 +285,9 @@ const createCustomerEstimate = async (data: any) => {
 
         if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "")
         estimate.tnc=data.tnc;
-        if(data.status !== undefined && data.status !== null && data.status !== "")
-        estimate.status=data.status;
+
+        if(data.status !== undefined && data.status !== null && data.status !== "")estimate.status=data.status;
+        estimate.status=0;
 
 
         let estimateData = await new CustomerModel().createCustomerEstimate(estimate)
@@ -295,7 +296,7 @@ const createCustomerEstimate = async (data: any) => {
         return estimateData;
 
     } catch (e: any) {
-        console.log("Exception =>", e.message);
+        LOGGER.info("Exception =>", e.message);
         throw e;
     }
 }
@@ -309,7 +310,6 @@ const updateCustomerEstimate = async (data: any) => {
         if(data.id !== undefined && data.id !== null && data.id !== "") 
         est = await new CustomerModel().estimateExistsOrNot(data.id);
         if (est.length == 0 ) throw new Error( "Estimate not found" )
-
 
         if(data.customer !== undefined && data.customer !== null && data.customer !== "")
         estimate.customer_id=data.customer;
@@ -334,9 +334,9 @@ const updateCustomerEstimate = async (data: any) => {
 
         if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "")
         estimate.packaging_id=data.packaging;
-        if(data.estimate_description !== undefined && data.estimate_description !== null && data.estimate_description !== "")
-        estimate.estimate_description=data.estimate_description;
 
+        if(data.product_description !== undefined && data.product_description !== null && data.product_description !== "") 
+        estimate.product_description=data.product_description;
 
         if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "")
         estimate.quantity=data.quantity;
@@ -353,9 +353,38 @@ const updateCustomerEstimate = async (data: any) => {
         if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "")
         estimate.tnc=data.tnc;
 
-        if(data.status !== undefined && data.status !== null && data.status !== "")
-        estimate.status=data.status;
+        if(data.status !== undefined && data.status !== null && data.status !== ""){
+            estimate.status=data.status;
+            let log : any = { "estimate_id" : data.id, "stage":data.status,"user_id":data.user_id }
+            if ( estimate.status==-1 ){
+                // Estimate declined by customer
+                LOGGER.info( "Estimate is declined" )
+            }
+            if ( estimate.status== 0 ){
+                // initial state of the estimate
+                LOGGER.info( "Estimate is in draft state" )
+            }
+            if ( estimate.status==1 ){
+                // need to integrate send an email functionaliey
+                LOGGER.info( "Pending for admin approval" )
+            }
+            if ( estimate.status==2 ){
+                LOGGER.info( "Approved by Admin." )
+            }
+            if ( estimate.status==3 ){
+                // need to integrate send an email functionaliey
+                LOGGER.info( "Email has been sent to the customer." )
+            }
+            if ( estimate.status==4 ){
+                // write code for estimate accespted by customer
+                LOGGER.info( "Accepted by Customer." )
+            }
+            if ( estimate.status==5 ){
+                LOGGER.info( "Ready to convert into sales_order." )
+            }
 
+            await new CustomerModel().createCustomerEstimateStagelog(log)
+        }
 
         let estimateData:any = await new CustomerModel().updateCustomerEstimateById(estimate, data.id )
 //   `stage`  -1 as declined, 0 as draft, 1 as pending approval, 2 as approved, 3 as sent, 4 as accepted, 5 as Convert to SO',
@@ -363,7 +392,7 @@ const updateCustomerEstimate = async (data: any) => {
         return estimateData;
 
     } catch (e: any) {
-        console.log("Exception =>", e.message);
+        LOGGER.info("Exception =>", e.message);
         throw e;
     }
 }
@@ -480,14 +509,13 @@ const createCustomerSalesOrder = async (data: any) => {
         if(data.status !== undefined && data.status !== null && data.status !== "")sales_order.status=data.status;
         sales_order.status=0
         
-        console.log( "sales order : ", sales_order )
         let sales_order_data = await new CustomerModel().createCustomerSalesOrder(sales_order)
         let log : any = { "estimate_id" : sales_order.estimate_id, "stage":5,"user_id":data.user_id }
         await new CustomerModel().createCustomerEstimateStagelog(log)
         return sales_order_data;
 
     } catch (e: any) {
-        console.log("Exception =>", e.message);
+        LOGGER.info("Exception =>", e.message);
         throw e;
     }
 }
@@ -496,7 +524,6 @@ const updateCustomerSalesOrder = async (data: any) => {
     try {
         let sales_order:any = {}, dt:any;
         let id  = data.id;
-        console.log( "req.body : ",  data )
         dt = await new CustomerModel().salesOrderExistsOrNot(id);
         if (dt.length == 0 ) throw new Error( "customer sales order not found ")
 
@@ -548,14 +575,13 @@ const updateCustomerSalesOrder = async (data: any) => {
         if(data.status !== undefined && data.status !== null && data.status !== "")
         sales_order.status=data.status;
         
-        console.log( "sales order : ", sales_order )
         let sales_order_data = await new CustomerModel().updateCustomerSalesOrder(sales_order, id)
         let log : any = { "estimate_id" : sales_order.estimate_id, "stage":5,"user_id":data.user_id }
         await new CustomerModel().createCustomerEstimateStagelog(log)
         return sales_order_data;
 
     } catch (e: any) {
-        console.log("Exception =>", e.message);
+        LOGGER.info("Exception =>", e.message);
         throw e;
     }
 }

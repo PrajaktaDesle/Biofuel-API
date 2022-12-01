@@ -123,24 +123,35 @@ const fetchAllProductUsageUnits= async () => {
     }
 
 }
-const fetchAllProducts = async (id: number) => {
 
+const fetchAllProducts = async (pageIndex: number, pageSize : number, sort : any, query : string) => {
     try {
-        let products = await new ProductModel().fetchAllProducts()
-
+        let orderQuery : string;
+        if(sort.key != ""){
+            orderQuery = " ORDER BY "+ sort.key + " "+ sort.order +" ";
+        } else{
+            orderQuery = "  ";
+        }
+        let products = await new ProductModel().fetchAllProducts(pageSize, (pageIndex-1) * pageSize, orderQuery, query)
         for(let i=0;i< products.length;i++) {
-        products[i].image= config.baseUrl + "/" + products[i].image;
-       
-    }
+            products[i].image= config.baseUrl + "/" + products[i].image;
+        }
         return products;
-
     }
     catch (error: any) {
         return error
     }
-
 }
 
+const fetchAllProductCount = async (query: string) => {
+    try {
+        let products = await new ProductModel().fetchAllProductCount(query);
+        return products.length;
+    }
+    catch (error: any) {
+        return error
+    }
+}
 
 const updateProductById = async (req: any) => {
 
@@ -222,6 +233,7 @@ export default {
     fetchProductById,
     updateProductById,
     fetchAllProducts,
+    fetchAllProductCount,
     fetchAllProductCategories,
     fetchAllProductUsageUnits,
     fetchAllProductRawMaterials,

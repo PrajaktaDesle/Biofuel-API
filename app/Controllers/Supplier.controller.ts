@@ -10,10 +10,10 @@ const register: IController = async (req, res) => {
     let supplier: any;
     try {
         supplier = await supplierService.createSupplier(req);
-        console.log('Supplier at controller-----> ', supplier);
+        LOGGER.info('Supplier at controller-----> ', supplier);
 
         if (supplier instanceof Error) {
-            console.log("error", supplier)
+            LOGGER.info("error", supplier)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
             apiResponse.result(res,
@@ -22,7 +22,7 @@ const register: IController = async (req, res) => {
         }
 
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
         // @ts-ignore
         if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
             apiResponse.error(
@@ -46,7 +46,7 @@ const login:IController = async ( req : any, res : any ) => {
     try{
         const supplier : any =  await supplierService.loginSupplier( req.body )   
         if ( supplier instanceof Error ){
-            console.log( "Controller Error : ", supplier.message )
+            LOGGER.info( "Controller Error : ", supplier.message )
             apiResponse.error( 
                 res, 
                 httpStatusCodes.BAD_REQUEST,
@@ -58,7 +58,7 @@ const login:IController = async ( req : any, res : any ) => {
         }
     }
     catch( err ) {
-        console.log("Controller Error : ", err);
+        LOGGER.info("Controller Error : ", err);
         apiResponse.error( res ,
                            httpStatusCodes.BAD_REQUEST );
 
@@ -91,18 +91,16 @@ const fetchAllSuppliers: IController = async (req, res) => {
     supplierService.fetchAllSuppliers()
         .then( (suppliers) => {
             if(suppliers instanceof Error){
-                // console.log("Error : ", suppliers.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
                     suppliers.message
                 );
             }else{
-                // console.log("suppplier : ", suppliers)
                 apiResponse.result(res, suppliers, httpStatusCodes.OK);
             }
         }).catch(err => {
-        console.log("Error  ->", err);
+        LOGGER.info("Error  ->", err);
         apiResponse.error(
             res,
             httpStatusCodes.BAD_REQUEST,
@@ -116,18 +114,18 @@ const fetchSupplierById: IController = async (req, res) => {
     supplierService.fetchSupplierById(req.query.id)
         .then( (supplier : any) => {
             if(supplier instanceof Error){
-                console.log("User 2", supplier.message)
+                LOGGER.info("User 2", supplier.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
                     supplier.message
                 );
             }else{
-                console.log("User 3", supplier)
+                LOGGER.log("User 3", supplier)
                 apiResponse.result(res, supplier, httpStatusCodes.OK);
             }
         }).catch( (err : any) => {
-        console.log("Error  ->", err);
+        LOGGER.info("Error  ->", err);
         apiResponse.error(
             res,
             httpStatusCodes.BAD_REQUEST,
@@ -143,14 +141,14 @@ const updateSupplierDetails : IController = async (req, res) => {
     try {
         let supplier : any = await supplierService.updateSupplierDetails(req);
         if (supplier instanceof Error) {
-            console.log("error", supplier)
+            LOGGER.info("error", supplier)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
 
             apiResponse.result(res, supplier, httpStatusCodes.CREATED);
         }
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
@@ -165,14 +163,14 @@ const getHomePage: IController = async (req, res) => {
     try {
         let homePage : any = await supplierService.getHomePage();
         if (homePage instanceof Error) {
-            console.log("error", homePage)
+            LOGGER.info("error", homePage)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
 
             apiResponse.result(res, homePage, httpStatusCodes.OK);
         }
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
