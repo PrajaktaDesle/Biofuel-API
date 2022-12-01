@@ -9,7 +9,6 @@ const createNotification: IController = async (req, res) => {
     let notification: any;
     try {
         notification = await notificationService.createNotification(req.body);
-        console.log('Notification at controller-----> ', notification);
         if (notification instanceof Error) {
             console.log("error", notification)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
