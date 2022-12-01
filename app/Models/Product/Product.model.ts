@@ -52,16 +52,16 @@ export class ProductModel extends BaseModel
         return await this._executeQuery( "select id, name from product_categories where id = ? ",[id])
     }
     async fetchProductUsageUnitById(id:number){
-        return await this._executeQuery( "select id, name from product_usage_unit where id = ? ",  [id])
+        return await this._executeQuery( "select id as value, name as label from product_usage_unit where id = ? ",  [id])
     }
     async fetchAllProductPackaging(){
-        return await this._executeQuery( "select id, name from  product_packaging",[])
+        return await this._executeQuery( "select id as value, name as label from  product_packaging",[])
     }
     async fetchRawMaterialByName(name:string){
         return await this._executeQuery( "select id from product_raw_material where name = ?", [name])
     }
     async fetchAllProductRawMaterials(){
-        return await this._executeQuery( "select id, name from  product_raw_material",[])
+        return await this._executeQuery( "select id as value, name as label from  product_raw_material",[])
     }
     async fetchProductPackagingByName(name:string){
         return await this._executeQuery( "select id from product_packaging where name = ?", [name])
