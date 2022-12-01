@@ -251,18 +251,20 @@ const fetchCustomerEstimateById : IController = async ( req:any , res:any ) => {
     try{
         let estimate = await CustomerService.fetchCustomerEstimateById( req.query.id )
         if ( estimate instanceof Error ){
+           LOGGER.info( "Error ", estimate )
            return apiResponse.error( res,
                                     httpStatusCodes.BAD_REQUEST,
                                     estimate.message )
         }
         else{
+           LOGGER.info( "estimate status ", estimate[0].status )
            return apiResponse.result( res,
                                      estimate,
                                      httpStatusCodes.OK )
         }
     }
     catch ( error : any ) {
-        LOGGER.info( "Error => ", error )
+        LOGGER.info( "Exception => ", error )
         return apiResponse.error( res,
                                   httpStatusCodes.BAD_REQUEST )
     }

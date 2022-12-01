@@ -91,14 +91,12 @@ const fetchAllSuppliers: IController = async (req, res) => {
     supplierService.fetchAllSuppliers()
         .then( (suppliers) => {
             if(suppliers instanceof Error){
-                // console.log("Error : ", suppliers.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
                     suppliers.message
                 );
             }else{
-                // console.log("suppplier : ", suppliers)
                 apiResponse.result(res, suppliers, httpStatusCodes.OK);
             }
         }).catch(err => {

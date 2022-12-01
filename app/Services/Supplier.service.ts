@@ -80,19 +80,8 @@ const createSupplier = async (req:any) =>{
 
 const fetchAllSuppliers = async ( ) =>{
     let suppliers;
-    suppliers = await new SupplierModel().fetchAllUsers(3)
-    if (suppliers == null) throw new Error("details did not match");
-    console.log( "suppliers : ", suppliers )
-    for(let i=0;i< suppliers.length;i++) {
-        let suppliersProfile = await new SupplierModel().fetchSuppliersProfileAndSourceAddressById( suppliers[i].id )
-        // Adding Baseurl to all images
-        suppliersProfile[0].pan_url= config.baseUrl + "/" + suppliersProfile[0].pan_url;
-        suppliersProfile[0].aadhaar_url= config.baseUrl + "/" + suppliersProfile[0].aadhaar_url;
-        suppliersProfile[0].gstin_url = config.baseUrl + "/" + suppliersProfile[0].gstin_url;
-        suppliersProfile[0].msme_url = config.baseUrl + "/" + suppliersProfile[0].msme_url;
-        let billing_address = await new SupplierModel().fetchSuppliersBillingAddressById( suppliers[i].id )
-        Object.assign( suppliers[i] , suppliersProfile[0], billing_address[0] )
-    }
+    suppliers = await new SupplierModel().fetchAllSuppliers()
+    if (suppliers == null) throw new Error("Suppliers not found");
     return suppliers;
 }
 const isFileNotValid = (type:any) => {
@@ -104,11 +93,10 @@ const isFileNotValid = (type:any) => {
 
 const fetchSupplierById = async (id: any) => {
     try {
-        let supplier = await new SupplierModel().fetchUserById( id, 3 );
+        let supplier = await new SupplierModel().fetchSupplierById( id );
         if (supplier.length == 0) throw new Error("Supplier not found");
-        let suppliersProfile = await new SupplierModel().fetchSuppliersProfileAndSourceAddressById( id )
-        suppliersProfile[0].city = {"label":suppliersProfile[0].city,"value":suppliersProfile[0].city_id}
-        suppliersProfile[0].state = {"label":suppliersProfile[0].state,"value":suppliersProfile[0].state_id}
+        supplier[0].city = {"label":supplier[0].city,"value":supplier[0].city_id}
+        supplier[0].state = {"label":supplier[0].state,"value":supplier[0].state_id}
         if ( supplier[0].status == 0) supplier[0].status = {"label":"Pending","value":0};
         if ( supplier[0].status == 1) supplier[0].status = {"label":"Approved", "value": 1};
         if ( supplier[0].status == -1) supplier[0].status = {"label":"Rejected", "value": -1};
@@ -116,8 +104,8 @@ const fetchSupplierById = async (id: any) => {
         if ( supplier[0].grade == 2) supplier[0].grade = {"label":"B", "value": 2};
         if ( supplier[0].grade == 3) supplier[0].grade = {"label":"C", "value": 3};
         if ( supplier[0].grade == 4) supplier[0].grade = {"label":"D", "value": 4};
-        let billing_address = await new SupplierModel().fetchSuppliersBillingAddressById( supplier[0].id )
-        Object.assign( supplier[0], suppliersProfile[0], billing_address[0]);
+        let billing_address = await new SupplierModel().fetchSuppliersBillingAddressById( id )
+        Object.assign( supplier[0], billing_address[0]);
         // Adding Baseurl to panurl from database
         supplier[0].pan_url= config.baseUrl + "/" + supplier[0].pan_url;
         supplier[0].aadhaar_url= config.baseUrl + "/" + supplier[0].aadhaar_url;
@@ -263,7 +251,7 @@ const getHomePage = async ( ) =>{
     if (data.length == 0) {
             throw new Error("Home Page not found!")
         }
-    console.log( data )
+    LOGGER.info( data )
     return data 
 }
 

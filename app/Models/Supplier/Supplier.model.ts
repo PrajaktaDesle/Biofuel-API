@@ -17,17 +17,26 @@ export class SupplierModel extends UserModel
         return await this._executeQuery("insert into addresses set ?", [supplierData]);
     }
    
-    async fetchSuppliersProfileAndSourceAddressById(id: any ){
-        return await this._executeQuery(`SELECT up.aadhaar_no, up.aadhaar_url, up.pan_no, up.pan_url, up.gstin, up.gstin_url, up.msme_no, up.msme_url, up.grade, a.address as source_address, a.latitude, a.longitude, ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode
-                                         FROM biofuel.users_profile up
-                                         inner join biofuel.addresses a ON a.user_id=up.user_id
-                                         inner join biofuel.address_city ac ON ac.id=a.city_id
-                                         inner join biofuel.address_state ast ON ac.state_id=ast.id
-                                         where a.user_id=? and a.address_type="source";`, [id]);
+    async fetchSupplierById(id: any ){
+        return await this._executeQuery(`SELECT u.id, u.name, u.mobile as contact_no, up.aadhaar_no, up.aadhaar_url, up.pan_no, up.pan_url, up.gstin, up.gstin_url, up.msme_no, up.msme_url, a.address as source_address, up.grade, up.payment_term , act.id as city_id , act.name as city, act.state_id, ast.name as state, a.pincode, a.latitude, a.longitude, u.status
+                                         FROM biofuel.user u
+                                         inner join biofuel.users_profile up ON u.id=up.user_id
+                                         inner join biofuel.addresses a ON u.id=a.user_id
+                                         inner join biofuel.address_city act ON act.id=a.city_id
+                                         inner join biofuel.address_state ast ON act.state_id=ast.id
+                                         where u.id = ? and a.address_type = "source";`, [id]);
     }  
 
     async fetchSuppliersBillingAddressById(id: any){
-        return await this._executeQuery("select user_type,address as `billing_address` from addresses where user_id = ? and address_type = ? ", [id, "billing"]);
+        return await this._executeQuery("select user_type,address as `billing_address` from addresses where user_id = ? and address_type = 'billing' ", [id]);
+    }
+    
+    async fetchAllSuppliers(){
+        return await this._executeQuery(`SELECT u.id, u.name, case when up.grade = 1 then 'A' when up.grade = 2 then 'B' when up.grade = 3 then 'C' when up.grade = 4 then 'D' else null end as grade, u.mobile as contact_no, a.address, act.name as city, a.pincode, a.latitude, a.longitude, u.status FROM biofuel.user u
+                                         inner join biofuel.users_profile up ON u.id=up.user_id 
+                                         inner join biofuel.addresses a ON u.id=a.user_id 
+                                         inner join biofuel.address_city act ON act.id=a.city_id 
+                                         where a.address_type = 'source' `, [])
     }
 
     async updateSuppliersProfileDetails(updatedSupplierData:any,id:number){
@@ -52,23 +61,7 @@ export class SupplierModel extends UserModel
     async supplierRawMaterialMapping( data : any){
         return await this._executeQuery( "insert into supplier_raw_material_mapping set ?", [data])
     }
-
-    async getCity(name:string){
-        return await this._executeQuery( "select id from address_city where name = ? ",[name])
-    }
-    async getCityStateById(id:number){
-        return await this._executeQuery( `SELECT ac.name as city, ac.state_id, a.name as state FROM biofuel.address_city ac
-                                          inner join biofuel.address_state a ON ac.state_id=a.id
-                                          where ac.id = ?`,[id] )
-    }
-    async getStateById(id:number){
-        return await this._executeQuery( "select * from address_state where id = ? ",[id])
-    }
-    async getState(name:string){
-        return await this._executeQuery( "select id from address_state where name = ?",[name])
-    }
      
-  
     async supplierPackagingMapping( data : any){
         return await this._executeQuery( "insert into supplier_packaging_mapping set ?", [data])
     }
