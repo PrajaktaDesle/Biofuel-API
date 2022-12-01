@@ -85,13 +85,13 @@ const fetchAllSuppliers = async ( ) =>{
     console.log( "suppliers : ", suppliers )
     for(let i=0;i< suppliers.length;i++) {
         let suppliersProfile = await new SupplierModel().fetchSuppliersProfileAndSourceAddressById( suppliers[i].id )
-        let billing_address = await new SupplierModel().fetchSuppliersBillingAddressById( suppliers[i].id )
-        Object.assign( suppliers[i] , suppliersProfile[0], billing_address[0] )
-        // Adding Baseurl to panurl from database
+        // Adding Baseurl to all images
         suppliersProfile[0].pan_url= config.baseUrl + "/" + suppliersProfile[0].pan_url;
         suppliersProfile[0].aadhaar_url= config.baseUrl + "/" + suppliersProfile[0].aadhaar_url;
         suppliersProfile[0].gstin_url = config.baseUrl + "/" + suppliersProfile[0].gstin_url;
         suppliersProfile[0].msme_url = config.baseUrl + "/" + suppliersProfile[0].msme_url;
+        let billing_address = await new SupplierModel().fetchSuppliersBillingAddressById( suppliers[i].id )
+        Object.assign( suppliers[i] , suppliersProfile[0], billing_address[0] )
     }
     return suppliers;
 }
@@ -112,6 +112,10 @@ const fetchSupplierById = async (id: any) => {
         if ( supplier[0].status == 0) supplier[0].status = {"label":"Pending","value":0};
         if ( supplier[0].status == 1) supplier[0].status = {"label":"Approved", "value": 1};
         if ( supplier[0].status == -1) supplier[0].status = {"label":"Rejected", "value": -1};
+        if ( supplier[0].grade == 1) supplier[0].grade = {"label":"A", "value": 1};
+        if ( supplier[0].grade == 2) supplier[0].grade = {"label":"B", "value": 2};
+        if ( supplier[0].grade == 3) supplier[0].grade = {"label":"C", "value": 3};
+        if ( supplier[0].grade == 4) supplier[0].grade = {"label":"D", "value": 4};
         let billing_address = await new SupplierModel().fetchSuppliersBillingAddressById( supplier[0].id )
         Object.assign( supplier[0], suppliersProfile[0], billing_address[0]);
         // Adding Baseurl to panurl from database
