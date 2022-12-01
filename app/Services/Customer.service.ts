@@ -2,10 +2,11 @@ import {uploadFile, uploadFiles}  from "../utilities/S3Bucket";
 import LOGGER from "../config/LOGGER";
 import formidable from "formidable";
 let config = require("../config");
-import * as path from "path";
 import moment from 'moment';
 import * as fs from "fs";
 import { CustomerModel } from "../Models/Customer/Customer.model";
+import {SupplierModel} from "../Models/Supplier/Supplier.model";
+
 const createCustomer = async (req:any)=> {
     try {
         let CustomerData,fields, files,customer_address;
@@ -16,7 +17,7 @@ const createCustomer = async (req:any)=> {
                 resolve({fields: fields, files: files});
             })
         }));
-        // customer pedetails
+        // customer details
         if(fields.name == undefined || fields.name == null || fields.name == "") throw new Error("name is required");
         customer.name=fields.name;
         if(fields.contact_no == undefined || fields.contact_no == null || fields.contact_no == "") throw new Error("mobile is required");
@@ -33,8 +34,8 @@ const createCustomer = async (req:any)=> {
         if(fields.shipping_state == undefined || fields.shipping_state == null || fields.shipping_state == "") throw new Error("shipping state is required");
         if(fields.shipping_address == undefined || fields.shipping_address == null || fields.shipping_address == "") throw new Error(" address_type is required");
         if(fields.billing_address == undefined || fields.billing_address == null || fields.billing_address == "") throw new Error("billing address is required");
-        if(fields.latitude == undefined || fields.latitude == null || fields.latitude == "") throw new Error("latitude is required");
-        if(fields.longitude == undefined || fields.longitude == null || fields.longitude == "") throw new Error("longitude is required");
+        if(fields.latitude == undefined || fields.latitude == null || fields.latitude == "")
+        if(fields.longitude == undefined || fields.longitude == null || fields.longitude == "")
         if(fields.pincode == undefined || fields.pincode == null || fields.pincode == "") throw new Error("pin code is required");
         if(fields.shipping_city == undefined || fields.shipping_city == null || fields.shipping_city == "") throw new Error(" city is required");
 
@@ -42,11 +43,11 @@ const createCustomer = async (req:any)=> {
         let s3Image: any = {}
         let s3Path: any = {}
         if (files.gstin !== undefined && files.gstin !== null && files.gstin !== "") {
-            if (fileNotValid(files.gstin.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image"); s3Image['image'] = files.gstin
+            if (fileNotValid(files.gstin.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image");s3Image['gstin_url'] = files.gstin
         }
-        else{ throw new Error("image is required") }
-        let name: string = "images/image/" + moment().unix() + "." + s3Image['image'].originalFilename.split(".").pop()
-        const result = await uploadFile(s3Image['image'], name);
+        else {throw new Error(" gst_url is required")}
+        let name: string = "images/gstin_url/" + moment().unix() + "." + s3Image['gstin_url'].originalFilename.split(".").pop()
+        const result = await uploadFile(s3Image['gstin_url'], name);
         if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
         console.log("s3 result  : ", result)
         s3Path['gstin_url'] = result.key;
@@ -75,61 +76,60 @@ const fileNotValid = (type: any) => {
 
 const updateCustomerdetails = async (req:any)=> {
     try {
-        let CustomerData,customer_details,fields, files, customerBillingAddress, customerShippingAddress;
-
+        let CustomerData,customer_details,fields, files, payment_term, state_name;
+        let customer: any = {}, customerBillingAddress:any={},customerShippingAddress:any={};
         //@ts-ignore
         ({fields, files} = await new Promise((resolve) => {
             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
                 resolve({fields: fields, files: files});
             })
         }));
-        let customer: any = {"status":fields.status}, customer_address:any={"status":fields.status},billing:any={"status":fields.status};
         if(fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
         customer_details = await new CustomerModel().fetchCustomersDetailsById(fields.id)
         if (customer_details.length == 0) throw new Error("id not found!")
         //  customer details validations
-        if(fields.name == undefined || fields.name == null || fields.name == "") throw new Error("name is required");
+        if(fields.status !== undefined && fields.status !== null && fields.status !== "")
+        customer.status = fields.status
+        if(fields.name !== undefined && fields.name !== null && fields.name !== "")
         customer.name=fields.name;
-        if(fields.contact_no == undefined || fields.contact_no == null || fields.contact_no == "") throw new Error("mobile is required");
+        if(fields.contact_no !== undefined && fields.contact_no !== null && fields.contact_no !== "")
         customer.mobile=fields.contact_no;
-        if(fields.email == undefined || fields.email == null || fields.address == "") throw new Error("email is required");
+        if(fields.email !== undefined && fields.email !== null && fields.address !== "")
         customer.email=fields.email;
-        if(fields.gstin_no == undefined || fields.gstin_no == null || fields.gstin_no == "") throw new Error("gst_no is required");
+        if(fields.gstin_no !== undefined && fields.gstin_no !== null && fields.gstin_no !== "")
         customer.gstin=fields.gstin_no;
-        if(fields.payment_term== undefined || fields.payment_term == null || fields.payment_term  == "") throw new Error("payment_term is required");
-        let payment_term = Number(fields.payment_term)
-        customer.payment_term= payment_term;
+        if(fields.payment_term !== undefined && fields.payment_term !== null && fields.payment_term  !== "")
+        // payment_term = Number(fields.payment_term)
+        customer.payment_term= fields.payment_term;
         let s3Image: any = {}
         let s3Path: any = {}
         if (files.gstin !== undefined && files.gstin !== null && files.gstin !== "") {
-            if (fileNotValid(files.gstin.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image"); s3Image['image'] = files.gstin
+            if (fileNotValid(files.gstin.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image");else{s3Image['gstin_url'] = files.gstin
         }
-        else{ throw new Error("image is required") }
-        let name: string = "images/image/" + moment().unix() + "." + s3Image['image'].originalFilename.split(".").pop()
+        let name: string = "images/gstin_url/" + moment().unix() + "." + s3Image['gstin_url'].originalFilename.split(".").pop()
         const result = await uploadFile(s3Image['image'], name);
         if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
         console.log("s3 result  : ", result)
         s3Path['gstin_url'] = result.key;
-        customer= Object.assign(customer, s3Path);
+        customer= Object.assign(customer, s3Path);}
 
-        // customer address validatitions
-        if(fields.billing_address  == undefined || fields.billing_address == null || fields.billing_address == "") throw new Error(" billing address is required");
-        billing.address=fields.billing_address;
-        if(fields.shipping_address == undefined || fields.shipping_address == null || fields.shipping_address == "") throw new Error("shipping address is required");
-        customer_address.address=fields.shipping_address;
-        if(fields.latitude == undefined || fields.latitude == null || fields.latitude == "") throw new Error("latitude is required");
-        customer_address.latitude=fields.latitude;
-        if(fields.longitude == undefined || fields.longitude == null || fields.longitude == "") throw new Error("longitude is required");
-        customer_address.longitude=fields.longitude;
-        if(fields.pincode == undefined || fields.pincode == null || fields.pincode == "") throw new Error("pin code is required");
-        customer_address.pincode=fields.pincode;
-        if(fields.shipping_state == undefined || fields.shipping_state == null || fields.shipping_state == "") throw new Error("shipping state is required");
-        let state_name =fields.shipping_state;
-        if(fields.shipping_city == undefined || fields.shipping_city == null || fields.shipping_city == "") throw new Error(" city is required");
-        customer_address.city_id =fields.shipping_city
-        CustomerData = await new CustomerModel().updateCustomersDetails(customer,fields.id)
-        customerBillingAddress= await new CustomerModel().updateCustomersAddress(billing ,fields.id, "billing")
-        customerShippingAddress = await new CustomerModel().updateCustomersAddress(customer_address,fields.id, "shipping")
+        if(fields.billing_address  !== undefined && fields.billing_address !== null && fields.billing_address !== "")
+        customerBillingAddress.address=fields.billing_address;
+        if(fields.shipping_address !== undefined && fields.shipping_address !== null && fields.shipping_address !== "")
+        customerShippingAddress.address=fields.shipping_address;
+        if(fields.latitude !== undefined && fields.latitude !== null && fields.latitude !== "")
+        customerShippingAddress.latitude=fields.latitude;
+        if(fields.longitude !== undefined && fields.longitude !== null && fields.longitude !== "")
+        customerShippingAddress.longitude=fields.longitude;
+        if(fields.pincode !== undefined && fields.pincode !== null && fields.pincode !== "")
+        customerShippingAddress.pincode=fields.pincode;
+        if(fields.shipping_state !== undefined && fields.shipping_state !== null && fields.shipping_state !== "")
+         state_name =fields.shipping_state;
+        if(fields.shipping_city !== undefined && fields.shipping_city !== null && fields.shipping_city !== "")
+        customerShippingAddress.city_id =fields.shipping_city
+        if( Object.keys(customer).length){await new CustomerModel().updateCustomersDetails(customer,fields.id).then((data)=>{console.log("updated successfully")})}
+        if( Object.keys(customerBillingAddress).length){await new CustomerModel().updateCustomersAddress(customerBillingAddress ,fields.id, "billing").then((data)=>{console.log("updated billing address")})}
+        if( Object.keys(customerShippingAddress).length) await new CustomerModel().updateCustomersAddress(customerShippingAddress,fields.id, "shipping").then((data)=>{console.log("shipping address updated successfully")})
         return {message:"updated successfully ", CustomerData};
     }catch(e:any){
         console.log("Exception =>", e.message);
@@ -142,15 +142,14 @@ const fetchCustomersById = async (id:any) => {
         let customers = await new  CustomerModel().fetchCustomersDetailsById(id)
         if (customers.length == 0) throw new Error(" customer not found!")
         customers[0].gst= config.baseUrl + "/" + customers[0].gstin_url;
-        // let address = await new Customer().fetchCustomerAddress(id)
-        let BAddress = await new CustomerModel().fetchsBillingAddressById(id)
-        let SAddress = await new  CustomerModel().fetchShippingAddressById(id)
-        let city = await new CustomerModel().getCityById(SAddress[0].city_id)
-        let state = await new CustomerModel().getStateById(city[0].state_id)
-        SAddress[0].shipping_city = city[0].name
-        SAddress[0].shipping_state = state[0].name
-        delete SAddress[0].city_id
-        Object.assign(customers[0],SAddress[0], BAddress[0])
+        customers[0].imgList = [{file : customers[0].gstin_url}]
+        customers[0].city = {label : customers[0].city , value : customers[0].city_id};
+        customers[0].state = {label : customers[0].state , value : customers[0].state_id};
+        if (customers[0].status == 1){
+            customers[0].customerStatus = {value : 1, label : "Active"};
+        }else{
+            customers[0].customerStatus = {value : 0, label : "Inactive"};
+        }
         return customers[0];
     }
     catch (error: any) {
@@ -160,22 +159,14 @@ const fetchCustomersById = async (id:any) => {
 }
 
 const fetchAll = async () => {
-    let Billing_address, shipping_address, city,state: any;
+    // let Billing_address, shipping_address, city,state: any;
     try {
-        // fetch all active customers
         let customers = await new CustomerModel().fetchAllCustomers()
+
         if (customers.length == 0) throw new Error(" customer not found!")
         for (let i = 0; i < customers.length; i++) {
+            // adding base url to panurl from database
             customers[i].gst= config.baseUrl + "/" + customers[0].gstin_url;
-            let id = customers[i].id
-            Billing_address = await new CustomerModel().fetchsBillingAddressById(id)
-            shipping_address = await new  CustomerModel().fetchShippingAddressById(id)
-            city = await new CustomerModel().getCityById(shipping_address[0].city_id)
-            state = await new CustomerModel().getStateById(city[0].state_id)
-            shipping_address[0].shipping_city = city[0].name
-            shipping_address[0].shipping_state = state[0].name
-            delete shipping_address[0].city_id
-            Object.assign(customers[i], shipping_address[0], shipping_address[0])
         }
         return customers;
     }
@@ -192,10 +183,8 @@ const CreateCSMService = async(req:any)=>{
         if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
             customer = await new  CustomerModel().fetchCustomers(req.body.customer_id)
         if (customer.length == 0) throw new Error("customer not found");
-        // console.log('customers------------------>',customer)
         customer_address = await new CustomerModel().fetchAddressID(req.body.customer_id)
         if (customer_address.length == 0) throw new Error("id not found");
-        // console.log('in service customer_address_id------>', customer_address)
         data.address_id = customer_address[0].id
         if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
             supplier = await new CustomerModel().fetchSupplier(req.body.supplier_id)
@@ -255,51 +244,51 @@ const createCustomerEstimate = async (data: any) => {
     try {
         let customerData;
         let estimate:any = {};
-        if(data.customer !== undefined && data.customer !== null && data.customer !== "") 
+        if(data.customer !== undefined && data.customer !== null && data.customer !== "")
         estimate.customer_id=data.customer;
 
-        if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "") 
+        if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "")
         estimate.estimate_no=data.estimate_id;
 
-        if(data.product !== undefined && data.product !== null && data.product !== "") 
+        if(data.product !== undefined && data.product !== null && data.product !== "")
         estimate.product_id=data.product;
 
-        if(data.estimate_date !== undefined && data.estimate_date !== null && data.estimate_date !== "") 
+        if(data.estimate_date !== undefined && data.estimate_date !== null && data.estimate_date !== "")
         estimate.estimate_date=data.estimate_date;
 
-        if(data.expiry_date !== undefined && data.expiry_date !== null && data.expiry_date !== "") 
+        if(data.expiry_date !== undefined && data.expiry_date !== null && data.expiry_date !== "")
         estimate.expiry_date=data.expiry_date;
 
-        if(data.estimate !== undefined && data.estimate !== null && data.estimate !== "") 
+        if(data.estimate !== undefined && data.estimate !== null && data.estimate !== "")
         estimate.estimate_id=data.estimate;
 
-        if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "") 
+        if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "")
         estimate.raw_material_id=data.raw_material;
 
-        if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "") 
+        if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "")
         estimate.packaging_id=data.packaging;
 
-        if(data.estimate_description !== undefined && data.estimate_description !== null && data.estimate_description !== "") 
+        if(data.estimate_description !== undefined && data.estimate_description !== null && data.estimate_description !== "")
         estimate.estimate_description=data.estimate_description;
 
-        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "") 
+        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "")
         estimate.quantity=data.quantity;
 
-        if(data.rate !== undefined && data.rate !== null && data.rate !== "") 
+        if(data.rate !== undefined && data.rate !== null && data.rate !== "")
         estimate.rate=data.rate;
 
-        if(data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "") 
+        if(data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "")
         estimate.adjustment_amount=data.adjustment;
 
-        if(data.customer_note !== undefined && data.customer_note !== null && data.customer_note !== "") 
+        if(data.customer_note !== undefined && data.customer_note !== null && data.customer_note !== "")
         estimate.customer_note=data.customer_note;
 
-        if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "") 
+        if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "")
         estimate.tnc=data.tnc;
+        if(data.status !== undefined && data.status !== null && data.status !== "")
+        estimate.status=data.status;
 
-        if(data.status !== undefined && data.status !== null && data.status !== "")estimate.status=data.status;
-        estimate.status=0
-        
+
         let estimateData = await new CustomerModel().createCustomerEstimate(estimate)
         let log : any = { "estimate_id" : estimateData.insertId, "stage":estimate.status,"user_id":data.user_id }
         await new CustomerModel().createCustomerEstimateStagelog(log)
@@ -314,86 +303,59 @@ const createCustomerEstimate = async (data: any) => {
 const updateCustomerEstimate = async (data: any) => {
     try {
         let estimate:any = {}, est:any;
+        if(data.id !== undefined && data.id !== null && data.id !== "")
+        est= await new CustomerModel().estimateExistsOrNot(data.id);
         
         if(data.id !== undefined && data.id !== null && data.id !== "") 
         est = await new CustomerModel().estimateExistsOrNot(data.id);
         if (est.length == 0 ) throw new Error( "Estimate not found" )
 
 
-        if(data.customer !== undefined && data.customer !== null && data.customer !== "") 
+        if(data.customer !== undefined && data.customer !== null && data.customer !== "")
         estimate.customer_id=data.customer;
 
-        if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "") 
+        if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "")
         estimate.estimate_no=data.estimate_id;
 
-        if(data.product !== undefined && data.product !== null && data.product !== "") 
+        if(data.product !== undefined && data.product !== null && data.product !== "")
         estimate.product_id=data.product;
 
-        if(data.estimate_date !== undefined && data.estimate_date !== null && data.estimate_date !== "") 
+        if(data.estimate_date !== undefined && data.estimate_date !== null && data.estimate_date !== "")
         estimate.estimate_date=data.estimate_date;
 
-        if(data.expiry_date !== undefined && data.expiry_date !== null && data.expiry_date !== "") 
+        if(data.expiry_date !== undefined && data.expiry_date !== null && data.expiry_date !== "")
         estimate.expiry_date=data.expiry_date;
 
-        if(data.estimate !== undefined && data.estimate !== null && data.estimate !== "") 
+        if(data.estimate !== undefined && data.estimate !== null && data.estimate !== "")
         estimate.estimate_id=data.estimate;
 
-        if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "") 
+        if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "")
         estimate.raw_material_id=data.raw_material;
 
-        if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "") 
+        if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "")
         estimate.packaging_id=data.packaging;
+        if(data.estimate_description !== undefined && data.estimate_description !== null && data.estimate_description !== "")
+        estimate.estimate_description=data.estimate_description;
 
-        if(data.product_description !== undefined && data.product_description !== null && data.product_description !== "") 
-        estimate.product_description=data.product_description;
 
-        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "") 
+        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "")
         estimate.quantity=data.quantity;
 
-        if(data.rate !== undefined && data.rate !== null && data.rate !== "") 
+        if(data.rate !== undefined && data.rate !== null && data.rate !== "")
         estimate.rate=data.rate;
 
-        if(data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "") 
+        if(data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "")
         estimate.adjustment_amount=data.adjustment;
 
-        if(data.customer_note !== undefined && data.customer_note !== null && data.customer_note !== "") 
+        if(data.customer_note !== undefined && data.customer_note !== null && data.customer_note !== "")
         estimate.customer_note=data.customer_note;
 
-        if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "") 
+        if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "")
         estimate.tnc=data.tnc;
-        
-        if(data.status !== undefined && data.status !== null && data.status !== ""){
-            estimate.status=data.status;
-            let log : any = { "estimate_id" : data.id, "stage":data.status,"user_id":data.user_id }
-            if ( estimate.status==-1 ){
-                // Estimate declined by customer
-                console.log( "Estimate was declined" )
-            }
-            if ( estimate.status== 0 ){
-                // initial state of the estimate
-                console.log( "Estimate is in draft state" )
-            }
-            if ( estimate.status==1 ){
-                // need to integrate send an email functionaliey
-                console.log( "Pending for admin approval" )
-            }
-            if ( estimate.status==2 ){
-                console.log( "Approved by Admin." )
-            }
-            if ( estimate.status==3 ){
-                // need to integrate send an email functionaliey
-                console.log( "Email has been sent to the customer." )
-            }
-            if ( estimate.status==4 ){
-                // write code for estimate accespted by customer
-                console.log( "Accepted by Customer." )
-            }
-            if ( estimate.status==5 ){
-                console.log( "Ready to convert into sales_order." )
-            }
-            
-            await new CustomerModel().createCustomerEstimateStagelog(log)
-        }
+
+        if(data.status !== undefined && data.status !== null && data.status !== "")
+        estimate.status=data.status;
+
 
         let estimateData:any = await new CustomerModel().updateCustomerEstimateById(estimate, data.id )
 //   `stage`  -1 as declined, 0 as draft, 1 as pending approval, 2 as approved, 3 as sent, 4 as accepted, 5 as Convert to SO',
@@ -440,7 +402,7 @@ const fetchCustomerEstimateById = async (id: number) => {
         estimate[0].product = { "label":estimate[0].product, "value":estimate[0].product_id}
         estimate[0].raw_material = { "label":estimate[0].raw_material, "value":estimate[0].raw_material_id}
         estimate[0].packaging = { "label":estimate[0].packaging, "value":estimate[0].packaging_id}
-       
+      
         return estimate;
 
     }
@@ -649,5 +611,4 @@ export default {
     updateCustomerSalesOrder,
     fetchCustomerSalesOrderById,
     fetchAllCustomerSalesOrders
-    
 }
