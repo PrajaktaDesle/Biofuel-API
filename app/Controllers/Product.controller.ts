@@ -58,7 +58,7 @@ const fetchProductById : IController = async ( req:any , res:any ) => {
         }
     }
     catch ( error : any ) {
-        console.log( "Error => ", error )
+        LOGGER.info( "Error => ", error )
         return apiResponse.error( res,
                                   httpStatusCodes.BAD_REQUEST )
     }
@@ -79,7 +79,7 @@ const fetchAllProducts : IController = async ( req:any , res:any ) => {
         }
     }
     catch ( error : any ) {
-        console.log( "Error => ", error )
+        LOGGER.info( "Error => ", error )
         return apiResponse.error( res,
                                   httpStatusCodes.BAD_REQUEST )
     }
@@ -100,7 +100,7 @@ const fetchAllProductCategories : IController = async ( req:any , res:any ) => {
         }
     }
     catch ( error : any ) {
-        console.log( "Error => ", error )
+        LOGGER.info( "Error => ", error )
         return apiResponse.error( res,
                                   httpStatusCodes.BAD_REQUEST )
     }
@@ -120,7 +120,7 @@ const updateProductById : IController = async ( req:any , res:any ) => {
         }
     }
     catch ( error : any ) {
-        console.log( "Error => ", error )
+        LOGGER.info( "Error => ", error )
         return apiResponse.error( res,
                                   httpStatusCodes.BAD_REQUEST )
     }
@@ -141,7 +141,7 @@ const fetchAllProductUsageUnits : IController = async ( req:any , res:any ) => {
         }
     }
     catch ( error : any ) {
-        console.log( "Error => ", error )
+        LOGGER.info( "Error => ", error )
         return apiResponse.error( res,
                                   httpStatusCodes.BAD_REQUEST )
     }
@@ -159,7 +159,7 @@ const fetchAllProductRawMaterials: IController = async (req, res) => {
             apiResponse.result(res, rawMaterials, httpStatusCodes.OK);
         }
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
@@ -173,14 +173,14 @@ const fetchAllProductPackaging: IController = async (req, res) => {
     try {
         let packaging : any = await productService.fetchAllProductPackaging();
         if (packaging instanceof Error) {
-            console.log("error", packaging)
+            LOGGER.info("error", packaging)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
 
             apiResponse.result(res, packaging, httpStatusCodes.OK);
         }
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,

@@ -205,7 +205,7 @@ const updateSupplierDetails = async (req:any) =>{
         if( Object.keys(source_address).length ){ await new SupplierModel().updateSuppliersAddressDetails(source_address,fd.id,"source").then((data)=>{console.log("supplier's source address details updated successfully")})}
         return {"message" : "supplier updated successfully","changedRows":1};
     }catch(e){
-        console.log("Exception ->", e);
+        LOGGER.info("Exception ->", e);
         throw e;
     }
 }
