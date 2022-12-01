@@ -18,14 +18,27 @@ export class ProductModel extends BaseModel
             "LEFT join product_usage_unit pu ON p.usage_unit_id = pu.id  " +
             "where p.id = ? ", [id] )
     }
-    async fetchAllProducts(){
-            return await this._executeQuery( `select p.id , p.name as productName, p.description, p.hsn as hsnCode, p.gst, category_id, pc.name as category,
+
+    async fetchAllProducts(limit : number, offset : number, sortOrder : string, query : string){
+            return await this._executeQuery( `select p.id , p.name as name, p.description, p.hsn as hsnCode, p.gst, category_id, pc.name as category,
                                               usage_unit_id, pu.name as usage_unit, p.status 
                                               from products p
                                               inner join product_categories pc ON  p.category_id = pc.id
-                                              inner join product_usage_unit pu ON p.usage_unit_id = pu.id  
-                                              order by p.status desc`, []  )
+                                              inner join product_usage_unit pu ON p.usage_unit_id = pu.id
+                                              ${query}
+                                              ${sortOrder} 
+                                              LIMIT ? OFFSET ?`, [limit, offset]  )
     }
+
+    async fetchAllProductCount(query : string){
+        return await this._executeQuery( `select p.id , p.name as name, p.description, p.hsn as hsnCode, p.gst, category_id, pc.name as category,
+                                              usage_unit_id, pu.name as usage_unit, p.status 
+                                              from products p
+                                              inner join product_categories pc ON  p.category_id = pc.id
+                                              inner join product_usage_unit pu ON p.usage_unit_id = pu.id
+                                              ${query}  `, []  )
+    }
+
     async updateProductById( data : any, id : number ){
         return await this._executeQuery( "update products set ? where id = ? ",[data,id] )
     }

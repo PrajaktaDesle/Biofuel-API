@@ -15,7 +15,7 @@ router.get(
   productController.fetchProductById
 );
 
-router.get( 
+router.post(
   '/all',
   productController.fetchAllProducts
 );
