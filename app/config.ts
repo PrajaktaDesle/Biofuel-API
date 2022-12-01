@@ -16,7 +16,7 @@ export = {
         secretKey : process.env.JWT_TOKEN_SECRET_KEY || 'my_secret_key',
         expiry : process.env.JWT_TOKEN_EXPIRY || '1d'
     },
-    baseUrl: "http://qa1.digitalflake.com",
+    baseUrl: "https://digi-qa-s3.s3.ap-south-1.amazonaws.com",
     listPerPage: env.LIST_PER_PAGE || 10
 }
     process.env.AWS_BUCKET_NAME = "digi-qa-s3",

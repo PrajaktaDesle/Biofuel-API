@@ -25,11 +25,6 @@ router.put(
   productController.updateProductById
 );
 
-router.put( 
-  '/update/status',
-  productController.updateProductStatus
-);
-
 router.get( 
   '/categories/all',
   productController.fetchAllProductCategories
@@ -39,5 +34,12 @@ router.get(
   '/usage/units/all',
   productController.fetchAllProductUsageUnits
 )
-
+router.get(
+  '/raw_materials/all',
+  productController.fetchAllProductRawMaterials
+)
+router.get(
+  '/packaging/all',
+   productController.fetchAllProductPackaging
+)
 export default router;

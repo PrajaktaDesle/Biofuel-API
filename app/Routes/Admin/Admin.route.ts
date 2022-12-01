@@ -6,7 +6,7 @@ import { celebrate } from 'celebrate';
 const router = express.Router();
 
 router.post(
-    '/login',
+    '/sign-in',
     celebrate( adminSchema.login ),
     adminController.login
 )

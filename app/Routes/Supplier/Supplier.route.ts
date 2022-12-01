@@ -14,38 +14,33 @@ router.post(
   '/login',
   celebrate(supplierSchema.login),
   supplierController.login
-)
+);
 
 router.post(
   '/verify-OTP',
   celebrate( supplierSchema.verify_otp),
   supplierController.verify_otp
-
-)
-router.put(
-  '/update',
-  supplierController.formidableUpdateDetails
-)
+);
 
 router.put( 
-  '/update/status',
-  celebrate( supplierSchema.updateSupplierStatus ),
-  supplierController.updateSuppliersDetails
-)
+  '/update',
+  supplierController.updateSupplierDetails
+);
 
 router.get(
   '/fetch',
   celebrate( supplierSchema.fetchSupplierById ),
   supplierController.fetchSupplierById
-)
+);
 
 router.get(
   '/fetch/all',
   supplierController.fetchAllSuppliers
 );
+
 router.get(
-  '/fetch/city/state',
-  supplierController.getAllCityWiseStates
-)
+  '/home/page',
+  supplierController.getHomePage
+);
 
 export default router;

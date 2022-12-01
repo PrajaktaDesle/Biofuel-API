@@ -43,14 +43,18 @@ const fetchProductById : IController = async ( req:any , res:any ) => {
     try{
         let product = await productService.fetchProductById( req.query.id )
         if ( product instanceof Error ){
-           return apiResponse.error( res,
+            return apiResponse.error( res,
                                     httpStatusCodes.BAD_REQUEST,
                                     product.message )
         }
-        else{
-           return apiResponse.result( res,
-                                     product,
+        else if(product.length > 0){
+            return apiResponse.result( res,
+                                     product[0],
                                      httpStatusCodes.OK )
+        }else{
+            return apiResponse.error( res,
+                httpStatusCodes.BAD_REQUEST,
+                "No Product Found");
         }
     }
     catch ( error : any ) {
@@ -112,7 +116,7 @@ const updateProductById : IController = async ( req:any , res:any ) => {
         else{
            return apiResponse.result( res,
                                      product,
-                                     httpStatusCodes.OK )
+                                     httpStatusCodes.CREATED )
         }
     }
     catch ( error : any ) {
@@ -143,32 +147,55 @@ const fetchAllProductUsageUnits : IController = async ( req:any , res:any ) => {
     }
 }
 
-const updateProductStatus : IController = async ( req:any , res:any ) => {
-    try{
-        let product = await productService.updateProductStatus( req.body )
-        if ( product instanceof Error ){
-           return apiResponse.error( res,
-                                    httpStatusCodes.BAD_REQUEST,
-                                    product.message )
+
+const fetchAllProductRawMaterials: IController = async (req, res) => {
+    try {
+        let rawMaterials : any = await productService.fetchAllProductRawMaterials();
+        if (rawMaterials instanceof Error) {
+            console.log("error", rawMaterials)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+
+            apiResponse.result(res, rawMaterials, httpStatusCodes.OK);
         }
-        else{
-           return apiResponse.result( res,
-                                     product,
-                                     httpStatusCodes.OK )
+    } catch (e:any) {
+        console.log("controller ->", e)
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+            return;
+    }
+};
+
+const fetchAllProductPackaging: IController = async (req, res) => {
+    try {
+        let packaging : any = await productService.fetchAllProductPackaging();
+        if (packaging instanceof Error) {
+            console.log("error", packaging)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+
+            apiResponse.result(res, packaging, httpStatusCodes.OK);
         }
+    } catch (e:any) {
+        console.log("controller ->", e)
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+            return;
     }
-    catch ( error : any ) {
-        console.log( "Error => ", error )
-        return apiResponse.error( res,
-                                  httpStatusCodes.BAD_REQUEST )
-    }
-}
+};
 export default {
     createProduct,
     fetchProductById,
     updateProductById,
     fetchAllProducts,
-    updateProductStatus,
     fetchAllProductCategories,
-    fetchAllProductUsageUnits
+    fetchAllProductUsageUnits,
+    fetchAllProductRawMaterials,
+    fetchAllProductPackaging
 }
