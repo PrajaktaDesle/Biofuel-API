@@ -17,6 +17,9 @@ const createNotification = async ( data : any ) => {
         quantity = data.quantity/vehicle_count
         console.log('deliverable quantity distribution------>',quantity)
         notificationData.quantity =quantity
+        console.log("no",notificationData)
+        let n = await new NotificationModel().fetchNotificationById(notificationData.purchase_order_id)
+        if(n.length !== 0 ) throw new Error("purchase_order_id already exist")
         for (let i = 0 ; i < vehicle_count ; i++){
             notification = await new NotificationModel().createNotification( notificationData );
             if ( notification.length == 0 ) throw new Error( "notification creation failed" )

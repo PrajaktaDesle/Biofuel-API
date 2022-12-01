@@ -11,8 +11,8 @@ export class NotificationModel extends BaseModel
     async fetchNotification(id:any){
         return await this._executeQuery("select * from purchase_order_dispatch_notifications where id = ? ", [id]);
     }
-    async fetchNotificationByUserId(id:any){
-        return await this._executeQuery("select * from dispatch_notification where user_id = ? ", [id]);
+    async fetchNotificationById(id:any){
+        return await this._executeQuery("select * from purchase_order_dispatch_notifications where purchase_order_id = ? ", [id]);
     }
 
     async createNotification(notificationData:any){
