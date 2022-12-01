@@ -220,7 +220,7 @@ const udpateCustomerEstimate: IController = async (req, res) => {
         console.log('estimate at controller-----> ', estimate);
 
         if (estimate instanceof Error) {
-            console.log("error", estimate)
+            LOGGER.info("error", estimate)
             apiResponse.error( res, 
                                httpStatusCodes.BAD_REQUEST );
         } 
@@ -231,7 +231,7 @@ const udpateCustomerEstimate: IController = async (req, res) => {
         }
 
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
         // @ts-ignore
         if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
             apiResponse.error( res,
@@ -262,7 +262,7 @@ const fetchCustomerEstimateById : IController = async ( req:any , res:any ) => {
         }
     }
     catch ( error : any ) {
-        console.log( "Error => ", error )
+        LOGGER.info( "Error => ", error )
         return apiResponse.error( res,
                                   httpStatusCodes.BAD_REQUEST )
     }
@@ -283,7 +283,7 @@ const fetchAllCustomerEstimates : IController = async ( req:any , res:any ) => {
         }
     }
     catch ( error : any ) {
-        console.log( "Error => ", error )
+        LOGGER.info( "Error => ", error )
         return apiResponse.error( res,
                                   httpStatusCodes.BAD_REQUEST )
     }
@@ -293,10 +293,10 @@ const createCustomerSalesOrder: IController = async (req, res) => {
     let sales_order: any;
     try {
         sales_order = await CustomerService.createCustomerSalesOrder(req.body);
-        console.log('sales_order at controller-----> ', sales_order);
+        LOGGER.info('sales_order at controller-----> ', sales_order);
 
         if (sales_order instanceof Error) {
-            console.log("error", sales_order)
+            LOGGER.info("error", sales_order)
             apiResponse.error( res, 
                                httpStatusCodes.BAD_REQUEST );
         } 
@@ -307,7 +307,7 @@ const createCustomerSalesOrder: IController = async (req, res) => {
         }
 
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
         // @ts-ignore
         if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
             apiResponse.error( res,
@@ -328,10 +328,10 @@ const updateCustomerSalesOrder: IController = async (req, res) => {
     let sales_order: any;
     try {
         sales_order = await CustomerService.updateCustomerSalesOrder(req.body);
-        console.log('sales_order at controller-----> ', sales_order);
+        LOGGER.info('sales_order at controller-----> ', sales_order);
 
         if (sales_order instanceof Error) {
-            console.log("error", sales_order)
+            LOGGER.info("error", sales_order)
             apiResponse.error( res, 
                                httpStatusCodes.BAD_REQUEST );
         } 
@@ -342,7 +342,7 @@ const updateCustomerSalesOrder: IController = async (req, res) => {
         }
 
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
         // @ts-ignore
         if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
             apiResponse.error( res,
@@ -373,7 +373,7 @@ const fetchCustomerSalesOrderById : IController = async ( req:any , res:any ) =>
         }
     }
     catch ( error : any ) {
-        console.log( "Error => ", error )
+        LOGGER.info( "Error => ", error )
         return apiResponse.error( res,
                                   httpStatusCodes.BAD_REQUEST )
     }
@@ -394,7 +394,7 @@ const fetchAllCustomerSalesOrders : IController = async ( req:any , res:any ) =>
         }
     }
     catch ( error : any ) {
-        console.log( "Error => ", error )
+        LOGGER.info( "Error => ", error )
         return apiResponse.error( res,
                                   httpStatusCodes.BAD_REQUEST )
     }

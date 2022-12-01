@@ -18,7 +18,7 @@ export class SupplierModel extends UserModel
     }
    
     async fetchSuppliersProfileAndSourceAddressById(id: any ){
-        return await this._executeQuery(`SELECT up.aadhaar_no, up.aadhaar_url, up.pan_no, up.pan_url, up.gstin, up.gstin_url, up.msme_no, up.msme_url,a.address as source_address, a.latitude, a.longitude, ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode
+        return await this._executeQuery(`SELECT up.aadhaar_no, up.aadhaar_url, up.pan_no, up.pan_url, up.gstin, up.gstin_url, up.msme_no, up.msme_url, up.grade, a.address as source_address, a.latitude, a.longitude, ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode
                                          FROM biofuel.users_profile up
                                          inner join biofuel.addresses a ON a.user_id=up.user_id
                                          inner join biofuel.address_city ac ON ac.id=a.city_id

@@ -9,14 +9,14 @@ const getAllCities: IController = async (req, res) => {
     try {
         let cities : any = await addressService.getAllCities();
         if (cities instanceof Error) {
-            console.log("error", cities)
+            LOGGER.info("error", cities)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
 
             apiResponse.result(res, cities, httpStatusCodes.OK);
         }
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
@@ -30,14 +30,14 @@ const getAllStates: IController = async (req, res) => {
     try {
         let states : any = await addressService.getAllStates();
         if (states instanceof Error) {
-            console.log("error", states)
+            LOGGER.info("error", states)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
 
             apiResponse.result(res, states, httpStatusCodes.OK);
         }
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
@@ -51,14 +51,14 @@ const getCitiesByState: IController = async (req:any, res:any) => {
     try {
         let states : any = await addressService.getCitiesByState(req.query.state_id);
         if (states instanceof Error) {
-            console.log("error", states)
+            LOGGER.info("error", states)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
 
             apiResponse.result(res, states, httpStatusCodes.OK);
         }
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
