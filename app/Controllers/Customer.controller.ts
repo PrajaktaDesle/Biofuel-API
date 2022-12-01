@@ -266,7 +266,7 @@ const fetchCustomerEstimateById : IController = async ( req:any , res:any ) => {
         return apiResponse.error( res,
                                   httpStatusCodes.BAD_REQUEST )
     }
-}
+};
 
 const fetchAllCustomerEstimates : IController = async ( req:any , res:any ) => {
     try{
@@ -289,7 +289,116 @@ const fetchAllCustomerEstimates : IController = async ( req:any , res:any ) => {
     }
 }
 
+const createCustomerSalesOrder: IController = async (req, res) => {
+    let sales_order: any;
+    try {
+        sales_order = await CustomerService.createCustomerSalesOrder(req.body);
+        console.log('sales_order at controller-----> ', sales_order);
 
+        if (sales_order instanceof Error) {
+            console.log("error", sales_order)
+            apiResponse.error( res, 
+                               httpStatusCodes.BAD_REQUEST );
+        } 
+        else {
+            apiResponse.result( res, 
+                                sales_order,
+                                httpStatusCodes.CREATED );
+        }
+
+    } catch (e:any) {
+        console.log("controller ->", e)
+        // @ts-ignore
+        if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
+            apiResponse.error( res,
+                               httpStatusCodes.BAD_REQUEST,
+                               'MOBILE_AND_EMAIL_ALREADY_EXISTS' )
+        }
+        else{
+            apiResponse.error( res,
+                               httpStatusCodes.BAD_REQUEST,
+                               e.message )
+        }
+        return;
+    }
+};
+
+
+const updateCustomerSalesOrder: IController = async (req, res) => {
+    let sales_order: any;
+    try {
+        sales_order = await CustomerService.updateCustomerSalesOrder(req.body);
+        console.log('sales_order at controller-----> ', sales_order);
+
+        if (sales_order instanceof Error) {
+            console.log("error", sales_order)
+            apiResponse.error( res, 
+                               httpStatusCodes.BAD_REQUEST );
+        } 
+        else {
+            apiResponse.result( res, 
+                                sales_order,
+                                httpStatusCodes.CREATED );
+        }
+
+    } catch (e:any) {
+        console.log("controller ->", e)
+        // @ts-ignore
+        if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
+            apiResponse.error( res,
+                               httpStatusCodes.BAD_REQUEST,
+                               'MOBILE_AND_EMAIL_ALREADY_EXISTS' )
+        }
+        else{
+            apiResponse.error( res,
+                               httpStatusCodes.BAD_REQUEST,
+                               e.message )
+        }
+        return;
+    }
+};
+
+const fetchCustomerSalesOrderById : IController = async ( req:any , res:any ) => {
+    try{
+        let estimate = await CustomerService.fetchCustomerSalesOrderById( req.query.id )
+        if ( estimate instanceof Error ){
+           return apiResponse.error( res,
+                                    httpStatusCodes.BAD_REQUEST,
+                                    estimate.message )
+        }
+        else{
+           return apiResponse.result( res,
+                                     estimate,
+                                     httpStatusCodes.OK )
+        }
+    }
+    catch ( error : any ) {
+        console.log( "Error => ", error )
+        return apiResponse.error( res,
+                                  httpStatusCodes.BAD_REQUEST )
+    }
+}
+
+const fetchAllCustomerSalesOrders : IController = async ( req:any , res:any ) => {
+    try{
+        let estimate = await CustomerService.fetchAllCustomerSalesOrders( )
+        if ( estimate instanceof Error ){
+           return apiResponse.error( res,
+                                    httpStatusCodes.BAD_REQUEST,
+                                    estimate.message )
+        }
+        else{
+           return apiResponse.result( res,
+                                     estimate,
+                                     httpStatusCodes.OK )
+        }
+    }
+    catch ( error : any ) {
+        console.log( "Error => ", error )
+        return apiResponse.error( res,
+                                  httpStatusCodes.BAD_REQUEST )
+    }
+}
 
 export default {
                 Create,
@@ -302,5 +411,10 @@ export default {
                 createCustomerEstimate,
                 udpateCustomerEstimate,
                 fetchCustomerEstimateById,
-                fetchAllCustomerEstimates
+                fetchAllCustomerEstimates,
+                createCustomerSalesOrder,
+                updateCustomerSalesOrder,
+                fetchCustomerSalesOrderById,
+                fetchAllCustomerSalesOrders
+
 }

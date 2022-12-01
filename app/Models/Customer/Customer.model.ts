@@ -91,7 +91,7 @@ export class CustomerModel extends UserModel
     }
    
     async fetchCustomerEstimateById( id : any){
-        return await this._executeQuery( `SELECT es.id, customer_id, cs.name as customer,es.status, estimate_date, expiry_date, estimate_no ,product_id,p.name as product_name, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, adjustment_amount*rate as total_amount FROM biofuel.customer_estimates es
+        return await this._executeQuery( `SELECT es.id, customer_id, cs.name as customer,es.status, estimate_date, expiry_date, estimate_no ,product_id,p.name as product, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, rate, customer_note, adjustment_amount*rate as total_amount FROM biofuel.customer_estimates es
                                           inner join biofuel.products p ON p.id=es.product_id
                                           inner join biofuel.customers cs ON cs.id=es.customer_id
                                           inner join biofuel.product_raw_material rm ON rm.id=es.raw_material_id
@@ -112,5 +112,30 @@ export class CustomerModel extends UserModel
     async estimateExistsOrNot( id : number ){
         return await this._executeQuery( "select id from customer_estimates where id = ? ",[id] )
     }
-   
+    async createCustomerEstimateStagelog( data : any ){
+        return await this._executeQuery( "insert into customer_estimate_stage_logs set ? ", [data])
+    }
+    async createCustomerSalesOrder( data : any ){
+        return await this._executeQuery( "insert into customer_sales_orders set ? ", [data])
+    }
+    async updateCustomerSalesOrder( data : any, id : number ){
+        return await this._executeQuery( "update customer_sales_orders set ? where id = ? ", [data, id ])
+    }
+    async fetchCustomerSalesOrderById( id : number ){
+        return await this._executeQuery( `SELECT so.id, customer_id, cs.name as customer,so.status, so_date, delivery_date, estimate_id ,product_id,p.name as product, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, rate,  adjustment_amount*rate as total_amount FROM biofuel.customer_sales_orders so
+                                          inner join biofuel.products p ON p.id=so.product_id
+                                          inner join biofuel.customers cs ON cs.id=so.customer_id
+                                          inner join biofuel.product_raw_material rm ON rm.id=so.raw_material_id
+                                          inner join biofuel.product_packaging pp ON pp.id=so.packaging_id
+                                          where so.id = ?`, [id])
+    }
+    async fetchAllCustomerSalesOrders( ){
+        return await this._executeQuery( `SELECT so.id, customer_id, cs.name as customer,so.status, so_date, delivery_date, estimate_id ,product_id,p.name as product, product_description, adjustment_amount*rate as total_amount FROM biofuel.customer_sales_orders so
+                                          inner join biofuel.products p ON p.id=so.product_id
+                                          inner join biofuel.customers cs ON cs.id=so.customer_id`, [])
+    }
+    async salesOrderExistsOrNot( id : number ){
+        return await this._executeQuery( "select id from customer_sales_orders where id = ? ",[id] )
+    }
+    
 }

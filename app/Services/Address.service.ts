@@ -15,7 +15,16 @@ const getAllStates = async ( ) =>{
     return data 
 }
 
+const getCitiesByState = async ( state_id:number) =>{
+    let data = await new UserModel().getCitiesByState(state_id)
+    if (data.length == 0) {
+            throw new Error("Cities not found!")
+        }
+    return data 
+}
+
 export default {
     getAllCities,
-    getAllStates
+    getAllStates,
+    getCitiesByState
 }

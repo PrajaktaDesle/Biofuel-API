@@ -253,31 +253,6 @@ const verify_supplier_otp = async ( data : any ) => {
         return error;
     }
 }
-const getAllCityWiseStates = async ( ) =>{
-    let data = await new SupplierModel().getAllCityWiseStates()
-    if (data.length == 0) {
-            throw new Error("City wise states not found!")
-        }
-    console.log( data )
-    return data 
-}
-const getAllCities = async ( ) =>{
-    let data = await new SupplierModel().getAllCities()
-    if (data.length == 0) {
-            throw new Error("Cities not found!")
-        }
-    console.log( data )
-    return data 
-}
-
-const getAllStates = async ( ) =>{
-    let data = await new SupplierModel().getAllStates()
-    if (data.length == 0) {
-            throw new Error("States not found!")
-        }
-    console.log( data )
-    return data 
-}
 
 const getHomePage = async ( ) =>{
     let data = await new SupplierModel().getHomePage()
@@ -298,8 +273,5 @@ export default {
     fetchSupplierById,
     updateSupplierDetails,
     verify_supplier_otp,
-    getAllCityWiseStates,
-    getAllCities,
-    getAllStates,
     getHomePage
 }
