@@ -54,7 +54,8 @@ export class CustomerModel extends UserModel
     }
     // customer-supplier mapping
     async createCSM(data: any) {
-        return await this._executeQuery("insert into customer_supplier_mapping set ? ", [data]);
+        console.log('data------>', data)
+        return await this._executeQuery("insert ignore into customer_supplier_mapping set ? ", [data]);
 
     }
     async fetchAddressID(customer_id:number){
