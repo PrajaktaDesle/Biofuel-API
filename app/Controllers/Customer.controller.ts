@@ -4,6 +4,8 @@ import apiResponse from '../utilities/ApiResponse';
 import constants from "../Constants";
 import LOGGER from "../config/LOGGER";
 import CustomerService from "../Services/Customer.service";
+import productService from "../Services/Product.service";
+import customerService from "../Services/Customer.service";
 
 const Create: IController = async (req, res) => {
     let customer: any;
@@ -85,26 +87,22 @@ const updateCustomerDetails: IController = async (req, res) => {
 };
 
 const fetchAllCustomers: IController = async (req, res) => {
-    await CustomerService.fetchAll()
-        .then( (customer : any) => {
-            if(customer instanceof Error){
-                console.log("User 2", customer.message)
-                apiResponse.error(
-                    res,
-                    httpStatusCodes.BAD_REQUEST,
-                    customer.message
-                );
-            }else{
-                // console.log("User 3", customer)
-                apiResponse.result(res, customer, httpStatusCodes.OK);
-            }
-        }).catch( (err : any) => {
-            console.log("Error  ->", err);
-            apiResponse.error(
-                res,
-                httpStatusCodes.BAD_REQUEST,
-            );
-        });
+    let query = " "
+    if(req.body.query != ""){
+        query = ` WHERE (p.name like '%${req.body.query}%' OR pc.name like '%${req.body.query}%' ) `
+    }
+    let customer = await customerService.fetchAllCustomer(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
+    let count = await customerService.fetchAllCustomerCount(query);
+    if ( customer instanceof Error ){
+        return apiResponse.error( res,
+            httpStatusCodes.BAD_REQUEST,
+            customer.message )
+    }
+    else{
+        return apiResponse.result( res,
+            {data :customer, total : count},
+            httpStatusCodes.OK )
+    }
 };
 // customer-supplier mapping
 const Create_customer_supplier: IController = async(req,res) => {

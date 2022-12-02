@@ -15,8 +15,8 @@ router.put(
     '/update',
      CustomerController.updateCustomerDetails
 )
-router.get(
-    '/fetch-all',
+router.post(
+    '/all',
    CustomerController.fetchAllCustomers
 )
 // customer-supplier mapping
