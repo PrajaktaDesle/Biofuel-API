@@ -9,8 +9,6 @@ const createNotification: IController = async (req, res) => {
     let notification: any;
     try {
         notification = await notificationService.createNotification(req.body);
-        console.log('Notification at controller-----> ', notification);
-
         if (notification instanceof Error) {
             console.log("error", notification)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
@@ -19,7 +17,6 @@ const createNotification: IController = async (req, res) => {
                 notification
             }, httpStatusCodes.CREATED);
         }
-
     } catch (e:any) {
         console.log("controller ->", e)
         // @ts-ignore
@@ -42,29 +39,29 @@ const createNotification: IController = async (req, res) => {
 };
 
 
-// const fetchAllnotifications: IController = async (req, res) => {
-//     notificationService.fetchAllnotifications()
-//         .then( (notifications) => {
-//             if(notifications instanceof Error){
-//                 console.log("User 2", notifications.message)
-//                 apiResponse.error(
-//                     res,
-//                     httpStatusCodes.BAD_REQUEST,
-//                     notifications.message
-//                 );
-//             }else{
-//                 console.log("User 3", notifications)
-//                 apiResponse.result(res, notifications, httpStatusCodes.OK);
-//             }
-//         }).catch(err => {
-//         console.log("Error  ->", err);
-//         apiResponse.error(
-//             res,
-//             httpStatusCodes.BAD_REQUEST,
-//             //locale.INVALID_CREDENTIALS,
-//         );
-//     });
-// };
+const fetchAllnotifications: IController = async (req, res) => {
+    notificationService.fetchAllNotifications()
+        .then( (notifications) => {
+            if(notifications instanceof Error){
+                console.log("User 2", notifications.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    notifications.message
+                );
+            }else{
+                console.log("User 3", notifications)
+                apiResponse.result(res, notifications, httpStatusCodes.OK);
+            }
+        }).catch(err => {
+        console.log("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+            //locale.INVALID_CREDENTIALS,
+        );
+    });
+};
 
 
 const fetchNotificationById: IController = async (req, res) => {
@@ -121,6 +118,6 @@ export default {
     createNotification,
     updateNotificationDetails,
     fetchNotificationById,
-    // fetchAllnotifications,
+    fetchAllnotifications,
 
 };

@@ -18,13 +18,13 @@ router.put(
 )
 
 router.get(
-  '/fetch',
-  celebrate( notificationSchema.fetchNotificationById ),
-  notificationController.fetchNotificationById
+  '/fetch/all',
+  notificationController.fetchAllnotifications
 )
 
 // router.get(
-//   '/fetch/all',
+//   '/fetch/',
+// celebrate( notificationSchema.fetchNotificationById ),
 //   notificationController.fetchAllSuppliers
 // )
 

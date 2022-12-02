@@ -33,13 +33,26 @@ export class CustomerModel extends UserModel
     async updateCustomersAddress(customerData:any,user_id:number, add_type:string){
         return await this._executeQuery("update addresses set ? where user_id = ?  and address_type = ? ", [customerData,user_id, add_type]);
     }
-    async  fetchAllCustomers(){
-        return await this._executeQuery("SELECT cs.id, cs.name as customer, cs.email, cs.mobile as contact_no,cs.payment_term,cs.status,cs.gstin, cs.gstin_url,a.address as shipping_address,a.address as billing_address,a.latitude, a.longitude, a.user_type,ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode, cs.created_at, cs.updated_at\n" +
-            "                                         FROM biofuel.customers cs\n" +
-            "                                         inner join biofuel.addresses a ON a.user_id=cs.id\n" +
-            "                                         inner join biofuel.address_city ac ON ac.id=a.city_id\n" +
-            "                                         inner join biofuel.address_state ast ON ac.state_id=ast.id;\n",[])
+    async  fetchAllCustomers(limit : number, offset : number, sortOrder : string, query : string){
+        return await this._executeQuery(`SELECT cs.id, cs.name as customer, cs.email, cs.mobile as contact_no,cs.payment_term,cs.status,cs.gstin, cs.gstin_url,a.address as shipping_address,a.address as billing_address,a.latitude, a.longitude, a.user_type,ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode, cs.created_at, cs.updated_at 
+                                                   FROM biofuel.customers cs 
+                                                   inner join biofuel.addresses a ON a.user_id=cs.id 
+                                                   inner join biofuel.address_city ac ON ac.id=a.city_id 
+                                                   inner join biofuel.address_state ast ON ac.state_id=ast.id
+                                                   ${query}
+                                                   ${sortOrder} 
+                                                   LIMIT ? OFFSET ? `,[limit, offset])
     }
+
+    async fetchAllCustomerCount(query : string){
+        return await this._executeQuery(`SELECT cs.id, cs.name as customer, cs.email, cs.mobile as contact_no,cs.payment_term,cs.status,cs.gstin, cs.gstin_url,a.address as shipping_address,a.address as billing_address,a.latitude, a.longitude, a.user_type,ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode, cs.created_at, cs.updated_at 
+                                                   FROM biofuel.customers cs 
+                                                   inner join biofuel.addresses a ON a.user_id=cs.id 
+                                                   inner join biofuel.address_city ac ON ac.id=a.city_id 
+                                                   inner join biofuel.address_state ast ON ac.state_id=ast.id
+                                                   ${query} `, [])
+    }
+
     async fetchsBillingAddressById(user_id: any){
         return await this._executeQuery("select user_type ,address as `billing_address` from addresses where user_id = ? and address_type = ? ", [user_id, "billing"]);
     }
@@ -54,7 +67,8 @@ export class CustomerModel extends UserModel
     }
     // customer-supplier mapping
     async createCSM(data: any) {
-        return await this._executeQuery("insert into customer_supplier_mapping set ? ", [data]);
+        console.log('data------>', data)
+        return await this._executeQuery("insert ignore into customer_supplier_mapping set ? ", [data]);
 
     }
     async fetchAddressID(customer_id:number){

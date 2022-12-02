@@ -6,6 +6,7 @@ import moment from 'moment';
 import * as fs from "fs";
 import { CustomerModel } from "../Models/Customer/Customer.model";
 import {SupplierModel} from "../Models/Supplier/Supplier.model";
+import {ProductModel} from "../Models/Product/Product.model";
 
 const createCustomer = async (req:any)=> {
     try {
@@ -158,17 +159,30 @@ const fetchCustomersById = async (id:any) => {
 
 }
 
-const fetchAll = async () => {
-    // let Billing_address, shipping_address, city,state: any;
+const fetchAllCustomer = async (pageIndex: number, pageSize : number, sort : any, query : string) => {
+    let orderQuery: string;
     try {
-        let customers = await new CustomerModel().fetchAllCustomers()
+        if (sort.key != "") {
+            orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
+        } else {
+            orderQuery = "  ";
+        }
+        let customers = await new CustomerModel().fetchAllCustomers(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
 
         if (customers.length == 0) throw new Error(" customer not found!")
         for (let i = 0; i < customers.length; i++) {
             // adding base url to panurl from database
-            customers[i].gst= config.baseUrl + "/" + customers[0].gstin_url;
+            customers[i].gst = config.baseUrl + "/" + customers[0].gstin_url;
         }
         return customers;
+    } catch (e) {
+        return e
+    }
+}
+const fetchAllCustomerCount =async(query : string) => {
+    try {
+        let customers = await new CustomerModel().fetchAllCustomerCount(query);
+        return customers.length;
     }
     catch (error: any) {
         return error
@@ -176,24 +190,27 @@ const fetchAll = async () => {
 }
 
 // customer-supplier mapping
-const CreateCSMService = async(req:any)=>{
+const CreateCSMService = async(data:any)=>{
     let result, customer, supplier, customer_address;
-    let data:any={}
+    // let data:any=
     try{
-        if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
-            customer = await new  CustomerModel().fetchCustomers(req.body.customer_id)
-        if (customer.length == 0) throw new Error("customer not found");
-        customer_address = await new CustomerModel().fetchAddressID(req.body.customer_id)
-        if (customer_address.length == 0) throw new Error("id not found");
-        data.address_id = customer_address[0].id
-        if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
-            supplier = await new CustomerModel().fetchSupplier(req.body.supplier_id)
-        if (supplier.length == 0) throw new Error("Supplier not found");
-        data.customer_id = customer[0].id
-        data.supplier_id = supplier[0].id
-        let CSM = await new CustomerModel().fetchCSM(req.body.customer_id, req.body.supplier_id)
-        if(CSM.length !== 0) throw new Error(" id already present")
+        // if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
+        //     customer = await new  CustomerModel().fetchCustomers(req.body.customer_id)
+        // if (customer.length == 0) throw new Error("customer not found");
+        // customer_address = await new CustomerModel().fetchAddressID(req.body.customer_id)
+        // if (customer_address.length == 0) throw new Error("id not found");
+        // data.address_id = customer_address[0].id
+        // if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
+        //     supplier = await new CustomerModel().fetchSupplier(req.body.supplier_id)
+        // if (supplier.length == 0) throw new Error("Supplier not found");
+        // data.customer_id = customer[0].id
+        // data.supplier_id = supplier[0].id
+        // let CSM = await new CustomerModel().fetchCSM(req.body.customer_id, req.body.supplier_id)
+        // if(CSM.length !== 0) throw new Error(" id already present")
         result = await new CustomerModel().createCSM(data)
+        if ( result.insertId == 0){
+           return  {message:"Customer supplier mapping already exists  ",insertId:result.insertId}
+        }
         return {message:"added successfully ",insertId:result.insertId}
     }catch (e) {
         throw e
@@ -207,7 +224,6 @@ const updateCSMService = async(req:any)=>{
         CSM = await new CustomerModel().fetchCSM(req.body.customer_id,req.body.supplier_id)
         if(CSM.length == 0) throw new Error("id not found");
         data = {"status":req.body.status }
-        // console.log("data in service------>", data)
         result = await new CustomerModel().updateStatusById(data, req.body.customer_id,req.body.supplier_id)
         LOGGER.info( "Product details", result )
         console.log( result )
@@ -306,8 +322,8 @@ const updateCustomerEstimate = async (data: any) => {
         let estimate:any = {}, est:any;
         if(data.id !== undefined && data.id !== null && data.id !== "")
         est= await new CustomerModel().estimateExistsOrNot(data.id);
-        
-        if(data.id !== undefined && data.id !== null && data.id !== "") 
+
+        if(data.id !== undefined && data.id !== null && data.id !== "")
         est = await new CustomerModel().estimateExistsOrNot(data.id);
         if (est.length == 0 ) throw new Error( "Estimate not found" )
 
@@ -335,7 +351,7 @@ const updateCustomerEstimate = async (data: any) => {
         if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "")
         estimate.packaging_id=data.packaging;
 
-        if(data.product_description !== undefined && data.product_description !== null && data.product_description !== "") 
+        if(data.product_description !== undefined && data.product_description !== null && data.product_description !== "")
         estimate.product_description=data.product_description;
 
         if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "")
@@ -388,7 +404,7 @@ const updateCustomerEstimate = async (data: any) => {
 
         let estimateData:any = await new CustomerModel().updateCustomerEstimateById(estimate, data.id )
 //   `stage`  -1 as declined, 0 as draft, 1 as pending approval, 2 as approved, 3 as sent, 4 as accepted, 5 as Convert to SO',
-       
+
         return estimateData;
 
     } catch (e: any) {
@@ -431,7 +447,7 @@ const fetchCustomerEstimateById = async (id: number) => {
         estimate[0].product = { "label":estimate[0].product, "value":estimate[0].product_id}
         estimate[0].raw_material = { "label":estimate[0].raw_material, "value":estimate[0].raw_material_id}
         estimate[0].packaging = { "label":estimate[0].packaging, "value":estimate[0].packaging_id}
-      
+
         return estimate;
 
     }
@@ -461,54 +477,54 @@ const createCustomerSalesOrder = async (data: any) => {
     try {
         let sales_order:any = {};
 
-        if(data.customer !== undefined && data.customer !== null && data.customer !== "") 
+        if(data.customer !== undefined && data.customer !== null && data.customer !== "")
         sales_order.customer_id=data.customer;
 
-        if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "") 
+        if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "")
         sales_order.estimate_id=data.estimate_id;
-        
-        if(data.so_date !== undefined && data.so_date !== null && data.so_date !== "") 
+
+        if(data.so_date !== undefined && data.so_date !== null && data.so_date !== "")
         sales_order.so_date=data.so_date;
 
-        if(data.delivery_date !== undefined && data.delivery_date !== null && data.delivery_date !== "") 
+        if(data.delivery_date !== undefined && data.delivery_date !== null && data.delivery_date !== "")
         sales_order.delivery_date=data.delivery_date;
 
-        if(data.customer_so_number !== undefined && data.customer_so_number !== null && data.customer_so_number !== "") 
+        if(data.customer_so_number !== undefined && data.customer_so_number !== null && data.customer_so_number !== "")
         sales_order.sales_order_no=data.customer_so_number;
 
-        if(data.product !== undefined && data.product !== null && data.product !== "") 
+        if(data.product !== undefined && data.product !== null && data.product !== "")
         sales_order.product_id=data.product;
 
-        if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "") 
+        if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "")
         sales_order.raw_material_id=data.raw_material;
 
-        if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "") 
+        if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "")
         sales_order.packaging_id=data.packaging;
 
-        if(data.product_description !== undefined && data.product_description !== null && data.product_description !== "") 
+        if(data.product_description !== undefined && data.product_description !== null && data.product_description !== "")
         sales_order.product_description=data.product_description;
 
-        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "") 
+        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "")
         sales_order.quantity=data.quantity;
 
-        if(data.rate !== undefined && data.rate !== null && data.rate !== "") 
+        if(data.rate !== undefined && data.rate !== null && data.rate !== "")
         sales_order.rate=data.rate;
 
-        if(data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "") 
+        if(data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "")
         sales_order.adjustment_amount=data.adjustment;
 
-        if(data.customer_note !== undefined && data.customer_note !== null && data.customer_note !== "") 
+        if(data.customer_note !== undefined && data.customer_note !== null && data.customer_note !== "")
         sales_order.customer_note=data.customer_note;
 
-        if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "") 
+        if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "")
         sales_order.tnc=data.tnc;
         // payment_term
-        if(data.payment_term !== undefined && data.payment_term !== null && data.payment_term !== "") 
+        if(data.payment_term !== undefined && data.payment_term !== null && data.payment_term !== "")
         sales_order.payment_term=data.payment_term;
 
         if(data.status !== undefined && data.status !== null && data.status !== "")sales_order.status=data.status;
         sales_order.status=0
-        
+
         let sales_order_data = await new CustomerModel().createCustomerSalesOrder(sales_order)
         let log : any = { "estimate_id" : sales_order.estimate_id, "stage":5,"user_id":data.user_id }
         await new CustomerModel().createCustomerEstimateStagelog(log)
@@ -527,54 +543,54 @@ const updateCustomerSalesOrder = async (data: any) => {
         dt = await new CustomerModel().salesOrderExistsOrNot(id);
         if (dt.length == 0 ) throw new Error( "customer sales order not found ")
 
-        if(data.customer !== undefined && data.customer !== null && data.customer !== "") 
+        if(data.customer !== undefined && data.customer !== null && data.customer !== "")
         sales_order.customer_id=data.customer;
 
-        if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "") 
+        if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "")
         sales_order.estimate_id=data.estimate_id;
-        
-        if(data.so_date !== undefined && data.so_date !== null && data.so_date !== "") 
+
+        if(data.so_date !== undefined && data.so_date !== null && data.so_date !== "")
         sales_order.so_date=data.so_date;
 
-        if(data.delivery_date !== undefined && data.delivery_date !== null && data.delivery_date !== "") 
+        if(data.delivery_date !== undefined && data.delivery_date !== null && data.delivery_date !== "")
         sales_order.delivery_date=data.delivery_date;
 
-        if(data.customer_so_number !== undefined && data.customer_so_number !== null && data.customer_so_number !== "") 
+        if(data.customer_so_number !== undefined && data.customer_so_number !== null && data.customer_so_number !== "")
         sales_order.sales_order_no=data.customer_so_number;
 
-        if(data.product !== undefined && data.product !== null && data.product !== "") 
+        if(data.product !== undefined && data.product !== null && data.product !== "")
         sales_order.product_id=data.product;
 
-        if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "") 
+        if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "")
         sales_order.raw_material_id=data.raw_material;
 
-        if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "") 
+        if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "")
         sales_order.packaging_id=data.packaging;
 
-        if(data.product_description !== undefined && data.product_description !== null && data.product_description !== "") 
+        if(data.product_description !== undefined && data.product_description !== null && data.product_description !== "")
         sales_order.product_description=data.product_description;
 
-        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "") 
+        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "")
         sales_order.quantity=data.quantity;
 
-        if(data.rate !== undefined && data.rate !== null && data.rate !== "") 
+        if(data.rate !== undefined && data.rate !== null && data.rate !== "")
         sales_order.rate=data.rate;
 
-        if(data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "") 
+        if(data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "")
         sales_order.adjustment_amount=data.adjustment;
 
-        if(data.customer_note !== undefined && data.customer_note !== null && data.customer_note !== "") 
+        if(data.customer_note !== undefined && data.customer_note !== null && data.customer_note !== "")
         sales_order.customer_note=data.customer_note;
 
-        if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "") 
+        if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "")
         sales_order.tnc=data.tnc;
         // payment_term
-        if(data.payment_term !== undefined && data.payment_term !== null && data.payment_term !== "") 
+        if(data.payment_term !== undefined && data.payment_term !== null && data.payment_term !== "")
         sales_order.payment_term=data.payment_term;
 
         if(data.status !== undefined && data.status !== null && data.status !== "")
         sales_order.status=data.status;
-        
+
         let sales_order_data = await new CustomerModel().updateCustomerSalesOrder(sales_order, id)
         let log : any = { "estimate_id" : sales_order.estimate_id, "stage":5,"user_id":data.user_id }
         await new CustomerModel().createCustomerEstimateStagelog(log)
@@ -588,7 +604,7 @@ const updateCustomerSalesOrder = async (data: any) => {
 
 const fetchCustomerSalesOrderById = async (id: number) => {
 
-    try { 
+    try {
         let sales_order = await new CustomerModel().fetchCustomerSalesOrderById(id)
         if (sales_order.length == 0) {
             throw new Error("Sales order not found!")
@@ -625,7 +641,8 @@ export default {
     createCustomer,
     fetchCustomersById,
     updateCustomerdetails,
-    fetchAll,
+    fetchAllCustomer,
+    fetchAllCustomerCount,
     CreateCSMService,
     updateCSMService,
     fetchAllCSM,
