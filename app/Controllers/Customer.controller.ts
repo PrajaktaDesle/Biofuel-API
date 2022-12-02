@@ -108,7 +108,7 @@ const fetchAllCustomers: IController = async (req, res) => {
 const Create_customer_supplier: IController = async(req,res) => {
     let CSM: any;
     try {
-        CSM = await CustomerService.CreateCSMService(req.body) ;
+        CSM = await CustomerService.CreateCSMService(req) ;
         if (CSM instanceof Error) {
             console.log("error", CSM)
             apiResponse.error( res,
