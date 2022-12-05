@@ -193,25 +193,24 @@ const fetchAllCustomerCount =async(query : string) => {
         return error
     }
 }
-
 // customer-supplier mapping
-const CreateCSMService = async(data:any)=>{
+const CreateCSMService = async(req:any)=>{
     let result, customer, supplier, customer_address;
-    // let data:any=
+    let data:any={}
     try{
-        // if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
-        //     customer = await new  CustomerModel().fetchCustomers(req.body.customer_id)
-        // if (customer.length == 0) throw new Error("customer not found");
-        // customer_address = await new CustomerModel().fetchAddressID(req.body.customer_id)
-        // if (customer_address.length == 0) throw new Error("id not found");
-        // data.address_id = customer_address[0].id
-        // if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
-        //     supplier = await new CustomerModel().fetchSupplier(req.body.supplier_id)
-        // if (supplier.length == 0) throw new Error("Supplier not found");
-        // data.customer_id = customer[0].id
-        // data.supplier_id = supplier[0].id
-        // let CSM = await new CustomerModel().fetchCSM(req.body.customer_id, req.body.supplier_id)
-        // if(CSM.length !== 0) throw new Error(" id already present")
+        if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
+            customer = await new  CustomerModel().fetchCustomers(req.body.customer_id)
+        if (customer.length == 0) throw new Error("customer not found");
+        customer_address = await new CustomerModel().fetchAddressID(req.body.customer_id)
+        if (customer_address.length == 0) throw new Error("id not found");
+        data.address_id = customer_address[0].id
+        if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
+            supplier = await new CustomerModel().fetchSupplier(req.body.supplier_id)
+        if (supplier.length == 0) throw new Error("Supplier not found");
+        data.customer_id = customer[0].id
+        data.supplier_id = supplier[0].id
+        let CSM = await new CustomerModel().fetchCSM(req.body.customer_id, req.body.supplier_id)
+        if(CSM.length !== 0) throw new Error(" id already present")
         result = await new CustomerModel().createCSM(data)
         if ( result.insertId == 0){
            return  {message:"Customer supplier mapping already exists  ",insertId:result.insertId}
@@ -221,7 +220,6 @@ const CreateCSMService = async(data:any)=>{
         throw e
     }
 }
-
 const updateCSMService = async(req:any)=>{
     let result,CSM, data;
     try{
@@ -230,34 +228,55 @@ const updateCSMService = async(req:any)=>{
         if(CSM.length == 0) throw new Error("id not found");
         data = {"status":req.body.status }
         result = await new CustomerModel().updateStatusById(data, req.body.customer_id,req.body.supplier_id)
-        LOGGER.info( "Product details", result )
+        LOGGER.info( " result", result )
         console.log( result )
         return {"changedRows":result.changedRows};
     }catch (e) {
-        console.log("error----------->",e)
+        LOGGER.info("error",e)
         throw e
     }
 }
-const fetchAllCSM = async()=>{
+const fetchAllCSM = async(pageIndex: number, pageSize : number, sort : any, query : string)=>{
+    let orderQuery: string;
     try {
-        let result, customer_name, suppiler_name, address;
-        result = await new CustomerModel().fetchAll()
-        for (let i = 0; i < result.length; i++) {
-            customer_name = await new CustomerModel().fetchCustomers(result[i].customer_id)
-            suppiler_name = await new CustomerModel().fetchSupplier(result[i].supplier_id)
-            address = await new CustomerModel().fetchCity(result[i].address_id)
-            let city = await new CustomerModel().fetchCustomerCity(address[0].city_id)
-            result[i].customer = customer_name[0].name
-            result[i].supplier = suppiler_name[0].name
-            result[i].city = city[0].name
-            result[i].address =address[0].address
-            delete result[i].customer_id
-            delete result[i].supplier_id
-            delete result[i].address_id
-        }
+        // let result, customer_name, suppiler_name, address;
+        // result = await new CustomerModel().fetchAll()
+        // for (let i = 0; i < result.length; i++) {
+        //     customer_name = await new CustomerModel().fetchCustomers(result[i].customer_id)
+        //     suppiler_name = await new CustomerModel().fetchSupplier(result[i].supplier_id)
+        //     address = await new CustomerModel().fetchCity(result[i].address_id)
+        //     let city = await new CustomerModel().fetchCustomerCity(address[0].city_id)
+        //     result[i].customer = customer_name[0].name
+        //     result[i].supplier = suppiler_name[0].name
+        //     result[i].city = city[0].name
+        //     result[i].address =address[0].address
+        //     delete result[i].customer_id
+        //     delete result[i].supplier_id
+        //     delete result[i].address
+            if (sort.key != "") {
+                orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
+            } else {
+                orderQuery = "  ";
+            }
+            let result = await new CustomerModel().fetchAllCustomers_suppliers(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
+            if (result.length == 0) throw new Error(" customer not found!")
+            // for (let i = 0; i < result.length; i++) {
+            //     // adding base url to panurl from database
+            //     result[i].gst = config.baseUrl + "/" + result[0].gstin_url;
+            // }
+        // }
         return result
     }catch (e) {
         throw e
+    }
+}
+const fetch_customer_supplier_total =async(query : string) => {
+    try {
+        let customers_supplers = await new CustomerModel().fetch_customer_supplier_Count(query);
+        return customers_supplers.length;
+    }
+    catch (error: any) {
+        return error
     }
 }
 
@@ -651,6 +670,7 @@ export default {
     CreateCSMService,
     updateCSMService,
     fetchAllCSM,
+    fetch_customer_supplier_total,
     createCustomerEstimate,
     updateCustomerEstimate,
     fetchCustomerEstimateById,
