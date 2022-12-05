@@ -5,13 +5,12 @@ let config = require("../config");
 import moment from 'moment';
 import * as fs from "fs";
 import { CustomerModel } from "../Models/Customer/Customer.model";
-import {SupplierModel} from "../Models/Supplier/Supplier.model";
-import {ProductModel} from "../Models/Product/Product.model";
+import { AddressModel } from "../Models/Address/Address.model"
 
 const createCustomer = async (req:any)=> {
     try {
         let CustomerData,fields, files,customer_address;
-        let customer: any = {};
+        let customer: any = {}, shippingAddress : any = {address_type: 1}, billingAddress : any = {address_type: 0};
         //@ts-ignore
         ({fields, files} = await new Promise((resolve) => {
             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
@@ -21,53 +20,64 @@ const createCustomer = async (req:any)=> {
         // customer details
         if(fields.name == undefined || fields.name == null || fields.name == "") throw new Error("name is required");
         customer.name=fields.name;
-        if(fields.contact_no == undefined || fields.contact_no == null || fields.contact_no == "") throw new Error("mobile is required");
-        customer.mobile=fields.contact_no;
+        if(fields.contactNo == undefined || fields.contactNo == null || fields.contactNo == "") throw new Error("mobile is required");
+        customer.mobile=fields.contactNo;
         if(fields.email == undefined || fields.email == null || fields.address == "") throw new Error("email is required");
         customer.email=fields.email;
-        if(fields.gstin_no == undefined || fields.gstin_no == null || fields.gstin_no == "") throw new Error("gst_no is required");
-        customer.gstin=fields.gstin_no;
-        if(fields.payment_term== undefined || fields.payment_term == null || fields.payment_term  == "") throw new Error("payment_term is required");
-        let payment_term = Number(fields.payment_term)
-        customer.payment_term= payment_term;
-
-        // customer address
-        if(fields.shipping_state == undefined || fields.shipping_state == null || fields.shipping_state == "") throw new Error("shipping state is required");
-        if(fields.shipping_address == undefined || fields.shipping_address == null || fields.shipping_address == "") throw new Error(" address_type is required");
-        if(fields.billing_address == undefined || fields.billing_address == null || fields.billing_address == "") throw new Error("billing address is required");
+        if(fields.gstinNo == undefined || fields.gstinNo == null || fields.gstinNo == "") throw new Error("gst_no is required");
+        customer.gstin=fields.gstinNo;
+        if(fields.paymentTerm== undefined || fields.paymentTerm == null || fields.paymentTerm  == "") throw new Error("payment_term is required");
+        customer.payment_term= Number(fields.paymentTerm);
+        // customer Shipping address
+        if(fields.shippingState == undefined || fields.shippingState == null || fields.shippingState == "") throw new Error("Shipping State is required");
+        //shippingAddress.state = fields.shippingState;
+        if(fields.shippingCity == undefined || fields.shippingCity == null || fields.shippingCity == "") throw new Error("Shipping City is required");
+        shippingAddress.city_id = fields.shippingCity;
+        if(fields.shippingAddress == undefined || fields.shippingAddress == null || fields.shippingAddress == "") throw new Error("Shipping Address is required");
+        shippingAddress.address = fields.shippingAddress;
+        if(fields.shippingPincode == undefined || fields.shippingPincode == null || fields.shippingPincode == "") throw new Error("Shipping pincode is required");
+        shippingAddress.address = fields.shippingPincode;
+        // customer Billing address
+        if(fields.billingState == undefined || fields.billingState == null || fields.billingState == "") throw new Error("Billing State is required");
+        //billingAddress.state = fields.billingState;
+        if(fields.billingCity == undefined || fields.billingCity == null || fields.billingCity == "") throw new Error("Billing City is required");
+        billingAddress.city_id = fields.billingCity;
+        if(fields.billingAddress == undefined || fields.billingAddress == null || fields.billingAddress == "") throw new Error("Billing Address is required");
+        billingAddress.address = fields.billingAddress;
+        if(fields.billingPincode == undefined || fields.billingPincode == null || fields.billingPincode == "") throw new Error("Billing pincode is required");
+        billingAddress.address = fields.billingPincode;
+        /*
         if(fields.latitude == undefined || fields.latitude == null || fields.latitude == "")
-        if(fields.longitude == undefined || fields.longitude == null || fields.longitude == "")
-        if(fields.pincode == undefined || fields.pincode == null || fields.pincode == "") throw new Error("pin code is required");
-        if(fields.shipping_city == undefined || fields.shipping_city == null || fields.shipping_city == "") throw new Error(" city is required");
-
+        if(fields.longitude == undefined || fields.longitude == null || fields.longitude == "")*/
         // file validation
-        let s3Image: any = {}
-        let s3Path: any = {}
+        var gstin_url: any;
+        console.log("files ", files)
         if (files.gstin !== undefined && files.gstin !== null && files.gstin !== "") {
-            if (fileNotValid(files.gstin.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image");s3Image['gstin_url'] = files.gstin
+            if (fileNotValid(files.gstin.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image");
+            gstin_url = files.gstin
+        } else {
+            throw new Error(" gst_url is required");
         }
-        else {throw new Error(" gst_url is required")}
-        let name: string = "images/gstin_url/" + moment().unix() + "." + s3Image['gstin_url'].originalFilename.split(".").pop()
-        const result = await uploadFile(s3Image['gstin_url'], name);
+        let name: string = "images/gstin_url/" + moment().unix() + "." + gstin_url.originalFilename.split(".").pop()
+        const result = await uploadFile(gstin_url, name);
         if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
-        console.log("s3 result  : ", result)
-        s3Path['gstin_url'] = result.key;
-        customer= Object.assign(customer, s3Path);
-        CustomerData = await new CustomerModel().createCustomerDetails(customer)
+        customer.gstin_url = result.key;
+        CustomerData = await new CustomerModel().createCustomer(customer)
         if(!CustomerData) throw Error("failed to create customer")
         let user_id = CustomerData.insertId
         // customer billing address
-        let addressB = {"address_type":"billing","address":fields.billing_address,"user_type":0,"user_id":user_id}
-        customer_address = await new CustomerModel().createCustomerAddress(addressB)
+        billingAddress.user_id = CustomerData.insertId;
+        let customerBillingaddress = await new AddressModel().createAddress(billingAddress);
         // customer shipping address
-        let addressS = {"address_type":"shipping","address":fields.shipping_address,"user_type":0, "user_id":user_id, "latitude":fields.latitude,"longitude":fields.longitude, "pincode":fields.pincode, "city_id":fields.shipping_city }
-        customer_address = await new CustomerModel().createCustomerAddress(addressS)
+        shippingAddress.user_id = CustomerData.insertId;
+        let customerShippingaddress = await new AddressModel().createAddress(shippingAddress);
         return {message:"added successfully ", InsertId:CustomerData.insertId};
     }catch(e:any){
     console.log("Exception =>", e.message);
     throw e;
 }
 }
+
 const fileNotValid = (type: any) => {
     if (type == 'image/jpeg' || type == 'image/jpg' || type == 'image/png') {
         return false;
@@ -86,22 +96,15 @@ const updateCustomerdetails = async (req:any)=> {
             })
         }));
         if(fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
-        customer_details = await new CustomerModel().fetchCustomersDetailsById(fields.id)
+        customer_details = await new CustomerModel().fetchCustomersById(fields.id)
         if (customer_details.length == 0) throw new Error("id not found!")
         //  customer details validations
-        if(fields.status !== undefined && fields.status !== null && fields.status !== "")
-        customer.status = fields.status
-        if(fields.name !== undefined && fields.name !== null && fields.name !== "")
-        customer.name=fields.name;
-        if(fields.contact_no !== undefined && fields.contact_no !== null && fields.contact_no !== "")
-        customer.mobile=fields.contact_no;
-        if(fields.email !== undefined && fields.email !== null && fields.address !== "")
-        customer.email=fields.email;
-        if(fields.gstin_no !== undefined && fields.gstin_no !== null && fields.gstin_no !== "")
-        customer.gstin=fields.gstin_no;
-        if(fields.payment_term !== undefined && fields.payment_term !== null && fields.payment_term  !== "")
-        // payment_term = Number(fields.payment_term)
-        customer.payment_term= fields.payment_term;
+        if(fields.status !== undefined && fields.status !== null && fields.status !== "") customer.status = fields.status
+        if(fields.name !== undefined && fields.name !== null && fields.name !== "") customer.name=fields.name;
+        if(fields.contact_no !== undefined && fields.contact_no !== null && fields.contact_no !== "") customer.mobile=fields.contact_no;
+        if(fields.email !== undefined && fields.email !== null && fields.address !== "") customer.email=fields.email;
+        if(fields.gstin_no !== undefined && fields.gstin_no !== null && fields.gstin_no !== "") customer.gstin=fields.gstin_no;
+        if(fields.payment_term !== undefined && fields.payment_term !== null && fields.payment_term  !== "") customer.payment_term= fields.payment_term;
         let s3Image: any = {}
         let s3Path: any = {}
         if (files.gstin !== undefined && files.gstin !== null && files.gstin !== "") {
@@ -110,7 +113,6 @@ const updateCustomerdetails = async (req:any)=> {
         let name: string = "images/gstin_url/" + moment().unix() + "." + s3Image['gstin_url'].originalFilename.split(".").pop()
         const result = await uploadFile(s3Image['image'], name);
         if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
-        console.log("s3 result  : ", result)
         s3Path['gstin_url'] = result.key;
         customer= Object.assign(customer, s3Path);}
 
@@ -137,21 +139,24 @@ const updateCustomerdetails = async (req:any)=> {
         throw e;
     }
 }
-const fetchCustomersById = async (id:any) => {
 
+const fetchCustomersById = async (id:any) => {
     try {
-        let customers = await new  CustomerModel().fetchCustomersDetailsById(id)
-        if (customers.length == 0) throw new Error(" customer not found!")
-        customers[0].gst= config.baseUrl + "/" + customers[0].gstin_url;
-        customers[0].imgList = [{file : customers[0].gstin_url}]
-        customers[0].city = {label : customers[0].city , value : customers[0].city_id};
-        customers[0].state = {label : customers[0].state , value : customers[0].state_id};
-        if (customers[0].status == 1){
-            customers[0].customerStatus = {value : 1, label : "Active"};
+        let customers = await new  CustomerModel().fetchCustomersById(id)
+        if (customers.length == 0) throw new Error("Customer not found!");
+        customers = customers[0];
+      //customers[0].gst= config.baseUrl + "/" + customers[0].gstin_url;
+        //customers[0].imgList = [{file : customers[0].gstin_url}]
+        customers.shippingState = {label : customers.shipping_state , value : customers.shipping_state_id};
+        customers.shippingCity = {label : customers.shipping_city , value : customers.shipping_city_id};
+        customers.billingCity = {label : customers.billing_city , value : customers.billing_city_id};
+        customers.billingState = {label : customers.billing_state , value : customers.billing_state_id};
+        if (customers.status == 1){
+            customers.customerStatus = {value : 1, label : "Active"};
         }else{
-            customers[0].customerStatus = {value : 0, label : "Inactive"};
+            customers.customerStatus = {value : 0, label : "Inactive"};
         }
-        return customers[0];
+        return customers;
     }
     catch (error: any) {
         return error

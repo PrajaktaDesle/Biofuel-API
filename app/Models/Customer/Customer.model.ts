@@ -1,26 +1,41 @@
-import UserModel from "../User/User.model";
+import BaseModel from "../BaseModel";
 import {Connection} from "mysql2";
-
-export class CustomerModel extends UserModel
+export class CustomerModel extends BaseModel
 {
     constructor()
     {
         super();
     }
-    async createCustomerDetails(data:any){
+    async createCustomer(data:any){
         return await this._executeQuery("insert into customers set ?", [data]);
     }
     async updateCustomersDetails(customerData:any,id:number){
         return await this._executeQuery("update customers set ? where id = ? ", [customerData,id]);
     }
-    async fetchCustomersDetailsById(id: any ){
-        return await this._executeQuery(`SELECT cs.id, cs.name as customer, cs.email, cs.mobile as contact_no,cs.payment_term,cs.status,cs.gstin, cs.gstin_url,a.address as shipping_address,a.address as billing_address,a.latitude, a.longitude,a.user_type,ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode,cs.created_at,cs.updated_at
-                                         FROM biofuel.customers cs
-                                         inner join biofuel.addresses a ON a.user_id=cs.id
-                                         inner join biofuel.address_city ac ON ac.id=a.city_id
-                                         inner join biofuel.address_state ast ON ac.state_id=ast.id
-                                          where a.user_id =? and a.address_type="shipping";`,[id])
+
+    async fetchCustomersById(id: any ){
+        return await this._executeQuery(`SELECT cs.id, cs.name as customerName, cs.email, cs.mobile as contactNo, cs.gstin as gstNo, cs.payment_term as paymentTerms, cs.status,
+        max(case when a.address_type = "0" then a.address ELSE null end) as shippingAddress,
+        max(case when a.address_type = "0" then st.id end) as shipping_state_id,
+                        max(case when a.address_type = "0" then st.name end) as shipping_state,
+                        max(case when a.address_type = "0" then cty.id end) as shipping_city_id,
+                        max(case when a.address_type = "0" then cty.name end) as shipping_city,
+                        max(case when a.address_type = "0" then a.pincode end) as shippingPincode,
+                        max(case when a.address_type = "1" then a.address ELSE null end) as billingAddress,
+                        max(case when a.address_type = "1" then st.id end) as billing_state_id,
+                        max(case when a.address_type = "1" then st.name end) as billing_state,
+                        max(case when a.address_type = "1" then cty.id end) as billing_city_id,
+                        max(case when a.address_type = "1" then cty.name end) as billing_city,
+                        max(case when a.address_type = "1" then a.pincode end) as billingPincode,
+                        cs.created_at, cs.updated_at 
+                        FROM biofuel.customers cs 
+                        LEFT join biofuel.addresses a ON a.user_id=cs.id 
+                        LEFT join biofuel.address_city cty ON a.city_id = cty.id
+                        LEFT join biofuel.address_state st ON cty.state_id = st.id
+                        where cs.id = ?
+                        group by cs.id`,[id])
     }
+
     async createCustomerAddress(data:any){
         return await this._executeQuery("insert into addresses set ?", [data]);
     }
@@ -34,7 +49,7 @@ export class CustomerModel extends UserModel
         return await this._executeQuery("update addresses set ? where user_id = ?  and address_type = ? ", [customerData,user_id, add_type]);
     }
     async  fetchAllCustomers(limit : number, offset : number, sortOrder : string, query : string){
-        return await this._executeQuery(`SELECT cs.id, cs.name as customer, cs.email, cs.mobile as contact_no,cs.payment_term,cs.status,cs.gstin, cs.gstin_url,a.address as shipping_address,a.address as billing_address,a.latitude, a.longitude, a.user_type,ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode, cs.created_at, cs.updated_at 
+        return await this._executeQuery(`SELECT cs.id, cs.name as name, cs.email, cs.mobile as contact_no, cs.payment_term, cs.status, cs.gstin, cs.gstin_url,a.address as shipping_address, a.address as billing_address,a.latitude, a.longitude, a.user_type,ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode, cs.created_at, cs.updated_at 
                                                    FROM biofuel.customers cs 
                                                    inner join biofuel.addresses a ON a.user_id=cs.id 
                                                    inner join biofuel.address_city ac ON ac.id=a.city_id 
@@ -43,7 +58,6 @@ export class CustomerModel extends UserModel
                                                    ${sortOrder} 
                                                    LIMIT ? OFFSET ? `,[limit, offset])
     }
-
     async fetchAllCustomerCount(query : string){
         return await this._executeQuery(`SELECT cs.id, cs.name as customer, cs.email, cs.mobile as contact_no,cs.payment_term,cs.status,cs.gstin, cs.gstin_url,a.address as shipping_address,a.address as billing_address,a.latitude, a.longitude, a.user_type,ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode, cs.created_at, cs.updated_at 
                                                    FROM biofuel.customers cs 
@@ -52,7 +66,6 @@ export class CustomerModel extends UserModel
                                                    inner join biofuel.address_state ast ON ac.state_id=ast.id
                                                    ${query} `, [])
     }
-
     async fetchsBillingAddressById(user_id: any){
         return await this._executeQuery("select user_type ,address as `billing_address` from addresses where user_id = ? and address_type = ? ", [user_id, "billing"]);
     }
@@ -74,7 +87,6 @@ export class CustomerModel extends UserModel
     async fetchAddressID(customer_id:number){
         return await this._executeQuery("select id, user_type,address as `shipping_address` from addresses where user_id =? and address_type = ? and status = 1", [customer_id, "shipping"])
     }
-
     async fetchSupplier(supplier_id:number){
         return await this._executeQuery("select * from user where id = ? and status = 1 and role_id = 3", [supplier_id])
     }
@@ -99,11 +111,9 @@ export class CustomerModel extends UserModel
     async fetchCustomerCity(city_id:any){
         return await this._executeQuery("select name from address_city where id = ?", [city_id]);
     }
-
     async createCustomerEstimate( estimateData : any ){
         return await this._executeQuery( "insert into customer_estimates set ? ", [estimateData] )
     }
-   
     async fetchCustomerEstimateById( id : any){
         return await this._executeQuery( `SELECT es.id, customer_id, cs.name as customer,es.status, estimate_date, expiry_date, estimate_no ,product_id,p.name as product, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, rate, customer_note, adjustment_amount*rate as total_amount FROM biofuel.customer_estimates es
                                           inner join biofuel.products p ON p.id=es.product_id
@@ -151,5 +161,4 @@ export class CustomerModel extends UserModel
     async salesOrderExistsOrNot( id : number ){
         return await this._executeQuery( "select id from customer_sales_orders where id = ? ",[id] )
     }
-    
 }
