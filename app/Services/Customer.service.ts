@@ -43,7 +43,7 @@ const createCustomer = async (req:any)=> {
         if (files.gstin !== undefined && files.gstin !== null && files.gstin !== "") {
             if (fileNotValid(files.gstin.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image");s3Image['gstin_url'] = files.gstin
         }
-        else {throw new Error(" gst_url is required")}
+        else { throw new Error(" gst_url is required")}
         let name: string = "images/gstin_url/" + moment().unix() + "." + s3Image['gstin_url'].originalFilename.split(".").pop()
         const result = await uploadFile(s3Image['gstin_url'], name);
         if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
@@ -220,34 +220,55 @@ const updateCSMService = async(req:any)=>{
         if(CSM.length == 0) throw new Error("id not found");
         data = {"status":req.body.status }
         result = await new CustomerModel().updateStatusById(data, req.body.customer_id,req.body.supplier_id)
-        LOGGER.info( "Product details", result )
+        LOGGER.info( " result", result )
         console.log( result )
         return {"changedRows":result.changedRows};
     }catch (e) {
-        console.log("error----------->",e)
+        LOGGER.info("error",e)
         throw e
     }
 }
-const fetchAllCSM = async()=>{
+const fetchAllCSM = async(pageIndex: number, pageSize : number, sort : any, query : string)=>{
+    let orderQuery: string;
     try {
-        let result, customer_name, suppiler_name, address;
-        result = await new CustomerModel().fetchAll()
-        for (let i = 0; i < result.length; i++) {
-            customer_name = await new CustomerModel().fetchCustomers(result[i].customer_id)
-            suppiler_name = await new CustomerModel().fetchSupplier(result[i].supplier_id)
-            address = await new CustomerModel().fetchCity(result[i].address_id)
-            let city = await new CustomerModel().fetchCustomerCity(address[0].city_id)
-            result[i].customer = customer_name[0].name
-            result[i].supplier = suppiler_name[0].name
-            result[i].city = city[0].name
-            result[i].address =address[0].address
-            delete result[i].customer_id
-            delete result[i].supplier_id
-            delete result[i].address_id
-        }
+        // let result, customer_name, suppiler_name, address;
+        // result = await new CustomerModel().fetchAll()
+        // for (let i = 0; i < result.length; i++) {
+        //     customer_name = await new CustomerModel().fetchCustomers(result[i].customer_id)
+        //     suppiler_name = await new CustomerModel().fetchSupplier(result[i].supplier_id)
+        //     address = await new CustomerModel().fetchCity(result[i].address_id)
+        //     let city = await new CustomerModel().fetchCustomerCity(address[0].city_id)
+        //     result[i].customer = customer_name[0].name
+        //     result[i].supplier = suppiler_name[0].name
+        //     result[i].city = city[0].name
+        //     result[i].address =address[0].address
+        //     delete result[i].customer_id
+        //     delete result[i].supplier_id
+        //     delete result[i].address
+            if (sort.key != "") {
+                orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
+            } else {
+                orderQuery = "  ";
+            }
+            let result = await new CustomerModel().fetchAllCustomers_suppliers(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
+            if (result.length == 0) throw new Error(" customer not found!")
+            // for (let i = 0; i < result.length; i++) {
+            //     // adding base url to panurl from database
+            //     result[i].gst = config.baseUrl + "/" + result[0].gstin_url;
+            // }
+        // }
         return result
     }catch (e) {
         throw e
+    }
+}
+const fetch_customer_supplier_total =async(query : string) => {
+    try {
+        let customers_supplers = await new CustomerModel().fetch_customer_supplier_Count(query);
+        return customers_supplers.length;
+    }
+    catch (error: any) {
+        return error
     }
 }
 
@@ -641,6 +662,7 @@ export default {
     CreateCSMService,
     updateCSMService,
     fetchAllCSM,
+    fetch_customer_supplier_total,
     createCustomerEstimate,
     updateCustomerEstimate,
     fetchCustomerEstimateById,

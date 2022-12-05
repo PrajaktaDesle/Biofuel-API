@@ -20,7 +20,6 @@ const Create: IController = async (req, res) => {
             }, httpStatusCodes.CREATED);
         }
     } catch (e:any) {
-        console.log("controller ->", e)
         // @ts-ignore
         if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
             apiResponse.error(
@@ -51,7 +50,6 @@ const fetchCustomerById: IController = async (req, res) => {
                     customer.message
                 );
             }else{
-                // console.log("User 3", customer)
                 apiResponse.result(res, customer, httpStatusCodes.OK);
             }
         }).catch( (err : any) => {
@@ -73,11 +71,9 @@ const updateCustomerDetails: IController = async (req, res) => {
                     customer.message
                 );
             }else{
-                console.log("user 3", customer)
                 apiResponse.result(res, customer, httpStatusCodes.OK);
             }
         }).catch(err => {
-        console.log("Error  ->", err);
         apiResponse.error(
             res,
             httpStatusCodes.BAD_REQUEST,
@@ -87,21 +83,27 @@ const updateCustomerDetails: IController = async (req, res) => {
 };
 
 const fetchAllCustomers: IController = async (req, res) => {
-    let query = " "
-    if(req.body.query != ""){
-        query = ` WHERE (p.name like '%${req.body.query}%' OR pc.name like '%${req.body.query}%' ) `
-    }
-    let customer = await customerService.fetchAllCustomer(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
-    let count = await customerService.fetchAllCustomerCount(query);
-    if ( customer instanceof Error ){
-        return apiResponse.error( res,
+    try {
+        let query = " "
+        if (req.body.query != "") {
+            query = ` WHERE (p.name like '%${req.body.query}%' OR pc.name like '%${req.body.query}%' ) `
+        }
+        let customer = await customerService.fetchAllCustomer(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
+        let count = await customerService.fetchAllCustomerCount(query);
+        if (customer instanceof Error) {
+            return apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST,
+                customer.message)
+        } else {
+            return apiResponse.result(res,
+                {data: customer, total: count},
+                httpStatusCodes.OK)
+        }
+    } catch (error : any) {
+        LOGGER.info("error------>", error)
+        return apiResponse.error(res,
             httpStatusCodes.BAD_REQUEST,
-            customer.message )
-    }
-    else{
-        return apiResponse.result( res,
-            {data :customer, total : count},
-            httpStatusCodes.OK )
+            error.message)
     }
 };
 // customer-supplier mapping
@@ -121,14 +123,13 @@ const Create_customer_supplier: IController = async(req,res) => {
         }
 
     } catch (e:any) {
-        console.log("controller ->", e)
         // @ts-ignore
         if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
             apiResponse.error(res,
                 httpStatusCodes.BAD_REQUEST)
         } else {
             apiResponse.error(res,
-                httpStatusCodes.BAD_REQUEST)
+                httpStatusCodes.BAD_REQUEST, e.message)
         }
         return;
     }
@@ -150,30 +151,32 @@ const updateCSMStatus:IController = async ( req, res) => {
         }
     }
     catch ( error : any ) {
-        console.log( "Error => ", error )
         return apiResponse.error( res,
             httpStatusCodes.BAD_REQUEST,
             error.message)
     }
 }
 const fetchAll_customers_suppliers:IController = async ( req:any , res:any ) => {
-    try{
-        let result = await CustomerService.fetchAllCSM()
-        if ( result instanceof Error ){
-            return apiResponse.error( res,
+    try {
+        let query = " "
+        if (req.body.query != "") {
+            query = ` WHERE (cs.name like '%${req.body.query}%' OR sp.name like '%${req.body.query}%' ) `
+        }
+        let result = await CustomerService.fetchAllCSM(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
+        let count = await customerService.fetch_customer_supplier_total(query);
+        if (result instanceof Error) {
+            return apiResponse.error(res,
                 httpStatusCodes.BAD_REQUEST,
-                result.message )
+                result.message)
+        } else {
+            return apiResponse.result(res,
+                {data: result, total: count},
+                httpStatusCodes.OK)
         }
-        else{
-            return apiResponse.result( res,
-                result,
-                httpStatusCodes.OK )
-        }
-    }
-    catch ( error : any ) {
-        console.log( "Error => ", error )
+    }catch (error:any) {
         return apiResponse.error( res,
-            httpStatusCodes.BAD_REQUEST )
+            httpStatusCodes.BAD_REQUEST,
+            error.message)
     }
 }
 const createCustomerEstimate: IController = async (req, res) => {
