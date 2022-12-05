@@ -1,39 +1,41 @@
+import BaseModel from "../BaseModel";
 import {Connection} from "mysql2";
-import baseModel from "../BaseModel";
-
-export class CustomerModel extends baseModel
+export class CustomerModel extends BaseModel
 {
     constructor()
     {
         super();
     }
-    async createCustomerDetails(data:any){
+    async createCustomer(data:any){
         return await this._executeQuery("insert into customers set ?", [data]);
     }
     async updateCustomersDetails(customerData:any,id:number){
         return await this._executeQuery("update customers set ? where id = ? ", [customerData,id]);
     }
-    async fetchCustomersDetailsById(id: any ){
+
+    async fetchCustomersById(id: any ){
         return await this._executeQuery(`SELECT cs.id, cs.name as customerName, cs.email, cs.mobile as contactNo, cs.gstin as gstNo, cs.payment_term as paymentTerms, cs.status,
-                                                max(case when a.address_type = "0" then a.address ELSE null end) as shippingAddress,
-                                                max(case when a.address_type = "0" then st.id end) as shipping_state_id,
-                                                max(case when a.address_type = "0" then st.name end) as shipping_state,
-                                                max(case when a.address_type = "0" then cty.id end) as shipping_city_id,
-                                                max(case when a.address_type = "0" then cty.name end) as shipping_city,
-                                                max(case when a.address_type = "0" then a.pincode end) as shippingPincode,
-                                                max(case when a.address_type = "1" then a.address ELSE null end) as billingAddress,
-                                                max(case when a.address_type = "1" then st.id end) as billing_state_id,
-                                                max(case when a.address_type = "1" then st.name end) as billing_state,
-                                                max(case when a.address_type = "1" then cty.id end) as billing_city_id,
-                                                max(case when a.address_type = "1" then cty.name end) as billing_city,
-                                                max(case when a.address_type = "1" then a.pincode end) as billingPincode,
-                                                cs.created_at, cs.updated_at 
-                                                FROM biofuel.customers cs 
-                                                LEFT join biofuel.addresses a ON a.user_id=cs.id 
-                                                LEFT join biofuel.address_city cty ON a.city_id = cty.id
-                                                LEFT join biofuel.address_state st ON cty.state_id = st.id
-                                                where cs.id = ?;`,[id])
+        max(case when a.address_type = "0" then a.address ELSE null end) as shippingAddress,
+        max(case when a.address_type = "0" then st.id end) as shipping_state_id,
+                        max(case when a.address_type = "0" then st.name end) as shipping_state,
+                        max(case when a.address_type = "0" then cty.id end) as shipping_city_id,
+                        max(case when a.address_type = "0" then cty.name end) as shipping_city,
+                        max(case when a.address_type = "0" then a.pincode end) as shippingPincode,
+                        max(case when a.address_type = "1" then a.address ELSE null end) as billingAddress,
+                        max(case when a.address_type = "1" then st.id end) as billing_state_id,
+                        max(case when a.address_type = "1" then st.name end) as billing_state,
+                        max(case when a.address_type = "1" then cty.id end) as billing_city_id,
+                        max(case when a.address_type = "1" then cty.name end) as billing_city,
+                        max(case when a.address_type = "1" then a.pincode end) as billingPincode,
+                        cs.created_at, cs.updated_at 
+                        FROM biofuel.customers cs 
+                        LEFT join biofuel.addresses a ON a.user_id=cs.id 
+                        LEFT join biofuel.address_city cty ON a.city_id = cty.id
+                        LEFT join biofuel.address_state st ON cty.state_id = st.id
+                        where cs.id = ?
+                        group by cs.id`,[id])
     }
+
     async createCustomerAddress(data:any){
         return await this._executeQuery("insert into addresses set ?", [data]);
     }
@@ -81,7 +83,6 @@ export class CustomerModel extends baseModel
     async fetchAddressID(customer_id:number){
         return await this._executeQuery("select id, user_type,address as `shipping_address` from addresses where user_id =? and address_type = ? and status = 1", [customer_id, "shipping"])
     }
-
     async fetchSupplier(supplier_id:number){
         return await this._executeQuery("select * from user where id = ? and status = 1 and role_id = 3", [supplier_id])
     }
@@ -107,6 +108,9 @@ export class CustomerModel extends baseModel
     }
     async fetch_customer_supplier_Count(query:string){
         return await this._executeQuery(`select * from customer_supplier_mapping ${query}`,  [])
+    }
+    async fetchCustomerCity(city_id:any){
+        return await this._executeQuery("select name from address_city where id = ?", [city_id]);
     }
     async createCustomerEstimate( estimateData : any ){
         return await this._executeQuery( "insert into customer_estimates set ? ", [estimateData] )
