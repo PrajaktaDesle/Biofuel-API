@@ -15,48 +15,40 @@ export class CustomerModel extends BaseModel
 
     async fetchCustomersById(id: any ){
         return await this._executeQuery(`SELECT cs.id, cs.name as customerName, cs.email, cs.mobile as contactNo, cs.gstin as gstNo, cs.payment_term as paymentTerms, cs.status,
-        max(case when a.address_type = "0" then a.address ELSE null end) as shippingAddress,
-        max(case when a.address_type = "0" then st.id end) as shipping_state_id,
-                        max(case when a.address_type = "0" then st.name end) as shipping_state,
-                        max(case when a.address_type = "0" then cty.id end) as shipping_city_id,
-                        max(case when a.address_type = "0" then cty.name end) as shipping_city,
-                        max(case when a.address_type = "0" then a.pincode end) as shippingPincode,
-                        max(case when a.address_type = "1" then a.address ELSE null end) as billingAddress,
-                        max(case when a.address_type = "1" then st.id end) as billing_state_id,
-                        max(case when a.address_type = "1" then st.name end) as billing_state,
-                        max(case when a.address_type = "1" then cty.id end) as billing_city_id,
-                        max(case when a.address_type = "1" then cty.name end) as billing_city,
-                        max(case when a.address_type = "1" then a.pincode end) as billingPincode,
-                        cs.created_at, cs.updated_at 
-                        FROM biofuel.customers cs 
-                        LEFT join biofuel.addresses a ON a.user_id=cs.id 
-                        LEFT join biofuel.address_city cty ON a.city_id = cty.id
-                        LEFT join biofuel.address_state st ON cty.state_id = st.id
-                        where cs.id = ?
-                        group by cs.id`,[id])
-    }
-
-    async createCustomerAddress(data:any){
-        return await this._executeQuery("insert into addresses set ?", [data]);
-    }
-
-    async updateCustomersAddress(customerData:any,user_id:number, add_type:string){
-        return await this._executeQuery("update addresses set ? where user_id = ?  and address_type = ? ", [customerData,user_id, add_type]);
+                                                max(case when a.address_type = "1" then a.address ELSE null end) as shippingAddress,
+                                                max(case when a.address_type = "1" then st.id end) as shipping_state_id,
+                                                max(case when a.address_type = "1" then st.name end) as shipping_state,
+                                                max(case when a.address_type = "1" then cty.id end) as shipping_city_id,
+                                                max(case when a.address_type = "1" then cty.name end) as shipping_city,
+                                                max(case when a.address_type = "1" then a.pincode end) as shippingPincode,
+                                                max(case when a.address_type = "0" then a.address ELSE null end) as billingAddress,
+                                                max(case when a.address_type = "0" then st.id end) as billing_state_id,
+                                                max(case when a.address_type = "0" then st.name end) as billing_state,
+                                                max(case when a.address_type = "0" then cty.id end) as billing_city_id,
+                                                max(case when a.address_type = "0" then cty.name end) as billing_city,
+                                                max(case when a.address_type = "0" then a.pincode end) as billingPincode,
+                                                cs.created_at, cs.updated_at 
+                                                FROM biofuel.customers cs 
+                                                LEFT join biofuel.addresses a ON a.user_id=cs.id 
+                                                LEFT join biofuel.address_city cty ON a.city_id = cty.id
+                                                LEFT join biofuel.address_state st ON cty.state_id = st.id
+                                                where cs.id = ?
+                                                group by cs.id`,[id])
     }
     async  fetchAllCustomers(limit : number, offset : number, sortOrder : string, query : string){
         return await this._executeQuery(`SELECT cs.id, cs.name as customerName, cs.email, cs.mobile as contactNo, cs.gstin as gstNo, cs.payment_term as paymentTerms, cs.status,
-                                                max(case when a.address_type = "0" then a.address ELSE null end) as shippingAddress,
-                                                max(case when a.address_type = "0" then st.id end) as shipping_state_id,
-                                                max(case when a.address_type = "0" then st.name end) as shipping_state,
-                                                max(case when a.address_type = "0" then cty.id end) as shipping_city_id,
-                                                max(case when a.address_type = "0" then cty.name end) as shipping_city,
-                                                max(case when a.address_type = "0" then a.pincode end) as shippingPincode,
-                                                max(case when a.address_type = "1" then a.address ELSE null end) as billingAddress,
-                                                max(case when a.address_type = "1" then st.id end) as billing_state_id,
-                                                max(case when a.address_type = "1" then st.name end) as billing_state,
-                                                max(case when a.address_type = "1" then cty.id end) as billing_city_id,
-                                                max(case when a.address_type = "1" then cty.name end) as billing_city,
-                                                max(case when a.address_type = "1" then a.pincode end) as billingPincode,
+                                                max(case when a.address_type = "1" then a.address ELSE null end) as shippingAddress,
+                                                max(case when a.address_type = "1" then st.id end) as shipping_state_id,
+                                                max(case when a.address_type = "1" then st.name end) as shipping_state,
+                                                max(case when a.address_type = "1" then cty.id end) as shipping_city_id,
+                                                max(case when a.address_type = "1" then cty.name end) as shipping_city,
+                                                max(case when a.address_type = "1" then a.pincode end) as shippingPincode,
+                                                max(case when a.address_type = "0" then a.address ELSE null end) as billingAddress,
+                                                max(case when a.address_type = "0" then st.id end) as billing_state_id,
+                                                max(case when a.address_type = "0" then st.name end) as billing_state,
+                                                max(case when a.address_type = "0" then cty.id end) as billing_city_id,
+                                                max(case when a.address_type = "0" then cty.name end) as billing_city,
+                                                max(case when a.address_type = "0" then a.pincode end) as billingPincode,
                                                 cs.created_at, cs.updated_at 
                                                 FROM biofuel.customers cs 
                                                 LEFT join biofuel.addresses a ON a.user_id=cs.id 
@@ -78,7 +70,6 @@ export class CustomerModel extends BaseModel
     // customer-supplier mapping
     async createCSM(data: any) {
         return await this._executeQuery("insert ignore into customer_supplier_mapping set ? ", [data]);
-
     }
     async fetchAddressID(customer_id:number){
         return await this._executeQuery("select id, user_type,address as `shipping_address` from addresses where user_id =? and address_type = ? and status = 1", [customer_id, "shipping"])
@@ -99,18 +90,18 @@ export class CustomerModel extends BaseModel
         return await this._executeQuery("select * from customer_supplier_mapping where customer_id = ? and supplier_id = ? ", [customer_id, supplier_id])
     }
     async fetchAllCustomers_suppliers(limit : number, offset : number, sortOrder : string, query : string){
-        return await this._executeQuery(`SELECT customer_id, cs.name as customer, supplier_id, sp.name as supplier,csm.status FROM biofuel.customer_supplier_mapping csm
+        return await this._executeQuery(`SELECT customer_id, cs.name as customer, supplier_id, sp.name as supplier,csm.status, csm.created_at , csm.updated_at FROM biofuel.customer_supplier_mapping csm
                                                 inner join biofuel.customers cs on cs.id=csm.customer_id
                                                 inner join biofuel.user sp on sp.id = csm.supplier_id
                                                 ${query}
                                                 ${sortOrder}
                                                 LIMIT ? OFFSET ? `,[limit, offset])
     }
-    async fetch_customer_supplier_Count(query:string){
-        return await this._executeQuery(`select * from customer_supplier_mapping ${query}`,  [])
-    }
-    async fetchCustomerCity(city_id:any){
-        return await this._executeQuery("select name from address_city where id = ?", [city_id]);
+    async fetch_csm_count(query:string){
+        return await this._executeQuery(`SELECT customer_id, cs.name as customer, supplier_id, sp.name as supplier,csm.status, csm.created_at , csm.updated_at FROM biofuel.customer_supplier_mapping csm
+                                                inner join biofuel.customers cs on cs.id=csm.customer_id
+                                                inner join biofuel.user sp on sp.id = csm.supplier_id
+                                                ${query}`,  [])
     }
     async createCustomerEstimate( estimateData : any ){
         return await this._executeQuery( "insert into customer_estimates set ? ", [estimateData] )

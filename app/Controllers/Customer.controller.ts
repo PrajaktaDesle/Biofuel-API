@@ -112,7 +112,6 @@ const Create_customer_supplier: IController = async(req,res) => {
     try {
         CSM = await CustomerService.CreateCSMService(req) ;
         if (CSM instanceof Error) {
-            console.log("error", CSM)
             apiResponse.error( res,
                 httpStatusCodes.BAD_REQUEST );
         }
@@ -120,21 +119,19 @@ const Create_customer_supplier: IController = async(req,res) => {
             apiResponse.result( res,
                 CSM,
                 httpStatusCodes.CREATED );
-        }
-
+            }
     } catch (e:any) {
         // @ts-ignore
         if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
             apiResponse.error(res,
                 httpStatusCodes.BAD_REQUEST)
-        } else {
+        } else{
             apiResponse.error(res,
                 httpStatusCodes.BAD_REQUEST, e.message)
         }
         return;
     }
 };
-
 const updateCSMStatus:IController = async ( req, res) => {
     let  result:any
     try{
@@ -156,14 +153,14 @@ const updateCSMStatus:IController = async ( req, res) => {
             error.message)
     }
 }
-const fetchAll_customers_suppliers:IController = async ( req:any , res:any ) => {
+const fetchAllCSM:IController = async ( req:any , res:any ) => {
     try {
         let query = " "
         if (req.body.query != "") {
             query = ` WHERE (cs.name like '%${req.body.query}%' OR sp.name like '%${req.body.query}%' ) `
         }
         let result = await CustomerService.fetchAllCSM(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
-        let count = await customerService.fetch_customer_supplier_total(query);
+        let count = await customerService.fetchCSMCount(query);
         if (result instanceof Error) {
             return apiResponse.error(res,
                 httpStatusCodes.BAD_REQUEST,
@@ -410,7 +407,7 @@ export default {
                 fetchAllCustomers,
                 Create_customer_supplier, 
                 updateCSMStatus, 
-                fetchAll_customers_suppliers,
+                fetchAllCSM,
                 createCustomerEstimate,
                 udpateCustomerEstimate,
                 fetchCustomerEstimateById,
