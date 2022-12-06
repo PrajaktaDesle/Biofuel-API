@@ -74,7 +74,6 @@ const createCustomer = async (req:any)=> {
     throw e;
 }
 }
-
 const fileNotValid = (type: any) => {
     if (type == 'image/jpeg' || type == 'image/jpg' || type == 'image/png') {
         return false;
@@ -141,11 +140,10 @@ const updateCustomerdetails = async (req:any)=> {
         if( Object.keys(shippingAddress).length) await new AddressModel().updateAddress(shippingAddress,fields.id,1).then((data)=>{console.log("shipping address updated successfully")})
         return {message:"updated successfully "};
     }catch(e:any){
-        console.log("Exception =>", e.message);
+        LOGGER.info("Exception =>", e.message);
         throw e;
     }
 }
-
 const fetchCustomersById = async (id:any) => {
     try {
         let customers = await new  CustomerModel().fetchCustomersById(id)
@@ -169,7 +167,6 @@ const fetchCustomersById = async (id:any) => {
     }
 
 }
-
 const fetchAllCustomer = async (pageIndex: number, pageSize : number, sort : any, query : string) => {
     let orderQuery: string;
     try {
