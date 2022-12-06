@@ -32,7 +32,7 @@ router.put(
 );
 router.get(
     '/fetch/all',
-    CustomerController.fetchAll_customers_suppliers
+    CustomerController.fetchAllCSM
 );
 
 router.post(
