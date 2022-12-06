@@ -123,7 +123,6 @@ const updateCustomerdetails = async (req:any)=> {
         shippingAddress.latitude=fields.latitude;
         if(fields.longitude !== undefined && fields.longitude !== null && fields.longitude !== "")
         shippingAddress.longitude=fields.longitude;
-
         // update billing address
         if(fields.billingAddress !== undefined && fields.billingAddress !== null && fields.billingAddress !== "")
          billingAddress.address = fields.billingAddress
@@ -137,9 +136,6 @@ const updateCustomerdetails = async (req:any)=> {
          billingAddress.latitude = fields.latitude
         if(fields.longitude !== undefined && fields.longitude !== null && fields.longitude !== "")
          billingAddress.longitude = fields.longitude
-
-         console.log("billing address------------------------->", billingAddress)
-         console.log("shipping address--------------------------->", shippingAddress)
         if( Object.keys(customer).length){await new CustomerModel().updateCustomersDetails(customer,fields.id).then((data)=>{console.log("updated successfully")})}
         if( Object.keys(billingAddress).length){await new AddressModel().updateAddress(billingAddress ,fields.id,0).then((data)=>{console.log("updated billing address")})}
         if( Object.keys(shippingAddress).length) await new AddressModel().updateAddress(shippingAddress,fields.id,1).then((data)=>{console.log("shipping address updated successfully")})
