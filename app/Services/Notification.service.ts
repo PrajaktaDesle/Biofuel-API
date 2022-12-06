@@ -2,7 +2,7 @@ import { NotificationModel } from "../Models/Notification/Notification.model";
 const {v4 : uuidv4} = require('uuid');
 
 const createNotification = async ( data : any ) => {
-    let purchase_order_id,spo, vehicle_count, notification, quantity:any;
+    let spo, vehicle_count, notification, quantity:any;
     try{
         let notificationData :any = {};
         if(data.purchase_order_no !== undefined && data.purchase_order_no !== null && data.purchase_order_no !== "")
@@ -16,7 +16,7 @@ const createNotification = async ( data : any ) => {
         quantity = data.quantity/vehicle_count
         console.log('deliverable product  quantity distribution------>',quantity)
         notificationData.quantity =quantity
-        console.log("no",notificationData)
+        console.log("notification",notificationData)
         let n = await new NotificationModel().fetchNotificationById(notificationData.purchase_order_id)
         if(n.length !== 0 ) throw new Error("purchase order number already exist")
         for (let i = 0 ; i < vehicle_count ; i++){
@@ -30,8 +30,6 @@ const createNotification = async ( data : any ) => {
         throw error
     }
 }
-
-
 const updateNotificationDetails = async ( data:any ) => {
     try{
         let updatedNotification : any = {}
@@ -47,7 +45,6 @@ const updateNotificationDetails = async ( data:any ) => {
         throw error
     }
 }
-
 const fetchAllNotifications = async () => {
     try{
         let notification = await new NotificationModel().fetchAll()

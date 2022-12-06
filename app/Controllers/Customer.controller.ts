@@ -155,7 +155,7 @@ const updateCSMStatus:IController = async ( req, res) => {
 }
 const fetchAllCSM:IController = async ( req:any , res:any ) => {
     try {
-        let query = " "
+        let query = ""
         if (req.body.query != "") {
             query = ` WHERE (cs.name like '%${req.body.query}%' OR sp.name like '%${req.body.query}%' ) `
         }

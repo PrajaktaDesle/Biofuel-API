@@ -198,24 +198,14 @@ const fetchAllCustomerCount =async(query : string) => {
 }
 // customer-supplier mapping
 const CreateCSMService = async(req:any)=>{
-    let result, customer, supplier, customer_address;
-    let data:any={}
+    let data,result:any
     try{
-        if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
-            customer = await new  CustomerModel().fetchCustomers(req.body.customer_id)
-        if (customer.length == 0) throw new Error("customer not found");
-        customer_address = await new CustomerModel().fetchAddressID(req.body.customer_id)
-        if (customer_address.length == 0) throw new Error("id not found");
-        data.address_id = customer_address[0].id
-        if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
-            supplier = await new CustomerModel().fetchSupplier(req.body.supplier_id)
-        if (supplier.length == 0) throw new Error("Supplier not found");
-        data.customer_id = customer[0].id
-        data.supplier_id = supplier[0].id
-        let CSM = await new CustomerModel().fetchCSM(req.body.customer_id, req.body.supplier_id)
-        if(CSM.length !== 0) throw new Error(" id already present")
-        result = await new CustomerModel().createCSM(data)
-        if ( result.insertId == 0){
+        if(req.body.customer_id !== undefined && req.body.customer_id !== null && req.body.customer_id !== "")
+        if(req.body.supplier_id !== undefined && req.body.supplier_id !== null && req.body.supplier_id !== "")
+         data= await new CustomerModel().fetchCustomerSupplier(req.body.customer_id,req.body.supplier_id)
+        if(data.length == 0) throw new Error("csm ids not found")
+        result = await new CustomerModel().createCSM(data[0])
+        if (result.insertId == 0){
            return  {message:"Customer supplier mapping already exists  ",insertId:result.insertId}
         }
         return {message:"added successfully ",insertId:result.insertId}
