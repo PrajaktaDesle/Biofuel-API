@@ -154,9 +154,12 @@ const fetchCustomerById = async (id:any) => {
         if (customers.length == 0) throw new Error("Customer not found!");
         customers = customers[0];
       //customers[0].gst= config.baseUrl + "/" + customers[0].gstin_url;
-        //customers[0].imgList = [{file : customers[0].gstin_url}]
-        customers.shippingState = {label : customers.shipping_state , value : customers.shipping_state_id};
-        customers.shippingCity = {label : customers.shipping_city , value : customers.shipping_city_id};
+        customers.imgGst = ''
+        customers.shipping = {}
+        customers.shipping.state = {label : customers.shipping_state , value : customers.shipping_state_id};
+        customers.shipping.city = {label : customers.shipping_city , value : customers.shipping_city_id};
+        customers.shipping.address = customers.shippingAddress
+        customers.shipping.pincode = customers.shippingPincode
         customers.billingCity = {label : customers.billing_city , value : customers.billing_city_id};
         customers.billingState = {label : customers.billing_state , value : customers.billing_state_id};
         if (customers.status == 1){
@@ -680,6 +683,7 @@ export default {
     CreateCSMService,
     updateCSMService,
     fetchAllCSM,
+    fetchCSMCount,
     createCustomerEstimate,
     updateCustomerEstimate,
     fetchCustomerEstimateById,
