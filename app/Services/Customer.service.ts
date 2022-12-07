@@ -95,7 +95,7 @@ const updateCustomerdetails = async (req:any)=> {
             })
         }));
         if(fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
-         customer_details = await new CustomerModel().fetchCustomersById(fields.id)
+         customer_details = await new CustomerModel().fetchCustomerById(fields.id)
         if (customer_details.length == 0) throw new Error("id not found!")
         //  customer details validations
         if(fields.status !== undefined && fields.status !== null && fields.status !== "") customer.status = fields.status
@@ -138,7 +138,7 @@ const updateCustomerdetails = async (req:any)=> {
          billingAddress.latitude = fields.latitude
         if(fields.longitude !== undefined && fields.longitude !== null && fields.longitude !== "")
          billingAddress.longitude = fields.longitude
-        if( Object.keys(customer).length){await new CustomerModel().updateCustomersDetails(customer,fields.id).then((data)=>{console.log("updated successfully")})}
+        if( Object.keys(customer).length){await new CustomerModel().updateCustomer(customer,fields.id).then((data)=>{console.log("updated successfully")})}
         if( Object.keys(billingAddress).length){await new AddressModel().updateAddress(billingAddress ,fields.id,0).then((data)=>{console.log("updated billing address")})}
         if( Object.keys(shippingAddress).length) await new AddressModel().updateAddress(shippingAddress,fields.id,1).then((data)=>{console.log("shipping address updated successfully")})
         return {message:"updated successfully "};
@@ -150,7 +150,7 @@ const updateCustomerdetails = async (req:any)=> {
 
 const fetchCustomerById = async (id:any) => {
     try {
-        let customers = await new  CustomerModel().fetchCustomersById(id)
+        let customers = await new  CustomerModel().fetchCustomerById(id)
         if (customers.length == 0) throw new Error("Customer not found!");
         customers = customers[0];
       //customers[0].gst= config.baseUrl + "/" + customers[0].gstin_url;
