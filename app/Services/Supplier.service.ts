@@ -119,7 +119,12 @@ const fetchSupplierById = async (id: any) => {
     try {
         let supplier = await new SupplierModel().fetchSupplierById( id );
         if (supplier.length == 0) throw new Error("Supplier not found");
-       
+        supplier[0].packaging = {label : supplier[0].packaging , value : supplier[0].packaging_id};
+        supplier[0].raw_material = {label : supplier[0].raw_material , value : supplier[0].raw_material_id};
+        supplier[0].billing_state = {label : supplier[0].billing_state , value : supplier[0].billing_state_id};
+        supplier[0].billing_city = {label : supplier[0].billing_city , value : supplier[0].billing_city_id};
+        supplier[0].source_state = {label : supplier[0].source_state , value : supplier[0].source_state_id};
+        supplier[0].source_city = {label : supplier[0].source_city , value : supplier[0].source_city_id};
         if ( supplier[0].status == 0) supplier[0].status = {"label":"Pending","value":0};
         if ( supplier[0].status == 1) supplier[0].status = {"label":"Approved", "value": 1};
         if ( supplier[0].status == -1) supplier[0].status = {"label":"Rejected", "value": -1};

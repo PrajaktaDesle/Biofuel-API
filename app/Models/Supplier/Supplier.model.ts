@@ -31,7 +31,7 @@ export class SupplierModel extends UserModel
                                          max(case when a.address_type = "1" then cty.id end) as billing_city_id,
                                          max(case when a.address_type = "1" then cty.name end) as billing_city,
                                          max(case when a.address_type = "1" then a.pincode end) as billing_pincode,
-                                         p.payment_term, rm.raw_material_id, (select name from biofuel.product_raw_material pr where rm.raw_material_id=pr.id) as raw_material, packaging_id, (select name from biofuel.product_packaging pp where pm.packaging_id=pp.id) as product_packaging, u.created_at, u.updated_at 
+                                         p.payment_term, rm.raw_material_id, (select name from biofuel.product_raw_material pr where rm.raw_material_id=pr.id) as raw_material, packaging_id, (select name from biofuel.product_packaging pp where pm.packaging_id=pp.id) as packaging, u.created_at, u.updated_at 
                                          FROM biofuel.user u 
                                          inner join biofuel.addresses a ON a.user_id=u.id  
                                          inner join biofuel.users_profile p ON a.user_id=p.user_id
