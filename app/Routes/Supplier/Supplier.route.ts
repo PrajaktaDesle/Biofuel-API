@@ -33,7 +33,7 @@ router.get(
   supplierController.fetchSupplierById
 );
 
-router.get(
+router.post(
   '/fetch/all',
   supplierController.fetchAllSuppliers
 );
