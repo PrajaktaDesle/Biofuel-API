@@ -117,18 +117,12 @@ const Create_customer_supplier: IController = async(req,res) => {
         else {
             apiResponse.result( res,
                 CSM,
-                httpStatusCodes.CREATED );
+                httpStatusCodes.CREATED  );
             }
     } catch (e:any) {
-        // @ts-ignore
-        if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
-            apiResponse.error(res,
-                httpStatusCodes.BAD_REQUEST)
-        } else{
             apiResponse.error(res,
                 httpStatusCodes.BAD_REQUEST, e.message)
-        }
-        return;
+            return;
     }
 };
 const updateCSMStatus:IController = async ( req, res) => {
@@ -154,7 +148,7 @@ const updateCSMStatus:IController = async ( req, res) => {
 }
 const fetchAllCSM:IController = async ( req:any , res:any ) => {
     try {
-        let query = " "
+        let query = ""
         if (req.body.query != "") {
             query = ` WHERE (cs.name like '%${req.body.query}%' OR sp.name like '%${req.body.query}%' ) `
         }
