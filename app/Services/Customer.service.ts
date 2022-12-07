@@ -9,8 +9,8 @@ import { AddressModel } from "../Models/Address/Address.model"
 
 const createCustomer = async (req:any)=> {
     try {
-        let CustomerData,fields, files,customer_address;
-        let customer: any = {}, shippingAddress : any = {address_type: 1}, billingAddress : any = {address_type: 0};
+        let CustomerData,fields, files;
+        let customer: any = {}, shippingAddress : any = {address_type: 1, user_type:0}, billingAddress : any = {address_type: 0, user_type:0};
         //@ts-ignore
         ({fields, files} = await new Promise((resolve) => {
             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
@@ -36,7 +36,7 @@ const createCustomer = async (req:any)=> {
         if(fields.shippingAddress == undefined || fields.shippingAddress == null || fields.shippingAddress == "") throw new Error("Shipping Address is required");
         shippingAddress.address = fields.shippingAddress;
         if(fields.shippingPincode == undefined || fields.shippingPincode == null || fields.shippingPincode == "") throw new Error("Shipping pincode is required");
-        shippingAddress.address = fields.shippingPincode;
+        shippingAddress.pincode = fields.shippingPincode;
         // customer Billing address
         if(fields.billingState == undefined || fields.billingState == null || fields.billingState == "") throw new Error("Billing State is required");
         //billingAddress.state = fields.billingState;
@@ -45,7 +45,7 @@ const createCustomer = async (req:any)=> {
         if(fields.billingAddress == undefined || fields.billingAddress == null || fields.billingAddress == "") throw new Error("Billing Address is required");
         billingAddress.address = fields.billingAddress;
         if(fields.billingPincode == undefined || fields.billingPincode == null || fields.billingPincode == "") throw new Error("Billing pincode is required");
-        billingAddress.address = fields.billingPincode;
+        billingAddress.pincode = fields.billingPincode;
         /*
         if(fields.latitude == undefined || fields.latitude == null || fields.latitude == "")
         if(fields.longitude == undefined || fields.longitude == null || fields.longitude == "")*/
@@ -64,7 +64,6 @@ const createCustomer = async (req:any)=> {
         customer.gstin_url = result.key;
         CustomerData = await new CustomerModel().createCustomer(customer)
         if(!CustomerData) throw Error("failed to create customer")
-        let user_id = CustomerData.insertId
         // customer billing address
         billingAddress.user_id = CustomerData.insertId;
         let customerBillingaddress = await new AddressModel().createAddress(billingAddress);
@@ -73,7 +72,7 @@ const createCustomer = async (req:any)=> {
         let customerShippingaddress = await new AddressModel().createAddress(shippingAddress);
         return {message:"added successfully ", InsertId:CustomerData.insertId};
     }catch(e:any){
-    console.log("Exception =>", e.message);
+    LOGGER.info("Exception =>", e.message);
     throw e;
 }
 }
@@ -87,8 +86,8 @@ const fileNotValid = (type: any) => {
 
 const updateCustomerdetails = async (req:any)=> {
     try {
-        let CustomerData,customer_details,fields, files, payment_term, state_name;
-        let customer: any = {}, customerBillingAddress:any={},customerShippingAddress:any={};
+        let customer_details,fields, files;
+        let customer: any = {}, shippingAddress : any = {}, billingAddress : any = {};
         //@ts-ignore
         ({fields, files} = await new Promise((resolve) => {
             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
@@ -96,55 +95,66 @@ const updateCustomerdetails = async (req:any)=> {
             })
         }));
         if(fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
-        customer_details = await new CustomerModel().fetchCustomerById(fields.id)
+         customer_details = await new CustomerModel().fetchCustomersById(fields.id)
         if (customer_details.length == 0) throw new Error("id not found!")
         //  customer details validations
         if(fields.status !== undefined && fields.status !== null && fields.status !== "") customer.status = fields.status
         if(fields.name !== undefined && fields.name !== null && fields.name !== "") customer.name=fields.name;
-        if(fields.contact_no !== undefined && fields.contact_no !== null && fields.contact_no !== "") customer.mobile=fields.contact_no;
+        if(fields.contactNo !== undefined && fields.contactNo !== null && fields.contactNo !== "") customer.mobile=fields.contactNo;
         if(fields.email !== undefined && fields.email !== null && fields.address !== "") customer.email=fields.email;
-        if(fields.gstin_no !== undefined && fields.gstin_no !== null && fields.gstin_no !== "") customer.gstin=fields.gstin_no;
-        if(fields.payment_term !== undefined && fields.payment_term !== null && fields.payment_term  !== "") customer.payment_term= fields.payment_term;
+        if(fields.gstinNo !== undefined && fields.gstinNo !== null && fields.gstinNo !== "") customer.gstin=fields.gstinNo;
+        if(fields.paymentTerm !== undefined && fields.paymentTerm !== null && fields.paymentTerm  !== "") customer.payment_term= fields.paymentTerm;
         let s3Image: any = {}
         let s3Path: any = {}
         if (files.gstin !== undefined && files.gstin !== null && files.gstin !== "") {
             if (fileNotValid(files.gstin.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image");else{s3Image['gstin_url'] = files.gstin
         }
         let name: string = "images/gstin_url/" + moment().unix() + "." + s3Image['gstin_url'].originalFilename.split(".").pop()
-        const result = await uploadFile(s3Image['image'], name);
+        const result = await uploadFile(s3Image['gstin_url'], name);
         if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
         s3Path['gstin_url'] = result.key;
         customer= Object.assign(customer, s3Path);}
-
-        if(fields.billing_address  !== undefined && fields.billing_address !== null && fields.billing_address !== "")
-        customerBillingAddress.address=fields.billing_address;
-        if(fields.shipping_address !== undefined && fields.shipping_address !== null && fields.shipping_address !== "")
-        customerShippingAddress.address=fields.shipping_address;
+        // update customer shipping address
+        if(fields.shippingCity  !== undefined && fields.shippingCity !== null && fields.shippingCity !== "")
+        shippingAddress.city_id=fields.shippingCity;
+        if(fields.shippingPincode !== undefined && fields.shippingPincode !== null && fields.shippingPincode !== "")
+         shippingAddress.pincode = fields.shippingPincode
+        if(fields.shippingAddress !== undefined && fields.shippingAddress !== null && fields.shippingAddress !== "")
+        shippingAddress.address=fields.shippingAddress;
         if(fields.latitude !== undefined && fields.latitude !== null && fields.latitude !== "")
-        customerShippingAddress.latitude=fields.latitude;
+        shippingAddress.latitude=fields.latitude;
         if(fields.longitude !== undefined && fields.longitude !== null && fields.longitude !== "")
-        customerShippingAddress.longitude=fields.longitude;
-        if(fields.pincode !== undefined && fields.pincode !== null && fields.pincode !== "")
-        customerShippingAddress.pincode=fields.pincode;
-        if(fields.shipping_state !== undefined && fields.shipping_state !== null && fields.shipping_state !== "")
-         state_name =fields.shipping_state;
-        if(fields.shipping_city !== undefined && fields.shipping_city !== null && fields.shipping_city !== "")
-        customerShippingAddress.city_id =fields.shipping_city
-        if( Object.keys(customer).length){await new CustomerModel().updateCustomer(customer,fields.id).then((data)=>{console.log("updated successfully")})}
-        if( Object.keys(customerBillingAddress).length){await new CustomerModel().updateCustomersAddress(customerBillingAddress ,fields.id, "billing").then((data)=>{console.log("updated billing address")})}
-        if( Object.keys(customerShippingAddress).length) await new CustomerModel().updateCustomersAddress(customerShippingAddress,fields.id, "shipping").then((data)=>{console.log("shipping address updated successfully")})
-        return {message:"updated successfully ", CustomerData};
+        shippingAddress.longitude=fields.longitude;
+        // update billing address
+        if(fields.billingAddress !== undefined && fields.billingAddress !== null && fields.billingAddress !== "")
+         billingAddress.address = fields.billingAddress
+        if(fields.billingPincode !== undefined && fields.billingPincode !== null && fields.billingPincode !== "")
+         billingAddress.pincode=fields.billingPincode;
+        if(fields.billingCity !== undefined && fields.billingCity !== null && fields.billingCity !== "")
+         billingAddress.city_id =fields.billingCity;
+        if(fields.billingState !== undefined && fields.billingState !== null && fields.billingState !== "")
+        // billingAddress.state_id =fields.billingState
+        if(fields.latitude !== undefined && fields.latitude !== null && fields.latitude !== "")
+         billingAddress.latitude = fields.latitude
+        if(fields.longitude !== undefined && fields.longitude !== null && fields.longitude !== "")
+         billingAddress.longitude = fields.longitude
+        if( Object.keys(customer).length){await new CustomerModel().updateCustomersDetails(customer,fields.id).then((data)=>{console.log("updated successfully")})}
+        if( Object.keys(billingAddress).length){await new AddressModel().updateAddress(billingAddress ,fields.id,0).then((data)=>{console.log("updated billing address")})}
+        if( Object.keys(shippingAddress).length) await new AddressModel().updateAddress(shippingAddress,fields.id,1).then((data)=>{console.log("shipping address updated successfully")})
+        return {message:"updated successfully "};
     }catch(e:any){
-        console.log("Exception =>", e.message);
+        LOGGER.info("Exception =>", e.message);
         throw e;
     }
 }
 
 const fetchCustomerById = async (id:any) => {
     try {
-        let customers = await new  CustomerModel().fetchCustomerById(id)
+        let customers = await new  CustomerModel().fetchCustomersById(id)
         if (customers.length == 0) throw new Error("Customer not found!");
         customers = customers[0];
+      //customers[0].gst= config.baseUrl + "/" + customers[0].gstin_url;
+        //customers[0].imgList = [{file : customers[0].gstin_url}]
         customers.shippingState = {label : customers.shipping_state , value : customers.shipping_state_id};
         customers.shippingCity = {label : customers.shipping_city , value : customers.shipping_city_id};
         customers.billingCity = {label : customers.billing_city , value : customers.billing_city_id};
@@ -182,7 +192,6 @@ const fetchAllCustomer = async (pageIndex: number, pageSize : number, sort : any
         return e
     }
 }
-
 const fetchAllCustomerCount =async(query : string) => {
     try {
         let customers = await new CustomerModel().fetchAllCustomerCount(query);
@@ -194,23 +203,23 @@ const fetchAllCustomerCount =async(query : string) => {
 }
 
 // customer-supplier mapping
-const CreateCSMService = async(data:any)=>{
+const CreateCSMService = async(req:any)=>{
     let result, customer, supplier, customer_address;
-    // let data:any=
+    let data:any={}
     try{
-        // if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
-        //     customer = await new  CustomerModel().fetchCustomers(req.body.customer_id)
-        // if (customer.length == 0) throw new Error("customer not found");
-        // customer_address = await new CustomerModel().fetchAddressID(req.body.customer_id)
-        // if (customer_address.length == 0) throw new Error("id not found");
-        // data.address_id = customer_address[0].id
-        // if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
-        //     supplier = await new CustomerModel().fetchSupplier(req.body.supplier_id)
-        // if (supplier.length == 0) throw new Error("Supplier not found");
-        // data.customer_id = customer[0].id
-        // data.supplier_id = supplier[0].id
-        // let CSM = await new CustomerModel().fetchCSM(req.body.customer_id, req.body.supplier_id)
-        // if(CSM.length !== 0) throw new Error(" id already present")
+        if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
+            customer = await new  CustomerModel().fetchCustomers(req.body.customer_id)
+        if (customer.length == 0) throw new Error("customer not found");
+        customer_address = await new CustomerModel().fetchAddressID(req.body.customer_id)
+        if (customer_address.length == 0) throw new Error("id not found");
+        data.address_id = customer_address[0].id
+        if (req.body.customer_id !== undefined &&  req.body.customer_id !== null && req.body.customer_id !== "")
+            supplier = await new CustomerModel().fetchSupplier(req.body.supplier_id)
+        if (supplier.length == 0) throw new Error("Supplier not found");
+        data.customer_id = customer[0].id
+        data.supplier_id = supplier[0].id
+        let CSM = await new CustomerModel().fetchCSM(req.body.customer_id, req.body.supplier_id)
+        if(CSM.length !== 0) throw new Error(" id already present")
         result = await new CustomerModel().createCSM(data)
         if ( result.insertId == 0){
            return  {message:"Customer supplier mapping already exists  ",insertId:result.insertId}
@@ -229,34 +238,55 @@ const updateCSMService = async(req:any)=>{
         if(CSM.length == 0) throw new Error("id not found");
         data = {"status":req.body.status }
         result = await new CustomerModel().updateStatusById(data, req.body.customer_id,req.body.supplier_id)
-        LOGGER.info( "Product details", result )
+        LOGGER.info( " result", result )
         console.log( result )
         return {"changedRows":result.changedRows};
     }catch (e) {
-        console.log("error----------->",e)
+        LOGGER.info("error",e)
         throw e
     }
 }
-const fetchAllCSM = async()=>{
+const fetchAllCSM = async(pageIndex: number, pageSize : number, sort : any, query : string)=>{
+    let orderQuery: string;
     try {
-        let result, customer_name, suppiler_name, address;
-        result = await new CustomerModel().fetchAll()
-        for (let i = 0; i < result.length; i++) {
-            customer_name = await new CustomerModel().fetchCustomers(result[i].customer_id)
-            suppiler_name = await new CustomerModel().fetchSupplier(result[i].supplier_id)
-            address = await new CustomerModel().fetchCity(result[i].address_id)
-            let city = await new CustomerModel().fetchCustomerCity(address[0].city_id)
-            result[i].customer = customer_name[0].name
-            result[i].supplier = suppiler_name[0].name
-            result[i].city = city[0].name
-            result[i].address =address[0].address
-            delete result[i].customer_id
-            delete result[i].supplier_id
-            delete result[i].address_id
-        }
+        // let result, customer_name, suppiler_name, address;
+        // result = await new CustomerModel().fetchAll()
+        // for (let i = 0; i < result.length; i++) {
+        //     customer_name = await new CustomerModel().fetchCustomers(result[i].customer_id)
+        //     suppiler_name = await new CustomerModel().fetchSupplier(result[i].supplier_id)
+        //     address = await new CustomerModel().fetchCity(result[i].address_id)
+        //     let city = await new CustomerModel().fetchCustomerCity(address[0].city_id)
+        //     result[i].customer = customer_name[0].name
+        //     result[i].supplier = suppiler_name[0].name
+        //     result[i].city = city[0].name
+        //     result[i].address =address[0].address
+        //     delete result[i].customer_id
+        //     delete result[i].supplier_id
+        //     delete result[i].address
+            if (sort.key != "") {
+                orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
+            } else {
+                orderQuery = "  ";
+            }
+            let result = await new CustomerModel().fetchAllCustomers_suppliers(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
+            if (result.length == 0) throw new Error(" customer not found!")
+            // for (let i = 0; i < result.length; i++) {
+            //     // adding base url to panurl from database
+            //     result[i].gst = config.baseUrl + "/" + result[0].gstin_url;
+            // }
+        // }
         return result
     }catch (e) {
         throw e
+    }
+}
+const fetchCSMCount =async(query : string) => {
+    try {
+        let customers_supplers = await new CustomerModel().fetch_csm_count(query);
+        return customers_supplers.length;
+    }
+    catch (error: any) {
+        return error
     }
 }
 
