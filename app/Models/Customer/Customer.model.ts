@@ -9,11 +9,12 @@ export class CustomerModel extends BaseModel
     async createCustomer(data:any){
         return await this._executeQuery("insert into customers set ?", [data]);
     }
-    async updateCustomersDetails(customerData:any,id:number){
+
+    async updateCustomer(customerData:any,id:number){
         return await this._executeQuery("update customers set ? where id = ? ", [customerData,id]);
     }
 
-    async fetchCustomersById(id: any ){
+    async fetchCustomerById(id: any ){
         return await this._executeQuery(`SELECT cs.id, cs.name as customerName, cs.email, cs.mobile as contactNo, cs.gstin as gstNo, cs.payment_term as paymentTerms, cs.status,
         max(case when a.address_type = "0" then a.address ELSE null end) as shippingAddress,
         max(case when a.address_type = "0" then st.id end) as shipping_state_id,
@@ -36,15 +37,6 @@ export class CustomerModel extends BaseModel
                         group by cs.id`,[id])
     }
 
-    async createCustomerAddress(data:any){
-        return await this._executeQuery("insert into addresses set ?", [data]);
-    }
-    async fetchCustomerState(data:any){
-        return await this._executeQuery("select id,name from address_state where name = ?", [data]);
-    }
-    async fetchCustomerAddress(user_id:number){
-        return await this._executeQuery("select * from addresses where user_id = ?", [user_id]);
-    }
     async updateCustomersAddress(customerData:any,user_id:number, add_type:string){
         return await this._executeQuery("update addresses set ? where user_id = ?  and address_type = ? ", [customerData,user_id, add_type]);
     }
@@ -66,26 +58,11 @@ export class CustomerModel extends BaseModel
                                                    inner join biofuel.address_state ast ON ac.state_id=ast.id
                                                    ${query} `, [])
     }
-    async fetchsBillingAddressById(user_id: any){
-        return await this._executeQuery("select user_type ,address as `billing_address` from addresses where user_id = ? and address_type = ? ", [user_id, "billing"]);
-    }
-    async fetchShippingAddressById(id: any){
-        return await this._executeQuery("select address as `shipping_address`,pincode, city_id, latitude, longitude from addresses where user_id = ? and address_type = ? ", [id, "shipping"]);
-    }
-    async getCityById(id:number){
-        return await this._executeQuery( "select * from address_city where id = ? ",[id])
-    }
-    async getStateById(id:number){
-        return await this._executeQuery( "select * from address_state where id = ? ",[id])
-    }
     // customer-supplier mapping
     async createCSM(data: any) {
         console.log('data------>', data)
         return await this._executeQuery("insert ignore into customer_supplier_mapping set ? ", [data]);
 
-    }
-    async fetchAddressID(customer_id:number){
-        return await this._executeQuery("select id, user_type,address as `shipping_address` from addresses where user_id =? and address_type = ? and status = 1", [customer_id, "shipping"])
     }
     async fetchSupplier(supplier_id:number){
         return await this._executeQuery("select * from user where id = ? and status = 1 and role_id = 3", [supplier_id])

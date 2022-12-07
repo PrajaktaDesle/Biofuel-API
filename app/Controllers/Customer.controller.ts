@@ -41,7 +41,7 @@ const Create: IController = async (req, res) => {
     }
 }
 const fetchCustomerById: IController = async (req, res) => {
-    await CustomerService.fetchCustomersById(req.query.id)
+    await CustomerService.fetchCustomerById(req.query.id)
         .then( (customer : any) => {
             if(customer instanceof Error){
                 console.log("User 2", customer.message)
@@ -55,7 +55,6 @@ const fetchCustomerById: IController = async (req, res) => {
                 apiResponse.result(res, customer, httpStatusCodes.OK);
             }
         }).catch( (err : any) => {
-        console.log("Error  ->", err);
         apiResponse.error(
             res,
             httpStatusCodes.BAD_REQUEST,

@@ -96,7 +96,7 @@ const updateCustomerdetails = async (req:any)=> {
             })
         }));
         if(fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
-        customer_details = await new CustomerModel().fetchCustomersById(fields.id)
+        customer_details = await new CustomerModel().fetchCustomerById(fields.id)
         if (customer_details.length == 0) throw new Error("id not found!")
         //  customer details validations
         if(fields.status !== undefined && fields.status !== null && fields.status !== "") customer.status = fields.status
@@ -130,7 +130,7 @@ const updateCustomerdetails = async (req:any)=> {
          state_name =fields.shipping_state;
         if(fields.shipping_city !== undefined && fields.shipping_city !== null && fields.shipping_city !== "")
         customerShippingAddress.city_id =fields.shipping_city
-        if( Object.keys(customer).length){await new CustomerModel().updateCustomersDetails(customer,fields.id).then((data)=>{console.log("updated successfully")})}
+        if( Object.keys(customer).length){await new CustomerModel().updateCustomer(customer,fields.id).then((data)=>{console.log("updated successfully")})}
         if( Object.keys(customerBillingAddress).length){await new CustomerModel().updateCustomersAddress(customerBillingAddress ,fields.id, "billing").then((data)=>{console.log("updated billing address")})}
         if( Object.keys(customerShippingAddress).length) await new CustomerModel().updateCustomersAddress(customerShippingAddress,fields.id, "shipping").then((data)=>{console.log("shipping address updated successfully")})
         return {message:"updated successfully ", CustomerData};
@@ -140,13 +140,11 @@ const updateCustomerdetails = async (req:any)=> {
     }
 }
 
-const fetchCustomersById = async (id:any) => {
+const fetchCustomerById = async (id:any) => {
     try {
-        let customers = await new  CustomerModel().fetchCustomersById(id)
+        let customers = await new  CustomerModel().fetchCustomerById(id)
         if (customers.length == 0) throw new Error("Customer not found!");
         customers = customers[0];
-      //customers[0].gst= config.baseUrl + "/" + customers[0].gstin_url;
-        //customers[0].imgList = [{file : customers[0].gstin_url}]
         customers.shippingState = {label : customers.shipping_state , value : customers.shipping_state_id};
         customers.shippingCity = {label : customers.shipping_city , value : customers.shipping_city_id};
         customers.billingCity = {label : customers.billing_city , value : customers.billing_city_id};
@@ -184,6 +182,7 @@ const fetchAllCustomer = async (pageIndex: number, pageSize : number, sort : any
         return e
     }
 }
+
 const fetchAllCustomerCount =async(query : string) => {
     try {
         let customers = await new CustomerModel().fetchAllCustomerCount(query);
@@ -644,7 +643,7 @@ const fetchAllCustomerSalesOrders= async () => {
 
 export default {
     createCustomer,
-    fetchCustomersById,
+    fetchCustomerById,
     updateCustomerdetails,
     fetchAllCustomer,
     fetchAllCustomerCount,
