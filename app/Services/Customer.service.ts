@@ -55,7 +55,9 @@ const createCustomer = async (req:any)=> {
         if (files.gstin !== undefined && files.gstin !== null && files.gstin !== "") {
             if (fileNotValid(files.gstin.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image");
             gstin_url = files.gstin
-        } else {throw new Error(" gst_url is required");}
+        } else {
+            throw new Error(" gst_url is required");
+        }
         let name: string = "images/gstin_url/" + moment().unix() + "." + gstin_url.originalFilename.split(".").pop()
         const result = await uploadFile(gstin_url, name);
         if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
@@ -74,6 +76,7 @@ const createCustomer = async (req:any)=> {
     throw e;
 }
 }
+
 const fileNotValid = (type: any) => {
     if (type == 'image/jpeg' || type == 'image/jpg' || type == 'image/png') {
         return false;
@@ -92,7 +95,7 @@ const updateCustomerdetails = async (req:any)=> {
             })
         }));
         if(fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
-         customer_details = await new CustomerModel().fetchCustomersById(fields.id)
+         customer_details = await new CustomerModel().fetchCustomerById(fields.id)
         if (customer_details.length == 0) throw new Error("id not found!")
         //  customer details validations
         if(fields.status !== undefined && fields.status !== null && fields.status !== "") customer.status = fields.status
@@ -135,7 +138,7 @@ const updateCustomerdetails = async (req:any)=> {
          billingAddress.latitude = fields.latitude
         if(fields.longitude !== undefined && fields.longitude !== null && fields.longitude !== "")
          billingAddress.longitude = fields.longitude
-        if( Object.keys(customer).length){await new CustomerModel().updateCustomersDetails(customer,fields.id).then((data)=>{console.log("updated successfully")})}
+        if( Object.keys(customer).length){await new CustomerModel().updateCustomer(customer,fields.id).then((data)=>{console.log("updated successfully")})}
         if( Object.keys(billingAddress).length){await new AddressModel().updateAddress(billingAddress ,fields.id,0).then((data)=>{console.log("updated billing address")})}
         if( Object.keys(shippingAddress).length) await new AddressModel().updateAddress(shippingAddress,fields.id,1).then((data)=>{console.log("shipping address updated successfully")})
         return {message:"updated successfully "};
@@ -144,15 +147,19 @@ const updateCustomerdetails = async (req:any)=> {
         throw e;
     }
 }
-const fetchCustomersById = async (id:any) => {
+
+const fetchCustomerById = async (id:any) => {
     try {
-        let customers = await new  CustomerModel().fetchCustomersById(id)
+        let customers = await new  CustomerModel().fetchCustomerById(id)
         if (customers.length == 0) throw new Error("Customer not found!");
         customers = customers[0];
       //customers[0].gst= config.baseUrl + "/" + customers[0].gstin_url;
-        //customers[0].imgList = [{file : customers[0].gstin_url}]
-        customers.shippingState = {label : customers.shipping_state , value : customers.shipping_state_id};
-        customers.shippingCity = {label : customers.shipping_city , value : customers.shipping_city_id};
+        customers.imgGst = ''
+        customers.shipping = {}
+        customers.shipping.state = {label : customers.shipping_state , value : customers.shipping_state_id};
+        customers.shipping.city = {label : customers.shipping_city , value : customers.shipping_city_id};
+        customers.shipping.address = customers.shippingAddress
+        customers.shipping.pincode = customers.shippingPincode
         customers.billingCity = {label : customers.billing_city , value : customers.billing_city_id};
         customers.billingState = {label : customers.billing_state , value : customers.billing_state_id};
         if (customers.status == 1){
@@ -167,6 +174,7 @@ const fetchCustomersById = async (id:any) => {
     }
 
 }
+
 const fetchAllCustomer = async (pageIndex: number, pageSize : number, sort : any, query : string) => {
     let orderQuery: string;
     try {
@@ -195,6 +203,7 @@ const fetchAllCustomerCount =async(query : string) => {
         return error
     }
 }
+
 // customer-supplier mapping
 const CreateCSMService = async(req:any)=>{
     let data,result:any
@@ -214,6 +223,7 @@ const CreateCSMService = async(req:any)=>{
         throw {message:"mapping already exists for this ids",e}
     }
 }
+
 const updateCSMService = async(req:any)=>{
     let result,CSM, data;
     try{
@@ -638,7 +648,7 @@ const fetchAllCustomerSalesOrders= async () => {
 
 export default {
     createCustomer,
-    fetchCustomersById,
+    fetchCustomerById,
     updateCustomerdetails,
     fetchAllCustomer,
     fetchAllCustomerCount,

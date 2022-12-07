@@ -9,10 +9,12 @@ export class CustomerModel extends BaseModel
     async createCustomer(data:any){
         return await this._executeQuery("insert into customers set ?", [data]);
     }
-    async updateCustomersDetails(customerData:any,id:number){
+
+    async updateCustomer(customerData:any,id:number){
         return await this._executeQuery("update customers set ? where id = ? ", [customerData,id]);
     }
-    async fetchCustomersById(id: any ){
+
+    async fetchCustomerById(id: any ){
         return await this._executeQuery(`SELECT cs.id, cs.name as customerName, cs.email, cs.mobile as contactNo, cs.gstin as gstNo, cs.payment_term as paymentTerms, cs.status,
                                                 max(case when a.address_type = "1" then a.address ELSE null end) as shippingAddress,
                                                 max(case when a.address_type = "1" then st.id end) as shipping_state_id,
