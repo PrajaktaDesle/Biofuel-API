@@ -12,7 +12,6 @@ export class CustomerModel extends BaseModel
     async updateCustomersDetails(customerData:any,id:number){
         return await this._executeQuery("update customers set ? where id = ? ", [customerData,id]);
     }
-
     async fetchCustomersById(id: any ){
         return await this._executeQuery(`SELECT cs.id, cs.name as customerName, cs.email, cs.mobile as contactNo, cs.gstin as gstNo, cs.payment_term as paymentTerms, cs.status,
                                                 max(case when a.address_type = "1" then a.address ELSE null end) as shippingAddress,
@@ -77,13 +76,21 @@ export class CustomerModel extends BaseModel
                                                where (a.user_id  = ? and address_type = 1 and user_type = 0) and (sp.id = ? and role_id = 3);`
                                                 , [customer_id,supplier_id]);
     }
+    async create(customer_id :number, supplier_id:number){
+        let query = await this._executeQuery(`INSERT INTO customer_supplier_mapping(customer_id,address_id,supplier_id)
+                                                        select a.user_id as customer_id, a.id as address_id,sp.id as supplier_id
+                                                        from biofuel.user as sp, biofuel.addresses as a
+                                                        where (a.user_id = ? and address_type = 1 and user_type = 0) and (sp.id = ? and role_id = 3);
+                                                         `,[customer_id,supplier_id])
+        return query
+    }
     async updateStatusById(data : any, customer_id:number, supplier_id:number){
         return await this._executeQuery( "update customer_supplier_mapping set ? where  customer_id  = ? and supplier_id = ? ",[data,customer_id,supplier_id] )
     }
     async fetchCSM(customer_id:any, supplier_id:any){
         return await this._executeQuery("select * from customer_supplier_mapping where customer_id = ? and supplier_id = ? ", [customer_id, supplier_id])
     }
-    async fetchAllCustomers_suppliers(limit : number, offset : number, sortOrder : string, query : string){
+    async fetchAllCustomerSuppliers(limit : number, offset : number, sortOrder : string, query : string){
         return await this._executeQuery(`SELECT csm.id, customer_id, cs.name as customer, supplier_id, sp.name as supplier,csm.status, csm.created_at , csm.updated_at FROM biofuel.customer_supplier_mapping csm
                                                 inner join biofuel.customers cs on cs.id=csm.customer_id
                                                 inner join biofuel.user sp on sp.id = csm.supplier_id

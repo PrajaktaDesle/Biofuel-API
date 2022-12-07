@@ -176,7 +176,6 @@ const fetchAllCustomer = async (pageIndex: number, pageSize : number, sort : any
             orderQuery = "  ";
         }
         let customers = await new CustomerModel().fetchAllCustomers(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
-
         if (customers.length == 0) throw new Error(" customer not found!")
         for (let i = 0; i < customers.length; i++) {
             // adding base url to panurl from database
@@ -202,15 +201,17 @@ const CreateCSMService = async(req:any)=>{
     try{
         if(req.body.customer_id !== undefined && req.body.customer_id !== null && req.body.customer_id !== "")
         if(req.body.supplier_id !== undefined && req.body.supplier_id !== null && req.body.supplier_id !== "")
-         data= await new CustomerModel().fetchCustomerSupplier(req.body.customer_id,req.body.supplier_id)
-        if(data.length == 0) throw new Error("csm ids not found")
-        result = await new CustomerModel().createCSM(data[0])
+        //  data= await new CustomerModel().fetchCustomerSupplier(req.body.customer_id,req.body.supplier_id)
+        // if(data.length == 0) throw new Error("csm ids not found")
+        // result = await new CustomerModel().createCSM(data[0])
+        // console.log('result in service----------->', result)
+        result = await new CustomerModel().create(req.body.customer_id,req.body.supplier_id)
         if (result.insertId == 0){
-           return  {message:"Customer supplier mapping already exists  ",insertId:result.insertId}
+           return  {message:" entry not found  ",insertId:result.insertId}
         }
         return {message:"added successfully ",insertId:result.insertId}
     }catch (e) {
-        throw e
+        throw {message:"mapping already exists for this ids",e}
     }
 }
 const updateCSMService = async(req:any)=>{
@@ -232,32 +233,13 @@ const updateCSMService = async(req:any)=>{
 const fetchAllCSM = async(pageIndex: number, pageSize : number, sort : any, query : string)=>{
     let orderQuery: string;
     try {
-        // let result, customer_name, suppiler_name, address;
-        // result = await new CustomerModel().fetchAll()
-        // for (let i = 0; i < result.length; i++) {
-        //     customer_name = await new CustomerModel().fetchCustomers(result[i].customer_id)
-        //     suppiler_name = await new CustomerModel().fetchSupplier(result[i].supplier_id)
-        //     address = await new CustomerModel().fetchCity(result[i].address_id)
-        //     let city = await new CustomerModel().fetchCustomerCity(address[0].city_id)
-        //     result[i].customer = customer_name[0].name
-        //     result[i].supplier = suppiler_name[0].name
-        //     result[i].city = city[0].name
-        //     result[i].address =address[0].address
-        //     delete result[i].customer_id
-        //     delete result[i].supplier_id
-        //     delete result[i].address
             if (sort.key != "") {
                 orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
             } else {
                 orderQuery = "  ";
             }
-            let result = await new CustomerModel().fetchAllCustomers_suppliers(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
+            let result = await new CustomerModel().fetchAllCustomerSuppliers(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
             if (result.length == 0) throw new Error(" customer not found!")
-            // for (let i = 0; i < result.length; i++) {
-            //     // adding base url to panurl from database
-            //     result[i].gst = config.baseUrl + "/" + result[0].gstin_url;
-            // }
-        // }
         return result
     }catch (e) {
         throw e

@@ -118,18 +118,12 @@ const Create_customer_supplier: IController = async(req,res) => {
         else {
             apiResponse.result( res,
                 CSM,
-                httpStatusCodes.CREATED );
+                httpStatusCodes.CREATED  );
             }
     } catch (e:any) {
-        // @ts-ignore
-        if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
-            apiResponse.error(res,
-                httpStatusCodes.BAD_REQUEST)
-        } else{
             apiResponse.error(res,
                 httpStatusCodes.BAD_REQUEST, e.message)
-        }
-        return;
+            return;
     }
 };
 const updateCSMStatus:IController = async ( req, res) => {
