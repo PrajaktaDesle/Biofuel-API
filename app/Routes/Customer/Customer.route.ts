@@ -30,7 +30,7 @@ router.put(
     celebrate(CustomerSchema.updateStatus),
     CustomerController.updateCSMStatus
 );
-router.get(
+router.post(
     '/fetch/all',
     CustomerController.fetchAllCSM
 );

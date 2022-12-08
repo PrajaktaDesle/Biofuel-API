@@ -128,7 +128,11 @@ const fetchSupplierById = async (id: any) => {
         if ( supplier[0].status == 0) supplier[0].status = {"label":"Pending","value":0};
         if ( supplier[0].status == 1) supplier[0].status = {"label":"Approved", "value": 1};
         if ( supplier[0].status == -1) supplier[0].status = {"label":"Rejected", "value": -1};
-       
+        if ( supplier[0].grade == 1) supplier[0].grade = {"label":"A","value":1};
+        if ( supplier[0].grade == 2) supplier[0].grade = {"label":"B","value":2};
+        if ( supplier[0].grade == 3) supplier[0].grade = {"label":"C","value":3};
+        if ( supplier[0].grade == 4) supplier[0].grade = {"label":"D","value":4};
+
         // Adding Baseurl to panurl from database
         supplier[0].pan_img= config.baseUrl + "/" + supplier[0].pan_img;
         supplier[0].aadhaar_img= config.baseUrl + "/" + supplier[0].aadhaar_img;
@@ -151,7 +155,6 @@ const updateSupplierDetails = async (req:any) =>{
             new formidable.IncomingForm().parse(req, async (err: any, fd: any, fl: any) => {
                     resolve({fd: fd, fl: fl});})}));
         
-        console.log( " fl : ", fl, " fd : ", fd)
         let id=Number(fd.id);
         let updatedSupplier : any = {}, profile : any = {}, billing_address : any = {}, source_address:any = {}, packaging_mapping:any = {}, raw_material_mapping:any = {}, result:any = {}, city:any = {}, state:any = {};
 
