@@ -1,6 +1,4 @@
 import { NotificationModel } from "../Models/Notification/Notification.model";
-const {v4 : uuidv4} = require('uuid');
-
 const createNotification = async ( data : any ) => {
     let spo, vehicle_count, notification, quantity:any;
     try{
@@ -45,17 +43,32 @@ const updateNotificationDetails = async ( data:any ) => {
         throw error
     }
 }
-const fetchAllNotifications = async () => {
-    try{
-        let notification = await new NotificationModel().fetchAll()
-        if ( notification.length == 0 ) throw new Error( "No notification found " )
-        return notification
+const fetchAllNotifications = async (pageIndex: number, pageSize : number, sort : any, query : string) => {
+        let orderQuery: string;
+        try {
+            if (sort.key != "") {
+                orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
+            } else {
+                orderQuery = "  ";
+            }
+            let notification = await new NotificationModel().fetchAll(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
+            if (notification.length == 0) throw new Error("No notification found ")
+            return notification
+        } catch (error: any) {
+            console.log(" Exception ===> ", error.message)
+            throw error
+        }
     }
-    catch( error:any ){
-        console.log( " Exception ===> ", error.message )
-        throw error
+const fetchNotificationCount =async(query : string) => {
+    try {
+        let count = await new NotificationModel().fetchNotificationCount(query);
+        return count.length;
+    }
+    catch (error: any) {
+        return error
     }
 }
+
 const fetchNotificationById = async ( data:any ) => {
     try{
         let notification = await new NotificationModel().fetchNotification( data.id );
@@ -72,5 +85,6 @@ export default {
     createNotification, 
     updateNotificationDetails, 
     fetchNotificationById,
-    fetchAllNotifications
+    fetchAllNotifications,
+    fetchNotificationCount
 }
