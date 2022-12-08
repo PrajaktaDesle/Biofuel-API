@@ -44,10 +44,6 @@ export class SupplierModel extends UserModel
                                          group by u.id`, [id]);
     }  
 
-    async fetchSuppliersBillingAddressById(id: any){
-        return await this._executeQuery("select user_type,address as `billing_address` from addresses where user_id = ? and address_type = 2 ", [id]);
-    }
-    
     async fetchAllSuppliers(limit : number, offset : number, sortOrder : string, query : string){
         return await this._executeQuery(`SELECT u.id, u.name , u.email,  u.mobile as contact_no, a.latitude, a.longitude, case when p.grade = 1 then 'A' when p.grade = 2 then 'B' when p.grade = 3 then 'C' when p.grade = 4 then 'D' else null end as grade,  u.status,
                                          max(case when a.address_type = "2" then a.address ELSE null end) as source_address,
