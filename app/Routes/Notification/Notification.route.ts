@@ -17,7 +17,7 @@ router.put(
   notificationController.updateNotificationDetails
 )
 
-router.get(
+router.post(
   '/fetch/all',
   notificationController.fetchAllnotifications
 )
