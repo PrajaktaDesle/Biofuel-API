@@ -70,9 +70,9 @@ const createSupplier = async (req:any) =>{
         await new SupplierModel().supplierRawMaterialMapping({"supplier_id":user_id,"raw_material_id":fd.raw_material})
         await new SupplierModel().supplierPackagingMapping({"supplier_id":user_id,"packaging_id":fd.packaging})
         suppliersProfile = await new SupplierModel().createSuppliersProfile( profile )
-        let billing_address = {"address_type":2,"address":fd.billing_address,"pincode":fd.billing_pincode,"city_id":fd.billing_city,"user_type":1,"user_id":user_id} 
+        let billing_address = {"address_type":1,"address":fd.billing_address,"pincode":fd.billing_pincode,"city_id":fd.billing_city,"user_type":1,"user_id":user_id} 
         suppliersAddress = await new SupplierModel().createSuppliersAddress( billing_address )
-        let source_address : any = {"address_type":3,"address":fd.source_address,"pincode":fd.source_pincode,"city_id":fd.source_city,"user_type":1,"user_id":user_id}
+        let source_address : any = {"address_type":2,"address":fd.source_address,"pincode":fd.source_pincode,"city_id":fd.source_city,"user_type":1,"user_id":user_id}
         if(fd.longitude == undefined || fd.longitude == null || fd.longitude == "") source_address.longitude = fd.longitude;
         if(fd.latitude == undefined || fd.latitude == null || fd.latitude == "") source_address.latitude = fd.latitude;
         suppliersAddress = await new SupplierModel().createSuppliersAddress( source_address )
@@ -95,7 +95,7 @@ const fetchAllSuppliers = async (pageIndex: number, pageSize : number, sort : an
             orderQuery = "  ";
         }
     suppliers = await new SupplierModel().fetchAllSuppliers(pageSize, (pageIndex-1) * pageSize, orderQuery, query)
-    console.log( "suppliers : " , suppliers )
+    // console.log( "suppliers : " , suppliers )
     if (suppliers == null) throw new Error("Suppliers not found");
     return suppliers;
 }
@@ -227,13 +227,17 @@ const updateSupplierDetails = async (req:any) =>{
 
         // Multiple fl upload to s3Bucket
         if( Object.keys(s3Images).length ){ const s3Paths = await uploadFiles( s3Images ); Object.assign(profile, s3Paths); }
-        console.log( "profile : ", profile )
+        console.log( "fd  : ", fd )
+        console.log( "updated supplier  : ", updatedSupplier )
+        console.log( "updated profile  : ", profile )
+        console.log( "updated source_address  : ", source_address )
+        console.log( "updated billing_address  : ", billing_address )
 
         // Saving the data to the database
         if( Object.keys(updatedSupplier).length  ){await new SupplierModel().updateUserDetails(updatedSupplier,fd.id,3).then((data)=>{console.log("supplier details updated successfully")})}
         if( Object.keys(profile).length  ){ await new SupplierModel().updateSuppliersProfileDetails(profile,fd.id).then((data)=>{console.log("supplier's profile details updated successfully")})}
-        if( Object.keys(billing_address).length ){ await new SupplierModel().updateSuppliersAddressDetails(billing_address,fd.id,2).then((data)=>{console.log("supplier's billing address details updated successfully")})}
-        if( Object.keys(source_address).length ){ await new SupplierModel().updateSuppliersAddressDetails(source_address,fd.id,3).then((data)=>{console.log("supplier's source address details updated successfully")})}
+        if( Object.keys(billing_address).length ){ await new SupplierModel().updateSuppliersAddressDetails(billing_address,fd.id,1).then((data)=>{console.log("supplier's billing address details updated successfully")})}
+        if( Object.keys(source_address).length ){ await new SupplierModel().updateSuppliersAddressDetails(source_address,fd.id,2).then((data)=>{console.log("supplier's source address details updated successfully")})}
         if( Object.keys(raw_material_mapping).length ){ await new SupplierModel().updateSuppliersRawMaterialMapping(raw_material_mapping,fd.id).then((data)=>{console.log("supplier's raw materials details updated successfully")})}
         if( Object.keys(packaging_mapping).length ){ await new SupplierModel().updateSuppliersPackagingMapping(packaging_mapping,fd.id).then((data)=>{console.log("supplier's packaging details updated successfully")})}
         return {"message" : "supplier updated successfully","changedRows":1};
