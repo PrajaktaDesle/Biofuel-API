@@ -80,14 +80,13 @@ const createSupplier = async (req:any) =>{
         return suppliersData;
 
     }catch(e:any){
-        console.log("Exception =>", e.message);
+        LOGGER.info("Exception =>", e.message);
         throw e;
     }
 }
 
 const fetchAllSuppliers = async (pageIndex: number, pageSize : number, sort : any, query : string ) =>{
     let suppliers;
-    console.log( "sort : ", sort )
     let orderQuery : string;
         if(sort.key != ""){
             orderQuery = " ORDER BY u."+ sort.key + " "+ sort.order +" ";
@@ -95,7 +94,6 @@ const fetchAllSuppliers = async (pageIndex: number, pageSize : number, sort : an
             orderQuery = "  ";
         }
     suppliers = await new SupplierModel().fetchAllSuppliers(pageSize, (pageIndex-1) * pageSize, orderQuery, query)
-    // console.log( "suppliers : " , suppliers )
     if (suppliers == null) throw new Error("Suppliers not found");
     return suppliers;
 }
@@ -227,19 +225,14 @@ const updateSupplierDetails = async (req:any) =>{
 
         // Multiple fl upload to s3Bucket
         if( Object.keys(s3Images).length ){ const s3Paths = await uploadFiles( s3Images ); Object.assign(profile, s3Paths); }
-        console.log( "fd  : ", fd )
-        console.log( "updated supplier  : ", updatedSupplier )
-        console.log( "updated profile  : ", profile )
-        console.log( "updated source_address  : ", source_address )
-        console.log( "updated billing_address  : ", billing_address )
-
+    
         // Saving the data to the database
-        if( Object.keys(updatedSupplier).length  ){await new SupplierModel().updateUserDetails(updatedSupplier,fd.id,3).then((data)=>{console.log("supplier details updated successfully")})}
-        if( Object.keys(profile).length  ){ await new SupplierModel().updateSuppliersProfileDetails(profile,fd.id).then((data)=>{console.log("supplier's profile details updated successfully")})}
-        if( Object.keys(billing_address).length ){ await new SupplierModel().updateSuppliersAddressDetails(billing_address,fd.id,1).then((data)=>{console.log("supplier's billing address details updated successfully")})}
-        if( Object.keys(source_address).length ){ await new SupplierModel().updateSuppliersAddressDetails(source_address,fd.id,2).then((data)=>{console.log("supplier's source address details updated successfully")})}
-        if( Object.keys(raw_material_mapping).length ){ await new SupplierModel().updateSuppliersRawMaterialMapping(raw_material_mapping,fd.id).then((data)=>{console.log("supplier's raw materials details updated successfully")})}
-        if( Object.keys(packaging_mapping).length ){ await new SupplierModel().updateSuppliersPackagingMapping(packaging_mapping,fd.id).then((data)=>{console.log("supplier's packaging details updated successfully")})}
+        if( Object.keys(updatedSupplier).length  ){await new SupplierModel().updateUserDetails(updatedSupplier,fd.id,3).then((data)=>{LOGGER.info("supplier details updated successfully")})}
+        if( Object.keys(profile).length  ){ await new SupplierModel().updateSuppliersProfileDetails(profile,fd.id).then((data)=>{LOGGER.info("supplier's profile details updated successfully")})}
+        if( Object.keys(billing_address).length ){ await new SupplierModel().updateSuppliersAddressDetails(billing_address,fd.id,1).then((data)=>{LOGGER.info("supplier's billing address details updated successfully")})}
+        if( Object.keys(source_address).length ){ await new SupplierModel().updateSuppliersAddressDetails(source_address,fd.id,2).then((data)=>{LOGGER.info("supplier's source address details updated successfully")})}
+        if( Object.keys(raw_material_mapping).length ){ await new SupplierModel().updateSuppliersRawMaterialMapping(raw_material_mapping,fd.id).then((data)=>{LOGGER.info("supplier's raw materials details updated successfully")})}
+        if( Object.keys(packaging_mapping).length ){ await new SupplierModel().updateSuppliersPackagingMapping(packaging_mapping,fd.id).then((data)=>{LOGGER.info("supplier's packaging details updated successfully")})}
         return {"message" : "supplier updated successfully","changedRows":1};
     }catch(e){
         LOGGER.info("Exception ->", e);

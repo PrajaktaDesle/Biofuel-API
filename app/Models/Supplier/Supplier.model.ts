@@ -18,7 +18,7 @@ export class SupplierModel extends UserModel
     }
    
     async fetchSupplierById(id: any ){
-        return await this._executeQuery(`SELECT u.id, u.name , u.email,  u.mobile as contact_no, a.latitude, a.longitude, p.grade , up.aadhaar_no, up.aadhaar_url, up.pan_no, up.pan_url, up.gstin_no, up.gstin_url, up.msme_no, up.msme_url,  u.status,
+        return await this._executeQuery(`SELECT u.id, u.name , u.email,  u.mobile as contact_no, a.latitude, a.longitude, p.grade , up.aadhaar_no, up.aadhaar_url, up.pan_no, up.pan_url, up.gstin_no, up.gstin_url, up.msme_no, up.msme_url,  u.status, up.comment,
                                          max(case when a.address_type = "2" then a.address ELSE null end) as source_address,
                                          max(case when a.address_type = "2" then st.id end) as source_state_id,
                                          max(case when a.address_type = "2" then st.name end) as source_state,
