@@ -174,7 +174,6 @@ const fetchCustomerById = async (id:any) => {
     }
 
 }
-
 const fetchAllCustomer = async (pageIndex: number, pageSize : number, sort : any, query : string) => {
     let orderQuery: string;
     try {
@@ -252,6 +251,19 @@ const fetchAllCSM = async(pageIndex: number, pageSize : number, sort : any, quer
             if (result.length == 0) throw new Error(" customer not found!")
         return result
     }catch (e) {
+        throw e
+    }
+}
+const fetchAllMappedSuppliers = async(customer_id :any) =>{
+    let result:any
+    try{
+        result = await new CustomerModel().fetchAllMappedSuppliers(customer_id)
+        if (result.length == 0){
+            throw new Error( " mapping not found")
+        }
+        return result
+    }
+    catch (e) {
         throw e
     }
 }
@@ -663,5 +675,6 @@ export default {
     createCustomerSalesOrder,
     updateCustomerSalesOrder,
     fetchCustomerSalesOrderById,
-    fetchAllCustomerSalesOrders
+    fetchAllCustomerSalesOrders, fetchAllMappedSuppliers
+
 }
