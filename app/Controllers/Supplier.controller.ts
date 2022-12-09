@@ -88,25 +88,31 @@ const verify_otp : IController = async ( req, res) => {
 }
 
 const fetchAllSuppliers: IController = async (req, res) => {
-    supplierService.fetchAllSuppliers()
-        .then( (suppliers) => {
-            if(suppliers instanceof Error){
-                apiResponse.error(
-                    res,
-                    httpStatusCodes.BAD_REQUEST,
-                    suppliers.message
-                );
-            }else{
-                apiResponse.result(res, suppliers, httpStatusCodes.OK);
-            }
-        }).catch(err => {
-        LOGGER.info("Error  ->", err);
-        apiResponse.error(
-            res,
-            httpStatusCodes.BAD_REQUEST,
-            //locale.INVALID_CREDENTIALS,
-        );
-    });
+    try{
+        let query = " "
+        if(req.body.query != ""){
+            query = ` and  u.name like '%${req.body.query}%' or a.address like '%${req.body.query}' or  st.name like '%${req.body.query}' or cty.name like '%${req.body.query}' `
+            // query = ` WHERE (u.name like '%${req.body.query}%' ' ) `
+        }
+        let suppliers = await supplierService.fetchAllSuppliers(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
+        let count = await supplierService.fetchAllSuppliersCount(query);
+        if ( suppliers instanceof Error ){
+           return apiResponse.error( res,
+                                    httpStatusCodes.BAD_REQUEST,
+                                    suppliers.message )
+        }
+        else{
+           return apiResponse.result( res,
+               {data :suppliers, total : count},
+               httpStatusCodes.OK )
+        }
+
+    }
+    catch (error:any) {
+        LOGGER.info( "Error => ", error )
+        return apiResponse.error( res,
+                                  httpStatusCodes.BAD_REQUEST )
+    }
 };
 
 

@@ -31,7 +31,7 @@ router.put(
     CustomerController.updateCSMStatus
 );
 router.post(
-    '/fetch/all/csm',
+    '/fetch/all',
     CustomerController.fetchAllCSM
 );
 

@@ -47,7 +47,6 @@ const createProduct = async (req: any) => {
             product = Object.assign(product, s3Path);
         }
        
-        console.log( "product : ", product )
         productData = await new ProductModel().createProduct(product)
         return productData;
 
