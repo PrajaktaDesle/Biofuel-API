@@ -93,10 +93,17 @@ export class CustomerModel extends BaseModel
         return await this._executeQuery("select * from customer_supplier_mapping where customer_id = ? and supplier_id = ? ", [customer_id, supplier_id])
     }
     async fetchAllCustomerSuppliers(limit : number, offset : number, sortOrder : string, query : string){
+        console.log( `SELECT csm.id, customer_id, cs.name as customer, supplier_id, sp.name as supplier,csm.status, csm.created_at , csm.updated_at FROM biofuel.customer_supplier_mapping csm
+        inner join biofuel.customers cs on cs.id=csm.customer_id
+        inner join biofuel.user sp on sp.id = csm.supplier_id 
+        `, query, sortOrder,`
+        
+        ${sortOrder}
+        LIMIT ? OFFSET ? `)
         return await this._executeQuery(`SELECT csm.id, customer_id, cs.name as customer, supplier_id, sp.name as supplier,csm.status, csm.created_at , csm.updated_at FROM biofuel.customer_supplier_mapping csm
                                                 inner join biofuel.customers cs on cs.id=csm.customer_id
                                                 inner join biofuel.user sp on sp.id = csm.supplier_id
-                                                ${query}
+                                                where csm.status  = 1  ${query}
                                                 ${sortOrder}
                                                 LIMIT ? OFFSET ? `,[limit, offset])
     }
