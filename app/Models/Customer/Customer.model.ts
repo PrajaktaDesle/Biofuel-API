@@ -79,7 +79,7 @@ export class CustomerModel extends BaseModel
                                                 , [customer_id,supplier_id]);
     }
     async create(customer_id :number, supplier_id:number){
-        let query = await this._executeQuery(`INSERT INTO customer_supplier_mapping(customer_id,address_id,supplier_id)
+         let query = await this._executeQuery(`INSERT INTO customer_supplier_mapping(customer_id,address_id,supplier_id)
                                                         select a.user_id as customer_id, a.id as address_id,sp.id as supplier_id
                                                         from biofuel.user as sp, biofuel.addresses as a
                                                         where (a.user_id = ? and address_type = 1 and user_type = 0) and (sp.id = ? and role_id = 3);
