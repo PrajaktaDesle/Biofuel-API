@@ -55,8 +55,8 @@ export class CustomerModel extends BaseModel
                                                 LEFT join biofuel.addresses a ON a.user_id=cs.id 
                                                 LEFT join biofuel.address_city cty ON a.city_id = cty.id
                                                 LEFT join biofuel.address_state st ON cty.state_id = st.id
-                                                group by cs.id                                       
                                                 ${query}
+                                                group by cs.id                                                                                  
                                                 ${sortOrder} 
                                                 LIMIT ? OFFSET ? `,[limit, offset])
     }
