@@ -85,7 +85,7 @@ const fetchAllCustomers: IController = async (req, res) => {
     try {
         let query = " "
         if (req.body.query != "") {
-            query = ` WHERE (p.name like '%${req.body.query}%' OR pc.name like '%${req.body.query}%' ) `
+            query = ` where cs.name like  '%${req.body.query}%' or cs.mobile like '%${req.body.query}%'  `
         }
         let customer = await customerService.fetchAllCustomer(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
         let count = await customerService.fetchAllCustomerCount(query);
