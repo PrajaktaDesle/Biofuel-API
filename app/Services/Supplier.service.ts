@@ -66,6 +66,7 @@ const createSupplier = async (req:any) =>{
         let user_id = suppliersData.insertId
         let profile = {"aadhaar_no":fd.aadhaar_no,"pan_no":fd.pan_no,"gstin_no":fd.gstin_no,"msme_no":fd.msme_no,"user_id":user_id, "comment":fd.comment || null, "payment_term": fd.payment_term, "grade": fd.grade}
         Object.assign( profile, s3Paths );
+        console.log( "fd : ", fd)
         let arr = []; 
         // fd.raw_material = fd.raw_material.replaceAll("\"\\[","[");
         for (let i = 1; i < fd.raw_material.length - 1; i+=2) {
@@ -123,7 +124,7 @@ const fetchSupplierById = async (id: any) => {
         let supplier = await new SupplierModel().fetchSupplierById( id );
         if (supplier.length == 0) throw new Error("Supplier not found");
         supplier[0].packaging = {label : supplier[0].packaging , value : supplier[0].packaging_id};
-        supplier[0].raw_material = {label : supplier[0].raw_material , value : supplier[0].raw_material_id};
+        supplier[0].raw_material = supplier[0].raw_material;
         supplier[0].billing_state = {label : supplier[0].billing_state , value : supplier[0].billing_state_id};
         supplier[0].billing_city = {label : supplier[0].billing_city , value : supplier[0].billing_city_id};
         supplier[0].source_state = {label : supplier[0].source_state , value : supplier[0].source_state_id};
