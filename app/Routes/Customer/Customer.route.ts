@@ -22,7 +22,7 @@ router.post(
 // customer-supplier mapping
 router.post(
     '/add',
-    // celebrate(CustomerSchema.customer_supplier),
+    celebrate(CustomerSchema.customer_supplier),
     CustomerController.Create_customer_supplier
 );
 router.put(

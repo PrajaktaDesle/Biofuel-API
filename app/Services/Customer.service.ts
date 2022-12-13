@@ -261,7 +261,7 @@ const fetchAllMappedSuppliers = async(customer_id :any) =>{
     try{
         result = await new CustomerModel().fetchAllMappedSuppliers(customer_id)
         if (result.length == 0){
-            throw new Error( " mapping not found")
+            throw new Error( " suppliers not found for the given customer")
         }
         return result
     }

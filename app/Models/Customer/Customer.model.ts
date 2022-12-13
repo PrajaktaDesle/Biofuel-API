@@ -104,7 +104,7 @@ export class CustomerModel extends BaseModel
        return await this._executeQuery(`SELECT cs.name as customer, supplier_id, sp.name as supplier,csm.status, csm.created_at , csm.updated_at FROM biofuel.customer_supplier_mapping csm
                                                 inner join biofuel.customers cs on cs.id=csm.customer_id
                                                 inner join biofuel.user sp on sp.id = csm.supplier_id
-                                                where csm.customer_id = ?`
+                                                where csm.customer_id = ? `
                                                 , [customer_id])
     }
     async fetch_csm_count(query:string){
