@@ -72,13 +72,13 @@ const fetchProductById = async (id: number) => {
         }
         product[0].image= config.baseUrl + "/" + product[0].image;
         product[0].category = {label : product[0].category , value : product[0].category_id};
-        product[0].usageUnit = {label : product[0].usage_unit , value : product[0].usage_unit_id};
+        product[0].usage_unit = {label : product[0].usage_unit , value : product[0].usage_unit_id};
         //product[0].imgList = [{file : product[0].image}]
         product[0].imgList = [{ file :"https://picsum.photos/200/300"}]
         if (product[0].status == 1){
-            product[0].productStatus = {value : 1, label : "Active"};
+            product[0].status = {value : 1, label : "Active"};
         }else{
-            product[0].productStatus = {value : 0, label : "Inactive"};
+            product[0].status = {value : 0, label : "Inactive"};
         }
         return product;
 
@@ -129,7 +129,7 @@ const fetchAllProducts = async (pageIndex: number, pageSize : number, sort : any
         if(sort.key != ""){
             orderQuery = " ORDER BY "+ sort.key + " "+ sort.order +" ";
         } else{
-            orderQuery = "  ";
+            orderQuery = " ORDER BY p.status DESC";
         }
         let products = await new ProductModel().fetchAllProducts(pageSize, (pageIndex-1) * pageSize, orderQuery, query)
         for(let i=0;i< products.length;i++) {
@@ -164,7 +164,6 @@ const updateProductById = async (req: any) => {
             })
         }))
         if (fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
-
         // supplier exists or not
         let pd = await new ProductModel().fetchProductById(fields.id)
         if (pd.length == 0) throw new Error("Product not found!")
@@ -214,7 +213,6 @@ const fetchAllProductRawMaterials = async ( ) =>{
     if (data.length == 0) {
             throw new Error("Raw materials not found!")
         }
-    console.log( data )
     return data 
 }
 
@@ -223,7 +221,6 @@ const fetchAllProductPackaging = async ( ) =>{
     if (data.length == 0) {
             throw new Error("packaging not found!")
         }
-    console.log( data )
     return data 
 }
 
