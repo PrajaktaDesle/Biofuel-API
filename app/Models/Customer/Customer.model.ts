@@ -63,9 +63,9 @@ export class CustomerModel extends BaseModel
     async fetchAllCustomerCount(query : string){
         return await this._executeQuery(`SELECT cs.id, cs.name as customerName, cs.email, cs.mobile as contactNo ,cs.payment_term,cs.status,cs.gstin, cs.gstin_url,a.address as shipping_address,a.address as billing_address,a.latitude, a.longitude, a.user_type,ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode, cs.created_at, cs.updated_at 
                                                    FROM biofuel.customers cs 
-                                                   inner join biofuel.addresses a ON a.user_id=cs.id 
-                                                   inner join biofuel.address_city ac ON ac.id=a.city_id 
-                                                   inner join biofuel.address_state ast ON ac.state_id=ast.id
+                                                   left join biofuel.addresses a ON a.user_id=cs.id 
+                                                   left join biofuel.address_city ac ON ac.id=a.city_id 
+                                                   left join biofuel.address_state ast ON ac.state_id=ast.id
                                                    ${query} 
                                                    group by cs.id`, [])
     }
