@@ -121,6 +121,7 @@ const fetchSupplierById = async (id: any) => {
     try {
         let supplier = await new SupplierModel().fetchSupplierById( id );
         if (supplier.length == 0) throw new Error("Supplier not found");
+        let rm = {label : supplier[0].raw_material , value : supplier[0].raw_material_id};
         supplier[0].packaging = {label : supplier[0].packaging , value : supplier[0].packaging_id};
         supplier[0].raw_material = supplier[0].raw_material;
         supplier[0].billing_state = {label : supplier[0].billing_state , value : supplier[0].billing_state_id};
@@ -140,7 +141,7 @@ const fetchSupplierById = async (id: any) => {
         supplier[0].aadhaar_img= config.baseUrl + "/" + supplier[0].aadhaar_img;
         supplier[0].gstin_img= config.baseUrl + "/" + supplier[0].gstin_img;
         supplier[0].msme_img= config.baseUrl + "/" + supplier[0].msme_img;
-
+//console.log("suppp ->",supplier[0])
         return supplier[0];
     }
     catch (e){
