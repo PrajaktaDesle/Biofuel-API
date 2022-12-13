@@ -15,6 +15,6 @@ hooks:
       timeout: 300
       runas: ubuntu
   ApplicationStart:
-    - location: /home/ubuntu/Biofuel-API/scripts/Applicationstart.sh
+    - location: ./scripts/Applicationstart.sh
       timeout: 300
       runas: ubuntu
