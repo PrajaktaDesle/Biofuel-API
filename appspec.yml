@@ -7,7 +7,7 @@ files:
 file_exists_behavior: OVERWRITE
 hooks:
   BeforeInstall:
-    - location: ./scripts/BeforeInstallHook.sh
+    - location: /scripts/BeforeInstallHook.sh
       timeout: 300
       runas: ubuntu
   AfterInstall:
