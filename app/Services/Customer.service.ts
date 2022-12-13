@@ -51,10 +51,9 @@ const createCustomer = async (req:any)=> {
         if(fields.longitude == undefined || fields.longitude == null || fields.longitude == "")*/
         // file validation
         var gstin_url: any;
-        console.log("files ", files)
-        if (files.gstin !== undefined && files.gstin !== null && files.gstin !== "") {
-            if (fileNotValid(files.gstin.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image");
-            gstin_url = files.gstin
+        if (files.gstin_img !== undefined && files.gstin_img !== null && files.gstin_img !== "") {
+            if (fileNotValid(files.gstin_img.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image");
+            gstin_url = files.gstin_img
         } else {
             throw new Error(" gst_url is required");
         }
@@ -106,8 +105,8 @@ const updateCustomerdetails = async (req:any)=> {
         if(fields.paymentTerm !== undefined && fields.paymentTerm !== null && fields.paymentTerm  !== "") customer.payment_term= fields.paymentTerm;
         let s3Image: any = {}
         let s3Path: any = {}
-        if (files.gstin !== undefined && files.gstin !== null && files.gstin !== "") {
-            if (fileNotValid(files.gstin.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image");else{s3Image['gstin_url'] = files.gstin
+        if (files.gstin_img !== undefined && files.gstin_img !== null && files.gstin_img !== "") {
+            if (fileNotValid(files.gstin_img.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image");else{s3Image['gstin_url'] = files.gstin_img
         }
         let name: string = "images/gstin_url/" + moment().unix() + "." + s3Image['gstin_url'].originalFilename.split(".").pop()
         const result = await uploadFile(s3Image['gstin_url'], name);
@@ -153,7 +152,7 @@ const fetchCustomerById = async (id:any) => {
         let customers = await new  CustomerModel().fetchCustomerById(id)
         if (customers.length == 0) throw new Error("Customer not found!");
         customers = customers[0];
-      //customers[0].gst= config.baseUrl + "/" + customers[0].gstin_url;
+        customers.gstin_img = config.baseUrl + "/" + customers.gstin_img
         customers.imgGst = ''
         customers.shipping = {}
         customers.shipping.state = {label : customers.shipping_state , value : customers.shipping_state_id};
@@ -180,7 +179,7 @@ const fetchAllCustomer = async (pageIndex: number, pageSize : number, sort : any
         if (sort.key != "") {
             orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
         } else {
-            orderQuery = "  ";
+            orderQuery = " ORDER BY cs.status DESC ";
         }
         let customers = await new CustomerModel().fetchAllCustomers(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
         if (customers.length == 0) throw new Error(" customer not found!")
@@ -247,7 +246,7 @@ const fetchAllCSM = async(pageIndex: number, pageSize : number, sort : any, quer
             if (sort.key != "") {
                 orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
             } else {
-                orderQuery = "  ";
+                orderQuery = " ";
             }
             let result = await new CustomerModel().fetchAllCustomerSuppliers(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
             if (result.length == 0) throw new Error(" customer not found!")

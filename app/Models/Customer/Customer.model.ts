@@ -15,7 +15,7 @@ export class CustomerModel extends BaseModel
     }
 
     async fetchCustomerById(id: any ){
-        return await this._executeQuery(`SELECT cs.id, cs.name as customerName, cs.email, cs.mobile as contactNo, cs.gstin as gstNo, cs.payment_term as paymentTerms, cs.status,
+        return await this._executeQuery(`SELECT cs.id, cs.name as customerName, cs.email, cs.mobile as contactNo, cs.gstin as gstNo, cs.gstin_url as gstin_img, cs.payment_term as paymentTerms, cs.status,
                                                 max(case when a.address_type = "1" then a.address ELSE null end) as shippingAddress,
                                                 max(case when a.address_type = "1" then st.id end) as shipping_state_id,
                                                 max(case when a.address_type = "1" then st.name end) as shipping_state,
@@ -61,12 +61,13 @@ export class CustomerModel extends BaseModel
                                                 LIMIT ? OFFSET ? `,[limit, offset])
     }
     async fetchAllCustomerCount(query : string){
-        return await this._executeQuery(`SELECT cs.id, cs.name as customer, cs.email, cs.mobile as contact_no,cs.payment_term,cs.status,cs.gstin, cs.gstin_url,a.address as shipping_address,a.address as billing_address,a.latitude, a.longitude, a.user_type,ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode, cs.created_at, cs.updated_at 
+        return await this._executeQuery(`SELECT cs.id, cs.name as customerName, cs.email, cs.mobile as contactNo ,cs.payment_term,cs.status,cs.gstin, cs.gstin_url,a.address as shipping_address,a.address as billing_address,a.latitude, a.longitude, a.user_type,ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode, cs.created_at, cs.updated_at 
                                                    FROM biofuel.customers cs 
                                                    inner join biofuel.addresses a ON a.user_id=cs.id 
                                                    inner join biofuel.address_city ac ON ac.id=a.city_id 
                                                    inner join biofuel.address_state ast ON ac.state_id=ast.id
-                                                   ${query} `, [])
+                                                   ${query} 
+                                                   group by cs.id`, [])
     }
     // customer-supplier mapping
     async createCSM(data: any) {
