@@ -84,7 +84,7 @@ const fetchAllCustomers: IController = async (req, res) => {
     try {
         let query = " "
         if (req.body.query != "") {
-            query = ` where cs.name like  '%${req.body.query}%' or cs.mobile like '%${req.body.query}%'  `
+            query = ` WHERE cs.name like '%${req.body.query}%' OR cty.name like '%${req.body.query}%' OR st.name like '%${req.body.query}'OR cs.mobile like '%${req.body.query}%' `
         }
         let customer = await customerService.fetchAllCustomer(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
         let count = await customerService.fetchAllCustomerCount(query);
@@ -391,6 +391,27 @@ const fetchAllCustomerSalesOrders : IController = async ( req:any , res:any ) =>
                                   httpStatusCodes.BAD_REQUEST )
     }
 }
+const fetchAllSuppliersAgainstCustomer: IController = async (req, res) => {
+    await CustomerService.fetchAllMappedSuppliers(req.body.customer_id)
+        .then( (customer : any) => {
+            if(customer instanceof Error){
+                console.log("User 2", customer.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    customer.message
+                );
+            }else{
+                apiResponse.result(res, customer, httpStatusCodes.OK);
+            }
+        }).catch( (err : any) => {
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                err.message
+            );
+        });
+};
 
 export default {
                 Create,
@@ -407,6 +428,6 @@ export default {
                 createCustomerSalesOrder,
                 updateCustomerSalesOrder,
                 fetchCustomerSalesOrderById,
-                fetchAllCustomerSalesOrders
-
+                fetchAllCustomerSalesOrders,
+                fetchAllSuppliersAgainstCustomer
 }

@@ -56,16 +56,16 @@ export class CustomerModel extends BaseModel
                                                 LEFT join biofuel.address_city cty ON a.city_id = cty.id
                                                 LEFT join biofuel.address_state st ON cty.state_id = st.id
                                                 ${query}
-                                                group by cs.id   
+                                                group by cs.id                                                                                  
                                                 ${sortOrder} 
                                                 LIMIT ? OFFSET ? `,[limit, offset])
     }
     async fetchAllCustomerCount(query : string){
         return await this._executeQuery(`SELECT cs.id, cs.name as customerName, cs.email, cs.mobile as contactNo ,cs.payment_term,cs.status,cs.gstin, cs.gstin_url,a.address as shipping_address,a.address as billing_address,a.latitude, a.longitude, a.user_type,ac.id as city_id , ac.name as city, ac.state_id, ast.name as state, a.pincode, cs.created_at, cs.updated_at 
                                                    FROM biofuel.customers cs 
-                                                   inner join biofuel.addresses a ON a.user_id=cs.id 
-                                                   inner join biofuel.address_city ac ON ac.id=a.city_id 
-                                                   inner join biofuel.address_state ast ON ac.state_id=ast.id
+                                                   left join biofuel.addresses a ON a.user_id=cs.id 
+                                                   left join biofuel.address_city ac ON ac.id=a.city_id 
+                                                   left join biofuel.address_state ast ON ac.state_id=ast.id
                                                    ${query} 
                                                    group by cs.id`, [])
     }
@@ -80,7 +80,7 @@ export class CustomerModel extends BaseModel
                                                 , [customer_id,supplier_id]);
     }
     async create(customer_id :number, supplier_id:number){
-        let query = await this._executeQuery(`INSERT INTO customer_supplier_mapping(customer_id,address_id,supplier_id)
+         let query = await this._executeQuery(`INSERT INTO customer_supplier_mapping(customer_id,address_id,supplier_id)
                                                         select a.user_id as customer_id, a.id as address_id,sp.id as supplier_id
                                                         from biofuel.user as sp, biofuel.addresses as a
                                                         where (a.user_id = ? and address_type = 1 and user_type = 0) and (sp.id = ? and role_id = 3);
@@ -94,19 +94,19 @@ export class CustomerModel extends BaseModel
         return await this._executeQuery("select * from customer_supplier_mapping where customer_id = ? and supplier_id = ? ", [customer_id, supplier_id])
     }
     async fetchAllCustomerSuppliers(limit : number, offset : number, sortOrder : string, query : string){
-        console.log( `SELECT csm.id, customer_id, cs.name as customer, supplier_id, sp.name as supplier,csm.status, csm.created_at , csm.updated_at FROM biofuel.customer_supplier_mapping csm
-        inner join biofuel.customers cs on cs.id=csm.customer_id
-        inner join biofuel.user sp on sp.id = csm.supplier_id 
-        `, query, sortOrder,`
-        
-        ${sortOrder}
-        LIMIT ? OFFSET ? `)
-        return await this._executeQuery(`SELECT csm.id, customer_id, cs.name as customer, supplier_id, sp.name as supplier,csm.status, csm.created_at , csm.updated_at FROM biofuel.customer_supplier_mapping csm
+        return await this._executeQuery(`SELECT csm.id, customer_id, cs.name as customer, count(supplier_id) as supplierCount FROM biofuel.customer_supplier_mapping csm
                                                 inner join biofuel.customers cs on cs.id=csm.customer_id
-                                                inner join biofuel.user sp on sp.id = csm.supplier_id
                                                 where csm.status  = 1  ${query}
+                                                group by csm.customer_id
                                                 ${sortOrder}
                                                 LIMIT ? OFFSET ? `,[limit, offset])
+    }
+    async fetchAllMappedSuppliers(customer_id:number){
+       return await this._executeQuery(`SELECT cs.name as customer, supplier_id, sp.name as supplier,csm.status, csm.created_at , csm.updated_at FROM biofuel.customer_supplier_mapping csm
+                                                inner join biofuel.customers cs on cs.id=csm.customer_id
+                                                inner join biofuel.user sp on sp.id = csm.supplier_id
+                                                where csm.customer_id = ? `
+                                                , [customer_id])
     }
     async fetch_csm_count(query:string){
         return await this._executeQuery(`SELECT customer_id, cs.name as customer, supplier_id, sp.name as supplier,csm.status, csm.created_at , csm.updated_at FROM biofuel.customer_supplier_mapping csm
