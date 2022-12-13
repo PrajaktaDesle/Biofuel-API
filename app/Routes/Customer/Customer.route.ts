@@ -31,7 +31,7 @@ router.put(
     CustomerController.updateCSMStatus
 );
 router.post(
-    '/fetch/all',
+    '/fetch/all/csm',
     CustomerController.fetchAllCSM
 );
 
@@ -81,6 +81,9 @@ router.get(
   '/sales/order/fetch/all',
   CustomerController.fetchAllCustomerSalesOrders
 );
+router.get(
+    '/fetch/suppliers/By-customerId',
+    CustomerController.fetchAllSuppliersAgainstCustomer
 
-
+);
 export default router;

@@ -173,7 +173,6 @@ const fetchCustomerById = async (id:any) => {
     }
 
 }
-
 const fetchAllCustomer = async (pageIndex: number, pageSize : number, sort : any, query : string) => {
     let orderQuery: string;
     try {
@@ -205,15 +204,17 @@ const fetchAllCustomerCount =async(query : string) => {
 
 // customer-supplier mapping
 const CreateCSMService = async(req:any)=>{
-    let data,result:any
+    let result, suppliers:any
     try{
         if(req.body.customer_id !== undefined && req.body.customer_id !== null && req.body.customer_id !== "")
         if(req.body.supplier_id !== undefined && req.body.supplier_id !== null && req.body.supplier_id !== "")
         //  data= await new CustomerModel().fetchCustomerSupplier(req.body.customer_id,req.body.supplier_id)
         // if(data.length == 0) throw new Error("csm ids not found")
         // result = await new CustomerModel().createCSM(data[0])
-        // console.log('result in service----------->', result)
-        result = await new CustomerModel().create(req.body.customer_id,req.body.supplier_id)
+        suppliers = req.body.supplier_id
+        for( var i = 0 ; i < suppliers.length ; i++){
+            result = await new CustomerModel().create(req.body.customer_id,suppliers[i])
+        }
         if (result.insertId == 0){
            return  {message:" entry not found  ",insertId:result.insertId}
         }
@@ -251,6 +252,19 @@ const fetchAllCSM = async(pageIndex: number, pageSize : number, sort : any, quer
             if (result.length == 0) throw new Error(" customer not found!")
         return result
     }catch (e) {
+        throw e
+    }
+}
+const fetchAllMappedSuppliers = async(customer_id :any) =>{
+    let result:any
+    try{
+        result = await new CustomerModel().fetchAllMappedSuppliers(customer_id)
+        if (result.length == 0){
+            throw new Error( " suppliers not found for the given customer")
+        }
+        return result
+    }
+    catch (e) {
         throw e
     }
 }
@@ -662,5 +676,6 @@ export default {
     createCustomerSalesOrder,
     updateCustomerSalesOrder,
     fetchCustomerSalesOrderById,
-    fetchAllCustomerSalesOrders
+    fetchAllCustomerSalesOrders, fetchAllMappedSuppliers
+
 }

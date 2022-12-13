@@ -40,29 +40,28 @@ const createNotification: IController = async (req, res) => {
 
 
 const fetchAllnotifications: IController = async (req, res) => {
-    notificationService.fetchAllNotifications()
-        .then( (notifications) => {
-            if(notifications instanceof Error){
-                console.log("User 2", notifications.message)
-                apiResponse.error(
-                    res,
-                    httpStatusCodes.BAD_REQUEST,
-                    notifications.message
-                );
-            }else{
-                console.log("User 3", notifications)
-                apiResponse.result(res, notifications, httpStatusCodes.OK);
-            }
-        }).catch(err => {
-        console.log("Error  ->", err);
-        apiResponse.error(
-            res,
+    try {
+        let query = ""
+        if (req.body.query != "") {
+            query = ` WHERE (p.name like '%${req.body.query}%' OR sp.name like '%${req.body.query}%' ) `
+        }
+        let result = await notificationService.fetchAllNotifications(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
+        let count = await notificationService.fetchNotificationCount(query);
+        if (result instanceof Error) {
+            return apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST,
+                result.message)
+        } else {
+            return apiResponse.result(res,
+                {data: result, total: count},
+                httpStatusCodes.OK)
+        }
+    }catch (error:any) {
+        return apiResponse.error( res,
             httpStatusCodes.BAD_REQUEST,
-            //locale.INVALID_CREDENTIALS,
-        );
-    });
-};
-
+            error.message)
+    }
+}
 
 const fetchNotificationById: IController = async (req, res) => {
     notificationService.fetchNotificationById(req.query.id)

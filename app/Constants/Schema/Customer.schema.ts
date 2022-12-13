@@ -49,7 +49,7 @@ export default {
     customer_supplier: {
         [Segments.BODY]:  Joi.object().keys({
             customer_id: Joi.number().required(),
-            supplier_id: Joi.number().required()
+            supplier_id: Joi.array().required()
         }).unknown()
     },
     updateStatus: {
