@@ -250,6 +250,7 @@ const fetchAllCSM = async(pageIndex: number, pageSize : number, sort : any, quer
             }
             let result = await new CustomerModel().fetchAllCustomerSuppliers(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
             if (result.length == 0) throw new Error(" customer not found!")
+        console.log( "result : ", result )
         return result
     }catch (e) {
         throw e

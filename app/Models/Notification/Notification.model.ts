@@ -27,18 +27,18 @@ export class NotificationModel extends BaseModel
     }
     async fetchAll(limit : number, offset : number, sortOrder : string, query : string) {
         return await this._executeQuery(` select pon.id,spo.supplier_id, sp.name as supplier, sp.mobile,spo.po_number, pon.delivery_date, pon.quantity, pon.status,pon.created_at, pon.updated_at 
-                                                from biofuel.purchase_order_dispatch_notifications pon
-                                                inner join biofuel.supplier_purchase_order spo on spo.id = pon.purchase_order_id
-                                                inner join biofuel.user sp on sp.id = spo.supplier_id
+                                                from purchase_order_dispatch_notifications pon
+                                                inner join supplier_purchase_order spo on spo.id = pon.purchase_order_id
+                                                inner join user sp on sp.id = spo.supplier_id
                                                  ${query}
                                                 ${sortOrder}
                                                 LIMIT ? OFFSET ? `,[limit, offset])
     }
     async fetchNotificationCount(query : string){
         return await this._executeQuery(`select pon.id,spo.supplier_id, sp.name as supplier, sp.mobile,spo.po_number, pon.delivery_date, pon.quantity, pon.status,pon.created_at, pon.updated_at 
-                                                from biofuel.purchase_order_dispatch_notifications pon
-                                                inner join biofuel.supplier_purchase_order spo on spo.id = pon.purchase_order_id
-                                                inner join biofuel.user sp on sp.id = spo.supplier_id
+                                                from purchase_order_dispatch_notifications pon
+                                                inner join supplier_purchase_order spo on spo.id = pon.purchase_order_id
+                                                inner join user sp on sp.id = spo.supplier_id
                                                 ${query}`,[])
     }
 }

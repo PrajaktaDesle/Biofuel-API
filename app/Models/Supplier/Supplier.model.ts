@@ -35,19 +35,19 @@ export class SupplierModel extends UserModel
                                          
                                          CAST(CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT('value', rm.raw_material_id, 'label', pr.name)), ']') AS JSON) as raw_material, 
                                          packaging_id, pp.name as packaging, u.created_at, u.updated_at 
-                                         FROM biofuel.user u 
-                                         left join biofuel.addresses a ON a.user_id=u.id  
-                                         left join biofuel.address_city cty ON a.city_id = cty.id
-                                         left join biofuel.address_state st ON cty.state_id = st.id
+                                         FROM user u 
+                                         left join addresses a ON a.user_id=u.id  
+                                         left join address_city cty ON a.city_id = cty.id
+                                         left join address_state st ON cty.state_id = st.id
                                          
-                                         left join biofuel.users_profile p ON u.id=p.user_id
+                                         left join users_profile p ON u.id=p.user_id
                                          
-                                         left join biofuel.users_profile up ON u.id = up.user_id
+                                         left join users_profile up ON u.id = up.user_id
                                          
-                                         LEFT join biofuel.supplier_raw_material_mapping rm ON rm.supplier_id = u.id
-                                         LEFT join biofuel.supplier_packaging_mapping pm ON pm.supplier_id = u.id
-                                         left join biofuel.product_raw_material pr on rm.raw_material_id=pr.id
-                                         left join biofuel.product_packaging pp on pm.packaging_id=pp.id
+                                         LEFT join supplier_raw_material_mapping rm ON rm.supplier_id = u.id
+                                         LEFT join supplier_packaging_mapping pm ON pm.supplier_id = u.id
+                                         left join product_raw_material pr on rm.raw_material_id=pr.id
+                                         left join product_packaging pp on pm.packaging_id=pp.id
                                          where u.id = ?  and rm.status=1
                                          group by u.id;`, [id]);
     }  
