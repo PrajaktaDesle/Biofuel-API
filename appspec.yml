@@ -7,14 +7,14 @@ files:
 file_exists_behavior: OVERWRITE
 hooks:
   BeforeInstall:
-    - location: ./scripts/BeforeInstallHook.sh
+    - location: /home/ubuntu/Biofuel-API/scripts/BeforeInstallHook.sh
       timeout: 300
       runas: ubuntu
   AfterInstall:
-    - location: ./scripts/AfterInstallHook.sh
+    - location: /home/ubuntu/Biofuel-API/scripts/AfterInstallHook.sh
       timeout: 300
       runas: ubuntu
   ApplicationStart:
-    - location: ./scripts/Applicationstart.sh
+    - location: /home/ubuntu/Biofuel-API/scripts/Applicationstart.sh
       timeout: 300
       runas: ubuntu
