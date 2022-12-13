@@ -11,7 +11,7 @@ hooks:
       timeout: 300
       runas: ubuntu
   AfterInstall:
-    - location: /home/ubuntu/Biofuel-API/scripts/AfterInstallHook.sh
+    - location: ./scripts/AfterInstallHook.sh
       timeout: 300
       runas: ubuntu
   ApplicationStart:
