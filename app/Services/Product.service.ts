@@ -163,7 +163,6 @@ const updateProductById = async (req: any) => {
                 resolve({ fields: fields, files: files })
             })
         }))
-        console.log( "fl : ", files, "fd : ", fields)
         if (fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
         // supplier exists or not
         let pd = await new ProductModel().fetchProductById(fields.id)
@@ -214,7 +213,6 @@ const fetchAllProductRawMaterials = async ( ) =>{
     if (data.length == 0) {
             throw new Error("Raw materials not found!")
         }
-    console.log( data )
     return data 
 }
 
@@ -223,7 +221,6 @@ const fetchAllProductPackaging = async ( ) =>{
     if (data.length == 0) {
             throw new Error("packaging not found!")
         }
-    console.log( data )
     return data 
 }
 
