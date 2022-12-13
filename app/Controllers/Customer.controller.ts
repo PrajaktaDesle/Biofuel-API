@@ -12,7 +12,6 @@ const Create: IController = async (req, res) => {
     try {
         customer = await CustomerService.createCustomer(req)
         if (customer instanceof Error) {
-            console.log("error", customer)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
             apiResponse.result(res, {

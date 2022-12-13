@@ -66,13 +66,11 @@ const createSupplier = async (req:any) =>{
         let user_id = suppliersData.insertId
         let profile = {"aadhaar_no":fd.aadhaar_no,"pan_no":fd.pan_no,"gstin_no":fd.gstin_no,"msme_no":fd.msme_no,"user_id":user_id, "comment":fd.comment || null, "payment_term": fd.payment_term, "grade": fd.grade}
         Object.assign( profile, s3Paths );
-        console.log( "fd : ", fd)
         let arr = []; 
         // fd.raw_material = fd.raw_material.replaceAll("\"\\[","[");
         for (let i = 1; i < fd.raw_material.length - 1; i+=2) {
            arr.push([user_id,fd.raw_material[i],1])
         }
-        console.log( "arr : ", arr )
         await new SupplierModel().supplierRawMaterialMappingMany(arr)
         await new SupplierModel().supplierPackagingMapping({"supplier_id":user_id,"packaging_id":fd.packaging})
         suppliersProfile = await new SupplierModel().createSuppliersProfile( profile )
@@ -160,7 +158,6 @@ const updateSupplierDetails = async (req:any) =>{
                     resolve({fd: fd, fl: fl});})}));
         
         let id=Number(fd.id);
-        console.log( "fl : ", fl, "fd : ", fd )
 
         let updatedSupplier : any = {}, profile : any = {}, billing_address : any = {}, source_address:any = {}, packaging_mapping:any = {}, raw_material_mapping:any = {}, result:any = {}, city:any = {}, state:any = {};
 
