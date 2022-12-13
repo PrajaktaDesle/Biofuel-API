@@ -51,7 +51,6 @@ const createCustomer = async (req:any)=> {
         if(fields.longitude == undefined || fields.longitude == null || fields.longitude == "")*/
         // file validation
         var gstin_url: any;
-        console.log("files ", files)
         if (files.gstin_img !== undefined && files.gstin_img !== null && files.gstin_img !== "") {
             if (fileNotValid(files.gstin_img.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image");
             gstin_url = files.gstin_img
@@ -94,7 +93,6 @@ const updateCustomerdetails = async (req:any)=> {
                 resolve({fields: fields, files: files});
             })
         }));
-        console.log( "fd : ", fields )
         if(fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
          customer_details = await new CustomerModel().fetchCustomerById(fields.id)
         if (customer_details.length == 0) throw new Error("id not found!")
