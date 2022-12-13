@@ -68,7 +68,7 @@ const fetchAllProducts : IController = async ( req:any , res:any ) => {
     try{
         let query = " "
         if(req.body.query != ""){
-            query = ` WHERE (p.name like '%${req.body.query}%' OR pc.name like '%${req.body.query}%' ) `
+            query = ` WHERE (p.name like '%${req.body.query}%' OR p.hsn like '%${req.body.query}%' ) `
         }
 
         let product = await productService.fetchAllProducts(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
