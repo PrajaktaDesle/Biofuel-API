@@ -26,7 +26,7 @@ const createProduct = async (req: any) => {
         if (fields.hsn == undefined || fields.hsn == null || fields.hsn == "") throw new Error("hsn is required");
         product.hsn = fields.hsn;
         if (fields.gst == undefined || fields.gst == null || fields.gst == "") throw new Error("gst is required");
-        product.gst = fields.gst;
+        product.igst = fields.gst;
         if (fields.user_id == undefined || fields.user_id == null || fields.user_id == "") throw new Error("user_id is required");
         product.user_id = fields.user_id;
         if (fields.usage_unit == undefined || fields.usage_unit == null || fields.usage_unit == "") throw new Error("usage_unit is required");
@@ -176,7 +176,7 @@ const updateProductById = async (req: any) => {
         if (fields.hsn !== undefined && fields.hsn !== null && fields.hsn !== "")
             product.hsn = fields.hsn;
         if (fields.gst !== undefined && fields.gst !== null && fields.gst !== "")
-            product.gst = fields.gst;
+            product.igst = fields.gst;
         if (fields.status !== undefined && fields.status !== null && fields.status !== "")
             product.status = fields.status;
         if (fields.usage_unit !== undefined && fields.usage_unit !== null && fields.usage_unit !== ""){
