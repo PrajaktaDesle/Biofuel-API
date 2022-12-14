@@ -11,7 +11,7 @@ export class ProductModel extends BaseModel
         return await this._executeQuery( "insert into products set ? ", [productData] )
     }
     async fetchProductById( id : any){
-        return await this._executeQuery( "select p.id , p.name, p.description, p.hsn , p.gst, category_id, pc.name as category,\n" +
+        return await this._executeQuery( "select p.id , p.name, p.description, p.hsn , p.igst as gst, category_id, pc.name as category,\n" +
             "usage_unit_id, pu.name as usage_unit,p.image, p.status \n" +
             "from products p\n" +
             "LEFT join product_categories pc ON  p.category_id = pc.id\n" +
@@ -20,7 +20,7 @@ export class ProductModel extends BaseModel
     }
 
     async fetchAllProducts(limit : number, offset : number, sortOrder : string, query : string){
-            return await this._executeQuery( `select p.id , p.name, p.description, p.hsn, p.gst, category_id, pc.name as category,
+            return await this._executeQuery( `select p.id , p.name, p.description, p.hsn, p.igst as gst, category_id, pc.name as category,
                                               usage_unit_id, pu.name as usage_unit, p.status 
                                               from products p
                                               inner join product_categories pc ON  p.category_id = pc.id
@@ -31,7 +31,7 @@ export class ProductModel extends BaseModel
     }
 
     async fetchAllProductCount(query : string){
-        return await this._executeQuery( `select p.id , p.name, p.description, p.hsn, p.gst, category_id, pc.name as category,
+        return await this._executeQuery( `select p.id , p.name, p.description, p.hsn, p.igst as gst, category_id, pc.name as category,
                                               usage_unit_id, pu.name as usage_unit, p.status 
                                               from products p
                                               inner join product_categories pc ON  p.category_id = pc.id
