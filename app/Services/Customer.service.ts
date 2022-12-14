@@ -213,7 +213,7 @@ const CreateCSMService = async(req:any)=>{
         // result = await new CustomerModel().createCSM(data[0])
         suppliers = req.body.supplier_id
         for( var i = 0 ; i < suppliers.length ; i++){
-            result = await new CustomerModel().create(req.body.customer_id,suppliers[i])
+            result = await new CustomerModel().createCustomerSupplierMapping(req.body.customer_id,suppliers[i])
         }
         if (result.insertId == 0){
            return  {message:" entry not found  ",insertId:result.insertId}

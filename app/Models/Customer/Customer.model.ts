@@ -77,13 +77,12 @@ export class CustomerModel extends BaseModel {
                                                where (a.user_id  = ? and address_type = 1 and user_type = 0) and (sp.id = ? and role_id = 3);`
             , [customer_id, supplier_id]);
     }
-    async create(customer_id: number, supplier_id: number) {
-        let query = await this._executeQuery(`INSERT INTO customer_supplier_mapping(customer_id,address_id,supplier_id)
+    async createCustomerSupplierMapping(customer_id: number, supplier_id: number) {
+        return await this._executeQuery(`INSERT INTO customer_supplier_mapping(customer_id,address_id,supplier_id)
                                                         select a.user_id as customer_id, a.id as address_id,sp.id as supplier_id
                                                         from user as sp, addresses as a
-                                                        where (a.user_id = ? and address_type = 1 and user_type = 0) and (sp.id = ? and role_id = 3);
+                                                        where (a.user_id = ? and address_type = 0 and user_type = 0) and (sp.id = ? and role_id = 3);
                                                          `, [customer_id, supplier_id])
-        return query
     }
     async updateStatusById(data: any, customer_id: number, supplier_id: number) {
         return await this._executeQuery("update customer_supplier_mapping set ? where  customer_id  = ? and supplier_id = ? ", [data, customer_id, supplier_id])

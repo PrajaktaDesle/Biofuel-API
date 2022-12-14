@@ -42,8 +42,8 @@ router.get(
   '/home/page',
   supplierController.getHomePage
 );
-router.post(
-    '/fetch/all/By-State',
+router.get(
+    '/fetch/by-state',
     celebrate(supplierSchema.fetchSupplierByState),
     supplierController.fetchAllSuppliersByState
 )
