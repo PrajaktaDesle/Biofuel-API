@@ -16,18 +16,18 @@ export class CustomerModel extends BaseModel
 
     async fetchCustomerById(id: any ){
         return await this._executeQuery(`SELECT cs.id, cs.name as customerName, cs.email, cs.mobile as contactNo, cs.gstin as gstNo, cs.gstin_url as gstin_img, cs.payment_term as paymentTerms, cs.status,
-                                                max(case when a.address_type = "1" then a.address ELSE null end) as shippingAddress,
-                                                max(case when a.address_type = "1" then st.id end) as shipping_state_id,
-                                                max(case when a.address_type = "1" then st.name end) as shipping_state,
-                                                max(case when a.address_type = "1" then cty.id end) as shipping_city_id,
-                                                max(case when a.address_type = "1" then cty.name end) as shipping_city,
-                                                max(case when a.address_type = "1" then a.pincode end) as shippingPincode,
-                                                max(case when a.address_type = "0" then a.address ELSE null end) as billingAddress,
-                                                max(case when a.address_type = "0" then st.id end) as billing_state_id,
-                                                max(case when a.address_type = "0" then st.name end) as billing_state,
-                                                max(case when a.address_type = "0" then cty.id end) as billing_city_id,
-                                                max(case when a.address_type = "0" then cty.name end) as billing_city,
-                                                max(case when a.address_type = "0" then a.pincode end) as billingPincode,
+                                                max(case when a.address_type = "0" then a.address ELSE null end) as shippingAddress,
+                                                max(case when a.address_type = "0" then st.id end) as shipping_state_id,
+                                                max(case when a.address_type = "0" then st.name end) as shipping_state,
+                                                max(case when a.address_type = "0" then cty.id end) as shipping_city_id,
+                                                max(case when a.address_type = "0" then cty.name end) as shipping_city,
+                                                max(case when a.address_type = "0" then a.pincode end) as shippingPincode,
+                                                max(case when a.address_type = "1" then a.address ELSE null end) as billingAddress,
+                                                max(case when a.address_type = "1" then st.id end) as billing_state_id,
+                                                max(case when a.address_type = "1" then st.name end) as billing_state,
+                                                max(case when a.address_type = "1" then cty.id end) as billing_city_id,
+                                                max(case when a.address_type = "1" then cty.name end) as billing_city,
+                                                max(case when a.address_type = "1" then a.pincode end) as billingPincode,
                                                 cs.created_at, cs.updated_at 
                                                 FROM biofuel.customers cs 
                                                 LEFT join biofuel.addresses a ON a.user_id=cs.id 
@@ -38,18 +38,18 @@ export class CustomerModel extends BaseModel
     }
     async  fetchAllCustomers(limit : number, offset : number, sortOrder : string, query : string){
         return await this._executeQuery(`SELECT cs.id, cs.name as customerName, cs.email, cs.mobile as contactNo, cs.gstin as gstNo, cs.payment_term as paymentTerms, cs.status,
-                                                max(case when a.address_type = "1" then a.address ELSE null end) as shippingAddress,
-                                                max(case when a.address_type = "1" then st.id end) as shipping_state_id,
-                                                max(case when a.address_type = "1" then st.name end) as shipping_state,
-                                                max(case when a.address_type = "1" then cty.id end) as shipping_city_id,
-                                                max(case when a.address_type = "1" then cty.name end) as shipping_city,
-                                                max(case when a.address_type = "1" then a.pincode end) as shippingPincode,
-                                                max(case when a.address_type = "0" then a.address ELSE null end) as billingAddress,
-                                                max(case when a.address_type = "0" then st.id end) as billing_state_id,
-                                                max(case when a.address_type = "0" then st.name end) as billing_state,
-                                                max(case when a.address_type = "0" then cty.id end) as billing_city_id,
-                                                max(case when a.address_type = "0" then cty.name end) as billing_city,
-                                                max(case when a.address_type = "0" then a.pincode end) as billingPincode,
+                                                max(case when a.address_type = "0" then a.address ELSE null end) as shippingAddress,
+                                                max(case when a.address_type = "0" then st.id end) as shipping_state_id,
+                                                max(case when a.address_type = "0" then st.name end) as shipping_state,
+                                                max(case when a.address_type = "0" then cty.id end) as shipping_city_id,
+                                                max(case when a.address_type = "0" then cty.name end) as shipping_city,
+                                                max(case when a.address_type = "0" then a.pincode end) as shippingPincode,
+                                                max(case when a.address_type = "1" then a.address ELSE null end) as billingAddress,
+                                                max(case when a.address_type = "1" then st.id end) as billing_state_id,
+                                                max(case when a.address_type = "1" then st.name end) as billing_state,
+                                                max(case when a.address_type = "1" then cty.id end) as billing_city_id,
+                                                max(case when a.address_type = "1" then cty.name end) as billing_city,
+                                                max(case when a.address_type = "1" then a.pincode end) as billingPincode,
                                                 cs.created_at, cs.updated_at 
                                                 FROM biofuel.customers cs 
                                                 LEFT join biofuel.addresses a ON a.user_id=cs.id 

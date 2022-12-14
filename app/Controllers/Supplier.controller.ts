@@ -185,9 +185,26 @@ const getHomePage: IController = async (req, res) => {
     }
 };
 
-
-
-
+const fetchAllSuppliersByState: IController = async (req, res) => {
+    try{
+        let suppliers = await supplierService.fetchSuppliersByState(req)
+        if ( suppliers instanceof Error ){
+            return apiResponse.error( res,
+                httpStatusCodes.BAD_REQUEST,
+                suppliers.message )
+        }
+        else{
+            return apiResponse.result( res,
+                 suppliers,
+                httpStatusCodes.OK )
+        }
+    }
+    catch (error:any) {
+        LOGGER.info( "Error => ", error )
+        return apiResponse.error( res,
+            httpStatusCodes.BAD_REQUEST ,error.message)
+    }
+};
 
 export default {
     register,
@@ -196,5 +213,6 @@ export default {
     fetchAllSuppliers,
     fetchSupplierById,
     updateSupplierDetails,
-    getHomePage
+    getHomePage,
+    fetchAllSuppliersByState
 };

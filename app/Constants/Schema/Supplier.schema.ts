@@ -18,7 +18,11 @@ export default {
         [Segments.QUERY]:{
             id:Joi.number().required()
         }
+    },
+    fetchSupplierByState:{
+        [Segments.BODY]:{
+            state:Joi.string().required()
+        }
     }
-
 
 };
