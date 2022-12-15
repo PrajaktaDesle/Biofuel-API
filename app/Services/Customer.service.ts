@@ -10,7 +10,7 @@ import { AddressModel } from "../Models/Address/Address.model"
 const createCustomer = async (req:any)=> {
     try {
         let CustomerData,fields, files;
-        let customer: any = {}, shippingAddress : any = {address_type: 1, user_type:0}, billingAddress : any = {address_type: 0, user_type:0};
+        let customer: any = {}, shippingAddress : any = {address_type: 0, user_type:0}, billingAddress : any = {address_type: 1, user_type:0};
         //@ts-ignore
         ({fields, files} = await new Promise((resolve) => {
             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
@@ -138,8 +138,8 @@ const updateCustomerdetails = async (req:any)=> {
         if(fields.longitude !== undefined && fields.longitude !== null && fields.longitude !== "")
          billingAddress.longitude = fields.longitude
         if( Object.keys(customer).length){await new CustomerModel().updateCustomer(customer,fields.id).then((data)=>{console.log("updated successfully")})}
-        if( Object.keys(billingAddress).length){await new AddressModel().updateAddress(billingAddress ,fields.id,0).then((data)=>{console.log("updated billing address")})}
-        if( Object.keys(shippingAddress).length) await new AddressModel().updateAddress(shippingAddress,fields.id,1).then((data)=>{console.log("shipping address updated successfully")})
+        if( Object.keys(billingAddress).length){await new AddressModel().updateAddress(billingAddress ,fields.id,1).then((data)=>{console.log("updated billing address")})}
+        if( Object.keys(shippingAddress).length) await new AddressModel().updateAddress(shippingAddress,fields.id,0).then((data)=>{console.log("shipping address updated successfully")})
         return {message:"updated successfully "};
     }catch(e:any){
         LOGGER.info("Exception =>", e.message);
