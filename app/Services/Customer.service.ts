@@ -162,9 +162,9 @@ const fetchCustomerById = async (id:any) => {
         customers.billingCity = {label : customers.billing_city , value : customers.billing_city_id};
         customers.billingState = {label : customers.billing_state , value : customers.billing_state_id};
         if (customers.status == 1){
-            customers.customerStatus = {value : 1, label : "Active"};
+            customers.status = {value : 1, label : "Active"};
         }else{
-            customers.customerStatus = {value : 0, label : "Inactive"};
+            customers.status = {value : 0, label : "Inactive"};
         }
         return customers;
     }

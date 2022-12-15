@@ -94,7 +94,7 @@ const fetchAllSuppliers = async (pageIndex: number, pageSize : number, sort : an
     let suppliers;
     let orderQuery : string;
         if(sort.key != ""){
-            orderQuery = " ORDER BY u."+ sort.key + " "+ sort.order +" ";
+            orderQuery = " ORDER BY "+ sort.key + " "+ sort.order +" ";
         } else{
             orderQuery = " ORDER By CASE WHEN u.status=0 THEN 1 WHEN u.status=1 THEN 2 WHEN u.status=-1 THEN 3 END";
         }
