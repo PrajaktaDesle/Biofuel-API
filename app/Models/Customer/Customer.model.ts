@@ -169,4 +169,13 @@ export class CustomerModel extends BaseModel {
     async salesOrderExistsOrNot(id: number) {
         return await this._executeQuery("select id from customer_sales_orders where id = ? ", [id])
     }
+    async fetchALLActiveCustomers(){
+       return await this._executeQuery(`select a.id as value ,
+                                               concat(cs.name , ac.name) as label
+                                               from biofuel.addresses a
+                                               inner join biofuel.customers cs on cs.id = a.user_id and a.address_type = 0
+                                               inner join biofuel.address_city ac on ac.id = a.city_id
+                                               where a.user_type = 0 and cs.status = 1;
+                                               `,[])
+    }
 }

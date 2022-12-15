@@ -21,7 +21,7 @@ export default {
     },
     fetchSupplierByState:{
         [Segments.BODY]:{
-            state:Joi.string().required()
+            state:Joi.number().required()
         }
     }
 

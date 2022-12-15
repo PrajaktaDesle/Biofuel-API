@@ -412,6 +412,28 @@ const fetchAllSuppliersAgainstCustomer: IController = async (req, res) => {
             );
         });
 };
+const fetchAllActiveCustomers: IController = async (req, res) => {
+    await CustomerService.fetchAllActiveCustomerService()
+        .then( (customer : any) => {
+            if(customer instanceof Error){
+                console.log("User 2", customer.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    customer.message
+                );
+            }else{
+                apiResponse.result(res, customer, httpStatusCodes.OK);
+            }
+        }).catch( (err : any) => {
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                err.message
+            );
+        });
+};
+
 
 export default {
                 Create,
@@ -429,5 +451,6 @@ export default {
                 updateCustomerSalesOrder,
                 fetchCustomerSalesOrderById,
                 fetchAllCustomerSalesOrders,
-                fetchAllSuppliersAgainstCustomer
+                fetchAllSuppliersAgainstCustomer,
+                fetchAllActiveCustomers
 }

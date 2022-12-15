@@ -6,6 +6,8 @@ import moment from 'moment';
 import * as fs from "fs";
 import { CustomerModel } from "../Models/Customer/Customer.model";
 import { AddressModel } from "../Models/Address/Address.model"
+import customerController from "../Controllers/Customer.controller";
+const _ = require("lodash");
 
 const createCustomer = async (req:any)=> {
     try {
@@ -642,10 +644,8 @@ const fetchCustomerSalesOrderById = async (id: number) => {
     catch (error: any) {
         return error
     }
-
 }
 const fetchAllCustomerSalesOrders= async () => {
-
     try {
         let sales_order = await new CustomerModel().fetchAllCustomerSalesOrders()
         if (sales_order.length == 0) {
@@ -657,9 +657,23 @@ const fetchAllCustomerSalesOrders= async () => {
     catch (error: any) {
         return error
     }
-
 }
-
+const fetchAllActiveCustomerService = async () =>{
+    try {
+       let customer  = await new CustomerModel().fetchALLActiveCustomers()
+        if( customer.length == 0 )throw new Error( "customer not found")
+        // for(var i = 0 ; i < customer.length; i++) {
+        //     let label = customer[i].name + ','+ customer[i].city
+        //     customer[i].lable = label
+        //     delete customer[i].name
+        //     delete customer[i].city
+        // }
+        return {address : customer}
+    }
+    catch (error: any) {
+        return error
+    }
+}
 export default {
     createCustomer,
     fetchCustomerById,
@@ -677,6 +691,6 @@ export default {
     createCustomerSalesOrder,
     updateCustomerSalesOrder,
     fetchCustomerSalesOrderById,
-    fetchAllCustomerSalesOrders, fetchAllMappedSuppliers
-
+    fetchAllCustomerSalesOrders, fetchAllMappedSuppliers,
+    fetchAllActiveCustomerService
 }

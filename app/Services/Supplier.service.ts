@@ -312,7 +312,7 @@ const getHomePage = async ( ) =>{
 const fetchSuppliersByState = async (req:any) => {
      let result, state
       try {
-        state = req.body.state
+        state = req.query.state
         // @ts-ignore
         result = await new SupplierModel().getSuppliersByState(state)
         if (result.length == 0) throw new Error(" supplier not found!")

@@ -81,9 +81,14 @@ router.get(
   '/sales/order/fetch/all',
   CustomerController.fetchAllCustomerSalesOrders
 );
-router.post(
-    '/fetch/suppliers/By-customerId',
+router.get(
+    '/fetch/map-suppliers',
     CustomerController.fetchAllSuppliersAgainstCustomer
+
+);
+router.get(
+    '/fetch/active',
+    CustomerController.fetchAllActiveCustomers
 
 );
 export default router;

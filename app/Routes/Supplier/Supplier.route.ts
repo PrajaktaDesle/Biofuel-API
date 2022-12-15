@@ -43,7 +43,7 @@ router.get(
   supplierController.getHomePage
 );
 router.get(
-    '/fetch/by-state',
+    '/fetch/all/by-state',
     celebrate(supplierSchema.fetchSupplierByState),
     supplierController.fetchAllSuppliersByState
 )
