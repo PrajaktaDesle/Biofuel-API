@@ -262,7 +262,13 @@ const fetchCustomerEstimateById : IController = async ( req:any , res:any ) => {
 
 const fetchAllCustomerEstimates : IController = async ( req:any , res:any ) => {
     try{
-        let estimate = await CustomerService.fetchAllCustomerEstimates( )
+        let query = " "
+        if (req.body.query != "") {
+            query = ` WHERE cs.name like '%${req.body.query}%' OR cty.name like '%${req.body.query}%' OR st.name like '%${req.body.query}'OR cs.mobile like '%${req.body.query}%' `
+        }
+        let estimate = await CustomerService.fetchAllCustomerEstimates( req.body.pageIndex, req.body.pageSize, req.body.sort, query )
+        let count = await customerService.fetchAllCustomerEsimatesCount(query);
+
         if ( estimate instanceof Error ){
            return apiResponse.error( res,
                                     httpStatusCodes.BAD_REQUEST,
@@ -270,7 +276,7 @@ const fetchAllCustomerEstimates : IController = async ( req:any , res:any ) => {
         }
         else{
            return apiResponse.result( res,
-                                     estimate,
+                                     { data : estimate, total : count },
                                      httpStatusCodes.OK )
         }
     }
@@ -373,7 +379,12 @@ const fetchCustomerSalesOrderById : IController = async ( req:any , res:any ) =>
 
 const fetchAllCustomerSalesOrders : IController = async ( req:any , res:any ) => {
     try{
-        let estimate = await CustomerService.fetchAllCustomerSalesOrders( )
+        let query = " "
+        if (req.body.query != "") {
+            query = ` WHERE cs.name like '%${req.body.query}%' OR cty.name like '%${req.body.query}%' OR st.name like '%${req.body.query}'OR cs.mobile like '%${req.body.query}%' `
+        }
+        let estimate = await CustomerService.fetchAllCustomerSalesOrders(req.body.pageIndex, req.body.pageSize, req.body.sort, query )
+        let count = await CustomerService.fetchAllCustomerSalesOrdersCount(query);
         if ( estimate instanceof Error ){
            return apiResponse.error( res,
                                     httpStatusCodes.BAD_REQUEST,
@@ -381,7 +392,7 @@ const fetchAllCustomerSalesOrders : IController = async ( req:any , res:any ) =>
         }
         else{
            return apiResponse.result( res,
-                                     estimate,
+                                     {data : estimate , total : count },
                                      httpStatusCodes.OK )
         }
     }
