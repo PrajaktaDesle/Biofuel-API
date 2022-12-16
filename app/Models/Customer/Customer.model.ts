@@ -84,11 +84,11 @@ export class CustomerModel extends BaseModel {
                                                         where (a.user_id = ? and address_type = 0 and user_type = 0) and (sp.id = ? and role_id = 3);
                                                          `, [customer_id, supplier_id])
     }
-    async updateStatusById(data: any, customer_id: number, supplier_id: number) {
-        return await this._executeQuery("update customer_supplier_mapping set ? where  customer_id  = ? and supplier_id = ? ", [data, customer_id, supplier_id])
+    async updateStatusById(id:number, status:number) {
+        return await this._executeQuery("update customer_supplier_mapping set status = ? where id = ? ", [id,status])
     }
-    async fetchCSM(customer_id: any, supplier_id: any) {
-        return await this._executeQuery("select * from customer_supplier_mapping where customer_id = ? and supplier_id = ? ", [customer_id, supplier_id])
+    async fetchCSM(id:number) {
+        return await this._executeQuery("select * from customer_supplier_mapping where id = ? ", [id])
     }
     async fetchAllCustomerSuppliers(limit: number, offset: number, sortOrder: string, query: string) {
         // return await this._executeQuery(`SELECT csm.id, customer_id, cs.name as customer,FLOOR((count(csm.supplier_id)/2)) as supplier, case when a.address_type=0 then ast.name ELSE null end as state FROM customer_supplier_mapping csm
@@ -171,11 +171,22 @@ export class CustomerModel extends BaseModel {
     }
     async fetchALLActiveCustomers(){
        return await this._executeQuery(`select a.id as value ,
-                                               concat(cs.name , ac.name) as label
+                                               concat(cs.name ,', ', ac.name) as label
                                                from biofuel.addresses a
                                                inner join biofuel.customers cs on cs.id = a.user_id and a.address_type = 0
                                                inner join biofuel.address_city ac on ac.id = a.city_id
                                                where a.user_type = 0 and cs.status = 1;
                                                `,[])
+    }
+    async fetchAllmappedSuppliersByAddressId(address_id :number){
+        return await this._executeQuery(`select csm.supplier_id ,sp.name as supplier,ac.name as city, ast.name as state,
+                                                csm.status, csm.created_at, csm.updated_at
+                                                from biofuel.customer_supplier_mapping csm
+                                                inner join biofuel.addresses a on a.user_id = csm.supplier_id  
+                                                inner join biofuel.user sp on sp.id = a.user_id
+                                                inner join biofuel.address_city ac on ac.id = a.city_id and a.address_type = 1
+                                                inner join biofuel.address_state ast on ast.id = ac.state_id
+                                                where csm.address_id = ? and csm.status = 1
+                                                 `,[address_id])
     }
 }

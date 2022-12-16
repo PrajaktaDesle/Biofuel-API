@@ -26,7 +26,7 @@ router.post(
     CustomerController.Create_customer_supplier
 );
 router.put(
-    '/update/status',
+    '/update/mapping/status',
     celebrate(CustomerSchema.updateStatus),
     CustomerController.updateCSMStatus
 );
@@ -89,6 +89,11 @@ router.get(
 router.get(
     '/fetch/active',
     CustomerController.fetchAllActiveCustomers
+
+);
+router.get(
+    '/fetch/suppliers',
+    CustomerController.fetchAllMappedSuppliers
 
 );
 export default router;

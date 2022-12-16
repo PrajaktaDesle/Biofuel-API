@@ -227,13 +227,12 @@ const CreateCSMService = async(req:any)=>{
 }
 
 const updateCSMService = async(req:any)=>{
-    let result,CSM, data;
+    let result,CSM;
     try{
 
-        CSM = await new CustomerModel().fetchCSM(req.body.customer_id,req.body.supplier_id)
+        CSM = await new CustomerModel().fetchCSM(req.body.id)
         if(CSM.length == 0) throw new Error("id not found");
-        data = {"status":req.body.status }
-        result = await new CustomerModel().updateStatusById(data, req.body.customer_id,req.body.supplier_id)
+        result = await new CustomerModel().updateStatusById(req.body.id, req.body.status)
         LOGGER.info( " result", result )
         console.log( result )
         return {"changedRows":result.changedRows};
@@ -674,6 +673,18 @@ const fetchAllActiveCustomerService = async () =>{
         return error
     }
 }
+const  fetchSuppliers = async (req:any) =>{
+    try {
+        let address_id = req.query.address_id
+        let suppliers  = await new CustomerModel().fetchAllmappedSuppliersByAddressId(address_id)
+        if( suppliers.length == 0 )throw new Error( "customer not found")
+
+        return {suppliers : suppliers}
+    }
+    catch (error: any) {
+        return error
+    }
+}
 export default {
     createCustomer,
     fetchCustomerById,
@@ -692,5 +703,5 @@ export default {
     updateCustomerSalesOrder,
     fetchCustomerSalesOrderById,
     fetchAllCustomerSalesOrders, fetchAllMappedSuppliers,
-    fetchAllActiveCustomerService
+    fetchAllActiveCustomerService,fetchSuppliers
 }
