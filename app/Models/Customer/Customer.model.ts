@@ -130,13 +130,15 @@ export class CustomerModel extends BaseModel {
                                           inner join product_packaging pp ON pp.id=es.packaging_id
                                           where es.id = ?;`, [id])
     }
-    async fetchAllCustomerEstimates() {
-        return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, estimate_date, expiry_date, estimate_no , es.id ,product_id,p.name as product_name, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, adjustment_amount*rate as total_amount FROM customer_estimates es
+    async fetchAllCustomerEstimates(limit: number, offset: number, sortOrder: string, query: string) {
+        return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, DATE_FORMAT(estimate_date, '%d-%m-%Y')  as estimate_date ,DATE_FORMAT(expiry_date, '%d-%m-%Y')  as expiry_date , estimate_no , es.id ,product_id,p.name as product_name, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, adjustment_amount*rate as total_amount FROM customer_estimates es
                                           inner join products p ON p.id=es.product_id
                                           inner join customers cs ON cs.id=es.customer_id
                                           inner join product_raw_material rm ON rm.id=es.raw_material_id
                                           inner join product_packaging pp ON pp.id=es.packaging_id
-                                          order by es.status desc`, [])
+                                          ${query}
+                                          ${sortOrder} 
+                                          LIMIT ? OFFSET ?`, [limit, offset])
     }
     async updateCustomerEstimateById(data: any, id: number) {
         return await this._executeQuery("update customer_estimates set ? where id = ? ", [data, id])
@@ -161,10 +163,14 @@ export class CustomerModel extends BaseModel {
                                           inner join product_packaging pp ON pp.id=so.packaging_id
                                           where so.id = ?`, [id])
     }
-    async fetchAllCustomerSalesOrders() {
-        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status, so_date, delivery_date, estimate_id ,product_id,p.name as product, product_description, adjustment_amount*rate as total_amount FROM customer_sales_orders so
+    async fetchAllCustomerSalesOrders(limit: number, offset: number, sortOrder: string, query: string) {
+        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status, DATE_FORMAT(so_date, '%d-%m-%Y')  as so_date, DATE_FORMAT(delivery_date, '%d-%m-%Y') as delivery_date, estimate_id ,product_id,p.name as product, product_description, adjustment_amount*rate as total_amount FROM customer_sales_orders so
                                           inner join products p ON p.id=so.product_id
-                                          inner join customers cs ON cs.id=so.customer_id`, [])
+                                          inner join customers cs ON cs.id=so.customer_id
+                                          ${query}
+                                          ${sortOrder} 
+                                          LIMIT ? OFFSET ? `, [limit, offset])
+
     }
     async salesOrderExistsOrNot(id: number) {
         return await this._executeQuery("select id from customer_sales_orders where id = ? ", [id])
@@ -189,4 +195,23 @@ export class CustomerModel extends BaseModel {
                                                 where csm.address_id = ? and csm.status = 1
                                                  `,[address_id])
     }
+    async fetchAllCustomerEstimatesCount(query:string) {
+        return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, estimate_date, expiry_date, estimate_no , es.id ,product_id,p.name as product_name, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, adjustment_amount*rate as total_amount FROM customer_estimates es
+        inner join products p ON p.id=es.product_id
+        inner join customers cs ON cs.id=es.customer_id
+        inner join product_raw_material rm ON rm.id=es.raw_material_id
+        inner join product_packaging pp ON pp.id=es.packaging_id
+        ${query}
+        `, [])
+
+    }
+    async fetchAllCustomerSalesOrdersCount( query: string ) {
+        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status, so_date, delivery_date, estimate_id ,product_id,p.name as product, product_description, adjustment_amount*rate as total_amount FROM customer_sales_orders so
+                                          inner join products p ON p.id=so.product_id
+                                          inner join customers cs ON cs.id=so.customer_id
+                                          ${query}
+                                          `, [])
+
+    }
+
 }

@@ -481,10 +481,15 @@ const fetchCustomerEstimateById = async (id: number) => {
 
 }
 
-const fetchAllCustomerEstimates = async () => {
-
+const fetchAllCustomerEstimates = async (pageIndex: number, pageSize : number, sort : any, query : string) => {
+    let orderQuery: string;
     try {
-        let estimates = await new CustomerModel().fetchAllCustomerEstimates()
+        if (sort.key != "") {
+            orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
+        } else {
+            orderQuery = " ORDER BY es.status DESC ";
+        }
+        let estimates = await new CustomerModel().fetchAllCustomerEstimates(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
         if( estimates.length == 0 ){
             throw new Error( "Estimates not found")
         }
@@ -495,6 +500,16 @@ const fetchAllCustomerEstimates = async () => {
         return error
     }
 
+}
+
+const fetchAllCustomerEsimatesCount = async (query : string) => {
+    try {
+        let estimates = await new CustomerModel().fetchAllCustomerEstimatesCount(query);
+        return estimates.length;
+    }
+    catch (error: any) {
+        return error
+    }
 }
 
 const createCustomerSalesOrder = async (data: any) => {
@@ -643,10 +658,18 @@ const fetchCustomerSalesOrderById = async (id: number) => {
     catch (error: any) {
         return error
     }
+
 }
-const fetchAllCustomerSalesOrders= async () => {
+const fetchAllCustomerSalesOrders= async (pageIndex: number, pageSize : number, sort : any, query : string) => {
+    let orderQuery: string;
+
     try {
-        let sales_order = await new CustomerModel().fetchAllCustomerSalesOrders()
+        if (sort.key != "") {
+            orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
+        } else {
+            orderQuery = " ORDER BY cs.status DESC ";
+        }
+        let sales_order = await new CustomerModel().fetchAllCustomerSalesOrders(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
         if (sales_order.length == 0) {
             throw new Error("Sales orders not found!")
         }
@@ -668,6 +691,15 @@ const fetchAllActiveCustomerService = async () =>{
         //     delete customer[i].city
         // }
         return {address : customer}
+    }
+    catch (error: any) {
+        return error
+    }
+}
+const fetchAllCustomerSalesOrdersCount =async(query : string) => {
+    try {
+        let customers = await new CustomerModel().fetchAllCustomerSalesOrdersCount(query);
+        return customers.length;
     }
     catch (error: any) {
         return error
@@ -703,5 +735,7 @@ export default {
     updateCustomerSalesOrder,
     fetchCustomerSalesOrderById,
     fetchAllCustomerSalesOrders, fetchAllMappedSuppliers,
+    fetchAllCustomerEsimatesCount,
+    fetchAllCustomerSalesOrdersCount,
     fetchAllActiveCustomerService,fetchSuppliers
 }

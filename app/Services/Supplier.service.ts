@@ -261,7 +261,7 @@ const loginSupplier = async ( data : any ) => {
         if ( supplier.length === 0 ) throw new Error( "User does not exist");
         if ( supplier[0].status !== 1 ) throw new Error( "Your account is not active");
         // const otp = Math.floor( 100000 + Math.random() * 900000 )
-        const otp  = "123456";
+        const otp  = "1234";
         LOGGER.info("otp", otp )
         data.otp = otp;
         data.user_id = supplier[0].id;

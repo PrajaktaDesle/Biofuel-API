@@ -47,7 +47,7 @@ router.get(
     CustomerController.fetchCustomerEstimateById
 );
 
-router.get(
+router.post(
     '/estimate/fetch/all',
     CustomerController.fetchAllCustomerEstimates
 );
@@ -77,7 +77,7 @@ router.get(
   CustomerController.fetchCustomerSalesOrderById
 );
 
-router.get( 
+router.post( 
   '/sales/order/fetch/all',
   CustomerController.fetchAllCustomerSalesOrders
 );
