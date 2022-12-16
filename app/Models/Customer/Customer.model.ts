@@ -172,22 +172,22 @@ export class CustomerModel extends BaseModel {
     async fetchALLActiveCustomers(){
        return await this._executeQuery(`select a.id as value ,
                                                concat(cs.name ,', ', ac.name) as label
-                                               from biofuel.addresses a
-                                               inner join biofuel.customers cs on cs.id = a.user_id and a.address_type = 0
-                                               inner join biofuel.address_city ac on ac.id = a.city_id
-                                               where a.user_type = 0 and cs.status = 1;
+                                               from addresses a
+                                               inner join customers cs on a.user_id = cs.id 
+                                               inner join biofuel.address_city ac on a.city_id = ac.id
+                                               where a.user_type = 0 and a.address_type = 0 and cs.status = 1;
                                                `,[])
     }
     async fetchAllmappedSuppliersByAddressId(address_id :number){
         return await this._executeQuery(`select csm.supplier_id ,sp.name as supplier,ac.name as city, ast.name as state,
                                                 csm.status, csm.created_at, csm.updated_at
-                                                from biofuel.customer_supplier_mapping csm
-                                                inner join biofuel.addresses a on a.user_id = csm.supplier_id  
-                                                inner join biofuel.user sp on sp.id = a.user_id
-                                                inner join biofuel.address_city ac on ac.id = a.city_id and a.address_type = 1
-                                                inner join biofuel.address_state ast on ast.id = ac.state_id
-                                                where csm.address_id = ? and csm.status = 1
-                                                 `,[address_id])
+                                                from customer_supplier_mapping csm
+                                                inner join addresses a on csm.supplier_id = a.user_id 
+                                                inner join user sp on a.user_id = sp.id
+                                                inner join address_city ac on a.city_id = ac.id and a.address_type = 1
+                                                inner join address_state ast on ac.state_id = ast.id
+                                                where csm.address_id = 20 and csm.status = 1
+                                                `,[address_id])
     }
     async fetchAllCustomerEstimatesCount(query:string) {
         return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, estimate_date, expiry_date, estimate_no , es.id ,product_id,p.name as product_name, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, adjustment_amount*rate as total_amount FROM customer_estimates es

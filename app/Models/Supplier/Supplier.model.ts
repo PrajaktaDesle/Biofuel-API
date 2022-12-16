@@ -128,10 +128,10 @@ export class SupplierModel extends UserModel
     async getSuppliersByState(state_id:number){
         return await this._executeQuery(`select sp.id, sp.name as supplier,sp.status,
                                                   ac.name as city,st.name as state
-                                                  from biofuel.user sp
-                                                  inner join biofuel.addresses a on a.user_id = sp.id  
-                                                  inner join biofuel.address_city ac on ac.id = a.city_id
-                                                  inner join biofuel.address_state st on st.id = ac.state_id
+                                                  from user sp
+                                                  inner join addresses a on sp.id = a.user_id 
+                                                  inner join address_city ac on  a.city_id = ac.id 
+                                                  inner join address_state st on ac.state_id = st.id 
                                                   where a.address_type = 1 and sp.status = 1 and st.id = ?
                                                   `, [state_id])
     }
