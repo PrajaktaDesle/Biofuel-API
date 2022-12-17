@@ -689,7 +689,21 @@ const fetchAllCustomerSalesOrdersCount =async(query : string) => {
         return error
     }
 }
+const fetchAllCustomersJson = async (  ) => {
+    try{
+        let result = await new CustomerModel().fetchAllCustomersJson();
+        if( result[0].customers.length === 0 ){
+            throw new Error("Customers  not found!")
 
+        }
+        else{
+            return result[0].customers
+        }
+    }
+    catch(err){
+        return err 
+    }
+}
 export default {
     createCustomer,
     fetchCustomerById,
@@ -709,7 +723,7 @@ export default {
     fetchCustomerSalesOrderById,
     fetchAllCustomerSalesOrders, fetchAllMappedSuppliers,
     fetchAllCustomerEsimatesCount,
-    fetchAllCustomerSalesOrdersCount
-    
+    fetchAllCustomerSalesOrdersCount,
+    fetchAllCustomersJson
 
 }

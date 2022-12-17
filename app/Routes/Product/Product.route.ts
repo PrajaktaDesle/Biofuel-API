@@ -42,4 +42,9 @@ router.get(
   '/packaging/all',
    productController.fetchAllProductPackaging
 )
+
+router.get(
+  '/list/all',
+   productController.fetchAllProductsList
+)
 export default router;

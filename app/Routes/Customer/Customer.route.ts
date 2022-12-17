@@ -86,4 +86,9 @@ router.post(
     CustomerController.fetchAllSuppliersAgainstCustomer
 
 );
+router.get(
+    '/fetch/list',
+    CustomerController.fetchAllCustomersJson
+
+);
 export default router;
