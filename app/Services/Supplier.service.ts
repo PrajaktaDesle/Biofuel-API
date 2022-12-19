@@ -7,6 +7,7 @@ let config = require("../config");
 import moment from 'moment';
 import Encryption from "../utilities/Encryption";
 import fs from 'fs';
+import {CustomerModel} from "../Models/Customer/Customer.model";
 
 const createSupplier = async (req:any) =>{
     try{
@@ -308,7 +309,18 @@ const getHomePage = async ( ) =>{
     LOGGER.info( data )
     return data 
 }
-
+const fetchSuppliersByState = async (req:any) => {
+     let result, state
+      try {
+        state = req.query.state
+        // @ts-ignore
+        result = await new SupplierModel().getSuppliersByState(state)
+        if (result.length == 0) throw new Error(" supplier not found!")
+        return result;
+    } catch (e) {
+        return e
+    }
+}
 
 
 
@@ -320,5 +332,6 @@ export default {
     updateSupplierDetails,
     verify_supplier_otp,
     getHomePage,
-    fetchAllSuppliersCount
+    fetchAllSuppliersCount,
+    fetchSuppliersByState
 }

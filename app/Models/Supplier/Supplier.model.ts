@@ -125,5 +125,14 @@ export class SupplierModel extends UserModel
     async getHomePage(){
         return await this._executeQuery( "select id , name, image_url from app_homepage ",[])
     }
-
+    async getSuppliersByState(state_id:number){
+        return await this._executeQuery(`select sp.id, sp.name as supplier,sp.status,
+                                                  ac.name as city,st.name as state
+                                                  from user sp
+                                                  inner join addresses a on sp.id = a.user_id 
+                                                  inner join address_city ac on  a.city_id = ac.id 
+                                                  inner join address_state st on ac.state_id = st.id 
+                                                  where a.address_type = 1 and sp.status = 1 and st.id = ?
+                                                  `, [state_id])
+    }
 }

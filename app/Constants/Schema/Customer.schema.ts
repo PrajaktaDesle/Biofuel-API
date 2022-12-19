@@ -44,7 +44,6 @@ export default {
             id:Joi.number().required()
         }
     },
-    
 
     customer_supplier: {
         [Segments.BODY]:  Joi.object().keys({
@@ -54,8 +53,7 @@ export default {
     },
     updateStatus: {
         [Segments.BODY]:  Joi.object().keys({
-            customer_id: Joi.number().required(),
-            supplier_id: Joi.number().required(),
+            id:Joi.number().required(),
             status: Joi.number().required().min(0).max(1)
         }).unknown()
     },
