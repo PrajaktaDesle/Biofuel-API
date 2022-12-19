@@ -44,7 +44,6 @@ export default {
             id:Joi.number().required()
         }
     },
-
     customer_supplier: {
         [Segments.BODY]:  Joi.object().keys({
             customer_id: Joi.number().required(),
@@ -55,6 +54,16 @@ export default {
         [Segments.BODY]:  Joi.object().keys({
             id:Joi.number().required(),
             status: Joi.number().required().min(0).max(1)
+        }).unknown()
+    },
+     getsuppliers: {
+        [Segments.QUERY]:  Joi.object().keys({
+            address_id:Joi.number().required(),
+        }).unknown()
+    },
+    getsuppliersByCustomerId: {
+        [Segments.BODY]:  Joi.object().keys({
+            customer_id:Joi.number().required(),
         }).unknown()
     },
     createCustomerSalesOrder: {

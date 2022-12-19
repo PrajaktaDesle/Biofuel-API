@@ -261,9 +261,7 @@ const fetchAllMappedSuppliers = async(customer_id :any) =>{
     let result:any
     try{
         result = await new CustomerModel().fetchAllMappedSuppliers(customer_id)
-        if (result.length == 0){
-            throw new Error( " suppliers not found for the given customer")
-        }
+        if (result.length == 0) throw new Error( " suppliers not found for the given customer")
         return result
     }
     catch (e) {
@@ -710,7 +708,6 @@ const  fetchSuppliers = async (req:any) =>{
         let address_id = req.query.address_id
         let suppliers  = await new CustomerModel().fetchAllmappedSuppliersByAddressId(address_id)
         if( suppliers.length == 0 )throw new Error( "customer not found")
-
         return {suppliers : suppliers}
     }
     catch (error: any) {

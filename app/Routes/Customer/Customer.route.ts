@@ -83,6 +83,7 @@ router.post(
 );
 router.get(
     '/fetch/map-suppliers',
+    celebrate(CustomerSchema.getsuppliersByCustomerId),
     CustomerController.fetchAllSuppliersAgainstCustomer
 
 );
@@ -93,6 +94,7 @@ router.get(
 );
 router.get(
     '/fetch/suppliers',
+    celebrate(CustomerSchema.getsuppliers),
     CustomerController.fetchAllMappedSuppliers
 
 );

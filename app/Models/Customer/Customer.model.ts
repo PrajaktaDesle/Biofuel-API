@@ -186,7 +186,7 @@ export class CustomerModel extends BaseModel {
                                                 inner join user sp on a.user_id = sp.id
                                                 inner join address_city ac on a.city_id = ac.id and a.address_type = 1
                                                 inner join address_state ast on ac.state_id = ast.id
-                                                where csm.address_id = 20 and csm.status = 1
+                                                where csm.address_id = ? and csm.status = 1
                                                 `,[address_id])
     }
     async fetchAllCustomerEstimatesCount(query:string) {
