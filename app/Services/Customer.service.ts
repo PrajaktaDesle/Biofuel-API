@@ -6,11 +6,13 @@ import moment from 'moment';
 import * as fs from "fs";
 import { CustomerModel } from "../Models/Customer/Customer.model";
 import { AddressModel } from "../Models/Address/Address.model"
+import customerController from "../Controllers/Customer.controller";
+const _ = require("lodash");
 
 const createCustomer = async (req:any)=> {
     try {
         let CustomerData,fields, files;
-        let customer: any = {}, shippingAddress : any = {address_type: 1, user_type:0}, billingAddress : any = {address_type: 0, user_type:0};
+        let customer: any = {}, shippingAddress : any = {address_type: 0, user_type:0}, billingAddress : any = {address_type: 1, user_type:0};
         //@ts-ignore
         ({fields, files} = await new Promise((resolve) => {
             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
@@ -138,8 +140,8 @@ const updateCustomerdetails = async (req:any)=> {
         if(fields.longitude !== undefined && fields.longitude !== null && fields.longitude !== "")
          billingAddress.longitude = fields.longitude
         if( Object.keys(customer).length){await new CustomerModel().updateCustomer(customer,fields.id).then((data)=>{console.log("updated successfully")})}
-        if( Object.keys(billingAddress).length){await new AddressModel().updateAddress(billingAddress ,fields.id,0).then((data)=>{console.log("updated billing address")})}
-        if( Object.keys(shippingAddress).length) await new AddressModel().updateAddress(shippingAddress,fields.id,1).then((data)=>{console.log("shipping address updated successfully")})
+        if( Object.keys(billingAddress).length){await new AddressModel().updateAddress(billingAddress ,fields.id,1).then((data)=>{console.log("updated billing address")})}
+        if( Object.keys(shippingAddress).length) await new AddressModel().updateAddress(shippingAddress,fields.id,0).then((data)=>{console.log("shipping address updated successfully")})
         return {message:"updated successfully "};
     }catch(e:any){
         LOGGER.info("Exception =>", e.message);
@@ -213,10 +215,10 @@ const CreateCSMService = async(req:any)=>{
         // result = await new CustomerModel().createCSM(data[0])
         suppliers = req.body.supplier_id
         for( var i = 0 ; i < suppliers.length ; i++){
-            result = await new CustomerModel().create(req.body.customer_id,suppliers[i])
+            result = await new CustomerModel().createCustomerSupplierMapping(req.body.customer_id,suppliers[i])
         }
         if (result.insertId == 0){
-           return  {message:" entry not found  ",insertId:result.insertId}
+           return  {message:" entry not found ",insertId:result.insertId}
         }
         return {message:"added successfully ",insertId:result.insertId}
     }catch (e) {
@@ -225,13 +227,12 @@ const CreateCSMService = async(req:any)=>{
 }
 
 const updateCSMService = async(req:any)=>{
-    let result,CSM, data;
+    let result,CSM;
     try{
 
-        CSM = await new CustomerModel().fetchCSM(req.body.customer_id,req.body.supplier_id)
+        CSM = await new CustomerModel().fetchCSM(req.body.id)
         if(CSM.length == 0) throw new Error("id not found");
-        data = {"status":req.body.status }
-        result = await new CustomerModel().updateStatusById(data, req.body.customer_id,req.body.supplier_id)
+        result = await new CustomerModel().updateStatusById(req.body.id, req.body.status)
         LOGGER.info( " result", result )
         console.log( result )
         return {"changedRows":result.changedRows};
@@ -682,7 +683,22 @@ const fetchAllCustomerSalesOrders= async (pageIndex: number, pageSize : number, 
     catch (error: any) {
         return error
     }
-
+}
+const fetchAllActiveCustomerService = async () =>{
+    try {
+       let customer  = await new CustomerModel().fetchALLActiveCustomers()
+        if( customer.length == 0 )throw new Error( "customer not found")
+        // for(var i = 0 ; i < customer.length; i++) {
+        //     let label = customer[i].name + ','+ customer[i].city
+        //     customer[i].lable = label
+        //     delete customer[i].name
+        //     delete customer[i].city
+        // }
+        return {address : customer}
+    }
+    catch (error: any) {
+        return error
+    }
 }
 const fetchAllCustomerSalesOrdersCount =async(query : string) => {
     try {
@@ -707,6 +723,18 @@ const fetchAllCustomersJson = async (  ) => {
     catch(err){
         return err 
     }
+    }
+const  fetchSuppliers = async (req:any) =>{
+    try {
+        let address_id = req.query.address_id
+        let suppliers  = await new CustomerModel().fetchAllmappedSuppliersByAddressId(address_id)
+        if( suppliers.length == 0 )throw new Error( "customer not found")
+
+        return {suppliers : suppliers}
+    }
+    catch (error: any) {
+        return error
+    }
 }
 export default {
     createCustomer,
@@ -728,6 +756,6 @@ export default {
     fetchAllCustomerSalesOrders, fetchAllMappedSuppliers,
     fetchAllCustomerEsimatesCount,
     fetchAllCustomerSalesOrdersCount,
-    fetchAllCustomersJson
-
+    fetchAllCustomersJson,
+    fetchAllActiveCustomerService,fetchSuppliers
 }

@@ -2,7 +2,7 @@ import supplierController from '../../Controllers/Supplier.controller';
 import supplierSchema from '../../Constants/Schema/Supplier.schema';
 import express from 'express';
 import path from 'path';
-import { celebrate } from 'celebrate';
+import {celebrate, celebrator} from 'celebrate';
 const router = express.Router();
 
 router.post(
@@ -42,5 +42,9 @@ router.get(
   '/home/page',
   supplierController.getHomePage
 );
-
+router.get(
+    '/fetch/all/by-state',
+    celebrate(supplierSchema.fetchSupplierByState),
+    supplierController.fetchAllSuppliersByState
+)
 export default router;

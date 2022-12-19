@@ -9,5 +9,4 @@ echo "Kill All Pm2 Process"
 # Stop all PM2
 # pm2 stop all
 echo "PM2 Stop All Succesfull"
-#pm2 stop all --silent 
-pm2 start pm2.config.js
+#pm2 stop all --silent

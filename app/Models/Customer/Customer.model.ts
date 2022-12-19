@@ -14,18 +14,18 @@ export class CustomerModel extends BaseModel {
 
     async fetchCustomerById(id: any) {
         return await this._executeQuery(`SELECT cs.id, cs.name as customerName, cs.email, cs.mobile as contactNo, cs.gstin as gstNo, cs.gstin_url as gstin_img, cs.payment_term as paymentTerms, cs.status,
-                                                max(case when a.address_type = "1" then a.address ELSE null end) as shippingAddress,
-                                                max(case when a.address_type = "1" then st.id end) as shipping_state_id,
-                                                max(case when a.address_type = "1" then st.name end) as shipping_state,
-                                                max(case when a.address_type = "1" then cty.id end) as shipping_city_id,
-                                                max(case when a.address_type = "1" then cty.name end) as shipping_city,
-                                                max(case when a.address_type = "1" then a.pincode end) as shippingPincode,
-                                                max(case when a.address_type = "0" then a.address ELSE null end) as billingAddress,
-                                                max(case when a.address_type = "0" then st.id end) as billing_state_id,
-                                                max(case when a.address_type = "0" then st.name end) as billing_state,
-                                                max(case when a.address_type = "0" then cty.id end) as billing_city_id,
-                                                max(case when a.address_type = "0" then cty.name end) as billing_city,
-                                                max(case when a.address_type = "0" then a.pincode end) as billingPincode,
+                                                max(case when a.address_type = "0" then a.address ELSE null end) as shippingAddress,
+                                                max(case when a.address_type = "0" then st.id end) as shipping_state_id,
+                                                max(case when a.address_type = "0" then st.name end) as shipping_state,
+                                                max(case when a.address_type = "0" then cty.id end) as shipping_city_id,
+                                                max(case when a.address_type = "0" then cty.name end) as shipping_city,
+                                                max(case when a.address_type = "0" then a.pincode end) as shippingPincode,
+                                                max(case when a.address_type = "1" then a.address ELSE null end) as billingAddress,
+                                                max(case when a.address_type = "1" then st.id end) as billing_state_id,
+                                                max(case when a.address_type = "1" then st.name end) as billing_state,
+                                                max(case when a.address_type = "1" then cty.id end) as billing_city_id,
+                                                max(case when a.address_type = "1" then cty.name end) as billing_city,
+                                                max(case when a.address_type = "1" then a.pincode end) as billingPincode,
                                                 cs.created_at, cs.updated_at 
                                                 FROM customers cs 
                                                 LEFT join addresses a ON a.user_id=cs.id 
@@ -36,18 +36,18 @@ export class CustomerModel extends BaseModel {
     }
     async fetchAllCustomers(limit: number, offset: number, sortOrder: string, query: string) {
         return await this._executeQuery(`SELECT cs.id, cs.name as customerName, cs.email, cs.mobile as contactNo, cs.gstin as gstNo, cs.payment_term as paymentTerms, cs.status,
-                                                max(case when a.address_type = "1" then a.address ELSE null end) as shippingAddress,
-                                                max(case when a.address_type = "1" then st.id end) as shipping_state_id,
-                                                max(case when a.address_type = "1" then st.name end) as shipping_state,
-                                                max(case when a.address_type = "1" then cty.id end) as shipping_city_id,
-                                                max(case when a.address_type = "1" then cty.name end) as shipping_city,
-                                                max(case when a.address_type = "1" then a.pincode end) as shippingPincode,
-                                                max(case when a.address_type = "0" then a.address ELSE null end) as billingAddress,
-                                                max(case when a.address_type = "0" then st.id end) as billing_state_id,
-                                                max(case when a.address_type = "0" then st.name end) as billing_state,
-                                                max(case when a.address_type = "0" then cty.id end) as billing_city_id,
-                                                max(case when a.address_type = "0" then cty.name end) as billing_city,
-                                                max(case when a.address_type = "0" then a.pincode end) as billingPincode,
+                                                max(case when a.address_type = "0" then a.address ELSE null end) as shippingAddress,
+                                                max(case when a.address_type = "0" then st.id end) as shipping_state_id,
+                                                max(case when a.address_type = "0" then st.name end) as shipping_state,
+                                                max(case when a.address_type = "0" then cty.id end) as shipping_city_id,
+                                                max(case when a.address_type = "0" then cty.name end) as shipping_city,
+                                                max(case when a.address_type = "0" then a.pincode end) as shippingPincode,
+                                                max(case when a.address_type = "1" then a.address ELSE null end) as billingAddress,
+                                                max(case when a.address_type = "1" then st.id end) as billing_state_id,
+                                                max(case when a.address_type = "1" then st.name end) as billing_state,
+                                                max(case when a.address_type = "1" then cty.id end) as billing_city_id,
+                                                max(case when a.address_type = "1" then cty.name end) as billing_city,
+                                                max(case when a.address_type = "1" then a.pincode end) as billingPincode,
                                                 cs.created_at, cs.updated_at 
                                                 FROM customers cs 
                                                 LEFT join addresses a ON a.user_id=cs.id 
@@ -71,25 +71,18 @@ export class CustomerModel extends BaseModel {
     async createCSM(data: any) {
         return await this._executeQuery("insert ignore into customer_supplier_mapping set ? ", [data]);
     }
-    async fetchCustomerSupplier(customer_id: number, supplier_id: number) {
-        return await this._executeQuery(`select a.user_id as customer_id, sp.id as supplier_id, a.id as address_id
-                                               from user as sp, addresses as a
-                                               where (a.user_id  = ? and address_type = 1 and user_type = 0) and (sp.id = ? and role_id = 3);`
-            , [customer_id, supplier_id]);
-    }
-    async create(customer_id: number, supplier_id: number) {
-        let query = await this._executeQuery(`INSERT INTO customer_supplier_mapping(customer_id,address_id,supplier_id)
+    async createCustomerSupplierMapping(customer_id: number, supplier_id: number) {
+        return await this._executeQuery(`INSERT INTO customer_supplier_mapping(customer_id,address_id,supplier_id)
                                                         select a.user_id as customer_id, a.id as address_id,sp.id as supplier_id
                                                         from user as sp, addresses as a
-                                                        where (a.user_id = ? and address_type = 1 and user_type = 0) and (sp.id = ? and role_id = 3);
+                                                        where (a.user_id = ? and address_type = 0 and user_type = 0) and (sp.id = ? and role_id = 3);
                                                          `, [customer_id, supplier_id])
-        return query
     }
-    async updateStatusById(data: any, customer_id: number, supplier_id: number) {
-        return await this._executeQuery("update customer_supplier_mapping set ? where  customer_id  = ? and supplier_id = ? ", [data, customer_id, supplier_id])
+    async updateStatusById(id:number, status:number) {
+         return await this._executeQuery("update customer_supplier_mapping set status = ? where id = ? ", [status, id])
     }
-    async fetchCSM(customer_id: any, supplier_id: any) {
-        return await this._executeQuery("select * from customer_supplier_mapping where customer_id = ? and supplier_id = ? ", [customer_id, supplier_id])
+    async fetchCSM(id:number) {
+        return await this._executeQuery("select * from customer_supplier_mapping where id = ? ", [id])
     }
     async fetchAllCustomerSuppliers(limit: number, offset: number, sortOrder: string, query: string) {
         // return await this._executeQuery(`SELECT csm.id, customer_id, cs.name as customer,FLOOR((count(csm.supplier_id)/2)) as supplier, case when a.address_type=0 then ast.name ELSE null end as state FROM customer_supplier_mapping csm
@@ -179,7 +172,28 @@ export class CustomerModel extends BaseModel {
     async salesOrderExistsOrNot(id: number) {
         return await this._executeQuery("select id from customer_sales_orders where id = ? ", [id])
     }
-    async fetchAllCustomerEstimatesCount(query: string) {
+    // async fetchAllCustomerEstimatesCount(query: string) {
+    async fetchALLActiveCustomers(){
+       return await this._executeQuery(`select a.id as value ,
+                                               concat(cs.name ,', ', ac.name) as label
+                                               from addresses a
+                                               inner join customers cs on a.user_id = cs.id 
+                                               inner join biofuel.address_city ac on a.city_id = ac.id
+                                               where a.user_type = 0 and a.address_type = 0 and cs.status = 1;
+                                               `,[])
+    }
+    async fetchAllmappedSuppliersByAddressId(address_id :number){
+        return await this._executeQuery(`select csm.supplier_id ,sp.name as supplier,ac.name as city, ast.name as state,
+                                                csm.status, csm.created_at, csm.updated_at
+                                                from customer_supplier_mapping csm
+                                                inner join addresses a on csm.supplier_id = a.user_id 
+                                                inner join user sp on a.user_id = sp.id
+                                                inner join address_city ac on a.city_id = ac.id and a.address_type = 1
+                                                inner join address_state ast on ac.state_id = ast.id
+                                                where csm.address_id = 20 and csm.status = 1
+                                                `,[address_id])
+    }
+    async fetchAllCustomerEstimatesCount(query:string) {
         return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, estimate_date, expiry_date, estimate_no , es.id ,product_id,p.name as product_name, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, adjustment_amount*rate as total_amount FROM customer_estimates es
         inner join products p ON p.id=es.product_id
         inner join customers cs ON cs.id=es.customer_id
