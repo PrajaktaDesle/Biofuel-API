@@ -427,11 +427,7 @@ const updateCustomerEstimate = async (data: any) => {
         }
 
         let estimateData:any = await new CustomerModel().updateCustomerEstimateById(estimate, data.id )
-        // let arr = []
-        // for (let i = 0; i < data.raw_material.length; i++) {
-        //     arr.push([data.id,data.raw_material[i],1])
-        //  }
-        // await new CustomerModel().estimateRawMaterialMappingMany(arr)
+      
 //   `stage`  -1 as declined, 0 as draft, 1 as pending approval, 2 as approved, 3 as sent, 4 as accepted, 5 as Convert to SO',
 
         return estimateData;
