@@ -287,8 +287,8 @@ const createCustomerEstimate = async (data: any) => {
         if(data.customer !== undefined && data.customer !== null && data.customer !== "")
         estimate.customer_id=data.customer;
 
-        if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "")
-        estimate.estimate_no=data.estimate_id;
+        if(data.estimate_no !== undefined && data.estimate_no !== null && data.estimate_no !== "")
+        estimate.estimate_no=data.estimate_no;
 
         if(data.product !== undefined && data.product !== null && data.product !== "")
         estimate.product_id=data.product;
@@ -299,8 +299,8 @@ const createCustomerEstimate = async (data: any) => {
         if(data.expiry_date !== undefined && data.expiry_date !== null && data.expiry_date !== "")
         estimate.expiry_date=data.expiry_date;
 
-        if(data.estimate !== undefined && data.estimate !== null && data.estimate !== "")
-        estimate.estimate_id=data.estimate;
+        // if(data.estimate !== undefined && data.estimate !== null && data.estimate !== "")
+        // estimate.estimate_id=data.estimate;
 
         if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "")
         estimate.raw_material_id=data.raw_material;
@@ -354,8 +354,8 @@ const updateCustomerEstimate = async (data: any) => {
         if(data.customer !== undefined && data.customer !== null && data.customer !== "")
         estimate.customer_id=data.customer;
 
-        if(data.estimate_id !== undefined && data.estimate_id !== null && data.estimate_id !== "")
-        estimate.estimate_no=data.estimate_id;
+        if(data.estimate_no !== undefined && data.estimate_no !== null && data.estimate_no !== "")
+        estimate.estimate_no=data.estimate_no;
 
         if(data.product !== undefined && data.product !== null && data.product !== "")
         estimate.product_id=data.product;
@@ -365,9 +365,6 @@ const updateCustomerEstimate = async (data: any) => {
 
         if(data.expiry_date !== undefined && data.expiry_date !== null && data.expiry_date !== "")
         estimate.expiry_date=data.expiry_date;
-
-        if(data.estimate !== undefined && data.estimate !== null && data.estimate !== "")
-        estimate.estimate_id=data.estimate;
 
         if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "")
         estimate.raw_material_id=data.raw_material;

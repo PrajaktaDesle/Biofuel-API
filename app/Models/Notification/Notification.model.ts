@@ -26,19 +26,23 @@ export class NotificationModel extends BaseModel
         return await this._executeQuery("select * from supplier_purchase_order where po_number = ?", [spo_no])
     }
     async fetchAll(limit : number, offset : number, sortOrder : string, query : string) {
-        return await this._executeQuery(` select pon.id,spo.supplier_id, sp.name as supplier, sp.mobile,spo.po_number, pon.delivery_date, pon.quantity, pon.status,pon.created_at, pon.updated_at 
-                                                from purchase_order_dispatch_notifications pon
-                                                inner join supplier_purchase_order spo on spo.id = pon.purchase_order_id
-                                                inner join user sp on sp.id = spo.supplier_id
-                                                 ${query}
-                                                ${sortOrder}
-                                                LIMIT ? OFFSET ? `,[limit, offset])
+        return await this._executeQuery(` select pon.id,spo.supplier_id, sp.name as supplier, sp.mobile,spo.po_number, DATE_FORMAT(pon.delivery_date, '%d-%m-%Y')  as delivery_date, pon.status,p.name product, pon.quantity, pon.created_at, pon.updated_at 
+                                          from purchase_order_dispatch_notifications pon
+                                          left join supplier_purchase_order spo on spo.id = pon.purchase_order_id 
+                                          left join customer_sales_orders cso on cso.id = spo.sales_order_id
+                                          left join products p on p.id = cso.product_id
+                                          left join user sp on sp.id = spo.supplier_id
+                                          ${query}
+                                          ${sortOrder}
+                                          LIMIT ? OFFSET ? `,[limit, offset])
     }
     async fetchNotificationCount(query : string){
-        return await this._executeQuery(`select pon.id,spo.supplier_id, sp.name as supplier, sp.mobile,spo.po_number, pon.delivery_date, pon.quantity, pon.status,pon.created_at, pon.updated_at 
-                                                from purchase_order_dispatch_notifications pon
-                                                inner join supplier_purchase_order spo on spo.id = pon.purchase_order_id
-                                                inner join user sp on sp.id = spo.supplier_id
-                                                ${query}`,[])
+        return await this._executeQuery(` select pon.id,spo.supplier_id, sp.name as supplier, sp.mobile,spo.po_number, DATE_FORMAT(pon.delivery_date, '%d-%m-%Y')  as delivery_date, pon.status,p.name product,pon.quantity, pon.created_at, pon.updated_at 
+                                          from purchase_order_dispatch_notifications pon
+                                          left join supplier_purchase_order spo on spo.id = pon.purchase_order_id 
+                                          left join customer_sales_orders cso on cso.id = spo.sales_order_id
+                                          left join products p on p.id = cso.product_id
+                                          left join user sp on sp.id = spo.supplier_id
+                                          ${query}`,[])
     }
 }
