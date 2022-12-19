@@ -87,6 +87,11 @@ router.get(
 
 );
 router.get(
+    '/fetch/list',
+    CustomerController.fetchAllCustomersJson
+);
+
+router.get(
     '/fetch/active',
     CustomerController.fetchAllActiveCustomers
 

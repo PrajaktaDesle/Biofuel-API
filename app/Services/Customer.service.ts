@@ -308,8 +308,8 @@ const createCustomerEstimate = async (data: any) => {
         if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "")
         estimate.packaging_id=data.packaging;
 
-        if(data.estimate_description !== undefined && data.estimate_description !== null && data.estimate_description !== "")
-        estimate.estimate_description=data.estimate_description;
+        if(data.product_description !== undefined && data.product_description !== null && data.product_description !== "")
+        estimate.product_description=data.product_description;
 
         if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "")
         estimate.quantity=data.quantity;
@@ -328,9 +328,9 @@ const createCustomerEstimate = async (data: any) => {
 
         if(data.status !== undefined && data.status !== null && data.status !== "")estimate.status=data.status;
         estimate.status=0;
-
-
+       
         let estimateData = await new CustomerModel().createCustomerEstimate(estimate)
+        
         let log : any = { "estimate_id" : estimateData.insertId, "stage":estimate.status,"user_id":data.user_id }
         await new CustomerModel().createCustomerEstimateStagelog(log)
         return estimateData;
@@ -427,6 +427,7 @@ const updateCustomerEstimate = async (data: any) => {
         }
 
         let estimateData:any = await new CustomerModel().updateCustomerEstimateById(estimate, data.id )
+      
 //   `stage`  -1 as declined, 0 as draft, 1 as pending approval, 2 as approved, 3 as sent, 4 as accepted, 5 as Convert to SO',
 
         return estimateData;
@@ -469,10 +470,11 @@ const fetchCustomerEstimateById = async (id: number) => {
                   break;
         }
         estimate[0].product = { "label":estimate[0].product, "value":estimate[0].product_id}
+        estimate[0].customer = { "label":estimate[0].customer, "value":estimate[0].customer_id}
         estimate[0].raw_material = { "label":estimate[0].raw_material, "value":estimate[0].raw_material_id}
         estimate[0].packaging = { "label":estimate[0].packaging, "value":estimate[0].packaging_id}
 
-        return estimate;
+        return estimate[0];
 
     }
     catch (error: any) {
@@ -705,6 +707,21 @@ const fetchAllCustomerSalesOrdersCount =async(query : string) => {
         return error
     }
 }
+const fetchAllCustomersJson = async (  ) => {
+    try{
+        let result = await new CustomerModel().fetchAllCustomersJson();
+        if( result[0].customers.length === 0 ){
+            throw new Error("Customers  not found!")
+
+        }
+        else{
+            return result[0].customers
+        }
+    }
+    catch(err){
+        return err 
+    }
+    }
 const  fetchSuppliers = async (req:any) =>{
     try {
         let address_id = req.query.address_id
@@ -737,5 +754,6 @@ export default {
     fetchAllCustomerSalesOrders, fetchAllMappedSuppliers,
     fetchAllCustomerEsimatesCount,
     fetchAllCustomerSalesOrdersCount,
+    fetchAllCustomersJson,
     fetchAllActiveCustomerService,fetchSuppliers
 }
