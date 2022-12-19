@@ -124,12 +124,15 @@ export class CustomerModel extends BaseModel {
         return await this._executeQuery("insert into customer_estimates set ? ", [estimateData])
     }
     async fetchCustomerEstimateById(id: any) {
-        return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, estimate_date, expiry_date, estimate_no ,product_id,p.name as product, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, rate, customer_note, adjustment_amount*rate as total_amount FROM customer_estimates es
+        return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, DATE_FORMAT(estimate_date, '%d-%m-%Y')  as estimate_date, DATE_FORMAT(expiry_date, '%d-%m-%Y')  as expiry_date, estimate_no as estimate_id ,product_id,p.name as product, product_description, packaging_id, pp.name as packaging, rate, customer_note, adjustment_amount*rate as total_amount,
+                                          CAST(CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT('value', erm.raw_material_id, 'label', prm.name)), ']') AS JSON) as raw_material
+                                          FROM customer_estimates es
                                           inner join products p ON p.id=es.product_id
                                           inner join customers cs ON cs.id=es.customer_id
-                                          inner join product_raw_material rm ON rm.id=es.raw_material_id
+                                          inner join estimate_raw_material_mapping erm ON erm.estimate_id = es.id
+                                          inner join product_raw_material prm ON prm.id=erm.raw_material_id
                                           inner join product_packaging pp ON pp.id=es.packaging_id
-                                          where es.id = ?;`, [id])
+                                          where es.id = ? and erm.status=1;`, [id])
     }
     async fetchAllCustomerEstimates(limit: number, offset: number, sortOrder: string, query: string) {
         return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, DATE_FORMAT(estimate_date, '%d-%m-%Y')  as estimate_date ,DATE_FORMAT(expiry_date, '%d-%m-%Y')  as expiry_date , estimate_no , es.id ,product_id,p.name as product_name, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, adjustment_amount*rate as total_amount FROM customer_estimates es
@@ -198,5 +201,9 @@ export class CustomerModel extends BaseModel {
         return await this._executeQuery(`SELECT  CAST(CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT('value', cs.id, 'label', cs.name)), ']') AS JSON) as customers
         FROM biofuel.customers cs where cs.status = 1`, [])
     }
+    async estimateRawMaterialMappingMany(data: any) {
+        console.log("insert into estimate_raw_material_mapping (estimate_id, raw_material_id, status) VALUES ?", [data])
+        return await this._executeQuery("insert into estimate_raw_material_mapping (estimate_id, raw_material_id, status) VALUES ?", [data])
 
+    }
 }

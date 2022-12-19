@@ -247,7 +247,7 @@ const fetchCustomerEstimateById : IController = async ( req:any , res:any ) => {
                                     estimate.message )
         }
         else{
-           LOGGER.info( "estimate status ", estimate[0].status )
+        //    LOGGER.info( "estimate status ", estimate[0].status )
            return apiResponse.result( res,
                                      estimate,
                                      httpStatusCodes.OK )

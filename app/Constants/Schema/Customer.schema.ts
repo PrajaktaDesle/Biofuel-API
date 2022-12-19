@@ -9,7 +9,7 @@ export default {
             estimate_date: Joi.string().required(),
             expiry_date: Joi.string().required(),
             product: Joi.number().required(),
-            raw_material: Joi.number().required(),
+            raw_material: Joi.array().required(),
             product_description: Joi.string().required(),
             packaging: Joi.number().required(),
             rate: Joi.number().required(),

@@ -302,13 +302,13 @@ const createCustomerEstimate = async (data: any) => {
         estimate.estimate_id=data.estimate;
 
         if(data.raw_material !== undefined && data.raw_material !== null && data.raw_material !== "")
-        estimate.raw_material_id=data.raw_material;
+        estimate.raw_material_id=data.raw_material[0];
 
         if(data.packaging !== undefined && data.packaging !== null && data.packaging !== "")
         estimate.packaging_id=data.packaging;
 
-        if(data.estimate_description !== undefined && data.estimate_description !== null && data.estimate_description !== "")
-        estimate.estimate_description=data.estimate_description;
+        if(data.product_description !== undefined && data.product_description !== null && data.product_description !== "")
+        estimate.product_description=data.product_description;
 
         if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "")
         estimate.quantity=data.quantity;
@@ -327,9 +327,13 @@ const createCustomerEstimate = async (data: any) => {
 
         if(data.status !== undefined && data.status !== null && data.status !== "")estimate.status=data.status;
         estimate.status=0;
-
-
+       
         let estimateData = await new CustomerModel().createCustomerEstimate(estimate)
+        let arr = []
+        for (let i = 0; i < data.raw_material.length; i++) {
+            arr.push([estimateData.insertId,data.raw_material[i],1])
+         }
+        await new CustomerModel().estimateRawMaterialMappingMany(arr)
         let log : any = { "estimate_id" : estimateData.insertId, "stage":estimate.status,"user_id":data.user_id }
         await new CustomerModel().createCustomerEstimateStagelog(log)
         return estimateData;
@@ -468,10 +472,10 @@ const fetchCustomerEstimateById = async (id: number) => {
                   break;
         }
         estimate[0].product = { "label":estimate[0].product, "value":estimate[0].product_id}
-        estimate[0].raw_material = { "label":estimate[0].raw_material, "value":estimate[0].raw_material_id}
+        estimate[0].customer = { "label":estimate[0].customer, "value":estimate[0].customer_id}
         estimate[0].packaging = { "label":estimate[0].packaging, "value":estimate[0].packaging_id}
 
-        return estimate;
+        return estimate[0];
 
     }
     catch (error: any) {
