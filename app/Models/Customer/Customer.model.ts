@@ -105,7 +105,7 @@ export class CustomerModel extends BaseModel {
                                          inner join address_state ast ON ac.state_id=ast.id
                                          where csm.customer_id = ? and csm.status = 1 
                                          group by csm.supplier_id`
-                                         ,[customer_id])
+            , [customer_id])
     }
     async fetch_csm_count(query: string) {
         return await this._executeQuery(`SELECT customer_id, cs.name as customer, supplier_id, sp.name as supplier,csm.status, csm.created_at , csm.updated_at FROM customer_supplier_mapping csm
@@ -117,12 +117,13 @@ export class CustomerModel extends BaseModel {
         return await this._executeQuery("insert into customer_estimates set ? ", [estimateData])
     }
     async fetchCustomerEstimateById(id: any) {
-        return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, estimate_date, expiry_date, estimate_no ,product_id,p.name as product, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, rate, customer_note, adjustment_amount*rate as total_amount FROM customer_estimates es
+        return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, DATE_FORMAT(estimate_date, '%d-%m-%Y')  as estimate_date, DATE_FORMAT(expiry_date, '%d-%m-%Y')  as expiry_date, estimate_no, es.raw_material_id, prm.name as raw_material ,product_id,p.name as product, product_description, packaging_id, pp.name as packaging, quantity, rate, adjustment_amount as adjustment,tnc, customer_note, adjustment_amount*rate as total_amount
+                                          FROM customer_estimates es
                                           inner join products p ON p.id=es.product_id
                                           inner join customers cs ON cs.id=es.customer_id
-                                          inner join product_raw_material rm ON rm.id=es.raw_material_id
+                                          inner join product_raw_material prm ON prm.id=es.raw_material_id
                                           inner join product_packaging pp ON pp.id=es.packaging_id
-                                          where es.id = ?;`, [id])
+                                          where es.id = ? `, [id])
     }
     async fetchAllCustomerEstimates(limit: number, offset: number, sortOrder: string, query: string) {
         return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, DATE_FORMAT(estimate_date, '%d-%m-%Y')  as estimate_date ,DATE_FORMAT(expiry_date, '%d-%m-%Y')  as expiry_date , estimate_no , es.id ,product_id,p.name as product_name, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, adjustment_amount*rate as total_amount FROM customer_estimates es
@@ -169,6 +170,7 @@ export class CustomerModel extends BaseModel {
     async salesOrderExistsOrNot(id: number) {
         return await this._executeQuery("select id from customer_sales_orders where id = ? ", [id])
     }
+    // async fetchAllCustomerEstimatesCount(query: string) {
     async fetchALLActiveCustomers(){
        return await this._executeQuery(`select a.id as value ,
                                                concat(cs.name ,', ', ac.name) as label
@@ -199,7 +201,7 @@ export class CustomerModel extends BaseModel {
         `, [])
 
     }
-    async fetchAllCustomerSalesOrdersCount( query: string ) {
+    async fetchAllCustomerSalesOrdersCount(query: string) {
         return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status, so_date, delivery_date, estimate_id ,product_id,p.name as product, product_description, adjustment_amount*rate as total_amount FROM customer_sales_orders so
                                           inner join products p ON p.id=so.product_id
                                           inner join customers cs ON cs.id=so.customer_id
@@ -207,5 +209,9 @@ export class CustomerModel extends BaseModel {
                                           `, [])
 
     }
-
+    async fetchAllCustomersJson() {
+        return await this._executeQuery(`SELECT  CAST(CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT('value', cs.id, 'label', cs.name)), ']') AS JSON) as customers
+        FROM biofuel.customers cs where cs.status = 1`, [])
+    }
+   
 }

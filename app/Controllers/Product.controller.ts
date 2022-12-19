@@ -196,6 +196,28 @@ const fetchAllProductPackaging: IController = async (req, res) => {
             return;
     }
 };
+
+const fetchAllProductsList: IController = async (req, res) => {
+    try {
+        let products : any = await productService.fetchAllProductsList();
+        if (products instanceof Error) {
+            LOGGER.info("error", products)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+
+            apiResponse.result(res, products, httpStatusCodes.OK);
+        }
+    } catch (e:any) {
+        LOGGER.info("controller ->", e)
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+            return;
+    }
+};
+
 export default {
     createProduct,
     fetchProductById,
@@ -204,5 +226,6 @@ export default {
     fetchAllProductCategories,
     fetchAllProductUsageUnits,
     fetchAllProductRawMaterials,
-    fetchAllProductPackaging
+    fetchAllProductPackaging,
+    fetchAllProductsList
 }

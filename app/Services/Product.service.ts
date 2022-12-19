@@ -224,6 +224,22 @@ const fetchAllProductPackaging = async ( ) =>{
     return data 
 }
 
+const fetchAllProductsList = async (  ) => {
+    try{
+        let result = await new ProductModel().fetchAllProductsList();
+        if( result[0].products.length === 0 ){
+            throw new Error("Customers  not found!")
+
+        }
+        else{
+            return result[0].products
+        }
+    }
+    catch(err){
+        return err 
+    }
+}
+
 export default {
     createProduct,
     fetchProductById,
@@ -233,6 +249,7 @@ export default {
     fetchAllProductCategories,
     fetchAllProductUsageUnits,
     fetchAllProductRawMaterials,
-    fetchAllProductPackaging
+    fetchAllProductPackaging,
+    fetchAllProductsList
 
 }

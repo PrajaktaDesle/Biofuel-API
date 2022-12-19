@@ -247,7 +247,7 @@ const fetchCustomerEstimateById : IController = async ( req:any , res:any ) => {
                                     estimate.message )
         }
         else{
-           LOGGER.info( "estimate status ", estimate[0].status )
+        //    LOGGER.info( "estimate status ", estimate[0].status )
            return apiResponse.result( res,
                                      estimate,
                                      httpStatusCodes.OK )
@@ -467,6 +467,29 @@ const fetchAllMappedSuppliers: IController = async (req, res) => {
 };
 
 
+
+const fetchAllCustomersJson: IController = async (req, res) => {
+    await CustomerService.fetchAllCustomersJson()
+        .then( (customer : any) => {
+            if(customer instanceof Error){
+                console.log("User 2", customer.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    customer.message
+                );
+            }else{
+                apiResponse.result(res, customer, httpStatusCodes.OK);
+            }
+        }).catch( (err : any) => {
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                err.message
+            );
+        });
+};
+
 export default {
                 Create,
                 fetchCustomerById,
@@ -484,5 +507,6 @@ export default {
                 fetchCustomerSalesOrderById,
                 fetchAllCustomerSalesOrders,
                 fetchAllSuppliersAgainstCustomer,
+                fetchAllCustomersJson,
                 fetchAllActiveCustomers, fetchAllMappedSuppliers
 }
