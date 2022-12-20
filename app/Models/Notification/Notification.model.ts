@@ -19,7 +19,7 @@ export class NotificationModel extends BaseModel
                                                 inner join customer_sales_orders cso on spo.sales_order_id = cso.id
                                                 inner join products p on cso.product_id = p.id where  pon.id = ?`,[id])
     }
-    async fetchNotificationById(id:any){
+    async fetchNotificationBy_purchase_order_id(id:any){
         return await this._executeQuery("select * from purchase_order_dispatch_notifications where purchase_order_id = ? ", [id]);
     }
 

@@ -100,7 +100,7 @@ router.get(
 router.get(
     '/fetch/suppliers',
     celebrate(CustomerSchema.getsuppliers),
-    CustomerController.fetchAllMappedSuppliers
+    CustomerController.fetchAllMappedSuppliersByAddressID
 
 );
 export default router;

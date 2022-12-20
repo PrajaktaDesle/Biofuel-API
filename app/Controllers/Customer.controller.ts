@@ -444,7 +444,7 @@ const fetchAllActiveCustomers: IController = async (req, res) => {
             );
         });
 };
-const fetchAllMappedSuppliers: IController = async (req, res) => {
+const fetchAllMappedSuppliersByAddressID: IController = async (req, res) => {
     await CustomerService.fetchSuppliers(req)
         .then( (customer : any) => {
             if(customer instanceof Error){
@@ -508,5 +508,5 @@ export default {
                 fetchAllCustomerSalesOrders,
                 fetchAllSuppliersAgainstCustomer,
                 fetchAllCustomersJson,
-                fetchAllActiveCustomers, fetchAllMappedSuppliers
+                fetchAllActiveCustomers, fetchAllMappedSuppliersByAddressID
 }
