@@ -206,6 +206,55 @@ const fetchAllSuppliersByState: IController = async (req, res) => {
     }
 };
 
+// fetchAllSupplierPO
+const fetchAllSupplierPO: IController = async (req, res) => {
+    try{
+        let query = " "
+        if(req.body.query != ""){
+            query = ` where spo.id like '%${req.body.query}%' or spo.name like '%${req.body.query}' `
+        }
+        let suppliers = await supplierService.fetchAllSupplierPO(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
+        let count = await supplierService.fetchAllSupplierPOCount(query);
+        if ( suppliers instanceof Error ){
+           return apiResponse.error( res,
+                                    httpStatusCodes.BAD_REQUEST,
+                                    suppliers.message )
+        }
+        else{
+           return apiResponse.result( res,
+               {data :suppliers, total : count},
+               httpStatusCodes.OK )
+        }
+
+    }
+    catch (error:any) {
+        LOGGER.info( "Error => ", error )
+        return apiResponse.error( res,
+                                  httpStatusCodes.BAD_REQUEST )
+    }
+};
+
+
+const updateSupplierPO : IController = async (req, res) => {
+    try {
+        let supplier : any = await supplierService.updateSupplierPO(req.body);
+        if (supplier instanceof Error) {
+            LOGGER.info("error", supplier)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+
+            apiResponse.result(res, supplier, httpStatusCodes.CREATED);
+        }
+    } catch (e:any) {
+        LOGGER.info("controller ->", e)
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+            return;
+    }
+};
 export default {
     register,
     login,
@@ -214,5 +263,7 @@ export default {
     fetchSupplierById,
     updateSupplierDetails,
     getHomePage,
-    fetchAllSuppliersByState
+    fetchAllSuppliersByState,
+    fetchAllSupplierPO,
+    updateSupplierPO
 };

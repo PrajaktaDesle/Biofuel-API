@@ -321,6 +321,111 @@ const fetchSuppliersByState = async (req:any) => {
         return e
     }
 }
+// fetchAllSupplierPO
+const fetchAllSupplierPO = async (pageIndex: number, pageSize : number, sort : any, query : string ) =>{
+    let suppliers;
+    let orderQuery : string;
+        if(sort.key != ""){
+            orderQuery = " ORDER BY "+ sort.key + " "+ sort.order +" ";
+        } else{
+            orderQuery = " ORDER By CASE WHEN spo.status=0 THEN 1 WHEN spo.status=1 THEN 2 WHEN spo.status=-1 THEN 3 END";
+        }
+    suppliers = await new SupplierModel().fetchAllSupplierPO(pageSize, (pageIndex-1) * pageSize, orderQuery, query)
+    console.log( "suppliers : ", suppliers )
+    if (suppliers == null) throw new Error("Suppliers PO not found");
+    return suppliers;
+}
+
+const fetchAllSupplierPOCount = async (query: string) => {
+    try {
+        let suppliers = await new SupplierModel().fetchAllSupplierPOCount(query);
+        return suppliers.length;
+    }
+    catch (error: any) {
+        return error
+    }
+}
+
+const updateSupplierPO = async (data: any) => {
+    try {
+        let sales_order:any = {}, dt:any;
+        let id  = data.id;
+        dt = await new SupplierModel().SupplierPOExistsOrNot(id);
+        if (dt.length == 0 ) throw new Error( "Supplier purchase order not found ")
+
+        // `id` int(11) NOT NULL AUTO_INCREMENT,
+        // `sales_order_id` int(11) DEFAULT NULL,
+        // `supplier_id` int(11) DEFAULT NULL,
+        // `po_number` varchar(45) DEFAULT NULL,
+        // `po_date` date DEFAULT NULL,
+        // `delivery_date` date DEFAULT NULL,
+        // `quantity` double DEFAULT NULL,
+        // `rate` double DEFAULT NULL,
+        // `adjustment_amount` double DEFAULT '0',
+        // `rate_type` tinyint(1) DEFAULT NULL COMMENT '0 as factory, 1 as delivery',
+        // `po_type` tinyint(1) DEFAULT NULL COMMENT '0 as new, 1 as secondary\n',
+        // `status` tinyint(1) DEFAULT NULL,
+
+        if(data.supplier !== undefined && data.supplier !== null && data.supplier !== "")
+        sales_order.supplier_id=data.supplier;
+
+        if(data.po_number !== undefined && data.po_number !== null && data.po_number !== "")
+        sales_order.po_number=data.po_number;
+
+        if(data.po_date !== undefined && data.po_date !== null && data.po_date !== "")
+        sales_order.po_date=data.po_date;
+
+        if(data.delivery_date !== undefined && data.delivery_date !== null && data.delivery_date !== "")
+        sales_order.delivery_date=data.delivery_date;
+
+        if(data.customer_so_number !== undefined && data.customer_so_number !== null && data.customer_so_number !== "")
+        sales_order.sales_order_id=data.customer_so_number;
+     
+        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "")
+        sales_order.quantity=data.quantity;
+
+        if(data.rate !== undefined && data.rate !== null && data.rate !== "")
+        sales_order.rate=data.rate;
+
+        if(data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "")
+        sales_order.adjustment_amount=data.adjustment;
+
+        if(data.rate_type !== undefined && data.rate_type !== null && data.rate_type !== "")
+        sales_order.rate_type=data.rate_type;
+
+        if(data.po_type !== undefined && data.po_type !== null && data.po_type !== "")
+        sales_order.po_type=data.po_type;
+
+        if(data.status !== undefined && data.status !== null && data.status !== ""){
+            sales_order.status=data.status;
+            let log : any = { "supplier_po_id" : id, "stage":data.status,"user_id":data.user_id }
+            if ( sales_order.status==-1 ){
+                // Estimate declined by customer
+                LOGGER.info( "Supplier Purchase is declined" )
+            }
+            if ( sales_order.status== 0 ){
+                // initial state of the estimate
+                LOGGER.info( "Supplier Purchase Order is in draft state" )
+            }
+            if ( sales_order.status==1 ){
+                // need to integrate send an email functionaliey
+                LOGGER.info( "Suppler Purchase Order is  approved" )
+            }
+ 
+            await new SupplierModel().createSupplierPOLogs(log)
+        }
+
+
+        let sales_order_data = await new SupplierModel().updateSupplierPO(sales_order, id)
+       
+        return sales_order_data;
+
+    } catch (e: any) {
+        LOGGER.info("Exception =>", e.message);
+        throw e;
+    }
+}
+
 
 
 
@@ -333,5 +438,8 @@ export default {
     verify_supplier_otp,
     getHomePage,
     fetchAllSuppliersCount,
-    fetchSuppliersByState
+    fetchSuppliersByState,
+    fetchAllSupplierPO,
+    fetchAllSupplierPOCount,
+    updateSupplierPO
 }
