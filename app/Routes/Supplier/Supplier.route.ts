@@ -56,4 +56,12 @@ router.put(
   celebrate(supplierSchema.updateSupplierPOStatus),
   supplierController.updateSupplierPO
 )
+router.get(
+  '/fetch/list',
+  supplierController.fetchAllSuppliersList
+)
+router.post(
+  '/po/create',
+  supplierController.createSupplierPO
+)
 export default router;

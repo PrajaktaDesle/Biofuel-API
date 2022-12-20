@@ -490,6 +490,27 @@ const fetchAllCustomersJson: IController = async (req, res) => {
         });
 };
 
+const fetchAllCustomersSOList: IController = async (req, res) => {
+    await CustomerService.fetchAllCustomersSOList()
+        .then( (customer : any) => {
+            if(customer instanceof Error){
+                console.log("User 2", customer.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    customer.message
+                );
+            }else{
+                apiResponse.result(res, customer, httpStatusCodes.OK);
+            }
+        }).catch( (err : any) => {
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                err.message
+            );
+        });
+};
 export default {
                 Create,
                 fetchCustomerById,
@@ -508,5 +529,6 @@ export default {
                 fetchAllCustomerSalesOrders,
                 fetchAllSuppliersAgainstCustomer,
                 fetchAllCustomersJson,
-                fetchAllActiveCustomers, fetchAllMappedSuppliers
+                fetchAllActiveCustomers, fetchAllMappedSuppliers,
+                fetchAllCustomersSOList
 }

@@ -255,6 +255,53 @@ const updateSupplierPO : IController = async (req, res) => {
             return;
     }
 };
+const fetchAllSuppliersList : IController = async (req, res) => {
+    try {
+        let supplier : any = await supplierService.fetchAllSuppliersList();
+        if (supplier instanceof Error) {
+            LOGGER.info("error", supplier)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+
+            apiResponse.result(res, supplier, httpStatusCodes.OK);
+        }
+    } catch (e:any) {
+        LOGGER.info("controller ->", e)
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+            return;
+    }
+};
+const createSupplierPO : IController = async (req, res) => {
+    let supplier: any;
+    try {
+        supplier = await supplierService.createSupplierPO(req.body);
+        LOGGER.info('Supplier at controller-----> ', supplier);
+
+        if (supplier instanceof Error) {
+            LOGGER.info("error", supplier)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+            apiResponse.result(res,
+            supplier,
+            httpStatusCodes.CREATED);
+        }
+
+    } catch (e:any) {
+        LOGGER.info("controller ->", e)
+        // @ts-ignore
+       
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+        return;
+    }
+};
 export default {
     register,
     login,
@@ -265,5 +312,7 @@ export default {
     getHomePage,
     fetchAllSuppliersByState,
     fetchAllSupplierPO,
-    updateSupplierPO
+    updateSupplierPO,
+    fetchAllSuppliersList,
+    createSupplierPO
 };

@@ -707,8 +707,8 @@ const fetchAllCustomerSalesOrdersCount =async(query : string) => {
 const fetchAllCustomersJson = async (  ) => {
     try{
         let result = await new CustomerModel().fetchAllCustomersJson();
-        if( result[0].customers.length === 0 ){
-            throw new Error("Customers  not found!")
+        if( result[0].customers === null ){
+            throw new Error("Customers not found!")
 
         }
         else{
@@ -731,6 +731,23 @@ const  fetchSuppliers = async (req:any) =>{
         return error
     }
 }
+// fetchAllCustomersSOList
+const fetchAllCustomersSOList = async (  ) => {
+    try{
+        let result = await new CustomerModel().fetchAllCustomersSOList();
+        console.log( "result : ", result )
+        if( result[0].so ===  null ){
+            throw new Error("Customer Sales orders not found!")
+
+        }
+        else{
+            return result[0].so
+        }
+    }
+    catch(err){
+        return err 
+    }
+    }
 export default {
     createCustomer,
     fetchCustomerById,
@@ -752,5 +769,6 @@ export default {
     fetchAllCustomerEsimatesCount,
     fetchAllCustomerSalesOrdersCount,
     fetchAllCustomersJson,
-    fetchAllActiveCustomerService,fetchSuppliers
+    fetchAllActiveCustomerService,fetchSuppliers,
+    fetchAllCustomersSOList
 }
