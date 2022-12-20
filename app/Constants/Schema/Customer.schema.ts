@@ -5,7 +5,7 @@ export default {
     createCustomerEstimate: {
         [Segments.BODY]:  Joi.object().keys({
             customer: Joi.number().required(),
-            estimate_id: Joi.number().integer().required(),
+            estimate_no: Joi.number().integer().required(),
             estimate_date: Joi.string().required(),
             expiry_date: Joi.string().required(),
             product: Joi.number().required(),
@@ -24,7 +24,7 @@ export default {
         [Segments.BODY]:  Joi.object().keys({
             id: Joi.number().required(),
             customer: Joi.number().optional(),
-            estimate_id: Joi.number().integer().optional(),
+            estimate_no: Joi.number().integer().optional(),
             estimate_date: Joi.string().optional(),
             expiry_date: Joi.string().optional(),
             product: Joi.number().optional(),
