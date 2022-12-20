@@ -42,19 +42,19 @@ export class ProductModel extends BaseModel
     async updateProductById( data : any, id : number ){
         return await this._executeQuery( "update products set ? where id = ? ",[data,id] )
     }
-    async fetchAllProductCategories(){
-        return await this._executeQuery( "select id as value, name as label from product_categories ",[] )
+    async fetchAllProductCategories( query:string ){
+        return await this._executeQuery( `select id as value, name as label from product_categories ${query} `,[] )
     }
-    async fetchAllProductUsageUnits(){
-        return await this._executeQuery( "select id as value, name as label from product_usage_unit ",[] )
+    async fetchAllProductUsageUnits( query:string ){
+        return await this._executeQuery( `select id as value, name as label from product_usage_unit ${query}`,[] )
     }
-    async fetchAllProductPackaging(){
-        return await this._executeQuery( "select id as value, name as label from  product_packaging",[])
+    async fetchAllProductPackaging( query:string ){
+        return await this._executeQuery( `select id as value, name as label from  product_packaging ${query}`,[])
     }
-    async fetchAllProductRawMaterials(){
-        return await this._executeQuery( "select id as value, name as label from  product_raw_material",[])
+    async fetchAllProductRawMaterials( query:string ){
+        return await this._executeQuery( `select id as value, name as label from  product_raw_material ${query}`,[])
     }
-    async fetchAllProductsList(query:string ) {
+    async fetchAllProductsList( query:string ) {
         return await this._executeQuery(`SELECT  p.id as value , p.name as label FROM products p where p.status = 1 ${query}`, [])
     }
 
