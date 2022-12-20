@@ -491,7 +491,8 @@ const fetchAllCustomersJson: IController = async (req, res) => {
 };
 
 const fetchAllCustomersSOList: IController = async (req, res) => {
-    await CustomerService.fetchAllCustomersSOList()
+    let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " AND cs.sales_order_no like '%"+ req.query.key + "%'" : "";
+    await CustomerService.fetchAllCustomersSOList(query)
         .then( (customer : any) => {
             if(customer instanceof Error){
                 console.log("User 2", customer.message)

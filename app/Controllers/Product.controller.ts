@@ -199,7 +199,8 @@ const fetchAllProductPackaging: IController = async (req, res) => {
 
 const fetchAllProductsList: IController = async (req, res) => {
     try {
-        let products : any = await productService.fetchAllProductsList();
+    let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " AND p.name like '%"+ req.query.key + "%'" : "";
+        let products : any = await productService.fetchAllProductsList(query);
         if (products instanceof Error) {
             LOGGER.info("error", products)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);

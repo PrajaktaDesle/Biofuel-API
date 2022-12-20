@@ -212,9 +212,8 @@ export class CustomerModel extends BaseModel {
     async fetchAllCustomersJson( query: string) {
         return await this._executeQuery(`SELECT cs.id as value,  cs.name AS label FROM biofuel.customers cs where cs.status = 1 ${query}`, [])
     }
-    async fetchAllCustomersSOList() {
-        return await this._executeQuery(`SELECT  CAST(CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT('value', cs.id, 'label', cs.sales_order_no)), ']') AS JSON) as so
-        FROM customer_sales_orders cs where cs.status = 1`, [])
+    async fetchAllCustomersSOList( query : string ) {
+        return await this._executeQuery(`SELECT  cs.id as value, cs.sales_order_no as label  FROM customer_sales_orders cs where cs.status = 1 ${query}`, [])
     }
    
 }
