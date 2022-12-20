@@ -78,13 +78,16 @@ export class SupplierModel extends UserModel
                                          LIMIT ? OFFSET ?`, [limit, offset]  )
     }
     async fetchAllSuppliersCount(query : string){
-        return await this._executeQuery( `SELECT u.id FROM user u 
+        return await this._executeQuery( `SELECT u.id, u.name , u.email,  u.mobile as contact_no, a.latitude, a.longitude, case when p.grade = 1 then 'A' when p.grade = 2 then 'B' when p.grade = 3 then 'C' when p.grade = 4 then 'D' else null end as grade,  u.status,
+                                          u.created_at, u.updated_at 
+                                          FROM user u 
                                           inner join addresses a ON a.user_id=u.id  
+                                          inner join users_profile p ON a.user_id=p.user_id
                                           inner join address_city cty ON a.city_id = cty.id
                                           inner join address_state st ON cty.state_id = st.id
-                                          where u.role_id = 3
-                                          group by u.id;
-                                          ${query}  `, []  )
+                                          where u.role_id = 3 ${query}
+                                          group by u.id
+                                           `, []  )
     }
 
 
@@ -134,5 +137,33 @@ export class SupplierModel extends UserModel
                                                   inner join address_state st on ac.state_id = st.id 
                                                   where a.address_type = 1 and sp.status = 1 and st.id = ?
                                                   `, [state_id])
+    }
+    async fetchAllSupplierPO(limit : number, offset : number, sortOrder : string, query : string){
+        return await this._executeQuery(`SELECT spo.id, s.name as supplier, c.name as customer, p.name as product, spo.sales_order_id, spo.quantity,DATE_FORMAT(spo.delivery_date, '%d-%m-%Y')  as delivery_date, spo.status FROM supplier_purchase_order spo
+                                         left join customer_sales_orders cso on cso.id = spo.sales_order_id
+                                         left join customers c on c.id = cso.customer_id
+                                         left join products p on p.id = cso.product_id
+                                         left join user s on s.id = spo.supplier_id
+                                         ${query}
+                                         ${sortOrder} 
+                                         LIMIT ? OFFSET ?`, [limit, offset]  )
+    }
+    async fetchAllSupplierPOCount(query : string){
+        return await this._executeQuery(`SELECT spo.id, s.name as supplier, c.name as customer, p.name as product, spo.sales_order_id, spo.quantity,DATE_FORMAT(spo.delivery_date, '%d-%m-%Y')  as delivery_date, spo.status FROM supplier_purchase_order spo
+                                         left join customer_sales_orders cso on cso.id = spo.sales_order_id
+                                         left join customers c on c.id = cso.customer_id
+                                         left join biofuel.products p on p.id = cso.product_id
+                                         left join user s on s.id = spo.supplier_id
+                                         ${query}
+                                         `, []  )
+    }
+    async updateSupplierPO( data : any, id : number ){
+        return await this._executeQuery( `update supplier_purchase_order set ? where id = ?  `, [data, id])
+    }
+    async SupplierPOExistsOrNot( id : number ){
+        return await this._executeQuery( `select id from supplier_purchase_order where id = ?`, [id])
+    }
+    async createSupplierPOLogs( data : any ){
+        return await this._executeQuery( ` insert into supplier_purchase_order_stage_logs set ? `, [data])
     }
 }

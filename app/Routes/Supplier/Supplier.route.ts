@@ -47,4 +47,13 @@ router.get(
     celebrate(supplierSchema.fetchSupplierByState),
     supplierController.fetchAllSuppliersByState
 )
+router.post(
+  '/po/fetch/all',
+  supplierController.fetchAllSupplierPO
+);
+router.put( 
+  '/po/update/status',
+  celebrate(supplierSchema.updateSupplierPOStatus),
+  supplierController.updateSupplierPO
+)
 export default router;
