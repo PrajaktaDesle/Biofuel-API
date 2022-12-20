@@ -704,16 +704,9 @@ const fetchAllCustomerSalesOrdersCount =async(query : string) => {
         return error
     }
 }
-const fetchAllCustomersJson = async (  ) => {
+const fetchAllCustomersJson = async ( query : string ) => {
     try{
-        let result = await new CustomerModel().fetchAllCustomersJson();
-        if( result[0].customers.length === 0 ){
-            throw new Error("Customers  not found!")
-
-        }
-        else{
-            return result[0].customers
-        }
+        return await new CustomerModel().fetchAllCustomersJson(query);
     }
     catch(err){
         return err 
