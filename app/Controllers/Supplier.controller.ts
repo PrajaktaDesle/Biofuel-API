@@ -257,7 +257,8 @@ const updateSupplierPO : IController = async (req, res) => {
 };
 const fetchAllSuppliersList : IController = async (req, res) => {
     try {
-        let supplier : any = await supplierService.fetchAllSuppliersList();
+        let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " AND u.name like '%"+ req.query.key + "%'" : "";
+        let supplier : any = await supplierService.fetchAllSuppliersList(query);
         if (supplier instanceof Error) {
             LOGGER.info("error", supplier)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);

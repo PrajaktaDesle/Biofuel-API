@@ -89,14 +89,14 @@ const fetchProductById = async (id: number) => {
 
 }
 
-const fetchAllProductCategories= async () => {
+const fetchAllProductCategories= async ( query : string ) => {
 
     try {
-        let productC = await new ProductModel().fetchAllProductCategories()
+        let productC = await new ProductModel().fetchAllProductCategories(query)
         if (productC.length == 0) {
             throw new Error("Product categories not found!")
         }
-       
+        console.log( "categories : ", productC )
         return productC;
 
     }
@@ -106,10 +106,10 @@ const fetchAllProductCategories= async () => {
 
 }
 
-const fetchAllProductUsageUnits= async () => {
+const fetchAllProductUsageUnits= async ( query : string ) => {
 
     try {
-        let productUU = await new ProductModel().fetchAllProductUsageUnits()
+        let productUU = await new ProductModel().fetchAllProductUsageUnits( query )
         if (productUU.length == 0) {
             throw new Error("Product usagae units not found!")
         }
@@ -208,16 +208,16 @@ const updateProductById = async (req: any) => {
 
 
 
-const fetchAllProductRawMaterials = async (  ) =>{
-    let data = await new ProductModel().fetchAllProductRawMaterials()
+const fetchAllProductRawMaterials = async (  query : string ) =>{
+    let data = await new ProductModel().fetchAllProductRawMaterials( query )
     if (data.length == 0) {
             throw new Error("Raw materials not found!")
         }
     return data 
 }
 
-const fetchAllProductPackaging = async (  ) =>{
-    let data = await new ProductModel().fetchAllProductPackaging()
+const fetchAllProductPackaging = async (  query : string ) =>{
+    let data = await new ProductModel().fetchAllProductPackaging( query )
     if (data.length == 0) {
             throw new Error("packaging not found!")
         }
