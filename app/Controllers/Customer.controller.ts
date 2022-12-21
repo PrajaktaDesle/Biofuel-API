@@ -466,8 +466,6 @@ const fetchAllMappedSuppliersByAddressID: IController = async (req, res) => {
         });
 };
 
-
-
 const fetchAllCustomersJson: IController = async (req, res) => {
     let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " AND cs.name like '%"+ req.query.key + "%'" : "";
     await CustomerService.fetchAllCustomersJson(query)

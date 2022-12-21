@@ -140,6 +140,8 @@ const fetchSupplierById: IController = async (req, res) => {
 
 
 
+
+
 const updateSupplierDetails : IController = async (req, res) => {
     try {
         let supplier : any = await supplierService.updateSupplierDetails(req);
@@ -253,99 +255,6 @@ const updateSupplierPO : IController = async (req, res) => {
             return;
     }
 };
-const  createDeliveryChallan: IController = async (req, res) => {
-    let challan: any;
-    try {
-        challan = await supplierService.createChallanService(req.body)
-        if (challan instanceof Error) {
-            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
-        } else {
-            apiResponse.result(res, {
-                challan
-            }, httpStatusCodes.CREATED);
-        }
-    } catch (e:any) {
-        // @ts-ignore
-        apiResponse.error(
-            res,
-            httpStatusCodes.BAD_REQUEST,
-            e.message
-        );
-    }
-    return;
-}
-const fetchAllDeliveryChallan: IController = async (req, res) => {
-    try{
-        let query = " "
-        if(req.body.query != ""){
-            query = ` where  dc.dispatch_id like '%${req.body.query}%' OR dc.vehicle_no like '%${req.body.query}%'`
-        }
-        let challan = await supplierService.fetchAllDeliveryChallan(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
-        let count = await supplierService.fetchAllChallansCount(query)
-        if ( challan instanceof Error ){
-            return apiResponse.error( res,
-                httpStatusCodes.BAD_REQUEST,
-                challan.message )
-        }
-        else{
-            return apiResponse.result( res,
-                {data :challan, total:count},
-                httpStatusCodes.OK )
-        }
-    }
-    catch (error:any) {
-        LOGGER.info( "Error => ", error )
-        return apiResponse.error( res,
-            httpStatusCodes.BAD_REQUEST )
-    }
-};
-const fetchAllSuppliersList : IController = async (req, res) => {
-    try {
-        let supplier : any = await supplierService.fetchAllSuppliersList();
-        if (supplier instanceof Error) {
-            LOGGER.info("error", supplier)
-            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
-        } else {
-
-            apiResponse.result(res, supplier, httpStatusCodes.OK);
-        }
-    } catch (e:any) {
-        LOGGER.info("controller ->", e)
-            apiResponse.error(
-                res,
-                httpStatusCodes.BAD_REQUEST,
-                e.message
-            );
-            return;
-    }
-};
-const createSupplierPO : IController = async (req, res) => {
-    let supplier: any;
-    try {
-        supplier = await supplierService.createSupplierPO(req.body);
-        LOGGER.info('Supplier at controller-----> ', supplier);
-
-        if (supplier instanceof Error) {
-            LOGGER.info("error", supplier)
-            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
-        } else {
-            apiResponse.result(res,
-            supplier,
-            httpStatusCodes.CREATED);
-        }
-
-    } catch (e:any) {
-        LOGGER.info("controller ->", e)
-        // @ts-ignore
-
-            apiResponse.error(
-                res,
-                httpStatusCodes.BAD_REQUEST,
-                e.message
-            );
-        return;
-    }
-};
 export default {
     register,
     login,
@@ -356,9 +265,5 @@ export default {
     getHomePage,
     fetchAllSuppliersByState,
     fetchAllSupplierPO,
-    updateSupplierPO,
-    createDeliveryChallan,
-    fetchAllDeliveryChallan,
-    fetchAllSuppliersList,
-    createSupplierPO
+    updateSupplierPO
 };
