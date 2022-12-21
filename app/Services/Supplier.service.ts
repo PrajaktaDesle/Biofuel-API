@@ -6,8 +6,6 @@ import formidable from "formidable";
 let config = require("../config");
 import moment from 'moment';
 import Encryption from "../utilities/Encryption";
-import fs from 'fs';
-import { CustomerModel } from "../Models/Customer/Customer.model";
 
 const createSupplier = async (req: any) => {
     try {
@@ -576,7 +574,6 @@ const fetchSupplierPOById = async (id: any) => {
         if (supplier[0].rate_type == 1) supplier[0].rate_type = { "label": "Delivery", "value": 1 };
         if (supplier[0].po_type == 0) supplier[0].po_type = { "label": "New", "value": 0 };
         if (supplier[0].po_type == 1) supplier[0].po_type = { "label": "Secondayr", "value": 1 };
-
         return supplier[0];
     }
     catch (e) {
