@@ -56,14 +56,14 @@ router.put(
   celebrate(supplierSchema.updateSupplierPOStatus),
   supplierController.updateSupplierPO
 )
-router.post(
-    '/create/delivery-challan',
-        supplierController.createDeliveryChallan
-)
-router.post(
-    '/fetch/all/challan',
-    supplierController.fetchAllDeliveryChallan
-)
+// router.post(
+//     '/create/delivery-challan',
+//         supplierController.createDeliveryChallan
+// )
+// router.post(
+//     '/fetch/all/challan',
+//     supplierController.fetchAllDeliveryChallan
+// )
 
 router.get(
   '/fetch/list',
@@ -72,5 +72,14 @@ router.get(
 router.post(
   '/po/create',
   supplierController.createSupplierPO
+)
+// fetchSupplierPOById
+router.get(
+  '/po/fetch',
+  supplierController.fetchSupplierPOById
+)
+router.put( 
+  '/po/update',
+  supplierController.updateSupplierPO
 )
 export default router;

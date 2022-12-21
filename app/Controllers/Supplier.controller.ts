@@ -305,6 +305,28 @@ const createSupplierPO : IController = async (req, res) => {
     }
 };
 
+const fetchSupplierPOById: IController = async (req, res) => {
+    supplierService.fetchSupplierPOById(req.query.id)
+        .then( (supplier : any) => {
+            if(supplier instanceof Error){
+                LOGGER.info("User 2", supplier.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    supplier.message
+                );
+            }else{
+                LOGGER.log("User 3", supplier)
+                apiResponse.result(res, supplier, httpStatusCodes.OK);
+            }
+        }).catch( (err : any) => {
+        LOGGER.info("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+        );
+    });
+};
 export default {
     register,
     login,
@@ -315,5 +337,8 @@ export default {
     getHomePage,
     fetchAllSuppliersByState,
     fetchAllSupplierPO,
-    updateSupplierPO
+    updateSupplierPO,
+    fetchAllSuppliersList,
+    createSupplierPO,
+    fetchSupplierPOById
 };
