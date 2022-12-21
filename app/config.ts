@@ -20,13 +20,6 @@ export = {
     // baseUrl: "https://digi-qa-s3.s3.ap-south-1.amazonaws.com",
     listPerPage: env.LIST_PER_PAGE || 10
 }
-    // process.env.AWS_BUCKET_NAME = "digi-qa-s3",
-    // process.env.AWS_BUCKET_REGION = "ap-south-1",
-    // process.env.AWS_ACCESS_KEY = "AKIA4FVNO3EYUANR25WJ",
-    // process.env.AWS_SECRET_KEY = "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"
- // region : "ap-south-1",
- //    accessKeyId: "AKIAXCAZHDZEYZ5Y4MXE",
- //    secretAccessKey: "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",
     process.env.AWS_BUCKET_NAME ="biofuel-s3",
     process.env.AWS_BUCKET_REGION = "ap-south-1",
     process.env.AWS_ACCESS_KEY = "AKIAXCAZHDZEYZ5Y4MXE",

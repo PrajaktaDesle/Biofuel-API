@@ -43,7 +43,8 @@ export class ProductModel extends BaseModel
         return await this._executeQuery( "update products set ? where id = ? ",[data,id] )
     }
     async fetchAllProductCategories( query:string ){
-        return await this._executeQuery( `select id as value, name as label from product_categories ${query} `,[] )
+        console.log( `select id as value, name as label from product_categories  where ${query} ` )
+        return await this._executeQuery( `select id as value, name as label from product_categories  ${query} `,[] )
     }
     async fetchAllProductUsageUnits( query:string ){
         return await this._executeQuery( `select id as value, name as label from product_usage_unit ${query}`,[] )

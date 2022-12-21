@@ -439,15 +439,15 @@ const updateSupplierPO = async (data: any) => {
     }
 }
 
-const fetchAllSuppliersList = async () => {
+const fetchAllSuppliersList = async (query:string) => {
     try {
-        let result = await new SupplierModel().fetchAllSuppliersList();
-        if (result[0].suppliers === null) {
+        let result = await new SupplierModel().fetchAllSuppliersList(query);
+        if (result.length === 0) {
             throw new Error("Suppliers  not found!")
 
         }
         else {
-            return result[0].suppliers
+            return result
         }
     }
     catch (err) {
@@ -473,7 +473,7 @@ const createSupplierPO = async (data: any) => {
         // `po_type` tinyint(1) DEFAULT NULL COMMENT '0 as new, 1 as secondary\n',
         // `status` tinyint(1) DEFAULT NULL,
 
-
+        console.log("request Data : " , data )
         if (data.supplier !== undefined && data.supplier !== null && data.supplier !== "")
             sales_order.supplier_id = data.supplier;
         

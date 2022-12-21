@@ -4,6 +4,7 @@ export default {
     citiesByState: { 
         [Segments.QUERY]: {
             state_id: Joi.number().required(),
+            key : Joi.any().optional(),
         }
     },
 

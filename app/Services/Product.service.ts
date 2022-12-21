@@ -96,7 +96,7 @@ const fetchAllProductCategories= async ( query : string ) => {
         if (productC.length == 0) {
             throw new Error("Product categories not found!")
         }
-       
+        console.log( "categories : ", productC )
         return productC;
 
     }
