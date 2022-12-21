@@ -166,6 +166,7 @@ export class SupplierModel extends UserModel
     async createSupplierPOLogs( data : any ){
         return await this._executeQuery( ` insert into supplier_purchase_order_stage_logs set ? `, [data])
     }
+
     async createDeliveryChallenModel(data: any) {
         return await this._executeQuery("insert into purchase_order_delivery_challan set ?", [data]);
 
