@@ -64,4 +64,13 @@ router.post(
   '/po/create',
   supplierController.createSupplierPO
 )
+// fetchSupplierPOById
+router.get(
+  '/po/fetch',
+  supplierController.fetchSupplierPOById
+)
+router.put( 
+  '/po/update',
+  supplierController.updateSupplierPO
+)
 export default router;
