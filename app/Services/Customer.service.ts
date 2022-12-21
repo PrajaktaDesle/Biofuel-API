@@ -281,6 +281,7 @@ const fetchCSMCount =async(query : string) => {
 const createCustomerEstimate = async (data: any) => {
     try {
         let customerData;
+        console.log( "estimate : ", data )
         let estimate:any = {};
         if(data.customer !== undefined && data.customer !== null && data.customer !== "")
         estimate.customer_id=data.customer;
@@ -324,9 +325,11 @@ const createCustomerEstimate = async (data: any) => {
         if(data.tnc !== undefined && data.tnc !== null && data.tnc !== "")
         estimate.tnc=data.tnc;
 
-        if(data.status !== undefined && data.status !== null && data.status !== "")estimate.status=data.status;
-        estimate.status=0;
-       
+        if(data.status !== undefined && data.status !== null && data.status !== ""){
+            estimate.status=data.status;
+        }
+        else {estimate.status=0;}
+       console.log( "estimate : ", estimate )
         let estimateData = await new CustomerModel().createCustomerEstimate(estimate)
         
         let log : any = { "estimate_id" : estimateData.insertId, "stage":estimate.status,"user_id":data.user_id }
