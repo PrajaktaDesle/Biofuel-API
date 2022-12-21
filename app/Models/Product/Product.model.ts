@@ -54,9 +54,8 @@ export class ProductModel extends BaseModel
     async fetchAllProductRawMaterials(){
         return await this._executeQuery( "select id as value, name as label from  product_raw_material",[])
     }
-    async fetchAllProductsList() {
-        return await this._executeQuery(`SELECT  CAST(CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT('value', p.id, 'label', p.name)), ']') AS JSON) as products
-        FROM products p where p.status = 1`, [])
+    async fetchAllProductsList(query:string ) {
+        return await this._executeQuery(`SELECT  p.id as value , p.name as label FROM products p where p.status = 1 ${query}`, [])
     }
 
 }

@@ -101,4 +101,9 @@ router.get(
     CustomerController.fetchAllMappedSuppliers
 
 );
+router.get(
+    '/fetch/so/list',
+    CustomerController.fetchAllCustomersSOList
+);
+
 export default router;

@@ -208,7 +208,7 @@ const updateProductById = async (req: any) => {
 
 
 
-const fetchAllProductRawMaterials = async ( ) =>{
+const fetchAllProductRawMaterials = async (  ) =>{
     let data = await new ProductModel().fetchAllProductRawMaterials()
     if (data.length == 0) {
             throw new Error("Raw materials not found!")
@@ -216,7 +216,7 @@ const fetchAllProductRawMaterials = async ( ) =>{
     return data 
 }
 
-const fetchAllProductPackaging = async ( ) =>{
+const fetchAllProductPackaging = async (  ) =>{
     let data = await new ProductModel().fetchAllProductPackaging()
     if (data.length == 0) {
             throw new Error("packaging not found!")
@@ -224,15 +224,15 @@ const fetchAllProductPackaging = async ( ) =>{
     return data 
 }
 
-const fetchAllProductsList = async (  ) => {
+const fetchAllProductsList = async ( query : string ) => {
     try{
-        let result = await new ProductModel().fetchAllProductsList();
-        if( result[0].products.length === 0 ){
-            throw new Error("Customers  not found!")
+        let result = await new ProductModel().fetchAllProductsList( query );
+        if( result.length === 0 ){
+            throw new Error("Products  not found!")
 
         }
         else{
-            return result[0].products
+            return result
         }
     }
     catch(err){
