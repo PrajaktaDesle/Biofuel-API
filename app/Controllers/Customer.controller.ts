@@ -84,7 +84,7 @@ const fetchAllCustomers: IController = async (req, res) => {
     try {
         let query = " "
         if (req.body.query != "") {
-            query = ` WHERE cs.name like '%${req.body.query}%' OR cty.name like '%${req.body.query}%' OR st.name like '%${req.body.query}'OR cs.mobile like '%${req.body.query}%' `
+            query = ` WHERE cs.name like '%${req.body.query}%' OR cs.mobile like '%${req.body.query}%' `
         }
         let customer = await customerService.fetchAllCustomer(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
         let count = await customerService.fetchAllCustomerCount(query);
@@ -444,7 +444,7 @@ const fetchAllActiveCustomers: IController = async (req, res) => {
             );
         });
 };
-const fetchAllMappedSuppliers: IController = async (req, res) => {
+const fetchAllMappedSuppliersByAddressID: IController = async (req, res) => {
     await CustomerService.fetchSuppliers(req)
         .then( (customer : any) => {
             if(customer instanceof Error){
@@ -465,8 +465,6 @@ const fetchAllMappedSuppliers: IController = async (req, res) => {
             );
         });
 };
-
-
 
 const fetchAllCustomersJson: IController = async (req, res) => {
     let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " AND cs.name like '%"+ req.query.key + "%'" : "";
@@ -530,6 +528,6 @@ export default {
                 fetchAllCustomerSalesOrders,
                 fetchAllSuppliersAgainstCustomer,
                 fetchAllCustomersJson,
-                fetchAllActiveCustomers, fetchAllMappedSuppliers,
+                fetchAllActiveCustomers, fetchAllMappedSuppliersByAddressID,
                 fetchAllCustomersSOList
 }

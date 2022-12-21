@@ -476,10 +476,10 @@ const createSupplierPO = async (data: any) => {
         console.log("request Data : " , data )
         if (data.supplier !== undefined && data.supplier !== null && data.supplier !== "")
             sales_order.supplier_id = data.supplier;
-        
+
         if (data.supplier_po_number !== undefined && data.supplier_po_number !== null && data.supplier_po_number !== "")
             sales_order.po_number = data.supplier_po_number;
-       
+
         if (data.customer_so_number !== undefined && data.customer_so_number !== null && data.customer_so_number !== "")
             sales_order.sales_order_id = data.customer_so_number;
 
@@ -500,10 +500,10 @@ const createSupplierPO = async (data: any) => {
 
         if (data.rate_type !== undefined && data.rate_type !== null && data.rate_type !== "")
             sales_order.rate_type = data.rate_type;
-       
+
         if (data.po_type !== undefined && data.po_type !== null && data.po_type !== "")
             sales_order.po_type = data.po_type;
-       
+
         if (data.status !== undefined && data.status !== null && data.status !== "") sales_order.status = data.status;
            sales_order.status = 0
         var supplierPOData = await new SupplierModel().createSuppliersPO(sales_order)
@@ -512,6 +512,54 @@ const createSupplierPO = async (data: any) => {
     } catch (e: any) {
         LOGGER.info("Exception =>", e.message);
         throw e;
+    }
+}
+const createChallanService = async(fields:any) =>{
+    let data:any = {}
+    try{
+        if(fields.quantity !== undefined && fields.quantity !== null && fields.quantity!== "")
+            data.quantity = fields.quantity
+        if(fields.DeliveryDate !== undefined && fields.DeliveryDate !== null && fields.DeliveryDate!== "")
+            data.delivery_date = fields.DeliveryDate
+        if(fields.NotificationNo !== undefined && fields.NotificationNo !== null && fields.NotificationNo !== "")
+            data.dispatch_id = fields.NotificationNo
+        if(fields.VehicleNo !== undefined && fields.VehicleNo !== null && fields.VehicleNo !== "")
+            data.vehicle_no = fields.VehicleNo
+        if(fields.DriverNo !== undefined && fields.DriverNo !== null && fields.DriverNo !== "")
+            data.driver_mobile_no = fields.DriverNo
+        if(fields.TransportationRate !== undefined && fields.TransportationRate  !== null && fields.TransportationRate  !== "")
+            data.transportation_rate = fields.TransportationRate
+        if(fields.user_id !== undefined && fields.user_id  !== null && fields.user_id  !== "")
+            data.user_id = fields.user_id
+        let result = await new SupplierModel().createDeliveryChallenModel(data)
+        if (result.length == 0 ) throw new Error( "failed to generate delivery challan" )
+        return result
+    }catch (e) {
+        throw e
+    }
+}
+
+const fetchAllDeliveryChallan = async (pageIndex: number, pageSize : number, sort : any, query : string ) =>{
+    let suppliers;
+    let orderQuery : string;
+    if(sort.key != ""){
+        orderQuery = " ORDER BY "+ sort.key + " "+ sort.order +" ";
+    }
+    else{
+        orderQuery = " ORDER By CASE WHEN spo.status=0 THEN 1 WHEN spo.status=1 THEN 2 WHEN spo.status=-1 THEN 3 END";
+    }
+    suppliers = await new SupplierModel().fetchAllDeliveryChallan(pageSize, (pageIndex-1) * pageSize, orderQuery, query)
+    console.log( "suppliers : ", suppliers )
+    if (suppliers == null) throw new Error("challan not found");
+    return suppliers;
+}
+const fetchAllChallansCount = async (query: string) => {
+    try {
+        let  challan = await new SupplierModel().fetchChallanCount(query);
+        return challan.length;
+    }
+    catch (error: any) {
+        return error
     }
 }
 
@@ -529,5 +577,8 @@ export default {
     fetchAllSupplierPOCount,
     updateSupplierPO,
     fetchAllSuppliersList,
-    createSupplierPO
+    createSupplierPO,
+    createChallanService,
+    fetchAllDeliveryChallan,
+    fetchAllChallansCount
 }

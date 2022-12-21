@@ -255,6 +255,7 @@ const updateSupplierPO : IController = async (req, res) => {
             return;
     }
 };
+
 const fetchAllSuppliersList : IController = async (req, res) => {
     try {
         let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " AND u.name like '%"+ req.query.key + "%'" : "";
@@ -303,6 +304,7 @@ const createSupplierPO : IController = async (req, res) => {
         return;
     }
 };
+
 export default {
     register,
     login,
@@ -313,7 +315,5 @@ export default {
     getHomePage,
     fetchAllSuppliersByState,
     fetchAllSupplierPO,
-    updateSupplierPO,
-    fetchAllSuppliersList,
-    createSupplierPO
+    updateSupplierPO
 };

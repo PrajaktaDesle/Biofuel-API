@@ -18,16 +18,7 @@ const createNotification: IController = async (req, res) => {
             }, httpStatusCodes.CREATED);
         }
     } catch (e:any) {
-        console.log("controller ->", e)
         // @ts-ignore
-        if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
-            apiResponse.error(
-                res,
-                httpStatusCodes.BAD_REQUEST,
-                'MOBILE_AND_EMAIL_ALREADY_EXISTS',
-            );
-        }
-        else{
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
@@ -35,15 +26,12 @@ const createNotification: IController = async (req, res) => {
             );
         }
         return;
-    }
 };
-
-
 const fetchAllnotifications: IController = async (req, res) => {
     try {
         let query = ""
         if (req.body.query != "") {
-            query = ` WHERE (p.name like '%${req.body.query}%' OR sp.name like '%${req.body.query}%' ) `
+            query = ` WHERE (p.name like '%${req.body.query}%' OR sp.name like '%${req.body.query}%' OR spo.po_number like '%${req.body.query}%') `
         }
         let result = await notificationService.fetchAllNotifications(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
         let count = await notificationService.fetchNotificationCount(query);

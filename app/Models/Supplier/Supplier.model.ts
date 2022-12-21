@@ -166,11 +166,47 @@ export class SupplierModel extends UserModel
     async createSupplierPOLogs( data : any ){
         return await this._executeQuery( ` insert into supplier_purchase_order_stage_logs set ? `, [data])
     }
-    async fetchAllSuppliersList(query:string) {
-        return await this._executeQuery(`SELECT u.id as  value , u.name  as label FROM user u where u.status = 1 and u.role_id = 3 ${query}`, [])
+
+    async createDeliveryChallenModel(data: any) {
+        return await this._executeQuery("insert into purchase_order_delivery_challan set ?", [data]);
+
+    }
+    async fetchAllDeliveryChallan(limit : number, offset : number, sortOrder : string, query : string) {
+        return await this._executeQuery(`select dc.id ,dc.dispatch_id, cs.name as customer, sp.name as supplier, sp.mobile,
+                                                dc.delivery_date, dc.quantity, dc.vehicle_no,dc.driver_mobile_no as DriverNo,
+                                                dc.transportation_rate, dc.status,
+                                                dc.created_at, dc.updated_at
+                                                from  purchase_order_delivery_challan dc
+                                                inner join user sp  on dc.user_id = sp.id
+                                                inner join purchase_order_dispatch_notifications noti on dc.dispatch_id = noti.id
+                                                inner join supplier_purchase_order spo on noti.purchase_order_id = spo.id
+                                                inner join customer_sales_orders cso on spo.sales_order_id = cso.id
+                                                inner join customers cs on cso.customer_id = cs.id
+                                                ${query}
+                                                ${sortOrder};`, [limit, offset]);
+
+    }
+    async fetchChallanCount(query:string) {
+        return await this._executeQuery(`select dc.id ,dc.dispatch_id, cs.name as customer, sp.name as supplier, sp.mobile,
+                                                dc.delivery_date, dc.quantity, dc.vehicle_no,dc.driver_mobile_no as DriverNo,
+                                                dc.transportation_rate, dc.status,
+                                                dc.created_at, dc.updated_at
+                                                from  purchase_order_delivery_challan dc
+                                                inner join user sp  on dc.user_id = sp.id
+                                                inner join purchase_order_dispatch_notifications noti on dc.dispatch_id = noti.id
+                                                inner join supplier_purchase_order spo on noti.purchase_order_id = spo.id
+                                                inner join customer_sales_orders cso on spo.sales_order_id = cso.id
+                                                inner join customers cs on cso.customer_id = cs.id
+                                                ${query}
+                                               `, []);
+
+    }
+    async fetchAllSuppliersList() {
+        return await this._executeQuery(`SELECT  CAST(CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT('value', u.id, 'label', u.name)), ']') AS JSON) as suppliers
+        FROM user u where u.status = 1 and u.role_id = 3`, [])
     }
     async createSuppliersPO(supplierData:any){
         return await this._executeQuery("insert into supplier_purchase_order set ?", [supplierData]);
     }
-    
+
 }

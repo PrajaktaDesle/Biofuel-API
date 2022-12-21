@@ -9,9 +9,17 @@ export class NotificationModel extends BaseModel
     }
 
     async fetchNotification(id:any){
-        return await this._executeQuery("select * from purchase_order_dispatch_notifications where id = ? ", [id]);
+        // return await this._executeQuery("select * from purchase_order_dispatch_notifications where id = ? ", [id]);
+        return await this._executeQuery(`select pon.id,spo.supplier_id, sp.name as supplier,
+                                                sp.mobile,spo.po_number, pon.delivery_date,pon.quantity,cso.product_id, p.name,
+                                                pon.status,pon.created_at, pon.updated_at 
+                                                from purchase_order_dispatch_notifications pon
+                                                inner join supplier_purchase_order spo on spo.id = pon.purchase_order_id
+                                                inner join user sp on sp.id = spo.supplier_id
+                                                inner join customer_sales_orders cso on spo.sales_order_id = cso.id
+                                                inner join products p on cso.product_id = p.id where  pon.id = ?`,[id])
     }
-    async fetchNotificationById(id:any){
+    async fetchNotificationBy_purchase_order_id(id:any){
         return await this._executeQuery("select * from purchase_order_dispatch_notifications where purchase_order_id = ? ", [id]);
     }
 
