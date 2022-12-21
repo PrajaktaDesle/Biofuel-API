@@ -234,7 +234,6 @@ const fetchAllSupplierPO: IController = async (req, res) => {
     }
 };
 
-
 const updateSupplierPO : IController = async (req, res) => {
     try {
         let supplier : any = await supplierService.updateSupplierPO(req.body);
