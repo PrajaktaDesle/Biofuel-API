@@ -200,9 +200,8 @@ export class SupplierModel extends UserModel
                                                `, []);
 
     }
-    async fetchAllSuppliersList() {
-        return await this._executeQuery(`SELECT  CAST(CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT('value', u.id, 'label', u.name)), ']') AS JSON) as suppliers
-        FROM user u where u.status = 1 and u.role_id = 3`, [])
+    async fetchAllSuppliersList(query:string) {
+        return await this._executeQuery(`SELECT u.id as  value , u.name  as label FROM user u where u.status = 1 and u.role_id = 3 ${query}`, [])
     }
     async createSuppliersPO(supplierData:any){
         return await this._executeQuery("insert into supplier_purchase_order set ?", [supplierData]);

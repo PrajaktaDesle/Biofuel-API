@@ -151,7 +151,8 @@ export class CustomerModel extends BaseModel {
         return await this._executeQuery("update customer_sales_orders set ? where id = ? ", [data, id])
     }
     async fetchCustomerSalesOrderById(id: number) {
-        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status, so_date,  DATE_FORMAT(delivery_date, '%d-%m-%Y') as delivery_date, estimate_id ,product_id,p.name as product, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, rate,  adjustment_amount*rate as total_amount FROM customer_sales_orders so
+        
+        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status, so_date,  DATE_FORMAT(delivery_date, '%Y-%m-%d') as delivery_date, estimate_id ,product_id,p.name as product, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, rate,  adjustment_amount*rate as total_amount FROM customer_sales_orders so
                                           inner join products p ON p.id=so.product_id
                                           inner join customers cs ON cs.id=so.customer_id
                                           inner join product_raw_material rm ON rm.id=so.raw_material_id
