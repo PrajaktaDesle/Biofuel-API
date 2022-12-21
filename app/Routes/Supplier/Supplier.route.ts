@@ -56,6 +56,15 @@ router.put(
   celebrate(supplierSchema.updateSupplierPOStatus),
   supplierController.updateSupplierPO
 )
+router.post(
+    '/create/delivery-challan',
+        supplierController.createDeliveryChallan
+)
+router.post(
+    '/fetch/all/challan',
+    supplierController.fetchAllDeliveryChallan
+)
+
 router.get(
   '/fetch/list',
   supplierController.fetchAllSuppliersList

@@ -22,10 +22,10 @@ router.post(
   notificationController.fetchAllnotifications
 )
 
-// router.get(
-//   '/fetch/',
-// celebrate( notificationSchema.fetchNotificationById ),
-//   notificationController.fetchAllSuppliers
-// )
+router.get(
+  '/fetch/By-id',
+celebrate( notificationSchema.fetchNotificationById ),
+  notificationController.fetchNotificationById
+)
 
 export default router;

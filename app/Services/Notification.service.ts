@@ -13,9 +13,9 @@ const createNotification = async ( data : any ) => {
         vehicle_count = data.count_of_vehicles
         quantity = data.quantity/vehicle_count
         console.log('deliverable product  quantity distribution------>',quantity)
-        notificationData.quantity =quantity
+        notificationData.quantity = quantity
         console.log("notification",notificationData)
-        let n = await new NotificationModel().fetchNotificationById(notificationData.purchase_order_id)
+        let n = await new NotificationModel().fetchNotificationBy_purchase_order_id(notificationData.purchase_order_id)
         if(n.length !== 0 ) throw new Error("purchase order number already exist")
         for (let i = 0 ; i < vehicle_count ; i++){
             notification = await new NotificationModel().createNotification( notificationData );
@@ -69,11 +69,19 @@ const fetchNotificationCount =async(query : string) => {
     }
 }
 
-const fetchNotificationById = async ( data:any ) => {
+const fetchNotificationById = async (data:any ) => {
     try{
-        let notification = await new NotificationModel().fetchNotification( data.id );
+        let notification = await new NotificationModel().fetchNotification(data);
         if ( notification.length == 0 ) throw new Error( "No notification found " )
-        return notification
+        let notifications = notification[0]
+        if(notification[0].status == 0){
+            notifications.status = {value : notification[0].status , label : "notification is pending"}
+        } else if (notification[0].status == 1){
+            notifications.status = {value : notification[0].status , label : "notification is approved"}
+        }else{
+            notifications.status = {value : notification[0].status , label : "notification is rejected"}
+        }
+        return notifications
     }
     catch( error:any ){
         console.log( " Exception ===> ", error.message )
