@@ -53,4 +53,7 @@ export class NotificationModel extends BaseModel
                                           left join user sp on sp.id = spo.supplier_id
                                           ${query}`,[])
     }
+    async getNotificationMenue( ) {
+        return await this._executeQuery( `select id , name, image_url from dispatch_menu `, [])
+    }
 }

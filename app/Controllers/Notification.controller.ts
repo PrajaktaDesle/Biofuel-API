@@ -99,12 +99,30 @@ const updateNotificationDetails: IController = async (req, res) => {
     });
 };
 
+const getNotificationMenue: IController = async (req, res) => {
+    try {
+        let homePage : any = await notificationService.getNotificationMenue();
+        if (homePage instanceof Error) {
+            LOGGER.info("error", homePage)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
 
-
+            apiResponse.result(res, homePage, httpStatusCodes.OK);
+        }
+    } catch (e:any) {
+        LOGGER.info("controller ->", e)
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+            return;
+    }
+};
 export default {
     createNotification,
     updateNotificationDetails,
     fetchNotificationById,
     fetchAllnotifications,
-
+    getNotificationMenue
 };
