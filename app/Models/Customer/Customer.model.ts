@@ -117,7 +117,8 @@ export class CustomerModel extends BaseModel {
         return await this._executeQuery("insert into customer_estimates set ? ", [estimateData])
     }
     async fetchCustomerEstimateById(id: any) {
-        return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, DATE_FORMAT(estimate_date, '%d-%m-%Y')  as estimate_date, DATE_FORMAT(expiry_date, '%d-%m-%Y')  as expiry_date, estimate_no, es.raw_material_id, prm.name as raw_material ,product_id,p.name as product, product_description, packaging_id, pp.name as packaging, quantity, rate, adjustment_amount as adjustment,tnc, customer_note, adjustment_amount+(rate*quantity) as total_amount
+        // return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, DATE_FORMAT(estimate_date, '%d-%m-%Y')  as estimate_date, DATE_FORMAT(expiry_date, '%d-%m-%Y')  as expiry_date, estimate_no, es.raw_material_id, prm.name as raw_material ,product_id,p.name as product, product_description, packaging_id, pp.name as packaging, quantity, rate, adjustment_amount as adjustment,tnc, customer_note, adjustment_amount+(rate*quantity) as total_amount
+        return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, estimate_date,  expiry_date, estimate_no, es.raw_material_id, prm.name as raw_material ,product_id,p.name as product, product_description, packaging_id, pp.name as packaging, quantity, rate, adjustment_amount as adjustment,tnc, customer_note, adjustment_amount+(rate*quantity) as total_amount
                                           FROM customer_estimates es
                                           inner join products p ON p.id=es.product_id
                                           inner join customers cs ON cs.id=es.customer_id
