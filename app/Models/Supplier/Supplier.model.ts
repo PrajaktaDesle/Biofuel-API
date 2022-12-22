@@ -170,9 +170,9 @@ export class SupplierModel extends UserModel
                 return await this._executeQuery("insert into purchase_order_delivery_challan set ?", [data]);
 
             }
-            async fetchAllDeliveryChallan(limit : number, offset : number, sortOrder : string, query : string) {
+    async fetchAllDeliveryChallan(limit : number, offset : number, sortOrder : string, query : string) {
                 return await this._executeQuery(`select dc.id ,dc.dispatch_id, cs.name as customer, sp.name as supplier, sp.mobile,
-                                                        dc.delivery_date, dc.quantity, dc.vehicle_no,dc.driver_mobile_no as DriverNo,
+                                                        DATE_FORMAT(dc.delivery_date, '%d-%m-%Y') as Delivery_date, dc.quantity, dc.vehicle_no,dc.driver_mobile_no as DriverNo,
                                                         dc.transportation_rate, dc.status,
                                                         dc.created_at, dc.updated_at
                                                         from  purchase_order_delivery_challan dc
@@ -185,9 +185,9 @@ export class SupplierModel extends UserModel
                                                         ${sortOrder};`, [limit, offset]);
 
             }
-            async fetchChallanCount(query:string) {
+    async fetchChallanCount(query:string) {
                 return await this._executeQuery(`select dc.id ,dc.dispatch_id, cs.name as customer, sp.name as supplier, sp.mobile,
-                                                        dc.delivery_date, dc.quantity, dc.vehicle_no,dc.driver_mobile_no as DriverNo,
+                                                         DATE_FORMAT(dc.delivery_date, '%d-%m-%Y') as Delivery_date, dc.quantity, dc.vehicle_no,dc.driver_mobile_no as DriverNo,
                                                         dc.transportation_rate, dc.status,
                                                         dc.created_at, dc.updated_at
                                                         from  purchase_order_delivery_challan dc
@@ -196,9 +196,7 @@ export class SupplierModel extends UserModel
                                                         inner join supplier_purchase_order spo on noti.purchase_order_id = spo.id
                                                         inner join customer_sales_orders cso on spo.sales_order_id = cso.id
                                                         inner join customers cs on cso.customer_id = cs.id
-                                                        ${query}
-                                                       `, []);
-
+                                                        ${query}`, []);
             }
     async fetchAllSuppliersList(query:string) {
         return await this._executeQuery(`SELECT u.id as  value , u.name  as label FROM user u where u.status = 1 and u.role_id = 3 ${query}`, [])
@@ -218,5 +216,10 @@ export class SupplierModel extends UserModel
         left join product_packaging pp ON pp.id=cso.packaging_id
         where spo.id = ? `, [id])
     }
-
+    async updateChallanStatus(data:any, id:number) {
+        return await this._executeQuery("update purchase_order_delivery_challan set ? where id = ?" , [data, id])
+    }
+    async fetchchallanById(id:number){
+        return await this._executeQuery(`select * from purchase_order_delivery_challan where id = ?`, [id])
+    }
 }
