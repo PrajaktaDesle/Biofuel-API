@@ -621,6 +621,25 @@ const fetchSupplierPOById = async (id: any) => {
     }
 }
 
+const fetchSupplierPOBySupplierId = async (id: any) => {
+    try {
+        let supplier = await new SupplierModel().fetchAllSupplierPOBySupplierId(id);
+        if (supplier.length == 0) throw new Error("Supplier PO not found");
+        supplier[0].customer_so_number = { label: supplier[0].customer_so_number, value: supplier[0].sales_order_id };
+        supplier[0].supplier = { label: supplier[0].supplier, value: supplier[0].supplier_id };
+        if (supplier[0].status == 0) supplier[0].status = { "label": "Pending", "value": 0 };
+        if (supplier[0].status == 1) supplier[0].status = { "label": "Approved", "value": 1 };
+        if (supplier[0].status == -1) supplier[0].status = { "label": "Rejected", "value": -1 };
+        if (supplier[0].rate_type == 0) supplier[0].rate_type = { "label": "Factory", "value": 0 };
+        if (supplier[0].rate_type == 1) supplier[0].rate_type = { "label": "Delivery", "value": 1 };
+        if (supplier[0].po_type == 0) supplier[0].po_type = { "label": "New", "value": 0 };
+        if (supplier[0].po_type == 1) supplier[0].po_type = { "label": "Secondayr", "value": 1 };
+        return supplier[0];
+    }
+    catch (e) {
+        return e;
+    }
+}
 export default {
     createSupplier,
     loginSupplier,
@@ -641,4 +660,5 @@ export default {
     fetchAllDeliveryChallan,
     fetchAllChallansCount,
     updateChallanStatus,
+    fetchSupplierPOBySupplierId
 }

@@ -354,6 +354,28 @@ const fetchSupplierPOById: IController = async (req, res) => {
     });
 };
 
+const fetchSupplierPOBySupplierId: IController = async (req, res) => {
+    supplierService.fetchSupplierPOBySupplierId(req.query.id)
+        .then( (supplier : any) => {
+            if(supplier instanceof Error){
+                LOGGER.info("User 2", supplier.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    supplier.message
+                );
+            }else{
+                LOGGER.log("User 3", supplier)
+                apiResponse.result(res, supplier, httpStatusCodes.OK);
+            }
+        }).catch( (err : any) => {
+        LOGGER.info("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+        );
+    });
+};
 const fetchAllChallan: IController = async (req, res) => {
     try{
         let query = " "
@@ -423,5 +445,6 @@ export default {
     fetchSupplierPOById,
     fetchAllChallan,
     createChallan,
-    updatechallanStatus
+    updatechallanStatus,
+    fetchSupplierPOBySupplierId
 };

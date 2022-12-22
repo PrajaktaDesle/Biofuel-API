@@ -81,6 +81,10 @@ router.get(
   '/po/fetch',
   supplierController.fetchSupplierPOById
 )
+router.get(
+    '/po/fetch/supplier-id/',
+    supplierController.fetchSupplierPOBySupplierId
+)
 router.put( 
   '/po/update',
   supplierController.updateSupplierPO
