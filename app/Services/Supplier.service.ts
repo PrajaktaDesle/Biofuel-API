@@ -6,8 +6,6 @@ import formidable from "formidable";
 let config = require("../config");
 import moment from 'moment';
 import Encryption from "../utilities/Encryption";
-import fs from 'fs';
-import { CustomerModel } from "../Models/Customer/Customer.model";
 
 const createSupplier = async (req: any) => {
     try {
@@ -382,8 +380,8 @@ const updateSupplierPO = async (data: any) => {
         if (data.supplier !== undefined && data.supplier !== null && data.supplier !== "")
             sales_order.supplier_id = data.supplier;
 
-        if (data.po_number !== undefined && data.po_number !== null && data.po_number !== "")
-            sales_order.po_number = data.po_number;
+        if (data.supplier_po_number !== undefined && data.supplier_po_number !== null && data.supplier_po_number !== "")
+            sales_order.po_number = data.supplier_po_number;
 
         if (data.po_date !== undefined && data.po_date !== null && data.po_date !== "")
             sales_order.po_date = data.po_date;
@@ -563,6 +561,26 @@ const fetchAllChallansCount = async (query: string) => {
     }
 }
 
+const fetchSupplierPOById = async (id: any) => {
+    try {
+        let supplier = await new SupplierModel().fetchAllSupplierPOById(id);
+        if (supplier.length == 0) throw new Error("Supplier PO not found");
+        supplier[0].customer_so_number = { label: supplier[0].customer_so_number, value: supplier[0].sales_order_id };
+        supplier[0].supplier = { label: supplier[0].supplier, value: supplier[0].supplier_id };
+        if (supplier[0].status == 0) supplier[0].status = { "label": "Pending", "value": 0 };
+        if (supplier[0].status == 1) supplier[0].status = { "label": "Approved", "value": 1 };
+        if (supplier[0].status == -1) supplier[0].status = { "label": "Rejected", "value": -1 };
+        if (supplier[0].rate_type == 0) supplier[0].rate_type = { "label": "Factory", "value": 0 };
+        if (supplier[0].rate_type == 1) supplier[0].rate_type = { "label": "Delivery", "value": 1 };
+        if (supplier[0].po_type == 0) supplier[0].po_type = { "label": "New", "value": 0 };
+        if (supplier[0].po_type == 1) supplier[0].po_type = { "label": "Secondayr", "value": 1 };
+        return supplier[0];
+    }
+    catch (e) {
+        return e;
+    }
+}
+
 export default {
     createSupplier,
     loginSupplier,
@@ -578,6 +596,7 @@ export default {
     updateSupplierPO,
     fetchAllSuppliersList,
     createSupplierPO,
+    fetchSupplierPOById,
     createChallanService,
     fetchAllDeliveryChallan,
     fetchAllChallansCount
