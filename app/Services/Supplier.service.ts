@@ -625,16 +625,17 @@ const fetchSupplierPOBySupplierId = async (id: any) => {
     try {
         let supplier = await new SupplierModel().fetchAllSupplierPOBySupplierId(id);
         if (supplier.length == 0) throw new Error("Supplier PO not found");
-        supplier[0].customer_so_number = { label: supplier[0].customer_so_number, value: supplier[0].sales_order_id };
-        supplier[0].supplier = { label: supplier[0].supplier, value: supplier[0].supplier_id };
-        if (supplier[0].status == 0) supplier[0].status = { "label": "Pending", "value": 0 };
-        if (supplier[0].status == 1) supplier[0].status = { "label": "Approved", "value": 1 };
-        if (supplier[0].status == -1) supplier[0].status = { "label": "Rejected", "value": -1 };
-        if (supplier[0].rate_type == 0) supplier[0].rate_type = { "label": "Factory", "value": 0 };
-        if (supplier[0].rate_type == 1) supplier[0].rate_type = { "label": "Delivery", "value": 1 };
-        if (supplier[0].po_type == 0) supplier[0].po_type = { "label": "New", "value": 0 };
-        if (supplier[0].po_type == 1) supplier[0].po_type = { "label": "Secondayr", "value": 1 };
-        return supplier[0];
+        for(var i = 0 ; i< supplier.length ; i++){
+        supplier[i].customer_so_number = { label: supplier[0].customer_so_number, value: supplier[0].sales_order_id };
+        supplier[i].supplier = { label: supplier[0].supplier, value: supplier[0].supplier_id };
+        if (supplier[i].status == 0) supplier[i].status = { "label": "Pending", "value": 0 };
+        if (supplier[i].status == 1) supplier[i].status = { "label": "Approved", "value": 1 };
+        if (supplier[i].status == -1) supplier[i].status = { "label": "Rejected", "value": -1 };
+        if (supplier[i].rate_type == 0) supplier[i].rate_type = { "label": "Factory", "value": 0 };
+        if (supplier[i].rate_type == 1) supplier[i].rate_type = { "label": "Delivery", "value": 1 };
+        if (supplier[i].po_type == 0) supplier[i].po_type = { "label": "New", "value": 0 };
+        if (supplier[i].po_type == 1) supplier[i].po_type = { "label": "Secondayr", "value": 1 };}
+        return supplier;
     }
     catch (e) {
         return e;
