@@ -6,6 +6,7 @@ import formidable from "formidable";
 let config = require("../config");
 import moment from 'moment';
 import Encryption from "../utilities/Encryption";
+import {CustomerModel} from "../Models/Customer/Customer.model";
 
 const createSupplier = async (req: any) => {
     try {
@@ -538,19 +539,21 @@ const createChallanService = async(fields:any) =>{
 }
 
 const fetchAllDeliveryChallan = async (pageIndex: number, pageSize : number, sort : any, query : string ) =>{
-    let suppliers;
-    let orderQuery : string;
-    if(sort.key != ""){
-        orderQuery = " ORDER BY "+ sort.key + " "+ sort.order +" ";
+    let result;
+    try {
+        let orderQuery: string;
+        if (sort.key != "") {
+            orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
+        }
+        // @ts-ignore
+        result = await new SupplierModel().fetchAllDeliveryChallan(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
+        if (result == null) throw new Error("challan not found");
+        return result;
+    }catch(error : any ){
+        throw error
     }
-    else{
-        orderQuery = " ORDER By CASE WHEN spo.status=0 THEN 1 WHEN spo.status=1 THEN 2 WHEN spo.status=-1 THEN 3 END";
-    }
-    suppliers = await new SupplierModel().fetchAllDeliveryChallan(pageSize, (pageIndex-1) * pageSize, orderQuery, query)
-    console.log( "suppliers : ", suppliers )
-    if (suppliers == null) throw new Error("challan not found");
-    return suppliers;
 }
+
 const fetchAllChallansCount = async (query: string) => {
     try {
         let  challan = await new SupplierModel().fetchChallanCount(query);
@@ -558,6 +561,43 @@ const fetchAllChallansCount = async (query: string) => {
     }
     catch (error: any) {
         return error
+    }
+}
+const fileNotValid = (type: any) => {
+    if (type == 'image/jpeg' || type == 'image/jpg' || type == 'image/png') {
+        return false;
+    }
+    return true;
+};
+
+const updateChallanStatus = async(req:any)=>{
+    try{
+        let fields,files, result;
+        let challan:any = {};
+        // @ts-ignore
+        ({fields, files} = await new Promise((resolve) => {
+            new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
+                resolve({fields: fields, files: files});
+            })
+        }));
+        if(fields.challan_id == undefined || fields.challan_id == null || fields.challan_id == "") throw new Error("id is missing");
+        result = await new SupplierModel().fetchchallanById(fields.challan_id)
+        if (result.length == 0) throw new Error("challan id not found");
+        if(fields.status !== undefined && fields.status !== null && fields.status !== "") challan.status = fields.status
+        if(fields.EwayBillNo !== undefined && fields.EwayBillNo !== null && fields.EwayBillNo !== "") challan.eway_bill = fields.EwayBillNo
+        let s3Image: any = {}
+        let s3Path: any = {}
+        if (files.EwayBill !== undefined && files.EwayBill !== null && files.EwayBill !== "") {
+            if (fileNotValid(files.EwayBill.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image");else{s3Image['ewaybill_url'] = files.EwayBill}
+            let name: string = "images/ewaybill_url/" + moment().unix() + "." + s3Image['ewaybill_url'].originalFilename.split(".").pop()
+            const result = await uploadFile(s3Image['ewaybill_url'], name);
+            if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
+            s3Path['ewaybill_url'] = result.key;
+            challan= Object.assign(challan, s3Path);}
+            if( Object.keys(challan).length){await new SupplierModel().updateChallanStatus(challan,fields.challan_id).then((data)=>{console.log("updated successfully")})}
+
+    }catch(error){
+        throw error
     }
 }
 
@@ -581,6 +621,26 @@ const fetchSupplierPOById = async (id: any) => {
     }
 }
 
+const fetchSupplierPOBySupplierId = async (id: any) => {
+    try {
+        let supplier = await new SupplierModel().fetchAllSupplierPOBySupplierId(id);
+        if (supplier.length == 0) throw new Error("Supplier PO not found");
+        for(var i = 0 ; i< supplier.length ; i++){
+        supplier[i].customer_so_number = { label: supplier[0].customer_so_number, value: supplier[0].sales_order_id };
+        supplier[i].supplier = { label: supplier[0].supplier, value: supplier[0].supplier_id };
+        if (supplier[i].status == 0) supplier[i].status = { "label": "Pending", "value": 0 };
+        if (supplier[i].status == 1) supplier[i].status = { "label": "Approved", "value": 1 };
+        if (supplier[i].status == -1) supplier[i].status = { "label": "Rejected", "value": -1 };
+        if (supplier[i].rate_type == 0) supplier[i].rate_type = { "label": "Factory", "value": 0 };
+        if (supplier[i].rate_type == 1) supplier[i].rate_type = { "label": "Delivery", "value": 1 };
+        if (supplier[i].po_type == 0) supplier[i].po_type = { "label": "New", "value": 0 };
+        if (supplier[i].po_type == 1) supplier[i].po_type = { "label": "Secondayr", "value": 1 };}
+        return supplier;
+    }
+    catch (e) {
+        return e;
+    }
+}
 export default {
     createSupplier,
     loginSupplier,
@@ -599,5 +659,7 @@ export default {
     fetchSupplierPOById,
     createChallanService,
     fetchAllDeliveryChallan,
-    fetchAllChallansCount
+    fetchAllChallansCount,
+    updateChallanStatus,
+    fetchSupplierPOBySupplierId
 }
