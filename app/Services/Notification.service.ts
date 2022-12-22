@@ -88,11 +88,21 @@ const fetchNotificationById = async (data:any ) => {
         throw error
     }
 }
+const getNotificationMenue = async (  ) => {
+    let data = await new NotificationModel().getNotificationMenue()
+    if (data.length == 0) {
+        throw new Error("Home Page not found!")
+    }
+    // LOGGER.info(data)
+    return data
 
+}
 export default {
     createNotification, 
     updateNotificationDetails, 
     fetchNotificationById,
     fetchAllNotifications,
-    fetchNotificationCount
+    fetchNotificationCount,
+    getNotificationMenue
+
 }

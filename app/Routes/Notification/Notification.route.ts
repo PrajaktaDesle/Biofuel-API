@@ -26,6 +26,11 @@ router.get(
   '/fetch/By-id',
 celebrate( notificationSchema.fetchNotificationById ),
   notificationController.fetchNotificationById
+);
+
+router.get(
+  '/menu',
+  notificationController.getNotificationMenue
 )
 
 export default router;
