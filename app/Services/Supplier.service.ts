@@ -607,7 +607,7 @@ const fetchSupplierPOById = async (id: any) => {
         let supplier = await new SupplierModel().fetchAllSupplierPOById(id);
         if (supplier.length == 0) throw new Error("Supplier PO not found");
         supplier[0].customer_so_number = { label: supplier[0].customer_so_number, value: supplier[0].sales_order_id };
-        supplier[0].supplier = { label: supplier[0].supplier, value: supplier[0].supplier_id };
+        supplier[0].supplier = { label: supplier[0].name, value: supplier[0].supplier_id };
         if (supplier[0].status == 0) supplier[0].status = { "label": "Pending", "value": 0 };
         if (supplier[0].status == 1) supplier[0].status = { "label": "Approved", "value": 1 };
         if (supplier[0].status == -1) supplier[0].status = { "label": "Rejected", "value": -1 };
