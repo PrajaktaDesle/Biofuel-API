@@ -563,12 +563,6 @@ const fetchAllChallansCount = async (query: string) => {
         return error
     }
 }
-// const fileNotValid = (type: any) => {
-//     if (type == 'image/jpeg' || type == 'image/jpg' || type == 'image/png'|| type == 'application/pdf') {
-//         return false;
-//     }
-//     return true;
-// };
 
 const updateChallanStatus = async(req:any)=>{
     try{
@@ -627,8 +621,8 @@ const fetchSupplierPOBySupplierId = async (id: any) => {
         let supplier = await new SupplierModel().fetchAllSupplierPOBySupplierId(id);
         if (supplier.length == 0) throw new Error("Supplier PO not found");
         for(var i = 0 ; i< supplier.length ; i++){
-        supplier[i].customer_so_number = { label: supplier[0].customer_so_number, value: supplier[0].sales_order_id };
-        supplier[i].supplier = { label: supplier[0].supplier, value: supplier[0].supplier_id };
+        supplier[i].customer_so_number = { label: supplier[i].customer_so_number, value: supplier[i].sales_order_id };
+        supplier[i].supplier = { label: supplier[i].supplier, value: supplier[i].supplier_id };
         if (supplier[i].status == 0) supplier[i].status = { "label": "Pending", "value": 0 };
         if (supplier[i].status == 1) supplier[i].status = { "label": "Approved", "value": 1 };
         if (supplier[i].status == -1) supplier[i].status = { "label": "Rejected", "value": -1 };

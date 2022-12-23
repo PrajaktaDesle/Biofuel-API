@@ -29,5 +29,18 @@ export default {
             id : Joi.number().required(),
             status : Joi.number().required().min(-1).message("status should be 0 or 1").max(1).message("status should be -1,0 or 1")
         }
+    },
+    generateChallan : {
+        [Segments.BODY] : {
+            dispatch_id: Joi.number().required(),
+            quantity: Joi.string().required(),
+            DeliveryDate: Joi.string().required(),
+            NotificationNo: Joi.string().required(),
+            VehicleNo: Joi.string().required(),
+            DriverNo: Joi.string().required(),
+            TransportationRate : Joi.number().required(),
+            user_id: Joi.number().required(),
+            // status : Joi.number().required().min(-1).message("status should be 0 or 1").max(1).message("status should be -1,0 or 1")
+        }
     }
 };

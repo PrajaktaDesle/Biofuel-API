@@ -58,7 +58,8 @@ router.put(
 )
 router.post(
     '/create/delivery-challan',
-        supplierController.createChallan
+    celebrate(supplierSchema.generateChallan),
+    supplierController.createChallan
 )
 router.post(
     '/fetch/all/challan',
