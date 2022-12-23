@@ -70,7 +70,7 @@ export default {
         [Segments.BODY]:  Joi.object().keys({
             customer: Joi.number().required(),
             estimate_id: Joi.number().integer().required(),
-            sales_order_id: Joi.number().integer().required(),
+            // sales_order_id: Joi.number().integer().required(),
             customer_so_number: Joi.number().integer().required(),
             so_date: Joi.string().required(),
             delivery_date: Joi.string().required(),
