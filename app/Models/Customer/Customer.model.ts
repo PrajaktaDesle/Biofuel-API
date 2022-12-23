@@ -161,7 +161,7 @@ export class CustomerModel extends BaseModel {
                                           where so.id = ?`, [id])
     }
     async fetchAllCustomerSalesOrders(limit: number, offset: number, sortOrder: string, query: string) {
-        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status, DATE_FORMAT(so_date, '%d-%m-%Y')  as so_date, DATE_FORMAT(delivery_date, '%d-%m-%Y') as delivery_date, estimate_id ,product_id,p.name as product, product_description, (quantity*rate)+adjustment_amount as total_amount FROM customer_sales_orders so
+        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status, DATE_FORMAT(so_date, '%d-%m-%Y')  as so_date, DATE_FORMAT(delivery_date, '%d-%m-%Y') as delivery_date, estimate_id ,product_id,p.name as product, product_description, (quantity*rate)+adjustment_amount as total_amount, sales_order_no FROM customer_sales_orders so
                                           inner join products p ON p.id=so.product_id
                                           inner join customers cs ON cs.id=so.customer_id
                                           ${query}

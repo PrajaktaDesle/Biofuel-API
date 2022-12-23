@@ -562,7 +562,7 @@ const createCustomerSalesOrder = async (data: any) => {
         sales_order.payment_term=data.payment_term;
 
         if(data.status !== undefined && data.status !== null && data.status !== "")sales_order.status=data.status;
-        sales_order.status=0
+        sales_order.status=1
 
         let sales_order_data = await new CustomerModel().createCustomerSalesOrder(sales_order)
         let log : any = { "estimate_id" : sales_order.estimate_id, "stage":5,"user_id":data.user_id }
