@@ -172,7 +172,7 @@ export class SupplierModel extends UserModel
             }
             async fetchAllDeliveryChallan(limit : number, offset : number, sortOrder : string, query : string) {
                 return await this._executeQuery(`select dc.id ,dc.dispatch_id, cs.name as customer, sp.name as supplier, sp.mobile,
-                                                        dc.delivery_date, dc.quantity, dc.vehicle_no,dc.driver_mobile_no as DriverNo,
+                                                        DATE_FORMAT(dc.delivery_date, '%d-%m-%Y')  as delivery_date, dc.quantity, dc.vehicle_no,dc.driver_mobile_no as DriverNo,
                                                         dc.transportation_rate, dc.status,
                                                         dc.created_at, dc.updated_at
                                                         from  purchase_order_delivery_challan dc
@@ -187,7 +187,7 @@ export class SupplierModel extends UserModel
             }
             async fetchChallanCount(query:string) {
                 return await this._executeQuery(`select dc.id ,dc.dispatch_id, cs.name as customer, sp.name as supplier, sp.mobile,
-                                                        dc.delivery_date, dc.quantity, dc.vehicle_no,dc.driver_mobile_no as DriverNo,
+                                                       DATE_FORMAT(dc.delivery_date, '%d-%m-%Y')  as delivery_date, dc.quantity, dc.vehicle_no,dc.driver_mobile_no as DriverNo,
                                                         dc.transportation_rate, dc.status,
                                                         dc.created_at, dc.updated_at
                                                         from  purchase_order_delivery_challan dc
@@ -222,15 +222,19 @@ export class SupplierModel extends UserModel
     async fetchAllSupplierPOBySupplierId(id:number) {
         // return await this._executeQuery(`SELECT spo.supplier_id, u.name, cso.customer_id as customer_id, c.name as customer, p.id as product_id, p.name as product, p.description as product_description , rm.name as raw_material,pp.name as packaging, spo.sales_order_id, cso.sales_order_no as customer_so_number , po_number as supplier_po_numer, po_date , DATE_FORMAT(spo.delivery_date, '%Y-%m-%d') as delivery_date, spo.quantity, spo.rate, spo.adjustment_amount, spo.rate_type, spo.po_type, spo.status FROM supplier_purchase_order spo
 
-        return await this._executeQuery(`SELECT spo.supplier_id, u.name, cso.customer_id as customer_id, c.name as customer, p.id as product_id, p.name as product, p.description as product_description , rm.name as raw_material,pp.name as packaging, spo.sales_order_id, cso.sales_order_no as customer_so_number , po_number as supplier_po_numer, DATE_FORMAT(po_date, '%Y-%m-%d') as po_date , DATE_FORMAT(spo.delivery_date, '%Y-%m-%d') as delivery_date, spo.quantity, spo.rate, spo.adjustment_amount, spo.rate_type, spo.po_type, spo.status 
-        FROM supplier_purchase_order spo
-        left join user u on u.id=spo.supplier_id
-        left join customer_sales_orders cso on spo.sales_order_id=cso.id  
-        left join customers c on c.id = cso.customer_id 
-        left join products p on p.id = cso.product_id
-        left join product_raw_material rm ON rm.id=cso.raw_material_id
-        left join product_packaging pp ON pp.id=cso.packaging_id
-        where spo.supplier_id = ? `, [id])
+        return await this._executeQuery(`SELECT spo.supplier_id, u.name, cso.customer_id as customer_id, c.name as customer, p.id as product_id, p.name as product, p.description as product_description , rm.name as raw_material,pp.name as packaging, spo.sales_order_id, cso.sales_order_no as customer_so_number , po_number as supplier_po_numer, DATE_FORMAT(po_date, '%Y-%m-%d') as po_date , DATE_FORMAT(spo.delivery_date, '%Y-%m-%d') as delivery_date, spo.quantity, spo.rate, spo.adjustment_amount, spo.rate_type, spo.po_type, spo.status, 
+                                                concat(a.address,' ,',cty.name,', ',a.pincode,' ,', ast.name)  as address
+                                                FROM supplier_purchase_order spo
+                                                left join user u on u.id=spo.supplier_id
+                                                left join addresses a on spo.supplier_id = a.user_id and a.address_type = 1
+                                                left join address_city cty on a.city_id  = cty.id
+                                                left join address_state ast on cty.state_id = ast.id
+                                                left join customer_sales_orders cso on spo.sales_order_id=cso.id  
+                                                left join customers c on c.id = cso.customer_id 
+                                                left join products p on p.id = cso.product_id
+                                                left join product_raw_material rm ON rm.id=cso.raw_material_id
+                                                left join product_packaging pp ON pp.id=cso.packaging_id
+                                                where spo.supplier_id = ? `, [id])
     }
     async updateChallanStatus(data:any, id:number) {
         return await this._executeQuery("update purchase_order_delivery_challan set ? where id = ?" , [data, id])
