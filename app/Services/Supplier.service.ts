@@ -564,7 +564,7 @@ const fetchAllChallansCount = async (query: string) => {
     }
 }
 const fileNotValid = (type: any) => {
-    if (type == 'image/jpeg' || type == 'image/jpg' || type == 'image/png') {
+    if (type == 'image/jpeg' || type == 'image/jpg' || type == 'image/png'|| type == 'application/pdf') {
         return false;
     }
     return true;
@@ -580,6 +580,7 @@ const updateChallanStatus = async(req:any)=>{
                 resolve({fields: fields, files: files});
             })
         }));
+        console.log("files in service------------->", files)
         if(fields.challan_id == undefined || fields.challan_id == null || fields.challan_id == "") throw new Error("id is missing");
         result = await new SupplierModel().fetchchallanById(fields.challan_id)
         if (result.length == 0) throw new Error("challan id not found");
@@ -588,7 +589,7 @@ const updateChallanStatus = async(req:any)=>{
         let s3Image: any = {}
         let s3Path: any = {}
         if (files.EwayBill !== undefined && files.EwayBill !== null && files.EwayBill !== "") {
-            if (fileNotValid(files.EwayBill.mimetype)) throw new Error("Only .png, .jpg and .jpeg format allowed! for image");else{s3Image['ewaybill_url'] = files.EwayBill}
+            if (fileNotValid(files.EwayBill.mimetype)) throw new Error("Only .png, .jpg and .jpeg pdf format allowed! for image");else{s3Image['ewaybill_url'] = files.EwayBill}
             let name: string = "images/ewaybill_url/" + moment().unix() + "." + s3Image['ewaybill_url'].originalFilename.split(".").pop()
             const result = await uploadFile(s3Image['ewaybill_url'], name);
             if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
