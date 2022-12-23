@@ -172,7 +172,7 @@ export class SupplierModel extends UserModel
             }
             async fetchAllDeliveryChallan(limit : number, offset : number, sortOrder : string, query : string) {
                 return await this._executeQuery(`select dc.id ,dc.dispatch_id, cs.name as customer, sp.name as supplier, sp.mobile,
-                                                        dc.delivery_date, dc.quantity, dc.vehicle_no,dc.driver_mobile_no as DriverNo,
+                                                        DATE_FORMAT(dc.delivery_date, '%d-%m-%Y')  as delivery_date, dc.quantity, dc.vehicle_no,dc.driver_mobile_no as DriverNo,
                                                         dc.transportation_rate, dc.status,
                                                         dc.created_at, dc.updated_at
                                                         from  purchase_order_delivery_challan dc
@@ -187,7 +187,7 @@ export class SupplierModel extends UserModel
             }
             async fetchChallanCount(query:string) {
                 return await this._executeQuery(`select dc.id ,dc.dispatch_id, cs.name as customer, sp.name as supplier, sp.mobile,
-                                                        dc.delivery_date, dc.quantity, dc.vehicle_no,dc.driver_mobile_no as DriverNo,
+                                                       DATE_FORMAT(dc.delivery_date, '%d-%m-%Y')  as delivery_date, dc.quantity, dc.vehicle_no,dc.driver_mobile_no as DriverNo,
                                                         dc.transportation_rate, dc.status,
                                                         dc.created_at, dc.updated_at
                                                         from  purchase_order_delivery_challan dc
