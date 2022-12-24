@@ -8,6 +8,7 @@ import { CustomerModel } from "../Models/Customer/Customer.model";
 import { AddressModel } from "../Models/Address/Address.model"
 import customerController from "../Controllers/Customer.controller";
 const _ = require("lodash");
+import dayjs from 'dayjs'
 
 const createCustomer = async (req:any)=> {
     try {
@@ -184,7 +185,6 @@ const fetchAllCustomer = async (pageIndex: number, pageSize : number, sort : any
             orderQuery = " ORDER BY cs.status DESC ";
         }
         let customers = await new CustomerModel().fetchAllCustomers(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
-        if (customers.length == 0) throw new Error(" customer not found!")
         for (let i = 0; i < customers.length; i++) {
             // adding base url to panurl from database
             customers[i].gst = config.baseUrl + "/" + customers[0].gstin_url;
@@ -328,7 +328,7 @@ const createCustomerEstimate = async (data: any) => {
         if(data.status !== undefined && data.status !== null && data.status !== ""){
             estimate.status=data.status;
         }
-        else {estimate.status=0;}
+        else {estimate.status=0}
        console.log( "estimate : ", estimate )
         let estimateData = await new CustomerModel().createCustomerEstimate(estimate)
         
@@ -464,14 +464,17 @@ const fetchCustomerEstimateById = async (id: number) => {
                   estimate[0].status = { "value":4, "label":"Accepted" }
                   break;
             case 5:
-                  estimate[0].status = { "value":5, "label":"convert to so" }
+                  estimate[0].status = { "value":5, "label":"Convert To SO" }
                   break;
         }
         estimate[0].product = { "label":estimate[0].product, "value":estimate[0].product_id}
         estimate[0].customer = { "label":estimate[0].customer, "value":estimate[0].customer_id}
         estimate[0].raw_material = { "label":estimate[0].raw_material, "value":estimate[0].raw_material_id}
         estimate[0].packaging = { "label":estimate[0].packaging, "value":estimate[0].packaging_id}
-
+        console.log( " Date before  : ",   estimate[0].estimate_date, typeof  estimate[0].estimate_date )
+        // estimate[0].estimate_date = dayjs( estimate[0].estimate_date,'YYYY-MM-DD' ).toDate()
+        // estimate[0].expiry_date = dayjs( estimate[0].expiry_date,'YYYY-MM-DD' ).toDate()
+        console.log( " Date after  : ",  estimate[0].estimate_date, typeof  estimate[0].estimate_date )
         return estimate[0];
 
     }
@@ -490,9 +493,6 @@ const fetchAllCustomerEstimates = async (pageIndex: number, pageSize : number, s
             orderQuery = " ORDER BY es.status DESC ";
         }
         let estimates = await new CustomerModel().fetchAllCustomerEstimates(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
-        if( estimates.length == 0 ){
-            throw new Error( "Estimates not found")
-        }
         return estimates;
 
     }
@@ -562,11 +562,12 @@ const createCustomerSalesOrder = async (data: any) => {
         sales_order.payment_term=data.payment_term;
 
         if(data.status !== undefined && data.status !== null && data.status !== "")sales_order.status=data.status;
-        sales_order.status=1
+        else{sales_order.status=1}
 
         let sales_order_data = await new CustomerModel().createCustomerSalesOrder(sales_order)
         let log : any = { "estimate_id" : sales_order.estimate_id, "stage":5,"user_id":data.user_id }
         await new CustomerModel().createCustomerEstimateStagelog(log)
+        await new CustomerModel().updateCustomerEstimateById({'status':5}, sales_order.estimate_id)
         return sales_order_data;
 
     } catch (e: any) {
@@ -652,6 +653,13 @@ const fetchCustomerSalesOrderById = async (id: number) => {
         sales_order[0].raw_material = { "label":sales_order[0].raw_material, "value":sales_order[0].raw_material_id }
         sales_order[0].packaging = { "label":sales_order[0].packaging, "value":sales_order[0].packaging_id }
         sales_order[0].product = { "label":sales_order[0].product, "value":sales_order[0].product_id }
+
+        if(sales_order[0].status=== 1){
+            sales_order[0].status = { "label" : "Approved", "value" : sales_order[0].status}
+        } 
+        else if(sales_order[0].status === -1){  
+            sales_order[0].status = { "label" : "Rejected", "value":sales_order[0].status }
+        }
         return sales_order;
 
     }
@@ -670,9 +678,6 @@ const fetchAllCustomerSalesOrders= async (pageIndex: number, pageSize : number, 
             orderQuery = " ORDER BY cs.status DESC ";
         }
         let sales_order = await new CustomerModel().fetchAllCustomerSalesOrders(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
-        if (sales_order.length == 0) {
-            throw new Error("Sales orders not found!")
-        }
         return sales_order;
 
     }

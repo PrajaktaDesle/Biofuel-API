@@ -264,7 +264,7 @@ const fetchAllCustomerEstimates : IController = async ( req:any , res:any ) => {
     try{
         let query = " "
         if (req.body.query != "") {
-            query = ` WHERE cs.name like '%${req.body.query}%' OR cty.name like '%${req.body.query}%' OR st.name like '%${req.body.query}'OR cs.mobile like '%${req.body.query}%' `
+            query = ` WHERE cs.name like '%${req.body.query}%'  `
         }
         let estimate = await CustomerService.fetchAllCustomerEstimates( req.body.pageIndex, req.body.pageSize, req.body.sort, query )
         let count = await customerService.fetchAllCustomerEsimatesCount(query);
@@ -381,7 +381,7 @@ const fetchAllCustomerSalesOrders : IController = async ( req:any , res:any ) =>
     try{
         let query = " "
         if (req.body.query != "") {
-            query = ` WHERE cs.name like '%${req.body.query}%' OR cty.name like '%${req.body.query}%' OR st.name like '%${req.body.query}'OR cs.mobile like '%${req.body.query}%' `
+            query = ` WHERE cs.name like '%${req.body.query}%' `
         }
         let estimate = await CustomerService.fetchAllCustomerSalesOrders(req.body.pageIndex, req.body.pageSize, req.body.sort, query )
         let count = await CustomerService.fetchAllCustomerSalesOrdersCount(query);
