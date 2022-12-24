@@ -211,7 +211,7 @@ const fetchAllSupplierPO: IController = async (req, res) => {
     try{
         let query = " "
         if(req.body.query != ""){
-            query = ` where spo.id like '%${req.body.query}%' or spo.name like '%${req.body.query}' `
+            query = ` where s.name like '%${req.body.query}%' or c.name like '%${req.body.query}' `
         }
         let suppliers = await supplierService.fetchAllSupplierPO(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
         let count = await supplierService.fetchAllSupplierPOCount(query);

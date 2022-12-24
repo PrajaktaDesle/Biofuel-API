@@ -7,6 +7,7 @@ let config = require("../config");
 import moment from 'moment';
 import Encryption from "../utilities/Encryption";
 import {CustomerModel} from "../Models/Customer/Customer.model";
+import dayjs from 'dayjs'
 
 const createSupplier = async (req: any) => {
     try {
@@ -104,7 +105,6 @@ const fetchAllSuppliers = async (pageIndex: number, pageSize: number, sort: any,
         orderQuery = " ORDER By CASE WHEN u.status=0 THEN 1 WHEN u.status=1 THEN 2 WHEN u.status=-1 THEN 3 END";
     }
     suppliers = await new SupplierModel().fetchAllSuppliers(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
-    if (suppliers == null) throw new Error("Suppliers not found");
     return suppliers;
 }
 const fetchAllSuppliersCount = async (query: string) => {
@@ -344,7 +344,6 @@ const fetchAllSupplierPO = async (pageIndex: number, pageSize: number, sort: any
     }
     suppliers = await new SupplierModel().fetchAllSupplierPO(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
     console.log("suppliers : ", suppliers)
-    if (suppliers == null) throw new Error("Suppliers PO not found");
     return suppliers;
 }
 
@@ -364,19 +363,6 @@ const updateSupplierPO = async (data: any) => {
         let id = data.id;
         dt = await new SupplierModel().SupplierPOExistsOrNot(id);
         if (dt.length == 0) throw new Error("Supplier purchase order not found ")
-
-        // `id` int(11) NOT NULL AUTO_INCREMENT,
-        // `sales_order_id` int(11) DEFAULT NULL,
-        // `supplier_id` int(11) DEFAULT NULL,
-        // `po_number` varchar(45) DEFAULT NULL,
-        // `po_date` date DEFAULT NULL,
-        // `delivery_date` date DEFAULT NULL,
-        // `quantity` double DEFAULT NULL,
-        // `rate` double DEFAULT NULL,
-        // `adjustment_amount` double DEFAULT '0',
-        // `rate_type` tinyint(1) DEFAULT NULL COMMENT '0 as factory, 1 as delivery',
-        // `po_type` tinyint(1) DEFAULT NULL COMMENT '0 as new, 1 as secondary\n',
-        // `status` tinyint(1) DEFAULT NULL,
 
         if (data.supplier !== undefined && data.supplier !== null && data.supplier !== "")
             sales_order.supplier_id = data.supplier;
@@ -458,20 +444,6 @@ const createSupplierPO = async (data: any) => {
     try {
         let sales_order: any = {}, dt: any;
 
-        // `id` int(11) NOT NULL AUTO_INCREMENT,
-        // `sales_order_id` int(11) DEFAULT NULL,
-        // `supplier_id` int(11) DEFAULT NULL,
-        // `customer_id` int(11) DEFAULT NULL,
-        // `po_number` varchar(45) DEFAULT NULL,
-        // `po_date` date DEFAULT NULL,
-        // `delivery_date` date DEFAULT NULL,
-        // `quantity` double DEFAULT NULL,
-        // `rate` double DEFAULT NULL,
-        // `adjustment_amount` double DEFAULT '0',
-        // `rate_type` tinyint(1) DEFAULT NULL COMMENT '0 as factory, 1 as delivery',
-        // `po_type` tinyint(1) DEFAULT NULL COMMENT '0 as new, 1 as secondary\n',
-        // `status` tinyint(1) DEFAULT NULL,
-
         console.log("request Data : " , data )
         if (data.supplier !== undefined && data.supplier !== null && data.supplier !== "")
             sales_order.supplier_id = data.supplier;
@@ -504,7 +476,7 @@ const createSupplierPO = async (data: any) => {
             sales_order.po_type = data.po_type;
 
         if (data.status !== undefined && data.status !== null && data.status !== "") sales_order.status = data.status;
-           sales_order.status = 0
+        else{sales_order.status = 0}
         var supplierPOData = await new SupplierModel().createSuppliersPO(sales_order)
 
         return supplierPOData
@@ -563,12 +535,6 @@ const fetchAllChallansCount = async (query: string) => {
         return error
     }
 }
-// const fileNotValid = (type: any) => {
-//     if (type == 'image/jpeg' || type == 'image/jpg' || type == 'image/png'|| type == 'application/pdf') {
-//         return false;
-//     }
-//     return true;
-// };
 
 const updateChallanStatus = async(req:any)=>{
     try{
@@ -616,7 +582,8 @@ const fetchSupplierPOById = async (id: any) => {
         if (supplier[0].rate_type == 0) supplier[0].rate_type = { "label": "Factory", "value": 0 };
         if (supplier[0].rate_type == 1) supplier[0].rate_type = { "label": "Delivery", "value": 1 };
         if (supplier[0].po_type == 0) supplier[0].po_type = { "label": "New", "value": 0 };
-        if (supplier[0].po_type == 1) supplier[0].po_type = { "label": "Secondayr", "value": 1 };
+        if (supplier[0].po_type == 1) supplier[0].po_type = { "label": "Secondary", "value": 1 };
+        supplier[0].po_date = dayjs(supplier[0].po_date, 'YYYY-MM-DD').toDate()
         return supplier[0];
     }
     catch (e) {
@@ -639,7 +606,7 @@ const fetchSupplierPOBySupplierId = async (id: any) => {
         if (supplier[i].rate_type == 0) supplier[i].rate_type = { "label": "Factory", "value": 0 };
         if (supplier[i].rate_type == 1) supplier[i].rate_type = { "label": "Delivery", "value": 1 };
         if (supplier[i].po_type == 0) supplier[i].po_type = { "label": "New", "value": 0 };
-        if (supplier[i].po_type == 1) supplier[i].po_type = { "label": "Secondayr", "value": 1 };}
+        if (supplier[i].po_type == 1) supplier[i].po_type = { "label": "Secondary", "value": 1 };}
         return supplier;
     }
     catch (e) {

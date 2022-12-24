@@ -52,7 +52,6 @@ const fetchAllNotifications = async (pageIndex: number, pageSize : number, sort 
                 orderQuery = "  ";
             }
             let notification = await new NotificationModel().fetchAll(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
-            if (notification.length == 0) throw new Error("No notification found ")
             return notification
         } catch (error: any) {
             console.log(" Exception ===> ", error.message)
