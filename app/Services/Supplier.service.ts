@@ -562,7 +562,6 @@ const updateChallanStatus = async(req:any)=>{
             s3Path['ewaybill_url'] = result.key;
             challan= Object.assign(challan, s3Path);}
             if( Object.keys(challan).length){await new SupplierModel().updateChallanStatus(challan,fields.challan_id).then((data)=>{console.log("updated successfully")})}
-
     }catch(error){
         throw error
     }
@@ -613,6 +612,41 @@ const fetchSupplierPOBySupplierId = async (id: any) => {
         return e;
     }
 }
+const addsupplierPaymentService = async(fields:any)=>{
+    let payment, data:any;
+    try{
+        if(fields.approvedQuantity !== undefined && fields.approvedQuantity !== null && fields.approvedQuantity !== "")
+        if(fields.delivery_challan_id !== undefined && fields.delivery_challan_id !== null && fields.delivery_challan_id !== "")
+        data = {approved_quantity: fields.approvedQuantity, delivery_challan_id: fields.delivery_challan_id}
+        payment = await new SupplierModel().addSupplierPayment(data)
+        if (payment.length == 0 ) throw new Error( "failed to add approved quantity" )
+        return payment
+    }catch (error:any){
+        LOGGER.info("error", error)
+        throw (error)
+    }
+
+}
+const fetchAllApprovedChallan = async ()=>{
+
+    try{
+        let challan = await new SupplierModel().fetchAllApprovedChallan()
+        if (challan.length == 0 ) throw new Error( "failed to add payment details" )
+        for(var i = 0 ; i < challan.length ; i++){
+            let pay = await new SupplierModel().fetchByDeliverychallanID(challan[i].id)
+            challan[i].approved_quantity = null
+            challan[i].amount = null
+            if( pay.length !== 0){
+                challan[i].approved_quantity = pay[0].approved_quantity
+                challan[i].amount = pay[0].amount
+            }
+        }
+        return challan
+    }catch (error){
+        throw error
+    }
+}
+
 export default {
     createSupplier,
     loginSupplier,
@@ -633,5 +667,7 @@ export default {
     fetchAllDeliveryChallan,
     fetchAllChallansCount,
     updateChallanStatus,
-    fetchSupplierPOBySupplierId
+    fetchSupplierPOBySupplierId,
+    addsupplierPaymentService,
+    fetchAllApprovedChallan
 }

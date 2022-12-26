@@ -90,4 +90,12 @@ router.put(
   '/po/update',
   supplierController.updateSupplierPO
 )
+router.post(
+    '/notify/',
+    supplierController.addSupplierPayment
+)
+router.get(
+    '/fetch/approved/challan',
+    supplierController.fetchApprovedChallan
+)
 export default router;

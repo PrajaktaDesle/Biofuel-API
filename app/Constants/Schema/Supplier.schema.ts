@@ -32,7 +32,6 @@ export default {
     },
     generateChallan : {
         [Segments.BODY] : {
-            dispatch_id: Joi.number().required(),
             quantity: Joi.string().required(),
             DeliveryDate: Joi.string().required(),
             NotificationNo: Joi.string().required(),
