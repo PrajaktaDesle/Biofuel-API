@@ -117,7 +117,6 @@ export class CustomerModel extends BaseModel {
         return await this._executeQuery("insert into customer_estimates set ? ", [estimateData])
     }
     async fetchCustomerEstimateById(id: any) {
-        // return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, DATE_FORMAT(estimate_date, '%d-%m-%Y')  as estimate_date, DATE_FORMAT(expiry_date, '%d-%m-%Y')  as expiry_date, estimate_no, es.raw_material_id, prm.name as raw_material ,product_id,p.name as product, product_description, packaging_id, pp.name as packaging, quantity, rate, adjustment_amount as adjustment,tnc, customer_note, adjustment_amount+(rate*quantity) as total_amount
         return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status,  DATE_FORMAT(estimate_date, '%Y-%m-%d') as estimate_date, DATE_FORMAT(expiry_date, '%Y-%m-%d') as expiry_date, estimate_no, es.raw_material_id, prm.name as raw_material ,product_id,p.name as product, product_description, packaging_id, pp.name as packaging, quantity, rate, adjustment_amount as adjustment,tnc, customer_note, adjustment_amount+(rate*quantity) as total_amount
                                           FROM customer_estimates es
                                           inner join products p ON p.id=es.product_id
@@ -153,7 +152,7 @@ export class CustomerModel extends BaseModel {
     }
     async fetchCustomerSalesOrderById(id: number) {
         
-        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status, so_date,  DATE_FORMAT(delivery_date, '%Y-%m-%d') as delivery_date, estimate_id ,product_id,p.name as product, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, rate, quantity, adjustment_amount,  (quantity*rate)+adjustment_amount as total_amount FROM customer_sales_orders so
+        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status,sales_order_no, DATE_FORMAT(so_date, '%Y-%m-%d') as so_date,  DATE_FORMAT(delivery_date, '%Y-%m-%d') as delivery_date, estimate_id ,product_id,p.name as product, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, rate, quantity, adjustment_amount,  (quantity*rate)+adjustment_amount as total_amount FROM customer_sales_orders so
                                           inner join products p ON p.id=so.product_id
                                           inner join customers cs ON cs.id=so.customer_id
                                           inner join product_raw_material rm ON rm.id=so.raw_material_id
@@ -161,7 +160,7 @@ export class CustomerModel extends BaseModel {
                                           where so.id = ?`, [id])
     }
     async fetchAllCustomerSalesOrders(limit: number, offset: number, sortOrder: string, query: string) {
-        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status, DATE_FORMAT(so_date, '%d-%m-%Y')  as so_date, DATE_FORMAT(delivery_date, '%d-%m-%Y') as delivery_date, estimate_id ,product_id,p.name as product, product_description, (quantity*rate)+adjustment_amount as total_amount FROM customer_sales_orders so
+        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status, DATE_FORMAT(so_date, '%d-%m-%Y')  as so_date, DATE_FORMAT(delivery_date, '%d-%m-%Y') as delivery_date, estimate_id ,product_id,p.name as product, product_description, (quantity*rate)+adjustment_amount as total_amount, sales_order_no FROM customer_sales_orders so
                                           inner join products p ON p.id=so.product_id
                                           inner join customers cs ON cs.id=so.customer_id
                                           ${query}

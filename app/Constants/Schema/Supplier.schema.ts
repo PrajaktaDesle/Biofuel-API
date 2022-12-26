@@ -27,7 +27,7 @@ export default {
     updateSupplierPOStatus : {
         [Segments.BODY] : {
             id : Joi.number().required(),
-            status : Joi.number().required().min(-1).message("status should be 0 or 1").max(1).message("status should be -1,0 or 1")
+            status : Joi.number().required().min(-1).message("status should be 0,1,2,3 or -1").max(3).message("status should be 0,1,2,3 or -1")
         }
     },
     generateChallan : {
