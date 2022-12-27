@@ -537,31 +537,37 @@ const fetchAllChallansCount = async (query: string) => {
 }
 
 const updateChallanStatus = async(req:any)=>{
+    // @ts-ignore
     try{
         let fields,files, result;
         let challan:any = {};
         // @ts-ignore
         ({fields, files} = await new Promise((resolve) => {
             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
-                resolve({fields: fields, files: files});
-            })
+                resolve({fields: fields, files: files});})
         }));
-     
         if(fields.challan_id == undefined || fields.challan_id == null || fields.challan_id == "") throw new Error("id is missing");
         result = await new SupplierModel().fetchchallanById(fields.challan_id)
         if (result.length == 0) throw new Error("challan id not found");
-        if(fields.status !== undefined && fields.status !== null && fields.status !== "") challan.status = fields.status
-        if(fields.EwayBillNo !== undefined && fields.EwayBillNo !== null && fields.EwayBillNo !== "") challan.eway_bill = fields.EwayBillNo
+        if(fields.status !== undefined && fields.status !== null && fields.status !== "")
+            challan.status = fields.status
+        if(fields.EwayBillNo !== undefined && fields.EwayBillNo !== null && fields.EwayBillNo !== "")
+            challan.eway_bill = fields.EwayBillNo
         let s3Image: any = {}
         let s3Path: any = {}
-        if (files.EwayBill !== undefined && files.EwayBill !== null && files.EwayBill !== "") {
+        if (files.EwayBill !== undefined && files.EwayBill !== null && files.EwayBill !== ""){
             if (isFileNotValid(files.EwayBill.mimetype)) throw new Error("Only .png, .jpg and .jpeg pdf format allowed! for image");else{s3Image['ewaybill_url'] = files.EwayBill}
             let name: string = "images/ewaybill_url/" + moment().unix() + "." + s3Image['ewaybill_url'].originalFilename.split(".").pop()
             const result = await uploadFile(s3Image['ewaybill_url'], name);
             if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
             s3Path['ewaybill_url'] = result.key;
-            challan= Object.assign(challan, s3Path);}
-            if( Object.keys(challan).length){await new SupplierModel().updateChallanStatus(challan,fields.challan_id).then((data)=>{console.log("updated successfully")})}
+            challan = Object.assign(challan, s3Path);}
+            if( Object.keys(challan).length) {
+                let updatedData = await new SupplierModel().updateChallanStatus(challan, fields.challan_id)
+                return {message: "updated successfully", result:updatedData}
+            }
+                return {message: "updated successfully", "changedRows":0 }
+
     }catch(error){
         throw error
     }
@@ -617,7 +623,7 @@ const addsupplierPaymentService = async(fields:any)=>{
     try{
         if(fields.approvedQuantity !== undefined && fields.approvedQuantity !== null && fields.approvedQuantity !== "")
         if(fields.delivery_challan_id !== undefined && fields.delivery_challan_id !== null && fields.delivery_challan_id !== "")
-        data = {approved_quantity: fields.approvedQuantity, delivery_challan_id: fields.delivery_challan_id}
+        data = {approved_quantity: fields.approvedQuantity, delivery_challan_id: fields.delivery_challan_id, status:1}
         payment = await new SupplierModel().addSupplierPayment(data)
         if (payment.length == 0 ) throw new Error( "failed to add approved quantity" )
         return payment
@@ -647,9 +653,10 @@ const fetchAllApprovedChallan = async ()=>{
     }
 }
 const updateSupplierPayment = async(fields:any)=>{
-    let supplier,payment:any
+    let supplier:any
     let data:any = {}
     try{
+        if(fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
         supplier = await new SupplierModel().fetchPaymentById(fields.id)
         if (supplier.length == 0 ) throw new Error( " supplier not found " )
         if (fields.payment_date !== undefined && fields.payment_date !== null && fields.payment_date !== "")
@@ -662,13 +669,24 @@ const updateSupplierPayment = async(fields:any)=>{
             data.utr_no = fields.utr_no;
         if (fields.status !== undefined && fields.status !== null && fields.status !== "")
             data.status = fields.status;
-        if (Object.keys(data).length) await new SupplierModel().updateSupplierPaymentDetails(data, fields.id).then((d) => { LOGGER.info("supplier's payment details updated successfully") })
-        return {message:"updated sucssesfully "}
+        if (Object.keys(data).length) {
+            let updatedData = await new SupplierModel().updateSupplierPaymentDetails(data, fields.id)
+            return updatedData
+        }
+        return {message:"updated sucssesfully " ,"changedRows" :0}
     }catch(error:any){
         LOGGER.info("error", error)
         throw error
     }
-
+}
+const fetchAllSPONumber = async()=>{
+    try{
+        let result = await new SupplierModel().fetchAllSPO_no()
+        if (result.length == 0 ) throw new Error( "purchase order not found" )
+        return result
+    }catch(err:any){
+        throw  err
+    }
 }
 export default {
     createSupplier,
@@ -693,5 +711,6 @@ export default {
     fetchSupplierPOBySupplierId,
     addsupplierPaymentService,
     fetchAllApprovedChallan,
-    updateSupplierPayment
+    updateSupplierPayment,
+    fetchAllSPONumber
 }

@@ -488,7 +488,6 @@ const  updatesupplierPayment: IController = async (req, res) => {
                     supplier.message
                 );
             }else{
-                LOGGER.log("User 3", supplier)
                 apiResponse.result(res, supplier, httpStatusCodes.OK);
             }
         }).catch( (err : any) => {
@@ -496,10 +495,33 @@ const  updatesupplierPayment: IController = async (req, res) => {
         apiResponse.error(
             res,
             httpStatusCodes.BAD_REQUEST,
+            err.message
         );
     });
 };
-
+// fetch all spo_number and products against po-number
+const  fetchAllSPONumber: IController = async (req, res) => {
+    supplierService.fetchAllSPONumber()
+        .then( ( result : any) => {
+            if( result instanceof Error){
+                LOGGER.info("User 2", result.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    result.message
+                );
+            }else{
+                apiResponse.result(res, result, httpStatusCodes.OK);
+            }
+        }).catch( (err : any) => {
+        LOGGER.info("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+            err.message
+        );
+    });
+};
 export default {
     register,
     login,
@@ -520,5 +542,6 @@ export default {
     fetchSupplierPOBySupplierId,
     addSupplierPayment,
     fetchApprovedChallan,
-    updatesupplierPayment
+    updatesupplierPayment,
+    fetchAllSPONumber
 };

@@ -259,4 +259,11 @@ export class SupplierModel extends UserModel {
     async updateSupplierPaymentDetails(data:any, id:number){
         return await this._executeQuery(`update supplier_payments set ? where id = ?`, [data, id])
     }
+    //fetch all purchase order number and products against po_number
+    async fetchAllSPO_no(){
+        return await this._executeQuery(`SELECT spo.id, spo.po_number, p.name as product
+                                                FROM biofuel.supplier_purchase_order spo
+                                                inner join customer_sales_orders cso on spo.sales_order_id = cso.id
+                                                inner join products p on cso.product_id = p.id `,[])
+    }
 }

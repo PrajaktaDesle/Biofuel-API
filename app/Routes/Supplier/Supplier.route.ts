@@ -100,6 +100,11 @@ router.get(
 )
 router.put(
     '/update/payment/',
+    // celebrate(supplierSchema.updateSupplierPayment),
     supplierController.updatesupplierPayment
+)
+router.get(
+    '/fetch/all/spo-number/',
+    supplierController.fetchAllSPONumber
 )
 export default router;
