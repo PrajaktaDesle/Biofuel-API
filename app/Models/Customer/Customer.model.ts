@@ -227,8 +227,10 @@ export class CustomerModel extends BaseModel {
                                          group by csm.supplier_id
                                          ${sortOrder}
                                          LIMIT ? OFFSET ? `, [limit, offset])
-        return await this._executeQuery(`SELECT  csm.id, supplier_id, sp.name as supplier,sp.mobile, sp.email, up.grade  , csm.status ,ac.id as city_id, ac.name as city,  ast.name as state, csm.created_at , csm.updated_at FROM customer_supplier_mapping csm
+        return await this._executeQuery(`SELECT  csm.id, csm.supplier_id, sp.name as supplier,sp.mobile, sp.email, up.grade  ,ss.id as supplier_selection_id ,qt_factory_rate,qt_transportation_rate, qt_delivered_rate, qt_quantity, ss.status ,ac.id as city_id, ac.name as city,  ast.name as state, csm.created_at , csm.updated_at FROM customer_supplier_mapping csm
                                          left join customers cs on cs.id=csm.customer_id
+                                         left join customer_sales_orders cso on cso.customer_id=csm.customer_id
+                                         left join supplier_selection ss on ss.sales_order_id=cso.customer_id
                                          left join user sp on sp.id = csm.supplier_id
                                          left join users_profile up on up.user_id=sp.id
                                          left join addresses a ON sp.id=a.user_id and a.address_type = 2
@@ -240,12 +242,15 @@ export class CustomerModel extends BaseModel {
                                          LIMIT ? OFFSET ? `, [limit, offset])
     }
     async fetchAllMappedSuppliersByCustomerIdCount(query: string, condition: string) {
-        return await this._executeQuery(`SELECT  supplier_id, sp.name as supplier,csm.status, ast.name as state, csm.created_at , csm.updated_at FROM customer_supplier_mapping csm
-                                         inner join customers cs on cs.id=csm.customer_id
-                                         inner join user sp on sp.id = csm.supplier_id
-                                         inner join addresses a ON sp.id=a.user_id and a.address_type = 2
-                                         inner join address_city ac ON ac.id=a.city_id 
-                                         inner join address_state ast ON ac.state_id=ast.id
+        return await this._executeQuery(`SELECT  csm.id, csm.supplier_id, sp.name as supplier,sp.mobile, sp.email, up.grade , ss.id as supplier_selection_id ,qt_factory_rate,qt_transportation_rate, qt_delivered_rate, qt_quantity, ss.status ,ac.id as city_id, ac.name as city,  ast.name as state, csm.created_at , csm.updated_at FROM customer_supplier_mapping csm
+                                         left join customers cs on cs.id=csm.customer_id
+                                         left join customer_sales_orders cso on cso.customer_id=csm.customer_id
+                                         left join supplier_selection ss on ss.sales_order_id=cso.customer_id
+                                         left join user sp on sp.id = csm.supplier_id
+                                         left join users_profile up on up.user_id=sp.id
+                                         left join addresses a ON sp.id=a.user_id and a.address_type = 2
+                                         left join address_city ac ON ac.id=a.city_id 
+                                         left join address_state ast ON ac.state_id=ast.id
                                          where csm.status = 1  ${condition}  ${query}
                                          group by csm.supplier_id
                                          `, [])

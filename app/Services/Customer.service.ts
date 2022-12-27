@@ -765,10 +765,7 @@ const fetchAllMappedSuppliersByCustomerId = async (pageIndex: number, pageSize: 
             // adding base url to panurl from database
             customers[i].latest_factory_rate = 101 + i;
             customers[i].latest_delivered_rate = 101 + i;
-            customers[i].qf_rate = 10 + i;
-            customers[i].qd_rate = 101 + i;
-            customers[i].t_rate = 10 + i + i;
-            customers[i].q_qty = 10 + i * i;
+            // customers[i].qt_factory_rate = 1000
         }
         return customers;
     } catch (e) {
