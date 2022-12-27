@@ -537,6 +537,7 @@ const fetchAllChallansCount = async (query: string) => {
 }
 
 const updateChallanStatus = async(req:any)=>{
+    // @ts-ignore
     try{
         let fields,files, result;
         let challan:any = {};
@@ -550,18 +551,25 @@ const updateChallanStatus = async(req:any)=>{
         if(fields.challan_id == undefined || fields.challan_id == null || fields.challan_id == "") throw new Error("id is missing");
         result = await new SupplierModel().fetchchallanById(fields.challan_id)
         if (result.length == 0) throw new Error("challan id not found");
-        if(fields.status !== undefined && fields.status !== null && fields.status !== "") challan.status = fields.status
-        if(fields.EwayBillNo !== undefined && fields.EwayBillNo !== null && fields.EwayBillNo !== "") challan.eway_bill = fields.EwayBillNo
+        if(fields.status !== undefined && fields.status !== null && fields.status !== "")
+            challan.status = fields.status
+        if(fields.EwayBillNo !== undefined && fields.EwayBillNo !== null && fields.EwayBillNo !== "")
+            challan.eway_bill = fields.EwayBillNo
         let s3Image: any = {}
         let s3Path: any = {}
-        if (files.EwayBill !== undefined && files.EwayBill !== null && files.EwayBill !== "") {
+        if (files.EwayBill !== undefined && files.EwayBill !== null && files.EwayBill !== ""){
             if (isFileNotValid(files.EwayBill.mimetype)) throw new Error("Only .png, .jpg and .jpeg pdf format allowed! for image");else{s3Image['ewaybill_url'] = files.EwayBill}
             let name: string = "images/ewaybill_url/" + moment().unix() + "." + s3Image['ewaybill_url'].originalFilename.split(".").pop()
             const result = await uploadFile(s3Image['ewaybill_url'], name);
             if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
             s3Path['ewaybill_url'] = result.key;
-            challan= Object.assign(challan, s3Path);}
-            if( Object.keys(challan).length){await new SupplierModel().updateChallanStatus(challan,fields.challan_id).then((data)=>{console.log("updated successfully")})}
+            challan = Object.assign(challan, s3Path);}
+            if( Object.keys(challan).length) {
+                let s = await new SupplierModel().updateChallanStatus(challan, fields.challan_id)
+                return {message: "updated successfully", result:s}
+            }
+                return {message: "updated successfully", "changedRows":0 }
+
     }catch(error){
         throw error
     }
