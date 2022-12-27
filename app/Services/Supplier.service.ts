@@ -562,7 +562,6 @@ const updateChallanStatus = async(req:any)=>{
             s3Path['ewaybill_url'] = result.key;
             challan= Object.assign(challan, s3Path);}
             if( Object.keys(challan).length){await new SupplierModel().updateChallanStatus(challan,fields.challan_id).then((data)=>{console.log("updated successfully")})}
-
     }catch(error){
         throw error
     }
@@ -613,6 +612,64 @@ const fetchSupplierPOBySupplierId = async (id: any) => {
         return e;
     }
 }
+const addsupplierPaymentService = async(fields:any)=>{
+    let payment, data:any;
+    try{
+        if(fields.approvedQuantity !== undefined && fields.approvedQuantity !== null && fields.approvedQuantity !== "")
+        if(fields.delivery_challan_id !== undefined && fields.delivery_challan_id !== null && fields.delivery_challan_id !== "")
+        data = {approved_quantity: fields.approvedQuantity, delivery_challan_id: fields.delivery_challan_id}
+        payment = await new SupplierModel().addSupplierPayment(data)
+        if (payment.length == 0 ) throw new Error( "failed to add approved quantity" )
+        return payment
+    }catch (error:any){
+        LOGGER.info("error", error)
+        throw (error)
+    }
+
+}
+const fetchAllApprovedChallan = async ()=>{
+
+    try{
+        let challan = await new SupplierModel().fetchAllApprovedChallan()
+        if (challan.length == 0 ) throw new Error( "failed to add payment details" )
+        for(var i = 0 ; i < challan.length ; i++){
+            let pay = await new SupplierModel().fetchByDeliverychallanID(challan[i].id)
+            challan[i].approved_quantity = null
+            challan[i].amount = null
+            if( pay.length !== 0){
+                challan[i].approved_quantity = pay[0].approved_quantity
+                challan[i].amount = pay[0].amount
+            }
+        }
+        return challan
+    }catch (error){
+        throw error
+    }
+}
+const updateSupplierPayment = async(fields:any)=>{
+    let supplier,payment:any
+    let data:any = {}
+    try{
+        supplier = await new SupplierModel().fetchPaymentById(fields.id)
+        if (supplier.length == 0 ) throw new Error( " supplier not found " )
+        if (fields.payment_date !== undefined && fields.payment_date !== null && fields.payment_date !== "")
+            data.payment_date = fields.payment_date;
+        if (fields.invoice_no !== undefined && fields.invoice_no !== null && fields.invoice_no !== "")
+            data.invoice_no = fields.invoice_no;
+        if (fields.amount !== undefined && fields.amount !== null && fields.amount !== "")
+            data.amount = fields.amount;
+        if (fields.utr_no !== undefined && fields.utr_no !== null && fields.utr_no !== "")
+            data.utr_no = fields.utr_no;
+        if (fields.status !== undefined && fields.status !== null && fields.status !== "")
+            data.status = fields.status;
+        if (Object.keys(data).length) await new SupplierModel().updateSupplierPaymentDetails(data, fields.id).then((d) => { LOGGER.info("supplier's payment details updated successfully") })
+        return {message:"updated sucssesfully "}
+    }catch(error:any){
+        LOGGER.info("error", error)
+        throw error
+    }
+
+}
 export default {
     createSupplier,
     loginSupplier,
@@ -633,5 +690,8 @@ export default {
     fetchAllDeliveryChallan,
     fetchAllChallansCount,
     updateChallanStatus,
-    fetchSupplierPOBySupplierId
+    fetchSupplierPOBySupplierId,
+    addsupplierPaymentService,
+    fetchAllApprovedChallan,
+    updateSupplierPayment
 }

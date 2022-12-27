@@ -58,7 +58,8 @@ router.put(
 )
 router.post(
     '/create/delivery-challan',
-        supplierController.createChallan
+    celebrate(supplierSchema.generateChallan),
+    supplierController.createChallan
 )
 router.post(
     '/fetch/all/challan',
@@ -88,5 +89,17 @@ router.get(
 router.put( 
   '/po/update',
   supplierController.updateSupplierPO
+)
+router.post(
+    '/notify/',
+    supplierController.addSupplierPayment
+)
+router.get(
+    '/fetch/approved/challan',
+    supplierController.fetchApprovedChallan
+)
+router.put(
+    '/update/payment/',
+    supplierController.updatesupplierPayment
 )
 export default router;

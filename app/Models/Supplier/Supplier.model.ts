@@ -236,6 +236,27 @@ export class SupplierModel extends UserModel {
     async fetchchallanById(id: number) {
         return await this._executeQuery(`select * from purchase_order_delivery_challan where id = ?`, [id])
     }
-
-
+    async  fetchAllApprovedChallan() {
+        return await this._executeQuery(`select dc.id, dc.dispatch_id, sp.name as supplier, sp.mobile,
+                                                 DATE_FORMAT(dc.delivery_date, '%d-%m-%Y')  as delivery_date, dc.quantity, dc.user_id, dc.status,
+                                                dc.created_at, dc.updated_at
+                                                from  purchase_order_delivery_challan dc
+                                                inner join user sp  on dc.user_id = sp.id
+                                                inner join purchase_order_dispatch_notifications noti on dc.dispatch_id = noti.id
+                                                inner join supplier_purchase_order spo on noti.purchase_order_id = spo.id
+                                                inner join customer_sales_orders cso on spo.sales_order_id = cso.id
+                                                where dc.status = 1`, [])
+    }
+    async addSupplierPayment(data:any) {
+        return await this._executeQuery(`insert into supplier_payments set ?`, [data])
+    }
+    async fetchByDeliverychallanID(id: number) {
+        return await this._executeQuery(`select approved_quantity, amount from supplier_payments where delivery_challan_id = ?`, [id])
+    }
+    async fetchPaymentById(id: number) {
+        return await this._executeQuery(`select * from supplier_payments where id = ?`, [id])
+    }
+    async updateSupplierPaymentDetails(data:any, id:number){
+        return await this._executeQuery(`update supplier_payments set ? where id = ?`, [data, id])
+    }
 }
