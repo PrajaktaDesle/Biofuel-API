@@ -100,6 +100,7 @@ router.get(
 )
 router.put(
     '/update/payment/',
+    // celebrate(supplierSchema.updateSupplierPayment),
     supplierController.updatesupplierPayment
 )
 export default router;

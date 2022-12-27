@@ -544,10 +544,8 @@ const updateChallanStatus = async(req:any)=>{
         // @ts-ignore
         ({fields, files} = await new Promise((resolve) => {
             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
-                resolve({fields: fields, files: files});
-            })
+                resolve({fields: fields, files: files});})
         }));
-     
         if(fields.challan_id == undefined || fields.challan_id == null || fields.challan_id == "") throw new Error("id is missing");
         result = await new SupplierModel().fetchchallanById(fields.challan_id)
         if (result.length == 0) throw new Error("challan id not found");
@@ -565,8 +563,8 @@ const updateChallanStatus = async(req:any)=>{
             s3Path['ewaybill_url'] = result.key;
             challan = Object.assign(challan, s3Path);}
             if( Object.keys(challan).length) {
-                let s = await new SupplierModel().updateChallanStatus(challan, fields.challan_id)
-                return {message: "updated successfully", result:s}
+                let updatedData = await new SupplierModel().updateChallanStatus(challan, fields.challan_id)
+                return {message: "updated successfully", result:updatedData}
             }
                 return {message: "updated successfully", "changedRows":0 }
 
@@ -625,7 +623,7 @@ const addsupplierPaymentService = async(fields:any)=>{
     try{
         if(fields.approvedQuantity !== undefined && fields.approvedQuantity !== null && fields.approvedQuantity !== "")
         if(fields.delivery_challan_id !== undefined && fields.delivery_challan_id !== null && fields.delivery_challan_id !== "")
-        data = {approved_quantity: fields.approvedQuantity, delivery_challan_id: fields.delivery_challan_id}
+        data = {approved_quantity: fields.approvedQuantity, delivery_challan_id: fields.delivery_challan_id, status:1}
         payment = await new SupplierModel().addSupplierPayment(data)
         if (payment.length == 0 ) throw new Error( "failed to add approved quantity" )
         return payment
@@ -655,9 +653,10 @@ const fetchAllApprovedChallan = async ()=>{
     }
 }
 const updateSupplierPayment = async(fields:any)=>{
-    let supplier,payment:any
+    let supplier:any
     let data:any = {}
     try{
+        if(fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
         supplier = await new SupplierModel().fetchPaymentById(fields.id)
         if (supplier.length == 0 ) throw new Error( " supplier not found " )
         if (fields.payment_date !== undefined && fields.payment_date !== null && fields.payment_date !== "")
@@ -670,8 +669,11 @@ const updateSupplierPayment = async(fields:any)=>{
             data.utr_no = fields.utr_no;
         if (fields.status !== undefined && fields.status !== null && fields.status !== "")
             data.status = fields.status;
-        if (Object.keys(data).length) await new SupplierModel().updateSupplierPaymentDetails(data, fields.id).then((d) => { LOGGER.info("supplier's payment details updated successfully") })
-        return {message:"updated sucssesfully "}
+        if (Object.keys(data).length) {
+            let updatedData = await new SupplierModel().updateSupplierPaymentDetails(data, fields.id)
+            return updatedData
+        }
+        return {message:"updated sucssesfully " ,"changedRows" :0}
     }catch(error:any){
         LOGGER.info("error", error)
         throw error

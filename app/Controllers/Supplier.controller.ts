@@ -488,7 +488,6 @@ const  updatesupplierPayment: IController = async (req, res) => {
                     supplier.message
                 );
             }else{
-                LOGGER.log("User 3", supplier)
                 apiResponse.result(res, supplier, httpStatusCodes.OK);
             }
         }).catch( (err : any) => {
@@ -496,6 +495,7 @@ const  updatesupplierPayment: IController = async (req, res) => {
         apiResponse.error(
             res,
             httpStatusCodes.BAD_REQUEST,
+            err.message
         );
     });
 };
