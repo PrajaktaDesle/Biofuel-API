@@ -678,7 +678,15 @@ const updateSupplierPayment = async(fields:any)=>{
         LOGGER.info("error", error)
         throw error
     }
-
+}
+const fetchAllSPONumber = async()=>{
+    try{
+        let result = await new SupplierModel().fetchAllSPO_no()
+        if (result.length == 0 ) throw new Error( "purchase order not found" )
+        return result
+    }catch(err:any){
+        throw  err
+    }
 }
 export default {
     createSupplier,
@@ -703,5 +711,6 @@ export default {
     fetchSupplierPOBySupplierId,
     addsupplierPaymentService,
     fetchAllApprovedChallan,
-    updateSupplierPayment
+    updateSupplierPayment,
+    fetchAllSPONumber
 }
