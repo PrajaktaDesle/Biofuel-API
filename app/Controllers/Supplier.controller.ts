@@ -477,6 +477,28 @@ const  fetchApprovedChallan: IController = async (req, res) => {
         );
     });
 };
+const  updatesupplierPayment: IController = async (req, res) => {
+    supplierService.updateSupplierPayment(req.body)
+        .then( ( supplier : any) => {
+            if(supplier instanceof Error){
+                LOGGER.info("User 2", supplier.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    supplier.message
+                );
+            }else{
+                LOGGER.log("User 3", supplier)
+                apiResponse.result(res, supplier, httpStatusCodes.OK);
+            }
+        }).catch( (err : any) => {
+        LOGGER.info("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+        );
+    });
+};
 
 export default {
     register,
@@ -497,5 +519,6 @@ export default {
     updatechallanStatus,
     fetchSupplierPOBySupplierId,
     addSupplierPayment,
-    fetchApprovedChallan
+    fetchApprovedChallan,
+    updatesupplierPayment
 };

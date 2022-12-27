@@ -98,4 +98,8 @@ router.get(
     '/fetch/approved/challan',
     supplierController.fetchApprovedChallan
 )
+router.put(
+    '/update/payment/',
+    supplierController.updatesupplierPayment
+)
 export default router;

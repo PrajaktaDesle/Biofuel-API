@@ -646,7 +646,30 @@ const fetchAllApprovedChallan = async ()=>{
         throw error
     }
 }
+const updateSupplierPayment = async(fields:any)=>{
+    let supplier,payment:any
+    let data:any = {}
+    try{
+        supplier = await new SupplierModel().fetchPaymentById(fields.id)
+        if (supplier.length == 0 ) throw new Error( " supplier not found " )
+        if (fields.payment_date !== undefined && fields.payment_date !== null && fields.payment_date !== "")
+            data.payment_date = fields.payment_date;
+        if (fields.invoice_no !== undefined && fields.invoice_no !== null && fields.invoice_no !== "")
+            data.invoice_no = fields.invoice_no;
+        if (fields.amount !== undefined && fields.amount !== null && fields.amount !== "")
+            data.amount = fields.amount;
+        if (fields.utr_no !== undefined && fields.utr_no !== null && fields.utr_no !== "")
+            data.utr_no = fields.utr_no;
+        if (fields.status !== undefined && fields.status !== null && fields.status !== "")
+            data.status = fields.status;
+        if (Object.keys(data).length) await new SupplierModel().updateSupplierPaymentDetails(data, fields.id).then((d) => { LOGGER.info("supplier's payment details updated successfully") })
+        return {message:"updated sucssesfully "}
+    }catch(error:any){
+        LOGGER.info("error", error)
+        throw error
+    }
 
+}
 export default {
     createSupplier,
     loginSupplier,
@@ -669,5 +692,6 @@ export default {
     updateChallanStatus,
     fetchSupplierPOBySupplierId,
     addsupplierPaymentService,
-    fetchAllApprovedChallan
+    fetchAllApprovedChallan,
+    updateSupplierPayment
 }

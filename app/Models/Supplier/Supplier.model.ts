@@ -248,11 +248,15 @@ export class SupplierModel extends UserModel {
                                                 where dc.status = 1`, [])
     }
     async addSupplierPayment(data:any) {
-        console.log('data in model----------->', data)
         return await this._executeQuery(`insert into supplier_payments set ?`, [data])
     }
     async fetchByDeliverychallanID(id: number) {
         return await this._executeQuery(`select approved_quantity, amount from supplier_payments where delivery_challan_id = ?`, [id])
     }
-
+    async fetchPaymentById(id: number) {
+        return await this._executeQuery(`select * from supplier_payments where id = ?`, [id])
+    }
+    async updateSupplierPaymentDetails(data:any, id:number){
+        return await this._executeQuery(`update supplier_payments set ? where id = ?`, [data, id])
+    }
 }
