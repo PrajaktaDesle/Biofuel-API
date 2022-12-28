@@ -688,6 +688,28 @@ const fetchAllSPONumber = async()=>{
         throw  err
     }
 }
+const fetchAllNotificationsBySupplierId = async(req:any)=>{
+    let result,id:any;
+    try{
+        id = req.query.supplier_id
+        result = await new SupplierModel().fetchAllNotificationsBySupplierId(id)
+        if (result.length == 0 ) throw new Error( "notification  not found" )
+        return result
+    }catch(err:any){
+        throw err
+    }
+}
+const fetchAllPaymentsBySupplierId = async(req:any)=>{
+    let result,id:any;
+    try{
+        id = req.query.supplier_id
+        result = await new SupplierModel().getAllPaymentsBySupplier_id(id)
+        if (result.length == 0 ) throw new Error( "payment details  not found for given supplier" )
+        return result
+    }catch(err:any){
+        throw err
+    }
+}
 export default {
     createSupplier,
     loginSupplier,
@@ -712,5 +734,7 @@ export default {
     addsupplierPaymentService,
     fetchAllApprovedChallan,
     updateSupplierPayment,
-    fetchAllSPONumber
+    fetchAllSPONumber,
+    fetchAllNotificationsBySupplierId,
+    fetchAllPaymentsBySupplierId
 }

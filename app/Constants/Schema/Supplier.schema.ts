@@ -57,5 +57,15 @@ export default {
             utr_no :Joi.number().required(),
             status : Joi.number().required().min(0).message("status should be 0 or 1 ").max(1).message("status should be 0 or 1")
         }
-    }
+    },
+    fetchNotificatonsBySupplierById:{
+        [Segments.QUERY]:{
+            supplier_id:Joi.number().required()
+        }
+    },
+    fetchAllPaymentsSupplierById:{
+        [Segments.QUERY]:{
+            supplier_id:Joi.number().required()
+        }
+    },
 };

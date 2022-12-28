@@ -107,4 +107,16 @@ router.get(
     '/fetch/all/spo-number/',
     supplierController.fetchAllSPONumber
 )
+router.get(
+    '/fetch/all/notifications/',
+    celebrate(supplierSchema.fetchNotificatonsBySupplierById),
+    supplierController.fetchAllNotificationsBySupplierID
+
+)
+router.get(
+    '/fetch/all/payments/',
+    celebrate(supplierSchema.fetchAllPaymentsSupplierById),
+    supplierController.fetchAllPaymentsBySupplierID
+
+)
 export default router;
