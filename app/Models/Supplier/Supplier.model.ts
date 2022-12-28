@@ -246,8 +246,8 @@ export class SupplierModel extends UserModel {
         return await this._executeQuery(`select * from purchase_order_delivery_challan where id = ?`, [id])
     }
     async  fetchAllApprovedChallan() {
-        return await this._executeQuery(`select dc.id, dc.dispatch_id, sp.name as supplier, sp.mobile,
-                                                 DATE_FORMAT(dc.delivery_date, '%d-%m-%Y')  as delivery_date, dc.quantity, dc.user_id, dc.status,
+        return await this._executeQuery(`select dc.id, dc.dispatch_id, sp.name as supplier, sp.mobile,dc.ewaybill_url,dc.delivery_challan_url,dc.bilty_url,dc.invoice_url,dc.weight_slip_url,
+                                                DATE_FORMAT(dc.delivery_date, '%d-%m-%Y')  as delivery_date, dc.quantity, dc.user_id, dc.status,
                                                 dc.created_at, dc.updated_at
                                                 from  purchase_order_delivery_challan dc
                                                 inner join user sp  on dc.user_id = sp.id
