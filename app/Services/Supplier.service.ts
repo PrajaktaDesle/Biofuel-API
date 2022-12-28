@@ -553,16 +553,24 @@ const updateChallanStatus = async(req:any)=>{
             challan.status = fields.status
         if(fields.EwayBillNo !== undefined && fields.EwayBillNo !== null && fields.EwayBillNo !== "")
             challan.eway_bill = fields.EwayBillNo
-        let s3Image: any = {}
-        let s3Path: any = {}
-        if (files.EwayBill !== undefined && files.EwayBill !== null && files.EwayBill !== ""){
-            if (isFileNotValid(files.EwayBill.mimetype)) throw new Error("Only .png, .jpg and .jpeg pdf format allowed! for image");else{s3Image['ewaybill_url'] = files.EwayBill}
-            let name: string = "images/ewaybill_url/" + moment().unix() + "." + s3Image['ewaybill_url'].originalFilename.split(".").pop()
-            const result = await uploadFile(s3Image['ewaybill_url'], name);
-            if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
-            s3Path['ewaybill_url'] = result.key;
-            challan = Object.assign(challan, s3Path);}
-            if( Object.keys(challan).length) {
+
+        let s3Images: any = {};
+        if (files.Bilty !== undefined && files.Bilty !== null && files.Bilty !== "") {
+            if (isFileNotValid(files.Bilty.mimetype)) throw new Error("Only .png, .jpg, .jpeg, .pdf  format allowed!"); else { s3Images.bilty_url = files.Bilty; }
+        }
+        if (files.challan !== undefined && files.challan  !== null && files.challan !== "") {
+            if (isFileNotValid(files.challan.mimetype)) throw new Error("Only .png, .jpg, .jpeg, .pdf format allowed!"); else { s3Images.delivery_challan_url = files.challan; }
+        }
+        if (files.invoice !== undefined && files.invoice !== null && files.invoice!== "") {
+            if (isFileNotValid(files.invoice.mimetype)) throw new Error("Only .png, .jpg ,.jpeg, .pdf format allowed! "); else { s3Images.invoice_url = files.invoice; }
+        }
+        if (files.weight_slip !== undefined && files.weight_slip !== null && files.weight_slip !== "") {
+            if (isFileNotValid(files.weight_slip.mimetype)) throw new Error("Only .png, .jpg, .jpeg, .pdf  format allowed!"); else { s3Images.weight_slip_url = files.weight_slip }
+        }
+        // Multiple fl upload to s3Bucket
+        if (Object.keys(s3Images).length) { const s3Paths = await uploadFiles(s3Images); Object.assign(challan, s3Paths); }
+
+        if( Object.keys(challan).length) {
                 let updatedData = await new SupplierModel().updateChallanStatus(challan, fields.challan_id)
                 return {message: "updated successfully", result:updatedData}
             }
@@ -667,6 +675,8 @@ const updateSupplierPayment = async(fields:any)=>{
             data.amount = fields.amount;
         if (fields.utr_no !== undefined && fields.utr_no !== null && fields.utr_no !== "")
             data.utr_no = fields.utr_no;
+        if(fields.approved_quantity !== undefined && fields.approved_quantity !== null && fields.approved_quantity !== "")
+            data.approved_quantity = fields.approved_quantity
         if (fields.status !== undefined && fields.status !== null && fields.status !== "")
             data.status = fields.status;
         if (Object.keys(data).length) {
