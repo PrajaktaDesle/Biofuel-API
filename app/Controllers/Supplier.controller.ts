@@ -522,6 +522,51 @@ const  fetchAllSPONumber: IController = async (req, res) => {
         );
     });
 };
+
+const  fetchAllNotificationsBySupplierID: IController = async (req, res) => {
+    supplierService.fetchAllNotificationsBySupplierId(req)
+        .then( ( result : any) => {
+            if( result instanceof Error){
+                LOGGER.info("User 2", result.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    result.message
+                );
+            }else{
+                apiResponse.result(res, result, httpStatusCodes.OK);
+            }
+        }).catch( (err : any) => {
+        LOGGER.info("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+            err.message
+        );
+    });
+};
+const  fetchAllPaymentsBySupplierID: IController = async (req, res) => {
+    supplierService.fetchAllPaymentsBySupplierId(req)
+        .then( ( result : any) => {
+            if( result instanceof Error){
+                LOGGER.info("User 2", result.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    result.message
+                );
+            }else{
+                apiResponse.result(res, result, httpStatusCodes.OK);
+            }
+        }).catch( (err : any) => {
+        LOGGER.info("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+            err.message
+        );
+    });
+};
 export default {
     register,
     login,
@@ -543,5 +588,8 @@ export default {
     addSupplierPayment,
     fetchApprovedChallan,
     updatesupplierPayment,
-    fetchAllSPONumber
+    fetchAllSPONumber,
+    fetchAllNotificationsBySupplierID,
+    fetchAllPaymentsBySupplierID
+
 };

@@ -168,6 +168,15 @@ export class SupplierModel extends UserModel {
         return await this._executeQuery("insert into purchase_order_delivery_challan set ?", [data]);
 
     }
+    async fetchAllNotificationsBySupplierId(id:number){
+        return await this._executeQuery(`select pon.id as NotificationNo,spo.supplier_id, sp.name as supplier,
+                                                pon.status, DATE_FORMAT(pon.created_at, '%d-%m-%Y') as date, pon.created_at,pon.updated_at 
+                                                from purchase_order_dispatch_notifications pon
+                                                left join supplier_purchase_order spo on spo.id = pon.purchase_order_id 
+                                                left join customer_sales_orders cso on cso.id = spo.sales_order_id
+                                                left join user sp on sp.id = spo.supplier_id
+                                                where spo.supplier_id = ?;`,[id])
+    }
     async fetchAllDeliveryChallan(limit: number, offset: number, sortOrder: string, query: string) {
         return await this._executeQuery(`select dc.id ,dc.dispatch_id, cs.name as customer, sp.name as supplier, sp.mobile,
                                                         DATE_FORMAT(dc.delivery_date, '%d-%m-%Y')  as delivery_date, dc.quantity, dc.vehicle_no,dc.driver_mobile_no as DriverNo,
@@ -216,7 +225,7 @@ export class SupplierModel extends UserModel {
         where spo.id = ? `, [id])
     }
     async fetchAllSupplierPOBySupplierId(id: number) {
-        return await this._executeQuery(`SELECT spo.supplier_id, u.name, cso.customer_id as customer_id, c.name as customer, p.id as product_id, p.name as product, p.description as product_description , rm.name as raw_material,pp.name as packaging, spo.sales_order_id, cso.sales_order_no as customer_so_number , po_number as supplier_po_numer, DATE_FORMAT(po_date, '%Y-%m-%d') as po_date , DATE_FORMAT(spo.delivery_date, '%Y-%m-%d') as delivery_date, spo.quantity, spo.rate, spo.adjustment_amount, spo.rate_type, spo.po_type, spo.status, 
+        return await this._executeQuery(`SELECT spo.id, spo.supplier_id, u.name, cso.customer_id as customer_id, c.name as customer, p.id as product_id, p.name as product, p.description as product_description , rm.name as raw_material,pp.name as packaging, spo.sales_order_id, cso.sales_order_no as customer_so_number , po_number as supplier_po_numer, DATE_FORMAT(po_date, '%Y-%m-%d') as po_date , DATE_FORMAT(spo.delivery_date, '%Y-%m-%d') as delivery_date, spo.quantity, spo.rate, spo.adjustment_amount, spo.rate_type, spo.po_type, spo.status, 
                                                 concat(a.address,' ,',cty.name,', ',a.pincode,' ,', ast.name)  as address
                                                 FROM supplier_purchase_order spo
                                                 left join user u on u.id=spo.supplier_id
@@ -265,5 +274,13 @@ export class SupplierModel extends UserModel {
                                                 FROM biofuel.supplier_purchase_order spo
                                                 inner join customer_sales_orders cso on spo.sales_order_id = cso.id
                                                 inner join products p on cso.product_id = p.id `,[])
+    }
+    async getAllPaymentsBySupplier_id(id:number){
+        return await this._executeQuery(`select DATE_FORMAT(py.payment_date, '%d-%m-%Y') as date , py.invoice_no, py.amount, py.utr_no,
+                                                py.created_at, py.updated_at
+                                                from supplier_payments py
+                                                inner join purchase_order_delivery_challan dc on py.delivery_challan_id = dc.id
+                                                where dc.user_id = ? 
+                                                order by py.payment_date desc `,[id])
     }
 }
