@@ -428,7 +428,100 @@ const  updatechallanStatus: IController = async (req, res) => {
         return;
     }
 };
+const  addSupplierPayment : IController = async (req, res) => {
+    let supplier: any;
+    try {
+        supplier = await supplierService.addsupplierPaymentService(req.body);
+        LOGGER.info('Supplier at controller-----> ', supplier);
 
+        if (supplier instanceof Error) {
+            LOGGER.info("error", supplier)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+            apiResponse.result(res,
+                supplier,
+                httpStatusCodes.CREATED);
+        }
+
+    } catch (e:any) {
+        LOGGER.info("controller ->", e)
+        // @ts-ignore
+
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+            e.message
+        );
+        return;
+    }
+};
+const  fetchApprovedChallan: IController = async (req, res) => {
+    supplierService.fetchAllApprovedChallan()
+        .then( ( challan : any) => {
+            if(challan instanceof Error){
+                LOGGER.info("User 2", challan.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    challan.message
+                );
+            }else{
+                LOGGER.log("User 3", challan)
+                apiResponse.result(res, challan, httpStatusCodes.OK);
+            }
+        }).catch( (err : any) => {
+        LOGGER.info("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+        );
+    });
+};
+const  updatesupplierPayment: IController = async (req, res) => {
+    supplierService.updateSupplierPayment(req.body)
+        .then( ( supplier : any) => {
+            if(supplier instanceof Error){
+                LOGGER.info("User 2", supplier.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    supplier.message
+                );
+            }else{
+                apiResponse.result(res, supplier, httpStatusCodes.OK);
+            }
+        }).catch( (err : any) => {
+        LOGGER.info("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+            err.message
+        );
+    });
+};
+// fetch all spo_number and products against po-number
+const  fetchAllSPONumber: IController = async (req, res) => {
+    supplierService.fetchAllSPONumber()
+        .then( ( result : any) => {
+            if( result instanceof Error){
+                LOGGER.info("User 2", result.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    result.message
+                );
+            }else{
+                apiResponse.result(res, result, httpStatusCodes.OK);
+            }
+        }).catch( (err : any) => {
+        LOGGER.info("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+            err.message
+        );
+    });
+};
 export default {
     register,
     login,
@@ -446,5 +539,9 @@ export default {
     fetchAllChallan,
     createChallan,
     updatechallanStatus,
-    fetchSupplierPOBySupplierId
+    fetchSupplierPOBySupplierId,
+    addSupplierPayment,
+    fetchApprovedChallan,
+    updatesupplierPayment,
+    fetchAllSPONumber
 };
