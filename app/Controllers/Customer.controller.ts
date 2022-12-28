@@ -18,17 +18,15 @@ const Create: IController = async (req, res) => {
                 customer
             }, httpStatusCodes.CREATED);
         }
-    } catch (e:any) {
+    } catch (e: any) {
         // @ts-ignore
         if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
                 'MOBILE_AND_EMAIL_ALREADY_EXISTS',
-
             );
-        }
-        else{
+        } else {
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
@@ -40,44 +38,44 @@ const Create: IController = async (req, res) => {
 }
 const fetchCustomerById: IController = async (req, res) => {
     await CustomerService.fetchCustomerById(req.query.id)
-        .then( (customer : any) => {
-            if(customer instanceof Error){
+        .then((customer: any) => {
+            if (customer instanceof Error) {
                 console.log("User 2", customer.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
                     customer.message
                 );
-            }else{
+            } else {
                 apiResponse.result(res, customer, httpStatusCodes.OK);
             }
-        }).catch( (err : any) => {
-        apiResponse.error(
-            res,
-            httpStatusCodes.BAD_REQUEST,
-        );
-    });
+        }).catch((err: any) => {
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+            );
+        });
 };
 const updateCustomerDetails: IController = async (req, res) => {
-     await CustomerService.updateCustomerdetails(req)
-        .then( (customer) => {
-            if(customer instanceof Error){
+    await CustomerService.updateCustomerdetails(req)
+        .then((customer) => {
+            if (customer instanceof Error) {
                 console.log("user 2", customer.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
                     customer.message
                 );
-            }else{
+            } else {
                 apiResponse.result(res, customer, httpStatusCodes.OK);
             }
         }).catch(err => {
-        apiResponse.error(
-            res,
-            httpStatusCodes.BAD_REQUEST,
-            err.message
-        );
-    });
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                err.message
+            );
+        });
 };
 
 const fetchAllCustomers: IController = async (req, res) => {
@@ -97,7 +95,7 @@ const fetchAllCustomers: IController = async (req, res) => {
                 {data: customer, total: count},
                 httpStatusCodes.OK)
         }
-    } catch (error : any) {
+    } catch (error: any) {
         LOGGER.info("error------>", error)
         return apiResponse.error(res,
             httpStatusCodes.BAD_REQUEST,
@@ -105,47 +103,44 @@ const fetchAllCustomers: IController = async (req, res) => {
     }
 };
 // customer-supplier mapping
-const Create_customer_supplier: IController = async(req,res) => {
+const Create_customer_supplier: IController = async (req, res) => {
     let CSM: any;
     try {
-        CSM = await CustomerService.CreateCSMService(req) ;
+        CSM = await CustomerService.CreateCSMService(req);
         if (CSM instanceof Error) {
-            apiResponse.error( res,
-                httpStatusCodes.BAD_REQUEST );
-        }
-        else {
-            apiResponse.result( res,
-                CSM,
-                httpStatusCodes.CREATED  );
-            }
-    } catch (e:any) {
             apiResponse.error(res,
-                httpStatusCodes.BAD_REQUEST, e.message)
-            return;
+                httpStatusCodes.BAD_REQUEST);
+        } else {
+            apiResponse.result(res,
+                CSM,
+                httpStatusCodes.CREATED);
+        }
+    } catch (e: any) {
+        apiResponse.error(res,
+            httpStatusCodes.BAD_REQUEST, e.message)
+        return;
     }
 };
-const updateCSMStatus:IController = async ( req, res) => {
-    let  result:any
-    try{
-        result = await  CustomerService.updateCSMService(req)
-        if(result instanceof Error ){
-            return apiResponse.error( res,
+const updateCSMStatus: IController = async (req, res) => {
+    let result: any
+    try {
+        result = await CustomerService.updateCSMService(req)
+        if (result instanceof Error) {
+            return apiResponse.error(res,
                 httpStatusCodes.BAD_REQUEST,
-                result.message )
-        }
-        else{
-            return apiResponse.result( res,
+                result.message)
+        } else {
+            return apiResponse.result(res,
                 result,
-                httpStatusCodes.OK )
+                httpStatusCodes.OK)
         }
-    }
-    catch ( error : any ) {
-        return apiResponse.error( res,
+    } catch (error: any) {
+        return apiResponse.error(res,
             httpStatusCodes.BAD_REQUEST,
             error.message)
     }
 }
-const fetchAllCSM:IController = async ( req:any , res:any ) => {
+const fetchAllCSM: IController = async (req: any, res: any) => {
     try {
         let query = ""
         if (req.body.query != "") {
@@ -162,8 +157,8 @@ const fetchAllCSM:IController = async ( req:any , res:any ) => {
                 {data: result, total: count},
                 httpStatusCodes.OK)
         }
-    }catch (error:any) {
-        return apiResponse.error( res,
+    } catch (error: any) {
+        return apiResponse.error(res,
             httpStatusCodes.BAD_REQUEST,
             error.message)
     }
@@ -176,27 +171,25 @@ const createCustomerEstimate: IController = async (req, res) => {
 
         if (estimate instanceof Error) {
             LOGGER.info("error", estimate)
-            apiResponse.error( res, 
-                               httpStatusCodes.BAD_REQUEST );
-        } 
-        else {
-            apiResponse.result( res, 
-                                estimate,
-                                httpStatusCodes.CREATED );
+            apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST);
+        } else {
+            apiResponse.result(res,
+                estimate,
+                httpStatusCodes.CREATED);
         }
 
-    } catch (e:any) {
+    } catch (e: any) {
         LOGGER.info("controller ->", e)
         // @ts-ignore
         if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
-            apiResponse.error( res,
-                               httpStatusCodes.BAD_REQUEST,
-                               'MOBILE_AND_EMAIL_ALREADY_EXISTS' )
-        }
-        else{
-            apiResponse.error( res,
-                               httpStatusCodes.BAD_REQUEST,
-                               e.message )
+            apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST,
+                'MOBILE_AND_EMAIL_ALREADY_EXISTS')
+        } else {
+            apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message)
         }
         return;
     }
@@ -211,79 +204,73 @@ const udpateCustomerEstimate: IController = async (req, res) => {
 
         if (estimate instanceof Error) {
             LOGGER.info("error", estimate)
-            apiResponse.error( res, 
-                               httpStatusCodes.BAD_REQUEST );
-        } 
-        else {
-            apiResponse.result( res, 
-                                estimate,
-                                httpStatusCodes.CREATED );
+            apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST);
+        } else {
+            apiResponse.result(res,
+                estimate,
+                httpStatusCodes.CREATED);
         }
 
-    } catch (e:any) {
+    } catch (e: any) {
         LOGGER.info("controller ->", e)
         // @ts-ignore
         if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
-            apiResponse.error( res,
-                               httpStatusCodes.BAD_REQUEST,
-                               'MOBILE_AND_EMAIL_ALREADY_EXISTS' )
-        }
-        else{
-            apiResponse.error( res,
-                               httpStatusCodes.BAD_REQUEST,
-                               e.message )
+            apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST,
+                'MOBILE_AND_EMAIL_ALREADY_EXISTS')
+        } else {
+            apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message)
         }
         return;
     }
 };
 
-const fetchCustomerEstimateById : IController = async ( req:any , res:any ) => {
-    try{
-        let estimate = await CustomerService.fetchCustomerEstimateById( req.query.id )
-        if ( estimate instanceof Error ){
-           LOGGER.info( "Error ", estimate )
-           return apiResponse.error( res,
-                                    httpStatusCodes.BAD_REQUEST,
-                                    estimate.message )
+const fetchCustomerEstimateById: IController = async (req: any, res: any) => {
+    try {
+        let estimate = await CustomerService.fetchCustomerEstimateById(req.query.id)
+        if (estimate instanceof Error) {
+            LOGGER.info("Error ", estimate)
+            return apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST,
+                estimate.message)
+        } else {
+            //    LOGGER.info( "estimate status ", estimate[0].status )
+            return apiResponse.result(res,
+                estimate,
+                httpStatusCodes.OK)
         }
-        else{
-        //    LOGGER.info( "estimate status ", estimate[0].status )
-           return apiResponse.result( res,
-                                     estimate,
-                                     httpStatusCodes.OK )
-        }
-    }
-    catch ( error : any ) {
-        LOGGER.info( "Exception => ", error )
-        return apiResponse.error( res,
-                                  httpStatusCodes.BAD_REQUEST )
+    } catch (error: any) {
+        LOGGER.info("Exception => ", error)
+        return apiResponse.error(res,
+            httpStatusCodes.BAD_REQUEST)
     }
 };
 
-const fetchAllCustomerEstimates : IController = async ( req:any , res:any ) => {
-    try{
+const fetchAllCustomerEstimates: IController = async (req: any, res: any) => {
+    try {
         let query = " "
         if (req.body.query != "") {
             query = ` WHERE cs.name like '%${req.body.query}%'  `
         }
-        let estimate = await CustomerService.fetchAllCustomerEstimates( req.body.pageIndex, req.body.pageSize, req.body.sort, query )
+        let estimate = await CustomerService.fetchAllCustomerEstimates(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
         let count = await customerService.fetchAllCustomerEsimatesCount(query);
 
-        if ( estimate instanceof Error ){
-           return apiResponse.error( res,
-                                    httpStatusCodes.BAD_REQUEST,
-                                    estimate.message )
+        if (estimate instanceof Error) {
+            return apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST,
+                estimate.message)
+        } else {
+            return apiResponse.result(res,
+                {data: estimate, total: count},
+                httpStatusCodes.OK)
         }
-        else{
-           return apiResponse.result( res,
-                                     { data : estimate, total : count },
-                                     httpStatusCodes.OK )
-        }
-    }
-    catch ( error : any ) {
-        LOGGER.info( "Error => ", error )
-        return apiResponse.error( res,
-                                  httpStatusCodes.BAD_REQUEST )
+    } catch (error: any) {
+        LOGGER.info("Error => ", error)
+        return apiResponse.error(res,
+            httpStatusCodes.BAD_REQUEST)
     }
 }
 
@@ -295,27 +282,25 @@ const createCustomerSalesOrder: IController = async (req, res) => {
 
         if (sales_order instanceof Error) {
             LOGGER.info("error", sales_order)
-            apiResponse.error( res, 
-                               httpStatusCodes.BAD_REQUEST );
-        } 
-        else {
-            apiResponse.result( res, 
-                                sales_order,
-                                httpStatusCodes.CREATED );
+            apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST);
+        } else {
+            apiResponse.result(res,
+                sales_order,
+                httpStatusCodes.CREATED);
         }
 
-    } catch (e:any) {
+    } catch (e: any) {
         LOGGER.info("controller ->", e)
         // @ts-ignore
         if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
-            apiResponse.error( res,
-                               httpStatusCodes.BAD_REQUEST,
-                               'MOBILE_AND_EMAIL_ALREADY_EXISTS' )
-        }
-        else{
-            apiResponse.error( res,
-                               httpStatusCodes.BAD_REQUEST,
-                               e.message )
+            apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST,
+                'MOBILE_AND_EMAIL_ALREADY_EXISTS')
+        } else {
+            apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message)
         }
         return;
     }
@@ -330,92 +315,86 @@ const updateCustomerSalesOrder: IController = async (req, res) => {
 
         if (sales_order instanceof Error) {
             LOGGER.info("error", sales_order)
-            apiResponse.error( res, 
-                               httpStatusCodes.BAD_REQUEST );
-        } 
-        else {
-            apiResponse.result( res, 
-                                sales_order,
-                                httpStatusCodes.CREATED );
+            apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST);
+        } else {
+            apiResponse.result(res,
+                sales_order,
+                httpStatusCodes.CREATED);
         }
 
-    } catch (e:any) {
+    } catch (e: any) {
         LOGGER.info("controller ->", e)
         // @ts-ignore
         if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
-            apiResponse.error( res,
-                               httpStatusCodes.BAD_REQUEST,
-                               'MOBILE_AND_EMAIL_ALREADY_EXISTS' )
-        }
-        else{
-            apiResponse.error( res,
-                               httpStatusCodes.BAD_REQUEST,
-                               e.message )
+            apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST,
+                'MOBILE_AND_EMAIL_ALREADY_EXISTS')
+        } else {
+            apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message)
         }
         return;
     }
 };
 
-const fetchCustomerSalesOrderById : IController = async ( req:any , res:any ) => {
-    try{
-        let estimate = await CustomerService.fetchCustomerSalesOrderById( req.query.id )
-        if ( estimate instanceof Error ){
-           return apiResponse.error( res,
-                                    httpStatusCodes.BAD_REQUEST,
-                                    estimate.message )
+const fetchCustomerSalesOrderById: IController = async (req: any, res: any) => {
+    try {
+        let estimate = await CustomerService.fetchCustomerSalesOrderById(req.query.id)
+        if (estimate instanceof Error) {
+            return apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST,
+                estimate.message)
+        } else {
+            return apiResponse.result(res,
+                estimate,
+                httpStatusCodes.OK)
         }
-        else{
-           return apiResponse.result( res,
-                                     estimate,
-                                     httpStatusCodes.OK )
-        }
-    }
-    catch ( error : any ) {
-        LOGGER.info( "Error => ", error )
-        return apiResponse.error( res,
-                                  httpStatusCodes.BAD_REQUEST )
+    } catch (error: any) {
+        LOGGER.info("Error => ", error)
+        return apiResponse.error(res,
+            httpStatusCodes.BAD_REQUEST)
     }
 }
 
-const fetchAllCustomerSalesOrders : IController = async ( req:any , res:any ) => {
-    try{
+const fetchAllCustomerSalesOrders: IController = async (req: any, res: any) => {
+    try {
         let query = " "
         if (req.body.query != "") {
             query = ` WHERE cs.name like '%${req.body.query}%' `
         }
-        let estimate = await CustomerService.fetchAllCustomerSalesOrders(req.body.pageIndex, req.body.pageSize, req.body.sort, query )
+        let estimate = await CustomerService.fetchAllCustomerSalesOrders(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
         let count = await CustomerService.fetchAllCustomerSalesOrdersCount(query);
-        if ( estimate instanceof Error ){
-           return apiResponse.error( res,
-                                    httpStatusCodes.BAD_REQUEST,
-                                    estimate.message )
+        if (estimate instanceof Error) {
+            return apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST,
+                estimate.message)
+        } else {
+            return apiResponse.result(res,
+                {data: estimate, total: count},
+                httpStatusCodes.OK)
         }
-        else{
-           return apiResponse.result( res,
-                                     {data : estimate , total : count },
-                                     httpStatusCodes.OK )
-        }
-    }
-    catch ( error : any ) {
-        LOGGER.info( "Error => ", error )
-        return apiResponse.error( res,
-                                  httpStatusCodes.BAD_REQUEST )
+    } catch (error: any) {
+        LOGGER.info("Error => ", error)
+        return apiResponse.error(res,
+            httpStatusCodes.BAD_REQUEST)
     }
 }
 const fetchAllSuppliersAgainstCustomer: IController = async (req, res) => {
     await CustomerService.fetchAllMappedSuppliers(req.body.customer_id)
-        .then( (customer : any) => {
-            if(customer instanceof Error){
+        .then((customer: any) => {
+            if (customer instanceof Error) {
                 console.log("User 2", customer.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
                     customer.message
                 );
-            }else{
+            } else {
                 apiResponse.result(res, customer, httpStatusCodes.OK);
             }
-        }).catch( (err : any) => {
+        }).catch((err: any) => {
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
@@ -425,18 +404,18 @@ const fetchAllSuppliersAgainstCustomer: IController = async (req, res) => {
 };
 const fetchAllActiveCustomers: IController = async (req, res) => {
     await CustomerService.fetchAllActiveCustomerService()
-        .then( (customer : any) => {
-            if(customer instanceof Error){
+        .then((customer: any) => {
+            if (customer instanceof Error) {
                 console.log("User 2", customer.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
                     customer.message
                 );
-            }else{
+            } else {
                 apiResponse.result(res, customer, httpStatusCodes.OK);
             }
-        }).catch( (err : any) => {
+        }).catch((err: any) => {
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
@@ -446,18 +425,18 @@ const fetchAllActiveCustomers: IController = async (req, res) => {
 };
 const fetchAllMappedSuppliersByAddressID: IController = async (req, res) => {
     await CustomerService.fetchSuppliers(req)
-        .then( (customer : any) => {
-            if(customer instanceof Error){
+        .then((customer: any) => {
+            if (customer instanceof Error) {
                 console.log("User 2", customer.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
                     customer.message
                 );
-            }else{
+            } else {
                 apiResponse.result(res, customer, httpStatusCodes.OK);
             }
-        }).catch( (err : any) => {
+        }).catch((err: any) => {
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
@@ -467,19 +446,19 @@ const fetchAllMappedSuppliersByAddressID: IController = async (req, res) => {
 };
 
 const fetchAllCustomersJson: IController = async (req, res) => {
-    let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " AND cs.name like '%"+ req.query.key + "%'" : "";
+    let query: string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " AND cs.name like '%" + req.query.key + "%'" : "";
     await CustomerService.fetchAllCustomersJson(query)
-        .then( (customer : any) => {
-            if(customer instanceof Error){
+        .then((customer: any) => {
+            if (customer instanceof Error) {
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
                     customer.message
                 );
-            }else{
+            } else {
                 apiResponse.result(res, customer, httpStatusCodes.OK);
             }
-        }).catch( (err : any) => {
+        }).catch((err: any) => {
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
@@ -489,20 +468,20 @@ const fetchAllCustomersJson: IController = async (req, res) => {
 };
 
 const fetchAllCustomersSOList: IController = async (req, res) => {
-    let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " AND cs.sales_order_no like '%"+ req.query.key + "%'" : "";
+    let query: string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " AND cs.sales_order_no like '%" + req.query.key + "%'" : "";
     await CustomerService.fetchAllCustomersSOList(query)
-        .then( (customer : any) => {
-            if(customer instanceof Error){
+        .then((customer: any) => {
+            if (customer instanceof Error) {
                 console.log("User 2", customer.message)
                 apiResponse.error(
                     res,
                     httpStatusCodes.BAD_REQUEST,
                     customer.message
                 );
-            }else{
+            } else {
                 apiResponse.result(res, customer, httpStatusCodes.OK);
             }
-        }).catch( (err : any) => {
+        }).catch((err: any) => {
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
@@ -510,24 +489,53 @@ const fetchAllCustomersSOList: IController = async (req, res) => {
             );
         });
 };
+const fetchAllMappedSuppliersByCustomerId: IController = async (req, res) => {
+    try {
+        let query = " "
+        if (req.body.query != "") {
+            query = ` and cs.name like '%${req.body.query}%' OR cs.mobile like '%${req.body.query}%' `
+        }
+        let condition = " "
+        if (req.body.id != "") {
+            condition = ` and csm.customer_id = '${req.body.id}' `
+        }
+        let customer = await customerService.fetchAllMappedSuppliersByCustomerId(req.body.pageIndex, req.body.pageSize, req.body.sort, query, condition)
+        let count = await customerService.fetchAllMappedSuppliersByCustomerIdCount(query, condition);
+        if (customer instanceof Error) {
+            return apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST,
+                customer.message)
+        } else {
+            return apiResponse.result(res,
+                {data: customer, total: count},
+                httpStatusCodes.OK)
+        }
+    } catch (error: any) {
+        LOGGER.info("error------>", error)
+        return apiResponse.error(res,
+            httpStatusCodes.BAD_REQUEST,
+            error.message)
+    }
+}
 export default {
-                Create,
-                fetchCustomerById,
-                updateCustomerDetails,
-                fetchAllCustomers,
-                Create_customer_supplier, 
-                updateCSMStatus, 
-                fetchAllCSM,
-                createCustomerEstimate,
-                udpateCustomerEstimate,
-                fetchCustomerEstimateById,
-                fetchAllCustomerEstimates,
-                createCustomerSalesOrder,
-                updateCustomerSalesOrder,
-                fetchCustomerSalesOrderById,
-                fetchAllCustomerSalesOrders,
-                fetchAllSuppliersAgainstCustomer,
-                fetchAllCustomersJson,
-                fetchAllActiveCustomers, fetchAllMappedSuppliersByAddressID,
-                fetchAllCustomersSOList
+    Create,
+    fetchCustomerById,
+    updateCustomerDetails,
+    fetchAllCustomers,
+    Create_customer_supplier,
+    updateCSMStatus,
+    fetchAllCSM,
+    createCustomerEstimate,
+    udpateCustomerEstimate,
+    fetchCustomerEstimateById,
+    fetchAllCustomerEstimates,
+    createCustomerSalesOrder,
+    updateCustomerSalesOrder,
+    fetchCustomerSalesOrderById,
+    fetchAllCustomerSalesOrders,
+    fetchAllSuppliersAgainstCustomer,
+    fetchAllCustomersJson,
+    fetchAllActiveCustomers, fetchAllMappedSuppliersByAddressID,
+    fetchAllCustomersSOList,
+    fetchAllMappedSuppliersByCustomerId
 }
