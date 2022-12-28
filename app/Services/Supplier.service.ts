@@ -27,9 +27,9 @@ const createSupplier = async (req: any) => {
         if (fd.msme_no == undefined || fd.msme_no == null || fd.msme_no == "") throw new Error("msme_no is required");
         if (fd.raw_material == undefined || fd.raw_material == null || fd.raw_material == "") throw new Error("raw_material is required");
         if (fd.packaging == undefined || fd.packaging == null || fd.packaging == "") throw new Error("packaging is required");
-        if (fd.payment_term == undefined || fd.payment_term == null || fd.payment_term == "") throw new Error("payment_term is required");
+        // if (fd.payment_term == undefined || fd.payment_term == null || fd.payment_term == "") throw new Error("payment_term is required");
         // if(fd.comment == undefined || fd.comment == null || fd.comment == "") throw new Error("comment is required");
-        if (fd.grade == undefined || fd.grade == null || fd.grade == "") throw new Error("grade is required");
+        // if (fd.grade == undefined || fd.grade == null || fd.grade == "") throw new Error("grade is required");
 
         // Address field validation
         if (fd.billing_address == undefined || fd.billing_address == null || fd.billing_address == "") throw new Error("billing_address is required");
@@ -71,7 +71,7 @@ const createSupplier = async (req: any) => {
         let user = { "name": fd.name, "mobile": fd.contact_no, "email": fd.email, "role_id": 3 }
         suppliersData = await new SupplierModel().createUser(user)
         let user_id = suppliersData.insertId
-        let profile = { "aadhaar_no": fd.aadhaar_no, "pan_no": fd.pan_no, "gstin_no": fd.gstin_no, "msme_no": fd.msme_no, "user_id": user_id, "comment": fd.comment || null, "payment_term": fd.payment_term, "grade": fd.grade }
+        let profile = { "aadhaar_no": fd.aadhaar_no, "pan_no": fd.pan_no, "gstin_no": fd.gstin_no, "msme_no": fd.msme_no, "user_id": user_id, "comment": fd.comment || null, "payment_term": fd.payment_term || null, "grade": fd.grade || null }
         Object.assign(profile, s3Paths);
         let arr = [];
         // fd.raw_material = fd.raw_material.replaceAll("\"\\[","[");
