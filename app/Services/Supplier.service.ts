@@ -649,14 +649,13 @@ const fetchAllApprovedChallan = async ()=>{
     try{
         let challan = await new SupplierModel().fetchAllApprovedChallan()
         if (challan.length == 0 ) throw new Error( "failed to add payment details" )
-
         for(var i = 0 ; i < challan.length ; i++){
             challan[i].ewaybill_url = config.baseUrl + "/" + challan[i].ewaybill_url;
             challan[i].delivery_challan_url = config.baseUrl + "/" + challan[i].delivery_challan_url;
             challan[i].bilty_url = config.baseUrl + "/" + challan[i].bilty_url;
             challan[i].invoice_url = config.baseUrl + "/" + challan[i].invoice_url;
             challan[i].weight_slip_url = config.baseUrl + "/" + challan[i].weight_slip_url;
-            let pay = await new SupplierModel().fetchByDeliverychallanID(challan[i].id)
+            let pay = await new SupplierModel().fetchByDeliverychallanID(challan[i].delivery_challan_id)
             challan[i].approved_quantity = null
             challan[i].amount = null
             if( pay.length !== 0){

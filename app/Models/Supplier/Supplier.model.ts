@@ -256,17 +256,24 @@ export class SupplierModel extends UserModel {
         //                                             inner join customer_sales_orders cso on spo.sales_order_id = cso.id
         //                                             where dc.status = 1`, [])
         // }
-        return await this._executeQuery(`select py.id,dc.dispatch_id as notificationNo, sp.name as supplier, sp.mobile,dc.quantity, DATE_FORMAT(dc.delivery_date, '%d-%m-%Y')  as delivery_date ,
-                                                py.approved_quantity,py.amount, dc.ewaybill_url, dc.delivery_challan_url, dc.bilty_url, dc.invoice_url, dc.weight_slip_url
-                                                from supplier_payments py
-                                                inner join purchase_order_delivery_challan dc on py.delivery_challan_id = dc.id
-                                                inner join user sp on dc.user_id = sp.id`,[])
+        // return await this._executeQuery(`select py.id,dc.dispatch_id as notificationNo, sp.name as supplier, sp.mobile,dc.quantity, DATE_FORMAT(dc.delivery_date, '%d-%m-%Y')  as delivery_date ,
+        //                                         py.approved_quantity,py.amount, dc.ewaybill_url, dc.delivery_challan_url, dc.bilty_url, dc.invoice_url, dc.weight_slip_url
+        //                                         from supplier_payments py
+        //                                         inner join purchase_order_delivery_challan dc on py.delivery_challan_id = dc.id
+        //                                         inner join user sp on dc.user_id = sp.id`,[])
+        return await this._executeQuery(`select dc.id as delivery_challan_id, dc.dispatch_id as notificationNo, sp.name as supplier, sp.mobile, 
+                                                DATE_FORMAT(dc.delivery_date, '%d-%m-%Y')  as delivery_date, dc.quantity,dc.status,
+                                                dc.ewaybill_url,dc.delivery_challan_url,dc.bilty_url,dc.invoice_url,dc.weight_slip_url,
+                                                dc.created_at, dc.updated_at
+                                                from  purchase_order_delivery_challan dc
+                                                inner join user sp  on dc.user_id = sp.id
+                                                where dc.status = 1`,[])
     }
     async addSupplierPayment(data:any) {
         return await this._executeQuery(`insert into supplier_payments set ?`, [data])
     }
     async fetchByDeliverychallanID(id: number) {
-        return await this._executeQuery(`select approved_quantity, amount from supplier_payments where delivery_challan_id = ?`, [id])
+        return await this._executeQuery(`select id, approved_quantity, amount from supplier_payments where delivery_challan_id = ?`, [id])
     }
     async fetchPaymentById(id: number) {
         return await this._executeQuery(`select * from supplier_payments where id = ?`, [id])
