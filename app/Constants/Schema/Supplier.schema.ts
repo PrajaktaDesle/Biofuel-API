@@ -51,8 +51,8 @@ export default {
     updateSupplierPayment : {
         [Segments.BODY] : {
             id : Joi.number().required(),
-            payment_date:Joi.string().required(),
-            invoice_no:Joi.string().required(),
+            payment_date:Joi.date().required(),
+            invoice_no:Joi.number().required(),
             amount:Joi.number().required(),
             utr_no :Joi.number().required(),
             approved_quantity:Joi.number().required(),
