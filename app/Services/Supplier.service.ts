@@ -555,6 +555,9 @@ const updateChallanStatus = async(req:any)=>{
             challan.eway_bill = fields.EwayBillNo
 
         let s3Images: any = {};
+        if (files.EwayBill !== undefined && files.EwayBill !== null && files.EwayBill !== "") {
+            if (isFileNotValid(files.EwayBill.mimetype)) throw new Error("Only .png, .jpg, .jpeg, .pdf  format allowed!"); else { s3Images.ewaybill_url = files.EwayBill; }
+        }
         if (files.Bilty !== undefined && files.Bilty !== null && files.Bilty !== "") {
             if (isFileNotValid(files.Bilty.mimetype)) throw new Error("Only .png, .jpg, .jpeg, .pdf  format allowed!"); else { s3Images.bilty_url = files.Bilty; }
         }
@@ -646,7 +649,13 @@ const fetchAllApprovedChallan = async ()=>{
     try{
         let challan = await new SupplierModel().fetchAllApprovedChallan()
         if (challan.length == 0 ) throw new Error( "failed to add payment details" )
+
         for(var i = 0 ; i < challan.length ; i++){
+            challan[i].ewaybill_url = config.baseUrl + "/" + challan[i].ewaybill_url;
+            challan[i].delivery_challan_url = config.baseUrl + "/" + challan[i].delivery_challan_url;
+            challan[i].bilty_url = config.baseUrl + "/" + challan[i].bilty_url;
+            challan[i].invoice_url = config.baseUrl + "/" + challan[i].invoice_url;
+            challan[i].weight_slip_url = config.baseUrl + "/" + challan[i].weight_slip_url;
             let pay = await new SupplierModel().fetchByDeliverychallanID(challan[i].id)
             challan[i].approved_quantity = null
             challan[i].amount = null

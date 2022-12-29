@@ -91,7 +91,7 @@ router.put(
   supplierController.updateSupplierPO
 )
 router.post(
-    '/notify/',
+    '/payment/notify-quantity',
     supplierController.addSupplierPayment
 )
 router.get(
