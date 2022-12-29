@@ -104,17 +104,13 @@ router.put(
     supplierController.updatesupplierPayment
 )
 router.get(
-    '/fetch/all/spo-number/',
-    supplierController.fetchAllSPONumber
-)
-router.get(
     '/fetch/all/notifications/',
     celebrate(supplierSchema.fetchNotificatonsBySupplierById),
     supplierController.fetchAllNotificationsBySupplierID
 
 )
 router.get(
-    '/fetch/all/payments/',
+    '/payment/fetch-all/',
     celebrate(supplierSchema.fetchAllPaymentsSupplierById),
     supplierController.fetchAllPaymentsBySupplierID
 

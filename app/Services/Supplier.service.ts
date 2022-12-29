@@ -661,6 +661,7 @@ const fetchAllApprovedChallan = async ()=>{
             if( pay.length !== 0){
                 challan[i].approved_quantity = pay[0].approved_quantity
                 challan[i].amount = pay[0].amount
+                challan[i].payment_id = pay[0].id
             }
         }
         return challan
@@ -695,15 +696,6 @@ const updateSupplierPayment = async(fields:any)=>{
     }catch(error:any){
         LOGGER.info("error", error)
         throw error
-    }
-}
-const fetchAllSPONumber = async()=>{
-    try{
-        let result = await new SupplierModel().fetchAllSPO_no()
-        if (result.length == 0 ) throw new Error( "purchase order not found" )
-        return result
-    }catch(err:any){
-        throw  err
     }
 }
 const fetchAllNotificationsBySupplierId = async(req:any)=>{
@@ -752,7 +744,6 @@ export default {
     addsupplierPaymentService,
     fetchAllApprovedChallan,
     updateSupplierPayment,
-    fetchAllSPONumber,
     fetchAllNotificationsBySupplierId,
     fetchAllPaymentsBySupplierId
 }
