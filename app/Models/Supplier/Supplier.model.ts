@@ -166,19 +166,17 @@ export class SupplierModel extends UserModel {
     }
     async createDeliveryChallenModel(data: any) {
         return await this._executeQuery("insert into purchase_order_delivery_challan set ?", [data]);
-
     }
     async fetchAllNotificationsBySupplierId(id:number){
         return await this._executeQuery(`select pon.id as NotificationNo,spo.supplier_id, sp.name as supplier,
                                                 pon.status, DATE_FORMAT(pon.created_at, '%d-%m-%Y') as date, pon.created_at,pon.updated_at 
                                                 from purchase_order_dispatch_notifications pon
                                                 left join supplier_purchase_order spo on spo.id = pon.purchase_order_id 
-                                                left join customer_sales_orders cso on cso.id = spo.sales_order_id
                                                 left join user sp on sp.id = spo.supplier_id
-                                                where spo.supplier_id = ?;`,[id])
+                                                 where spo.supplier_id = ? and pon.status = 1;`,[id])
     }
     async fetchAllDeliveryChallan(limit: number, offset: number, sortOrder: string, query: string) {
-        return await this._executeQuery(`select dc.id ,dc.dispatch_id, cs.name as customer, sp.name as supplier, sp.mobile,
+        return await this._executeQuery(`select dc.id ,dc.dispatch_id as notificationNo,  cs.name as customer, sp.name as supplier, sp.mobile,dc.user_id as supplier_id,
                                                         DATE_FORMAT(dc.delivery_date, '%d-%m-%Y')  as delivery_date, dc.quantity, dc.vehicle_no,dc.driver_mobile_no as DriverNo,
                                                         dc.transportation_rate, dc.status,
                                                         dc.created_at, dc.updated_at
@@ -239,7 +237,7 @@ export class SupplierModel extends UserModel {
                                                 left join product_packaging pp ON pp.id=cso.packaging_id
                                                 where spo.supplier_id = ?  `, [id])
     }
-    async updateChallanStatus(data: any, id: number) {
+    async updateChallan(data: any, id: number) {
         return await this._executeQuery("update purchase_order_delivery_challan set ? where id = ?", [data, id])
     }
     async fetchchallanById(id: number) {

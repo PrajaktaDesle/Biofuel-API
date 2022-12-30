@@ -57,17 +57,17 @@ router.put(
   supplierController.updateSupplierPO
 )
 router.post(
-    '/create/delivery-challan',
+    '/generate-challan/',
     celebrate(supplierSchema.generateChallan),
     supplierController.createChallan
 )
 router.post(
-    '/fetch/all/challan',
+    '/fetch/all/challan/',
     supplierController.fetchAllChallan
 )
 router.put(
-    '/update/challan-status/',
-    supplierController.updatechallanStatus
+    '/challan/update/',
+    supplierController.updatechallan
 )
 router.get(
   '/fetch/list',

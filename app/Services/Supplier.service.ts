@@ -502,6 +502,7 @@ const createChallanService = async(fields:any) =>{
             data.transportation_rate = fields.TransportationRate
         if(fields.user_id !== undefined && fields.user_id  !== null && fields.user_id  !== "")
             data.user_id = fields.user_id
+            data.status = 0
         let result = await new SupplierModel().createDeliveryChallenModel(data)
         if (result.length == 0 ) throw new Error( "failed to generate delivery challan" )
         return result
@@ -536,7 +537,7 @@ const fetchAllChallansCount = async (query: string) => {
     }
 }
 
-const updateChallanStatus = async(req:any)=>{
+const updateChallanServcie = async(req:any)=>{
     // @ts-ignore
     try{
         let fields,files, result;
@@ -553,7 +554,6 @@ const updateChallanStatus = async(req:any)=>{
             challan.status = fields.status
         if(fields.EwayBillNo !== undefined && fields.EwayBillNo !== null && fields.EwayBillNo !== "")
             challan.eway_bill = fields.EwayBillNo
-
         let s3Images: any = {};
         if (files.EwayBill !== undefined && files.EwayBill !== null && files.EwayBill !== "") {
             if (isFileNotValid(files.EwayBill.mimetype)) throw new Error("Only .png, .jpg, .jpeg, .pdf  format allowed!"); else { s3Images.ewaybill_url = files.EwayBill; }
@@ -574,7 +574,7 @@ const updateChallanStatus = async(req:any)=>{
         if (Object.keys(s3Images).length) { const s3Paths = await uploadFiles(s3Images); Object.assign(challan, s3Paths); }
 
         if( Object.keys(challan).length) {
-                let updatedData = await new SupplierModel().updateChallanStatus(challan, fields.challan_id)
+                let updatedData = await new SupplierModel().updateChallan(challan, fields.challan_id)
                 return {message: "updated successfully", result:updatedData}
             }
                 return {message: "updated successfully", "changedRows":0 }
@@ -739,7 +739,7 @@ export default {
     createChallanService,
     fetchAllDeliveryChallan,
     fetchAllChallansCount,
-    updateChallanStatus,
+    updateChallanServcie,
     fetchSupplierPOBySupplierId,
     addsupplierPaymentService,
     fetchAllApprovedChallan,
