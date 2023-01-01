@@ -522,6 +522,55 @@ const  fetchAllSPONumber: IController = async (req, res) => {
         );
     });
 };
+
+const  addSupplierSection : IController = async (req, res) => {
+    let supplier: any;
+    try {
+        supplier = await supplierService.addSupplierSection(req.body);
+        LOGGER.info('Supplier selection at controller-----> ', supplier);
+
+        if (supplier instanceof Error) {
+            LOGGER.info("error", supplier)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+            apiResponse.result(res,
+                supplier,
+                httpStatusCodes.CREATED);
+        }
+
+    } catch (e:any) {
+        LOGGER.info("controller ->", e)
+        // @ts-ignore
+
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+            e.message
+        );
+        return;
+    }
+};
+
+const updateSupplierSelection : IController = async (req, res) => {
+    try {
+        let supplier : any = await supplierService.updateSupplierSelection(req.body);
+        if (supplier instanceof Error) {
+            LOGGER.info("error", supplier)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+
+            apiResponse.result(res, supplier, httpStatusCodes.CREATED);
+        }
+    } catch (e:any) {
+        LOGGER.info("controller ->", e)
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+            return;
+    }
+};
 export default {
     register,
     login,
@@ -543,5 +592,7 @@ export default {
     addSupplierPayment,
     fetchApprovedChallan,
     updatesupplierPayment,
-    fetchAllSPONumber
+    fetchAllSPONumber,
+    addSupplierSection,
+    updateSupplierSelection
 };

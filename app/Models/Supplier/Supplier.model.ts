@@ -8,6 +8,7 @@ export class SupplierModel extends UserModel {
     }
 
     async createSuppliersProfile(supplierData: any) {
+        console.log("insert into users_profile set ?", [supplierData])
         return await this._executeQuery("insert into users_profile set ?", [supplierData]);
     }
 
@@ -265,5 +266,17 @@ export class SupplierModel extends UserModel {
                                                 FROM biofuel.supplier_purchase_order spo
                                                 inner join customer_sales_orders cso on spo.sales_order_id = cso.id
                                                 inner join products p on cso.product_id = p.id `,[])
+    }
+    async addSupplierSelection(data:any) {
+        return await this._executeQuery(`insert into supplier_selection set ?`, [data])
+    }
+    async updateSupplierSelection(data: any, id: number) {
+        return await this._executeQuery("update supplier_selection set ? where id = ?", [data, id])
+    }
+    async SupplierSelectionExistsOrNot(id: number) {
+        return await this._executeQuery(`select id from supplier_selection where id = ?`, [id])
+    }
+    async createSupplierSelectionLogs(data: any) {
+        return await this._executeQuery(` insert into supplier_selection set ? `, [data])
     }
 }

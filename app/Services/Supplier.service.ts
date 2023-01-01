@@ -6,7 +6,7 @@ import formidable from "formidable";
 let config = require("../config");
 import moment from 'moment';
 import Encryption from "../utilities/Encryption";
-import {CustomerModel} from "../Models/Customer/Customer.model";
+import { CustomerModel } from "../Models/Customer/Customer.model";
 import dayjs from 'dayjs'
 
 const createSupplier = async (req: any) => {
@@ -424,7 +424,7 @@ const updateSupplierPO = async (data: any) => {
     }
 }
 
-const fetchAllSuppliersList = async (query:string) => {
+const fetchAllSuppliersList = async (query: string) => {
     try {
         let result = await new SupplierModel().fetchAllSuppliersList(query);
         if (result.length === 0) {
@@ -444,7 +444,7 @@ const createSupplierPO = async (data: any) => {
     try {
         let sales_order: any = {}, dt: any;
 
-        console.log("request Data : " , data )
+        console.log("request Data : ", data)
         if (data.supplier !== undefined && data.supplier !== null && data.supplier !== "")
             sales_order.supplier_id = data.supplier;
 
@@ -476,7 +476,7 @@ const createSupplierPO = async (data: any) => {
             sales_order.po_type = data.po_type;
 
         if (data.status !== undefined && data.status !== null && data.status !== "") sales_order.status = data.status;
-        else{sales_order.status = 0}
+        else { sales_order.status = 0 }
         var supplierPOData = await new SupplierModel().createSuppliersPO(sales_order)
 
         return supplierPOData
@@ -485,32 +485,32 @@ const createSupplierPO = async (data: any) => {
         throw e;
     }
 }
-const createChallanService = async(fields:any) =>{
-    let data:any = {}
-    try{
-        if(fields.quantity !== undefined && fields.quantity !== null && fields.quantity!== "")
+const createChallanService = async (fields: any) => {
+    let data: any = {}
+    try {
+        if (fields.quantity !== undefined && fields.quantity !== null && fields.quantity !== "")
             data.quantity = fields.quantity
-        if(fields.DeliveryDate !== undefined && fields.DeliveryDate !== null && fields.DeliveryDate!== "")
+        if (fields.DeliveryDate !== undefined && fields.DeliveryDate !== null && fields.DeliveryDate !== "")
             data.delivery_date = fields.DeliveryDate
-        if(fields.NotificationNo !== undefined && fields.NotificationNo !== null && fields.NotificationNo !== "")
+        if (fields.NotificationNo !== undefined && fields.NotificationNo !== null && fields.NotificationNo !== "")
             data.dispatch_id = fields.NotificationNo
-        if(fields.VehicleNo !== undefined && fields.VehicleNo !== null && fields.VehicleNo !== "")
+        if (fields.VehicleNo !== undefined && fields.VehicleNo !== null && fields.VehicleNo !== "")
             data.vehicle_no = fields.VehicleNo
-        if(fields.DriverNo !== undefined && fields.DriverNo !== null && fields.DriverNo !== "")
+        if (fields.DriverNo !== undefined && fields.DriverNo !== null && fields.DriverNo !== "")
             data.driver_mobile_no = fields.DriverNo
-        if(fields.TransportationRate !== undefined && fields.TransportationRate  !== null && fields.TransportationRate  !== "")
+        if (fields.TransportationRate !== undefined && fields.TransportationRate !== null && fields.TransportationRate !== "")
             data.transportation_rate = fields.TransportationRate
-        if(fields.user_id !== undefined && fields.user_id  !== null && fields.user_id  !== "")
+        if (fields.user_id !== undefined && fields.user_id !== null && fields.user_id !== "")
             data.user_id = fields.user_id
         let result = await new SupplierModel().createDeliveryChallenModel(data)
-        if (result.length == 0 ) throw new Error( "failed to generate delivery challan" )
+        if (result.length == 0) throw new Error("failed to generate delivery challan")
         return result
-    }catch (e) {
+    } catch (e) {
         throw e
     }
 }
 
-const fetchAllDeliveryChallan = async (pageIndex: number, pageSize : number, sort : any, query : string ) =>{
+const fetchAllDeliveryChallan = async (pageIndex: number, pageSize: number, sort: any, query: string) => {
     let result;
     try {
         let orderQuery: string = "";
@@ -521,14 +521,14 @@ const fetchAllDeliveryChallan = async (pageIndex: number, pageSize : number, sor
         result = await new SupplierModel().fetchAllDeliveryChallan(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
         if (result == null) throw new Error("challan not found");
         return result;
-    }catch(error : any ){
+    } catch (error: any) {
         throw error
     }
 }
 
 const fetchAllChallansCount = async (query: string) => {
     try {
-        let  challan = await new SupplierModel().fetchChallanCount(query);
+        let challan = await new SupplierModel().fetchChallanCount(query);
         return challan.length;
     }
     catch (error: any) {
@@ -536,39 +536,41 @@ const fetchAllChallansCount = async (query: string) => {
     }
 }
 
-const updateChallanStatus = async(req:any)=>{
+const updateChallanStatus = async (req: any) => {
     // @ts-ignore
-    try{
-        let fields,files, result;
-        let challan:any = {};
+    try {
+        let fields, files, result;
+        let challan: any = {};
         // @ts-ignore
-        ({fields, files} = await new Promise((resolve) => {
+        ({ fields, files } = await new Promise((resolve) => {
             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
-                resolve({fields: fields, files: files});})
+                resolve({ fields: fields, files: files });
+            })
         }));
-        if(fields.challan_id == undefined || fields.challan_id == null || fields.challan_id == "") throw new Error("id is missing");
+        if (fields.challan_id == undefined || fields.challan_id == null || fields.challan_id == "") throw new Error("id is missing");
         result = await new SupplierModel().fetchchallanById(fields.challan_id)
         if (result.length == 0) throw new Error("challan id not found");
-        if(fields.status !== undefined && fields.status !== null && fields.status !== "")
+        if (fields.status !== undefined && fields.status !== null && fields.status !== "")
             challan.status = fields.status
-        if(fields.EwayBillNo !== undefined && fields.EwayBillNo !== null && fields.EwayBillNo !== "")
+        if (fields.EwayBillNo !== undefined && fields.EwayBillNo !== null && fields.EwayBillNo !== "")
             challan.eway_bill = fields.EwayBillNo
         let s3Image: any = {}
         let s3Path: any = {}
-        if (files.EwayBill !== undefined && files.EwayBill !== null && files.EwayBill !== ""){
-            if (isFileNotValid(files.EwayBill.mimetype)) throw new Error("Only .png, .jpg and .jpeg pdf format allowed! for image");else{s3Image['ewaybill_url'] = files.EwayBill}
+        if (files.EwayBill !== undefined && files.EwayBill !== null && files.EwayBill !== "") {
+            if (isFileNotValid(files.EwayBill.mimetype)) throw new Error("Only .png, .jpg and .jpeg pdf format allowed! for image"); else { s3Image['ewaybill_url'] = files.EwayBill }
             let name: string = "images/ewaybill_url/" + moment().unix() + "." + s3Image['ewaybill_url'].originalFilename.split(".").pop()
             const result = await uploadFile(s3Image['ewaybill_url'], name);
             if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
             s3Path['ewaybill_url'] = result.key;
-            challan = Object.assign(challan, s3Path);}
-            if( Object.keys(challan).length) {
-                let updatedData = await new SupplierModel().updateChallanStatus(challan, fields.challan_id)
-                return {message: "updated successfully", result:updatedData}
-            }
-                return {message: "updated successfully", "changedRows":0 }
+            challan = Object.assign(challan, s3Path);
+        }
+        if (Object.keys(challan).length) {
+            let updatedData = await new SupplierModel().updateChallanStatus(challan, fields.challan_id)
+            return { message: "updated successfully", result: updatedData }
+        }
+        return { message: "updated successfully", "changedRows": 0 }
 
-    }catch(error){
+    } catch (error) {
         throw error
     }
 }
@@ -600,65 +602,66 @@ const fetchSupplierPOBySupplierId = async (id: any) => {
     try {
         let supplier = await new SupplierModel().fetchAllSupplierPOBySupplierId(id);
         if (supplier.length == 0) throw new Error("Supplier PO not found");
-        for(var i = 0 ; i< supplier.length ; i++){
-        supplier[i].customer_so_number = { label: supplier[i].customer_so_number, value: supplier[i].sales_order_id };
-        supplier[i].supplier = { label: supplier[i].supplier, value: supplier[i].supplier_id };
-        if (supplier[i].status == 0) supplier[i].status = { "label": "Draft", "value": 0 };
-        if (supplier[i].status == 1) supplier[i].status = { "label": "Pending For Approval", "value": 1 };
-        if (supplier[i].status == 2) supplier[i].status = { "label": "Approved", "value": 2 };
-        if (supplier[i].status == 3) supplier[i].status = { "label": "Issued", "value": 3 };
-        if (supplier[i].status == -1) supplier[i].status = { "label": "Rejected", "value": -1 };
-        if (supplier[i].rate_type == 0) supplier[i].rate_type = { "label": "Factory", "value": 0 };
-        if (supplier[i].rate_type == 1) supplier[i].rate_type = { "label": "Delivery", "value": 1 };
-        if (supplier[i].po_type == 0) supplier[i].po_type = { "label": "New", "value": 0 };
-        if (supplier[i].po_type == 1) supplier[i].po_type = { "label": "Secondary", "value": 1 };}
+        for (var i = 0; i < supplier.length; i++) {
+            supplier[i].customer_so_number = { label: supplier[i].customer_so_number, value: supplier[i].sales_order_id };
+            supplier[i].supplier = { label: supplier[i].supplier, value: supplier[i].supplier_id };
+            if (supplier[i].status == 0) supplier[i].status = { "label": "Draft", "value": 0 };
+            if (supplier[i].status == 1) supplier[i].status = { "label": "Pending For Approval", "value": 1 };
+            if (supplier[i].status == 2) supplier[i].status = { "label": "Approved", "value": 2 };
+            if (supplier[i].status == 3) supplier[i].status = { "label": "Issued", "value": 3 };
+            if (supplier[i].status == -1) supplier[i].status = { "label": "Rejected", "value": -1 };
+            if (supplier[i].rate_type == 0) supplier[i].rate_type = { "label": "Factory", "value": 0 };
+            if (supplier[i].rate_type == 1) supplier[i].rate_type = { "label": "Delivery", "value": 1 };
+            if (supplier[i].po_type == 0) supplier[i].po_type = { "label": "New", "value": 0 };
+            if (supplier[i].po_type == 1) supplier[i].po_type = { "label": "Secondary", "value": 1 };
+        }
         return supplier;
     }
     catch (e) {
         return e;
     }
 }
-const addsupplierPaymentService = async(fields:any)=>{
-    let payment, data:any;
-    try{
-        if(fields.approvedQuantity !== undefined && fields.approvedQuantity !== null && fields.approvedQuantity !== "")
-        if(fields.delivery_challan_id !== undefined && fields.delivery_challan_id !== null && fields.delivery_challan_id !== "")
-        data = {approved_quantity: fields.approvedQuantity, delivery_challan_id: fields.delivery_challan_id, status:1}
+const addsupplierPaymentService = async (fields: any) => {
+    let payment, data: any;
+    try {
+        if (fields.approvedQuantity !== undefined && fields.approvedQuantity !== null && fields.approvedQuantity !== "")
+            if (fields.delivery_challan_id !== undefined && fields.delivery_challan_id !== null && fields.delivery_challan_id !== "")
+                data = { approved_quantity: fields.approvedQuantity, delivery_challan_id: fields.delivery_challan_id, status: 1 }
         payment = await new SupplierModel().addSupplierPayment(data)
-        if (payment.length == 0 ) throw new Error( "failed to add approved quantity" )
+        if (payment.length == 0) throw new Error("failed to add approved quantity")
         return payment
-    }catch (error:any){
+    } catch (error: any) {
         LOGGER.info("error", error)
         throw (error)
     }
 
 }
-const fetchAllApprovedChallan = async ()=>{
+const fetchAllApprovedChallan = async () => {
 
-    try{
+    try {
         let challan = await new SupplierModel().fetchAllApprovedChallan()
-        if (challan.length == 0 ) throw new Error( "failed to add payment details" )
-        for(var i = 0 ; i < challan.length ; i++){
+        if (challan.length == 0) throw new Error("failed to add payment details")
+        for (var i = 0; i < challan.length; i++) {
             let pay = await new SupplierModel().fetchByDeliverychallanID(challan[i].id)
             challan[i].approved_quantity = null
             challan[i].amount = null
-            if( pay.length !== 0){
+            if (pay.length !== 0) {
                 challan[i].approved_quantity = pay[0].approved_quantity
                 challan[i].amount = pay[0].amount
             }
         }
         return challan
-    }catch (error){
+    } catch (error) {
         throw error
     }
 }
-const updateSupplierPayment = async(fields:any)=>{
-    let supplier:any
-    let data:any = {}
-    try{
-        if(fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
+const updateSupplierPayment = async (fields: any) => {
+    let supplier: any
+    let data: any = {}
+    try {
+        if (fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
         supplier = await new SupplierModel().fetchPaymentById(fields.id)
-        if (supplier.length == 0 ) throw new Error( " supplier not found " )
+        if (supplier.length == 0) throw new Error(" supplier not found ")
         if (fields.payment_date !== undefined && fields.payment_date !== null && fields.payment_date !== "")
             data.payment_date = fields.payment_date;
         if (fields.invoice_no !== undefined && fields.invoice_no !== null && fields.invoice_no !== "")
@@ -673,19 +676,119 @@ const updateSupplierPayment = async(fields:any)=>{
             let updatedData = await new SupplierModel().updateSupplierPaymentDetails(data, fields.id)
             return updatedData
         }
-        return {message:"updated sucssesfully " ,"changedRows" :0}
-    }catch(error:any){
+        return { message: "updated sucssesfully ", "changedRows": 0 }
+    } catch (error: any) {
         LOGGER.info("error", error)
         throw error
     }
 }
-const fetchAllSPONumber = async()=>{
-    try{
+const fetchAllSPONumber = async () => {
+    try {
         let result = await new SupplierModel().fetchAllSPO_no()
-        if (result.length == 0 ) throw new Error( "purchase order not found" )
+        if (result.length == 0) throw new Error("purchase order not found")
         return result
-    }catch(err:any){
-        throw  err
+    } catch (err: any) {
+        throw err
+    }
+}
+
+const addSupplierSection = async (data: any) => {
+    try {
+        let model_result: any = [];
+        for ( let i = 0 ; i < data.length ; i ++ ){
+            let model_data: any = {};
+            let id = 0;
+            console.log("request Data : ", data[i])
+            if (data[i].supplier_selection_id !== undefined && data[i].supplier_selection_id !== null && data[i].supplier_selection_id !== "")
+             id = data[i].supplier_selection_id;
+
+            if (data[i].sales_order_id !== undefined && data[i].sales_order_id !== null && data[i].sales_order_id !== "")
+                model_data.sales_order_id = data[i].sales_order_id;
+    
+            if (data[i].supplier_id !== undefined && data[i].supplier_id !== null && data[i].supplier_id !== "")
+                model_data.supplier_id = data[i].supplier_id;
+    
+            if (data[i].qt_factory_rate !== undefined && data[i].qt_factory_rate !== null && data[i].qt_factory_rate !== "")
+                model_data.qt_factory_rate = data[i].qt_factory_rate;
+    
+            if (data[i].qt_transportation_rate !== undefined && data[i].qt_transportation_rate !== null && data[i].qt_transportation_rate !== "")
+                model_data.qt_transportation_rate = data[i].qt_transportation_rate;
+    
+            if (data[i].qt_delivered_rate !== undefined && data[i].qt_delivered_rate !== null && data[i].qt_delivered_rate !== "")
+                model_data.qt_delivered_rate = data[i].qt_delivered_rate;
+            
+            if (data[i].qt_quantity !== undefined && data[i].qt_quantity !== null && data[i].qt_quantity !== "")
+                model_data.qt_quantity = data[i].qt_quantity;
+    
+            if (data[i].status !== undefined && data[i].status !== null && data[i].status !== "") model_data.status = data[i].status;
+            else { model_data.status = 1 }
+            
+            if( id ){
+                model_result.push( await new SupplierModel().updateSupplierSelection(model_data, id) )
+            }
+            else{
+                model_result.push( await new SupplierModel().addSupplierSelection(model_data) )
+
+            }
+        }
+        return model_result
+    } catch (e: any) {
+        LOGGER.info("Exception =>", e.message);
+        throw e;
+    }
+}
+const updateSupplierSelection = async (data: any) => {
+    try {
+        let model_data: any = {}, dt: any;
+        let id = data.supplier_selection_id;
+        dt = await new SupplierModel().SupplierSelectionExistsOrNot(id);
+        if (dt.length == 0) throw new Error("Selected Supplier does not exists !")
+
+        if (data.supplier_selection_id !== undefined && data.supplier_selection_id !== null && data.supplier_selection_id !== "")
+             id = data.supplier_selection_id;
+
+            if (data.qt_factory_rate !== undefined && data.qt_factory_rate !== null && data.qt_factory_rate !== "")
+                model_data.qt_factory_rate = data.qt_factory_rate;
+    
+            if (data.qt_transportation_rate !== undefined && data.qt_transportation_rate !== null && data.qt_transportation_rate !== "")
+                model_data.qt_transportation_rate = data.qt_transportation_rate;
+    
+            if (data.qt_delivered_rate !== undefined && data.qt_delivered_rate !== null && data.qt_delivered_rate !== "")
+                model_data.qt_delivered_rate = data.qt_delivered_rate;
+            
+            if (data.qt_quantity !== undefined && data.qt_quantity !== null && data.qt_quantity !== "")
+                model_data.qt_quantity = data.qt_quantity;
+    
+        if (data.status !== undefined && data.status !== null && data.status !== "") {
+            model_data.status = data.status;
+            let log: any = { "supplier_selection_id": id, "stage": data.status, "user_id": data.user_id || 123 }
+            if (model_data.status == 0) {
+                // Estimate declined by customer
+                LOGGER.info("Selected Suppler is in the Draft")
+            }
+            if (model_data.status == 1) {
+                // initial state of the estimate
+                LOGGER.info("Selected Suppler is  Notified")
+            }
+            if (model_data.status == 2) {
+                // need to integrate send an email functionaliey
+                LOGGER.info("Selected Suppler  is  Interested")
+            }
+            if (model_data.status == 3) {
+                // need to integrate send an email functionaliey
+                LOGGER.info("Selected Suppler is Shortlisted")
+            }
+            await new SupplierModel().createSupplierSelectionLogs(log)
+        }
+
+
+        let model_result = await new SupplierModel().updateSupplierSelection(model_data, id)
+
+        return model_result;
+
+    } catch (e: any) {
+        LOGGER.info("Exception =>", e.message);
+        throw e;
     }
 }
 export default {
@@ -712,5 +815,7 @@ export default {
     addsupplierPaymentService,
     fetchAllApprovedChallan,
     updateSupplierPayment,
-    fetchAllSPONumber
+    fetchAllSPONumber,
+    addSupplierSection,
+    updateSupplierSelection
 }

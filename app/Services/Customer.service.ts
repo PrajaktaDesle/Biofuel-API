@@ -638,7 +638,7 @@ const updateCustomerSalesOrder = async (data: any) => {
         // payment_term
         if (data.payment_term !== undefined && data.payment_term !== null && data.payment_term !== "")
             sales_order.payment_term = data.payment_term;
-
+        console.log( " payment term : ", data.payment_term)
         if (data.status !== undefined && data.status !== null && data.status !== "")
             sales_order.status = data.status;
 
@@ -761,12 +761,6 @@ const fetchAllMappedSuppliersByCustomerId = async (pageIndex: number, pageSize: 
             orderQuery = " ORDER BY cs.status DESC ";
         }
         let customers = await new CustomerModel().fetchAllMappedSuppliersByCustomerId(pageSize, (pageIndex - 1) * pageSize, orderQuery, query, condition)
-        for (let i = 0; i < customers.length; i++) {
-            // adding base url to panurl from database
-            customers[i].latest_factory_rate = 101 + i;
-            customers[i].latest_delivered_rate = 101 + i;
-            // customers[i].qt_factory_rate = 1000
-        }
         return customers;
     } catch (e) {
         return e

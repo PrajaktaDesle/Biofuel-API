@@ -107,4 +107,12 @@ router.get(
     '/fetch/all/spo-number/',
     supplierController.fetchAllSPONumber
 )
+router.post(
+  '/selection/add',
+  supplierController.addSupplierSection
+)
+router.put(
+  '/selection/update',
+  supplierController.updateSupplierSelection
+)
 export default router;
