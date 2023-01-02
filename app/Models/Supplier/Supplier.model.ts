@@ -138,7 +138,7 @@ export class SupplierModel extends UserModel {
                                                   `, [state_id])
     }
     async fetchAllSupplierPO(limit: number, offset: number, sortOrder: string, query: string) {
-        return await this._executeQuery(`SELECT spo.id, s.name as supplier, c.name as customer, p.name as product, spo.sales_order_id, spo.quantity,DATE_FORMAT(spo.delivery_date, '%d-%m-%Y')  as delivery_date, spo.status FROM supplier_purchase_order spo
+        return await this._executeQuery(`SELECT spo.id, spo.po_number, s.name as supplier, c.name as customer, p.name as product, spo.sales_order_id, spo.quantity,DATE_FORMAT(spo.delivery_date, '%d-%m-%Y')  as delivery_date, spo.status FROM supplier_purchase_order spo
                                          left join customer_sales_orders cso on cso.id = spo.sales_order_id
                                          left join customers c on c.id = cso.customer_id
                                          left join products p on p.id = cso.product_id
