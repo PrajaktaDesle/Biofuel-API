@@ -660,9 +660,12 @@ const fetchAllApprovedChallan = async ()=>{
             challan[i].approved_quantity = null
             challan[i].amount = null
             if( pay.length !== 0){
+                challan[i].payment_id = pay[0].id
                 challan[i].approved_quantity = pay[0].approved_quantity
                 challan[i].amount = pay[0].amount
-                challan[i].payment_id = pay[0].id
+                challan[i].invoice_no = pay[0].invoice_no
+                challan[i].utr_no = pay[0].utr_no
+                challan[i].payment_date = pay[0].payment_date
             }
         }
         return challan
