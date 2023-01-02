@@ -536,41 +536,50 @@ const fetchAllChallansCount = async (query: string) => {
     }
 }
 
-const updateChallanStatus = async (req: any) => {
+const updateChallanStatus = async(req:any)=>{
     // @ts-ignore
-    try {
-        let fields, files, result;
-        let challan: any = {};
+    try{
+        let fields,files, result;
+        let challan:any = {};
         // @ts-ignore
-        ({ fields, files } = await new Promise((resolve) => {
+        ({fields, files} = await new Promise((resolve) => {
             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
-                resolve({ fields: fields, files: files });
-            })
+                resolve({fields: fields, files: files});})
         }));
-        if (fields.challan_id == undefined || fields.challan_id == null || fields.challan_id == "") throw new Error("id is missing");
+        if(fields.challan_id == undefined || fields.challan_id == null || fields.challan_id == "") throw new Error("id is missing");
         result = await new SupplierModel().fetchchallanById(fields.challan_id)
         if (result.length == 0) throw new Error("challan id not found");
-        if (fields.status !== undefined && fields.status !== null && fields.status !== "")
+        if(fields.status !== undefined && fields.status !== null && fields.status !== "")
             challan.status = fields.status
-        if (fields.EwayBillNo !== undefined && fields.EwayBillNo !== null && fields.EwayBillNo !== "")
+        if(fields.EwayBillNo !== undefined && fields.EwayBillNo !== null && fields.EwayBillNo !== "")
             challan.eway_bill = fields.EwayBillNo
-        let s3Image: any = {}
-        let s3Path: any = {}
-        if (files.EwayBill !== undefined && files.EwayBill !== null && files.EwayBill !== "") {
-            if (isFileNotValid(files.EwayBill.mimetype)) throw new Error("Only .png, .jpg and .jpeg pdf format allowed! for image"); else { s3Image['ewaybill_url'] = files.EwayBill }
-            let name: string = "images/ewaybill_url/" + moment().unix() + "." + s3Image['ewaybill_url'].originalFilename.split(".").pop()
-            const result = await uploadFile(s3Image['ewaybill_url'], name);
-            if (result == 0 && result == undefined) throw new Error("file upload to s3 failed");
-            s3Path['ewaybill_url'] = result.key;
-            challan = Object.assign(challan, s3Path);
-        }
-        if (Object.keys(challan).length) {
-            let updatedData = await new SupplierModel().updateChallanStatus(challan, fields.challan_id)
-            return { message: "updated successfully", result: updatedData }
-        }
-        return { message: "updated successfully", "changedRows": 0 }
 
-    } catch (error) {
+        let s3Images: any = {};
+        if (files.EwayBill !== undefined && files.EwayBill !== null && files.EwayBill !== "") {
+            if (isFileNotValid(files.EwayBill.mimetype)) throw new Error("Only .png, .jpg, .jpeg, .pdf  format allowed!"); else { s3Images.ewaybill_url = files.EwayBill; }
+        }
+        if (files.Bilty !== undefined && files.Bilty !== null && files.Bilty !== "") {
+            if (isFileNotValid(files.Bilty.mimetype)) throw new Error("Only .png, .jpg, .jpeg, .pdf  format allowed!"); else { s3Images.bilty_url = files.Bilty; }
+        }
+        if (files.challan !== undefined && files.challan  !== null && files.challan !== "") {
+            if (isFileNotValid(files.challan.mimetype)) throw new Error("Only .png, .jpg, .jpeg, .pdf format allowed!"); else { s3Images.delivery_challan_url = files.challan; }
+        }
+        if (files.invoice !== undefined && files.invoice !== null && files.invoice!== "") {
+            if (isFileNotValid(files.invoice.mimetype)) throw new Error("Only .png, .jpg ,.jpeg, .pdf format allowed! "); else { s3Images.invoice_url = files.invoice; }
+        }
+        if (files.weight_slip !== undefined && files.weight_slip !== null && files.weight_slip !== "") {
+            if (isFileNotValid(files.weight_slip.mimetype)) throw new Error("Only .png, .jpg, .jpeg, .pdf  format allowed!"); else { s3Images.weight_slip_url = files.weight_slip }
+        }
+        // Multiple fl upload to s3Bucket
+        if (Object.keys(s3Images).length) { const s3Paths = await uploadFiles(s3Images); Object.assign(challan, s3Paths); }
+
+        if( Object.keys(challan).length) {
+                let updatedData = await new SupplierModel().updateChallanStatus(challan, fields.challan_id)
+                return {message: "updated successfully", result:updatedData}
+            }
+                return {message: "updated successfully", "changedRows":0 }
+
+    }catch(error){
         throw error
     }
 }
@@ -636,22 +645,28 @@ const addsupplierPaymentService = async (fields: any) => {
     }
 
 }
-const fetchAllApprovedChallan = async () => {
+const fetchAllApprovedChallan = async ()=>{
 
-    try {
+    try{
         let challan = await new SupplierModel().fetchAllApprovedChallan()
-        if (challan.length == 0) throw new Error("failed to add payment details")
-        for (var i = 0; i < challan.length; i++) {
-            let pay = await new SupplierModel().fetchByDeliverychallanID(challan[i].id)
+        if (challan.length == 0 ) throw new Error( "failed to add payment details" )
+        for(var i = 0 ; i < challan.length ; i++){
+            challan[i].ewaybill_url = config.baseUrl + "/" + challan[i].ewaybill_url;
+            challan[i].delivery_challan_url = config.baseUrl + "/" + challan[i].delivery_challan_url;
+            challan[i].bilty_url = config.baseUrl + "/" + challan[i].bilty_url;
+            challan[i].invoice_url = config.baseUrl + "/" + challan[i].invoice_url;
+            challan[i].weight_slip_url = config.baseUrl + "/" + challan[i].weight_slip_url;
+            let pay = await new SupplierModel().fetchByDeliverychallanID(challan[i].delivery_challan_id)
             challan[i].approved_quantity = null
             challan[i].amount = null
-            if (pay.length !== 0) {
+            if( pay.length !== 0){
                 challan[i].approved_quantity = pay[0].approved_quantity
                 challan[i].amount = pay[0].amount
+                challan[i].payment_id = pay[0].id
             }
         }
         return challan
-    } catch (error) {
+    }catch (error){
         throw error
     }
 }
@@ -670,6 +685,8 @@ const updateSupplierPayment = async (fields: any) => {
             data.amount = fields.amount;
         if (fields.utr_no !== undefined && fields.utr_no !== null && fields.utr_no !== "")
             data.utr_no = fields.utr_no;
+        if(fields.approved_quantity !== undefined && fields.approved_quantity !== null && fields.approved_quantity !== "")
+            data.approved_quantity = fields.approved_quantity
         if (fields.status !== undefined && fields.status !== null && fields.status !== "")
             data.status = fields.status;
         if (Object.keys(data).length) {
@@ -682,15 +699,7 @@ const updateSupplierPayment = async (fields: any) => {
         throw error
     }
 }
-const fetchAllSPONumber = async () => {
-    try {
-        let result = await new SupplierModel().fetchAllSPO_no()
-        if (result.length == 0) throw new Error("purchase order not found")
-        return result
-    } catch (err: any) {
-        throw err
-    }
-}
+
 
 const addSupplierSection = async (data: any) => {
     try {
@@ -791,6 +800,28 @@ const updateSupplierSelection = async (data: any) => {
         throw e;
     }
 }
+const fetchAllNotificationsBySupplierId = async(req:any)=>{
+    let result,id:any;
+    try{
+        id = req.query.supplier_id
+        result = await new SupplierModel().fetchAllNotificationsBySupplierId(id)
+        if (result.length == 0 ) throw new Error( "notification  not found" )
+        return result
+    }catch(err:any){
+        throw err
+    }
+}
+const fetchAllPaymentsBySupplierId = async(req:any)=>{
+    let result,id:any;
+    try{
+        id = req.query.supplier_id
+        result = await new SupplierModel().getAllPaymentsBySupplier_id(id)
+        if (result.length == 0 ) throw new Error( "payment details  not found for given supplier" )
+        return result
+    }catch(err:any){
+        throw err
+    }
+}
 export default {
     createSupplier,
     loginSupplier,
@@ -815,7 +846,8 @@ export default {
     addsupplierPaymentService,
     fetchAllApprovedChallan,
     updateSupplierPayment,
-    fetchAllSPONumber,
     addSupplierSection,
-    updateSupplierSelection
+    updateSupplierSelection,
+    fetchAllNotificationsBySupplierId,
+    fetchAllPaymentsBySupplierId
 }

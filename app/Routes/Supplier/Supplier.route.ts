@@ -91,11 +91,11 @@ router.put(
   supplierController.updateSupplierPO
 )
 router.post(
-    '/notify/',
+    '/payment/notify-quantity',
     supplierController.addSupplierPayment
 )
 router.get(
-    '/fetch/approved/challan',
+    '/payment/get-all/',
     supplierController.fetchApprovedChallan
 )
 router.put(
@@ -104,8 +104,16 @@ router.put(
     supplierController.updatesupplierPayment
 )
 router.get(
-    '/fetch/all/spo-number/',
-    supplierController.fetchAllSPONumber
+    '/fetch/all/notifications/',
+    celebrate(supplierSchema.fetchNotificatonsBySupplierById),
+    supplierController.fetchAllNotificationsBySupplierID
+
+)
+router.get(
+    '/payment/fetch-all/',
+    celebrate(supplierSchema.fetchAllPaymentsSupplierById),
+    supplierController.fetchAllPaymentsBySupplierID
+
 )
 router.post(
   '/selection/add',

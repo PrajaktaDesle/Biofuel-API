@@ -455,6 +455,7 @@ const  addSupplierPayment : IController = async (req, res) => {
         return;
     }
 };
+// fetch all approved challan for payment
 const  fetchApprovedChallan: IController = async (req, res) => {
     supplierService.fetchAllApprovedChallan()
         .then( ( challan : any) => {
@@ -499,9 +500,31 @@ const  updatesupplierPayment: IController = async (req, res) => {
         );
     });
 };
-// fetch all spo_number and products against po-number
-const  fetchAllSPONumber: IController = async (req, res) => {
-    supplierService.fetchAllSPONumber()
+
+const  fetchAllNotificationsBySupplierID: IController = async (req, res) => {
+    supplierService.fetchAllNotificationsBySupplierId(req)
+        .then( ( result : any) => {
+            if( result instanceof Error){
+                LOGGER.info("User 2", result.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    result.message
+                );
+            }else{
+                apiResponse.result(res, result, httpStatusCodes.OK);
+            }
+        }).catch( (err : any) => {
+        LOGGER.info("Error  ->", err);
+        apiResponse.error(
+            res,
+            httpStatusCodes.BAD_REQUEST,
+            err.message
+        );
+    });
+};
+const  fetchAllPaymentsBySupplierID: IController = async (req, res) => {
+    supplierService.fetchAllPaymentsBySupplierId(req)
         .then( ( result : any) => {
             if( result instanceof Error){
                 LOGGER.info("User 2", result.message)
@@ -592,7 +615,9 @@ export default {
     addSupplierPayment,
     fetchApprovedChallan,
     updatesupplierPayment,
-    fetchAllSPONumber,
     addSupplierSection,
-    updateSupplierSelection
+    updateSupplierSelection,
+    fetchAllNotificationsBySupplierID,
+    fetchAllPaymentsBySupplierID
+
 };
