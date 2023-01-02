@@ -57,16 +57,16 @@ router.put(
   supplierController.updateSupplierPO
 )
 router.post(
-    '/generate-challan/',
+    '/generate-challan',
     celebrate(supplierSchema.generateChallan),
     supplierController.createChallan
 )
 router.post(
-    '/fetch/all/challan/',
+    '/fetch/all/challan',
     supplierController.fetchAllChallan
 )
 router.put(
-    '/challan/update/',
+    '/challan/update',
     supplierController.updatechallan
 )
 router.get(
@@ -83,7 +83,7 @@ router.get(
   supplierController.fetchSupplierPOById
 )
 router.get(
-    '/po/fetch/supplier-id/',
+    '/po/fetch/supplier-id',
     supplierController.fetchSupplierPOBySupplierId
 )
 router.put( 
@@ -95,22 +95,22 @@ router.post(
     supplierController.addSupplierPayment
 )
 router.get(
-    '/payment/get-all/',
+    '/payment/get-all',
     supplierController.fetchApprovedChallan
 )
 router.put(
-    '/update/payment/',
+    '/update/payment',
     // celebrate(supplierSchema.updateSupplierPayment),
     supplierController.updatesupplierPayment
 )
 router.get(
-    '/fetch/all/notifications/',
+    '/fetch/all/notifications',
     celebrate(supplierSchema.fetchNotificatonsBySupplierById),
     supplierController.fetchAllNotificationsBySupplierID
 
 )
 router.get(
-    '/payment/fetch-all/',
+    '/payment/fetch-all',
     celebrate(supplierSchema.fetchAllPaymentsSupplierById),
     supplierController.fetchAllPaymentsBySupplierID
 
