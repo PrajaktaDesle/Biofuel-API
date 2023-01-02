@@ -115,4 +115,12 @@ router.get(
     supplierController.fetchAllPaymentsBySupplierID
 
 )
+router.post(
+  '/selection/add',
+  supplierController.addSupplierSection
+)
+router.put(
+  '/selection/update',
+  supplierController.updateSupplierSelection
+)
 export default router;
