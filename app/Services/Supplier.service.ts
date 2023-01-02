@@ -593,7 +593,7 @@ const fetchSupplierPOById = async (id: any) => {
         if (supplier[0].status == 0) supplier[0].status = { "label": "Draft", "value": 0 };
         if (supplier[0].status == 1) supplier[0].status = { "label": "Pending for Approval", "value": 1 };
         if (supplier[0].status == 2) supplier[0].status = { "label": "Approved", "value": 2 };
-        if (supplier[0].status == 2) supplier[0].status = { "label": "issued", "value": 3 };
+        if (supplier[0].status == 3) supplier[0].status = { "label": "Issued", "value": 3 };
         if (supplier[0].status == -1) supplier[0].status = { "label": "Rejected", "value": -1 };
         if (supplier[0].rate_type == 0) supplier[0].rate_type = { "label": "Factory", "value": 0 };
         if (supplier[0].rate_type == 1) supplier[0].rate_type = { "label": "Delivery", "value": 1 };
