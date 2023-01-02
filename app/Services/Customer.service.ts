@@ -638,7 +638,7 @@ const updateCustomerSalesOrder = async (data: any) => {
         // payment_term
         if (data.payment_term !== undefined && data.payment_term !== null && data.payment_term !== "")
             sales_order.payment_term = data.payment_term;
-        console.log( " payment term : ", data.payment_term)
+        console.log( " payment term : ", data.payment_term )
         if (data.status !== undefined && data.status !== null && data.status !== "")
             sales_order.status = data.status;
 
