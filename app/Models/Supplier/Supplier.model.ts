@@ -272,7 +272,7 @@ export class SupplierModel extends UserModel {
         return await this._executeQuery(`insert into supplier_payments set ?`, [data])
     }
     async fetchByDeliverychallanID(id: number) {
-        return await this._executeQuery(`select id, approved_quantity, amount from supplier_payments where delivery_challan_id = ?`, [id])
+        return await this._executeQuery(`select id, approved_quantity, amount, invoice_no, utr_no, DATE_FORMAT(payment_date, '%d-%m-%Y') as payment_date from supplier_payments where delivery_challan_id = ?`, [id])
     }
     async fetchPaymentById(id: number) {
         return await this._executeQuery(`select * from supplier_payments where id = ?`, [id])
