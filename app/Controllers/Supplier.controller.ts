@@ -402,10 +402,10 @@ const fetchAllChallan: IController = async (req, res) => {
             httpStatusCodes.BAD_REQUEST, error.message )
     }
 };
-const  updatechallanStatus: IController = async (req, res) => {
+const  updatechallan: IController = async (req, res) => {
     let supplier: any;
     try {
-        supplier = await supplierService.updateChallanStatus(req);
+        supplier = await supplierService.updateChallanServcie(req);
         LOGGER.info('Supplier at controller-----> ', supplier);
         if (supplier instanceof Error) {
             LOGGER.info("error", supplier)
@@ -610,7 +610,7 @@ export default {
     fetchSupplierPOById,
     fetchAllChallan,
     createChallan,
-    updatechallanStatus,
+    updatechallan,
     fetchSupplierPOBySupplierId,
     addSupplierPayment,
     fetchApprovedChallan,
