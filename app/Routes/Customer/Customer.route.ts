@@ -107,6 +107,10 @@ router.get(
     '/fetch/so/list',
     CustomerController.fetchAllCustomersSOList
 );
+router.get(
+    '/fetch/sales/order/list',
+    CustomerController.fetchAllCSOList
+);
 router.post(
     '/mapped/suppliers/by/customer_id',
     CustomerController.fetchAllMappedSuppliersByCustomerId
