@@ -385,7 +385,7 @@ const updateSupplierPO = async (data: any) => {
         if (data.rate !== undefined && data.rate !== null && data.rate !== "")
             sales_order.rate = data.rate;
 
-        if (data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "")
+        if (data.adjustment !== undefined)
             sales_order.adjustment_amount = data.adjustment;
 
         if (data.rate_type !== undefined && data.rate_type !== null && data.rate_type !== "")
