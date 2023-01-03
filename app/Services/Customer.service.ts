@@ -752,6 +752,20 @@ const fetchAllCustomersSOList = async (query: string) => {
         return err
     }
 }
+const fetchAllCSOList = async (query: string) => {
+    try {
+        let result = await new CustomerModel().fetchAllCSOList(query);
+        if (result.length === 0) {
+            throw new Error("Customer Sales orders not found!")
+
+        } else {
+            return result
+        }
+    } catch (err) {
+        return err
+    }
+}
+
 const fetchAllMappedSuppliersByCustomerId = async (pageIndex: number, pageSize: number, sort: any, query: string, condition: string) => {
     let orderQuery: string;
     try {
@@ -798,5 +812,6 @@ export default {
     fetchAllActiveCustomerService, fetchSuppliers,
     fetchAllCustomersSOList,
     fetchAllMappedSuppliersByCustomerId,
-    fetchAllMappedSuppliersByCustomerIdCount
+    fetchAllMappedSuppliersByCustomerIdCount,
+    fetchAllCSOList
 }

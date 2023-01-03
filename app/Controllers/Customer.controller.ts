@@ -489,6 +489,29 @@ const fetchAllCustomersSOList: IController = async (req, res) => {
             );
         });
 };
+
+const fetchAllCSOList: IController = async (req, res) => {
+    let query: string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " AND cs.sales_order_no like '%" + req.query.key + "%'" : "";
+    await CustomerService.fetchAllCSOList(query)
+        .then((customer: any) => {
+            if (customer instanceof Error) {
+                console.log("User 2", customer.message)
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    customer.message
+                );
+            } else {
+                apiResponse.result(res, customer, httpStatusCodes.OK);
+            }
+        }).catch((err: any) => {
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                err.message
+            );
+        });
+};
 const fetchAllMappedSuppliersByCustomerId: IController = async (req, res) => {
     try {
         let query = " "
@@ -537,5 +560,6 @@ export default {
     fetchAllCustomersJson,
     fetchAllActiveCustomers, fetchAllMappedSuppliersByAddressID,
     fetchAllCustomersSOList,
-    fetchAllMappedSuppliersByCustomerId
+    fetchAllMappedSuppliersByCustomerId,
+    fetchAllCSOList
 }
