@@ -659,6 +659,9 @@ const fetchAllApprovedChallan = async ()=>{
             let pay = await new SupplierModel().fetchByDeliverychallanID(challan[i].delivery_challan_id)
             challan[i].approved_quantity = null
             challan[i].amount = null
+            challan[i].invoice_no = null
+            challan[i].utr_no = null
+            challan[i].payment_date = null
             if( pay.length !== 0){
                 challan[i].payment_id = pay[0].id
                 challan[i].approved_quantity = pay[0].approved_quantity
