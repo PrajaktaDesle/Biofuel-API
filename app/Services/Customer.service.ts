@@ -476,7 +476,7 @@ const fetchCustomerEstimateById = async (id: number) => {
                 estimate[0].status = {"value": 4, "label": "Accepted"}
                 break;
             case 5:
-                estimate[0].status = {"value": 5, "label": "Convert To SO"}
+                estimate[0].status = {"value": 5, "label": "Converted To SO"}
                 break;
         }
         estimate[0].product = {"label": estimate[0].product, "value": estimate[0].product_id}
