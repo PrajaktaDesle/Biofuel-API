@@ -174,8 +174,7 @@ export class SupplierModel extends UserModel {
                                                 from purchase_order_dispatch_notifications pon
                                                 left join supplier_purchase_order spo on spo.id = pon.purchase_order_id 
                                                 left join user sp on sp.id = spo.supplier_id
-                                    "payment_id": 11
-                             where spo.supplier_id = ? ;`,[id])
+                                                where spo.supplier_id = ? ;`,[id])
     }
     async fetchAllDeliveryChallan(limit: number, offset: number, sortOrder: string, query: string) {
         return await this._executeQuery(`select dc.id ,dc.dispatch_id as notificationNo,  cs.name as customer, sp.name as supplier, sp.mobile,dc.user_id as supplier_id,
