@@ -385,7 +385,7 @@ const updateCustomerEstimate = async (data: any) => {
         if (data.packaging !== undefined && data.packaging !== null && data.packaging !== "")
             estimate.packaging_id = data.packaging;
 
-        if (data.product_description !== undefined && data.product_description !== null && data.product_description !== "")
+        if (data.product_description !== undefined )
             estimate.product_description = data.product_description;
 
         if (data.quantity !== undefined && data.quantity !== null && data.quantity !== "")
@@ -394,13 +394,13 @@ const updateCustomerEstimate = async (data: any) => {
         if (data.rate !== undefined && data.rate !== null && data.rate !== "")
             estimate.rate = data.rate;
 
-        if (data.adjustment !== undefined && data.adjustment !== null && data.adjustment !== "")
+        if (data.adjustment !== undefined)
             estimate.adjustment_amount = data.adjustment;
 
-        if (data.customer_note !== undefined && data.customer_note !== null && data.customer_note !== "")
+        if (data.customer_note !== undefined )
             estimate.customer_note = data.customer_note;
 
-        if (data.tnc !== undefined && data.tnc !== null && data.tnc !== "")
+        if (data.tnc !== undefined )
             estimate.tnc = data.tnc;
 
         if (data.status !== undefined && data.status !== null && data.status !== "") {
@@ -476,7 +476,7 @@ const fetchCustomerEstimateById = async (id: number) => {
                 estimate[0].status = {"value": 4, "label": "Accepted"}
                 break;
             case 5:
-                estimate[0].status = {"value": 5, "label": "Convert To SO"}
+                estimate[0].status = {"value": 5, "label": "Converted To SO"}
                 break;
         }
         estimate[0].product = {"label": estimate[0].product, "value": estimate[0].product_id}

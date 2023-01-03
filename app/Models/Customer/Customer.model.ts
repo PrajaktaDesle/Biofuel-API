@@ -152,7 +152,7 @@ export class CustomerModel extends BaseModel {
     }
     async fetchCustomerSalesOrderById(id: number) {
 
-        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status,sales_order_no, so.payment_term, a.address, a.address_type,ac.name as city, ast.name as state ,  a.pincode, DATE_FORMAT(so_date, '%Y-%m-%d') as so_date,  DATE_FORMAT(delivery_date, '%Y-%m-%d') as delivery_date, estimate_id ,product_id,p.name as product, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, rate, quantity, adjustment_amount,  (quantity*rate)+adjustment_amount as total_amount FROM customer_sales_orders so
+        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status,sales_order_no, so.payment_term, a.address, a.address_type,ac.name as city, ast.name as state ,  a.pincode, DATE_FORMAT(so_date, '%Y-%m-%d') as so_date,  DATE_FORMAT(delivery_date, '%Y-%m-%d') as delivery_date, estimate_id ,product_id,p.name as product, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, rate, quantity, adjustment_amount, tnc, customer_note,  (quantity*rate)+adjustment_amount as total_amount FROM customer_sales_orders so
                                           left join products p ON p.id=so.product_id
                                           left join customers cs ON cs.id=so.customer_id
                                           left join addresses a on a.user_id = cs.id and a.address_type = 1
