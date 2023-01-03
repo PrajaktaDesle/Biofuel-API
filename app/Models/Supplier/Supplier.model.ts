@@ -182,11 +182,11 @@ export class SupplierModel extends UserModel {
                                                         dc.transportation_rate, dc.status,
                                                         dc.created_at, dc.updated_at
                                                         from  purchase_order_delivery_challan dc
-                                                        inner join user sp  on dc.user_id = sp.id
-                                                        inner join purchase_order_dispatch_notifications noti on dc.dispatch_id = noti.id
-                                                        inner join supplier_purchase_order spo on noti.purchase_order_id = spo.id
-                                                        inner join customer_sales_orders cso on spo.sales_order_id = cso.id
-                                                        inner join customers cs on cso.customer_id = cs.id
+                                                        left join user sp  on dc.user_id = sp.id
+                                                        left join purchase_order_dispatch_notifications noti on dc.dispatch_id = noti.id
+                                                        left join supplier_purchase_order spo on noti.purchase_order_id = spo.id
+                                                        left join customer_sales_orders cso on spo.sales_order_id = cso.id
+                                                        left join customers cs on cso.customer_id = cs.id
                                                         ${query}
                                                         ${sortOrder};`, [limit, offset]);
 
@@ -197,11 +197,11 @@ export class SupplierModel extends UserModel {
                                                         dc.transportation_rate, dc.status,
                                                         dc.created_at, dc.updated_at
                                                         from  purchase_order_delivery_challan dc
-                                                        inner join user sp  on dc.user_id = sp.id
-                                                        inner join purchase_order_dispatch_notifications noti on dc.dispatch_id = noti.id
-                                                        inner join supplier_purchase_order spo on noti.purchase_order_id = spo.id
-                                                        inner join customer_sales_orders cso on spo.sales_order_id = cso.id
-                                                        inner join customers cs on cso.customer_id = cs.id
+                                                        left join user sp  on dc.user_id = sp.id
+                                                        left join purchase_order_dispatch_notifications noti on dc.dispatch_id = noti.id
+                                                        left join supplier_purchase_order spo on noti.purchase_order_id = spo.id
+                                                        left join customer_sales_orders cso on spo.sales_order_id = cso.id
+                                                        left join customers cs on cso.customer_id = cs.id
                                                         ${query}
                                                        `, []);
 

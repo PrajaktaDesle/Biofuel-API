@@ -380,7 +380,7 @@ const fetchAllChallan: IController = async (req, res) => {
     try{
         let query = " "
         if(req.body.query != ""){
-            query = ` where dc.dispatch_id like '%${req.body.query}%' or dc.vehicle_no like '%${req.body.query}%' `
+            query = ` where dc.dispatch_id like '%${req.body.query}%' or dc.vehicle_no like '%${req.body.query}%' or sp.name like '%${req.body.query}%' or cs.name like '%${req.body.query}%' `
         }
         let suppliers = await supplierService.fetchAllDeliveryChallan(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
         let count = await supplierService.fetchAllChallansCount(query);
