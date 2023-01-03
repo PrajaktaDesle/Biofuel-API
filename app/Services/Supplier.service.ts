@@ -653,7 +653,7 @@ const fetchAllApprovedChallan = async (pageIndex: number, pageSize: number, sort
             orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
         }
         let challan = await new SupplierModel().fetchAllApprovedChallan(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
-        if (challan.length == 0 ) throw new Error( "failed to add payment details" )
+        if (challan == null ) throw new Error( "data not found" )
         for(var i = 0 ; i < challan.length ; i++){
             challan[i].ewaybill_url = config.baseUrl + "/" + challan[i].ewaybill_url;
             challan[i].delivery_challan_url = config.baseUrl + "/" + challan[i].delivery_challan_url;
