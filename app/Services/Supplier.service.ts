@@ -645,10 +645,14 @@ const addsupplierPaymentService = async (fields: any) => {
     }
 
 }
-const fetchAllApprovedChallan = async ()=>{
+const fetchAllApprovedChallan = async (pageIndex: number, pageSize: number, sort: any, query: string)=>{
 
     try{
-        let challan = await new SupplierModel().fetchAllApprovedChallan()
+        let orderQuery: string = "";
+        if (sort.key != "") {
+            orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
+        }
+        let challan = await new SupplierModel().fetchAllApprovedChallan(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
         if (challan.length == 0 ) throw new Error( "failed to add payment details" )
         for(var i = 0 ; i < challan.length ; i++){
             challan[i].ewaybill_url = config.baseUrl + "/" + challan[i].ewaybill_url;
@@ -674,6 +678,15 @@ const fetchAllApprovedChallan = async ()=>{
         return challan
     }catch (error){
         throw error
+    }
+}
+const fetchAllPaymentsCount = async(query:string)=>{
+    try {
+        let result = await new SupplierModel().fetchAllPaymentsCount(query);
+        return result.length;
+    }
+    catch (error: any) {
+        return error
     }
 }
 const updateSupplierPayment = async (fields: any) => {
@@ -851,6 +864,7 @@ export default {
     fetchSupplierPOBySupplierId,
     addsupplierPaymentService,
     fetchAllApprovedChallan,
+    fetchAllPaymentsCount,
     updateSupplierPayment,
     addSupplierSection,
     updateSupplierSelection,

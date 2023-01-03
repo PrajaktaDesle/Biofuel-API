@@ -94,7 +94,7 @@ router.post(
     '/payment/notify-quantity',
     supplierController.addSupplierPayment
 )
-router.get(
+router.post(
     '/payment/get-all',
     supplierController.fetchApprovedChallan
 )

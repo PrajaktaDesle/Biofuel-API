@@ -457,26 +457,31 @@ const  addSupplierPayment : IController = async (req, res) => {
 };
 // fetch all approved challan for payment
 const  fetchApprovedChallan: IController = async (req, res) => {
-    supplierService.fetchAllApprovedChallan()
-        .then( ( challan : any) => {
-            if(challan instanceof Error){
-                LOGGER.info("User 2", challan.message)
-                apiResponse.error(
-                    res,
-                    httpStatusCodes.BAD_REQUEST,
-                    challan.message
-                );
-            }else{
-                LOGGER.log("User 3", challan)
-                apiResponse.result(res, challan, httpStatusCodes.OK);
-            }
-        }).catch( (err : any) => {
-        LOGGER.info("Error  ->", err);
-        apiResponse.error(
-            res,
+    try{
+        let query = " "
+        if(req.body.query != ""){
+            query = ` and  sp.name like '%${req.body.query}%' or sp.mobile like '%${req.body.query}' `
+        }
+        let payment = await supplierService.fetchAllApprovedChallan(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
+        let count = await supplierService.fetchAllPaymentsCount(query);
+        if ( payment instanceof Error ){
+            return apiResponse.error( res,
+                httpStatusCodes.BAD_REQUEST,
+                payment.message )
+        }
+        else{
+            return apiResponse.result( res,
+                {data :payment, total : count},
+                httpStatusCodes.OK )
+        }
+
+    }
+    catch (error:any) {
+        LOGGER.info( "Error => ", error )
+        return apiResponse.error( res,
             httpStatusCodes.BAD_REQUEST,
-        );
-    });
+            error.message)
+    }
 };
 const  updatesupplierPayment: IController = async (req, res) => {
     supplierService.updateSupplierPayment(req.body)
