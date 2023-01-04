@@ -117,7 +117,7 @@ export class CustomerModel extends BaseModel {
         return await this._executeQuery("insert into customer_estimates set ? ", [estimateData])
     }
     async fetchCustomerEstimateById(id: any) {
-        return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status,  DATE_FORMAT(estimate_date, '%Y-%m-%d') as estimate_date, DATE_FORMAT(expiry_date, '%Y-%m-%d') as expiry_date, estimate_no, es.raw_material_id, prm.name as raw_material ,product_id,p.name as product, product_description, packaging_id, pp.name as packaging, quantity, rate, adjustment_amount as adjustment,tnc, customer_note, IFNULL(adjustment_amount, 0)+(rate*quantity) as total_amount
+        return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status,  DATE_FORMAT(estimate_date, '%Y-%m-%d') as estimate_date, DATE_FORMAT(expiry_date, '%Y-%m-%d') as expiry_date, estimate_no, es.raw_material_id, prm.name as raw_material ,product_id,p.name as product, es.product_description, packaging_id, pp.name as packaging, quantity, rate, adjustment_amount as adjustment,tnc, customer_note, IFNULL(adjustment_amount, 0)+(rate*quantity) as total_amount
                                           FROM customer_estimates es
                                           inner join products p ON p.id=es.product_id
                                           inner join customers cs ON cs.id=es.customer_id
@@ -126,7 +126,7 @@ export class CustomerModel extends BaseModel {
                                           where es.id = ? `, [id])
     }
     async fetchAllCustomerEstimates(limit: number, offset: number, sortOrder: string, query: string) {
-        return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, DATE_FORMAT(estimate_date, '%d-%m-%Y')  as estimate_date ,DATE_FORMAT(expiry_date, '%d-%m-%Y')  as expiry_date , estimate_no , es.id ,product_id,p.name as product_name, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, IFNULL(adjustment_amount, 0)+(rate*quantity) as total_amount FROM customer_estimates es
+        return await this._executeQuery(`SELECT es.id, customer_id, cs.name as customer,es.status, DATE_FORMAT(estimate_date, '%d-%m-%Y')  as estimate_date ,DATE_FORMAT(expiry_date, '%d-%m-%Y')  as expiry_date , estimate_no , es.id ,product_id,p.name as product_name, es.product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, IFNULL(adjustment_amount, 0)+(rate*quantity) as total_amount FROM customer_estimates es
                                           inner join products p ON p.id=es.product_id
                                           inner join customers cs ON cs.id=es.customer_id
                                           inner join product_raw_material rm ON rm.id=es.raw_material_id
@@ -152,7 +152,7 @@ export class CustomerModel extends BaseModel {
     }
     async fetchCustomerSalesOrderById(id: number) {
 
-        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status,sales_order_no, so.payment_term, a.address, a.address_type,ac.name as city, ast.name as state ,  a.pincode, DATE_FORMAT(so_date, '%Y-%m-%d') as so_date,  DATE_FORMAT(delivery_date, '%Y-%m-%d') as delivery_date, estimate_id ,product_id,p.name as product, product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, rate, quantity, adjustment_amount, tnc, customer_note,  IFNULL(adjustment_amount, 0)+(rate*quantity) as total_amount FROM customer_sales_orders so
+        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status,sales_order_no, so.payment_term, a.address, a.address_type,ac.name as city, ast.name as state ,  a.pincode, DATE_FORMAT(so_date, '%Y-%m-%d') as so_date,  DATE_FORMAT(delivery_date, '%Y-%m-%d') as delivery_date, estimate_id ,product_id,p.name as product, so.product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, rate, quantity, adjustment_amount, tnc, customer_note,  IFNULL(adjustment_amount, 0)+(rate*quantity) as total_amount FROM customer_sales_orders so
                                           left join products p ON p.id=so.product_id
                                           left join customers cs ON cs.id=so.customer_id
                                           left join addresses a on a.user_id = cs.id and a.address_type = 1
@@ -163,7 +163,7 @@ export class CustomerModel extends BaseModel {
                                           where so.id = ?`, [id])
     }
     async fetchAllCustomerSalesOrders(limit: number, offset: number, sortOrder: string, query: string) {
-        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status, DATE_FORMAT(so_date, '%d-%m-%Y')  as so_date, DATE_FORMAT(delivery_date, '%d-%m-%Y') as delivery_date, estimate_id ,product_id,p.name as product, product_description, IFNULL(adjustment_amount, 0)+(rate*quantity) as total_amount, sales_order_no FROM customer_sales_orders so
+        return await this._executeQuery(`SELECT so.id, customer_id, cs.name as customer,so.status, DATE_FORMAT(so_date, '%d-%m-%Y')  as so_date, DATE_FORMAT(delivery_date, '%d-%m-%Y') as delivery_date, estimate_id ,product_id,p.name as product, so.product_description, IFNULL(adjustment_amount, 0)+(rate*quantity) as total_amount, sales_order_no FROM customer_sales_orders so
                                           inner join products p ON p.id=so.product_id
                                           inner join customers cs ON cs.id=so.customer_id
                                           ${query}
@@ -173,6 +173,12 @@ export class CustomerModel extends BaseModel {
     }
     async salesOrderExistsOrNot(id: number) {
         return await this._executeQuery("select id from customer_sales_orders where id = ? ", [id])
+    }
+    async estimateNoExistsOrNot(no: number) {
+        return await this._executeQuery("select id from customer_estimates where estimate_no = ? ", [no])
+    }
+    async salesOrderNoExistsOrNot(no: number) {
+        return await this._executeQuery("select id from customer_sales_orders where sales_order_no = ? ", [no])
     }
     // async fetchAllCustomerEstimatesCount(query: string) {
     async fetchALLActiveCustomers() {
