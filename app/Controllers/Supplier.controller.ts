@@ -599,6 +599,27 @@ const updateSupplierSelection : IController = async (req, res) => {
             return;
     }
 };
+
+const supplierPONoExistsOrNot: IController = async (req, res) => {
+    await supplierService.supplierPONoExistsOrNot(req)
+        .then((customer: any) => {
+            if (customer instanceof Error) {
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    customer.message
+                );
+            } else {
+                apiResponse.result(res, customer, httpStatusCodes.OK);
+            }
+        }).catch((err: any) => {
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                err.message
+            );
+        });
+};
 export default {
     register,
     login,
@@ -623,6 +644,7 @@ export default {
     addSupplierSection,
     updateSupplierSelection,
     fetchAllNotificationsBySupplierID,
-    fetchAllPaymentsBySupplierID
+    fetchAllPaymentsBySupplierID,
+    supplierPONoExistsOrNot
 
 };

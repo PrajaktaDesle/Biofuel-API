@@ -841,6 +841,21 @@ const fetchAllPaymentsBySupplierId = async(req:any)=>{
         throw err
     }
 }
+
+const supplierPONoExistsOrNot = async (req: any) => {
+    try {
+        let sponumber = req.query.sponumber
+        let suppliers = await new SupplierModel().supplierPONoExistsOrNot(sponumber)
+        if (suppliers.length == 0){
+            return false
+        }
+        else{
+        return  true
+        }
+    } catch (error: any) {
+        return error
+    }
+}
 export default {
     createSupplier,
     loginSupplier,
@@ -869,5 +884,6 @@ export default {
     addSupplierSection,
     updateSupplierSelection,
     fetchAllNotificationsBySupplierId,
-    fetchAllPaymentsBySupplierId
+    fetchAllPaymentsBySupplierId,
+    supplierPONoExistsOrNot
 }

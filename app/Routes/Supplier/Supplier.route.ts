@@ -123,4 +123,9 @@ router.put(
   '/selection/update',
   supplierController.updateSupplierSelection
 )
+
+router.get(
+  '/supplierPONumber/exists',
+  supplierController.supplierPONoExistsOrNot
+)
 export default router;
