@@ -456,7 +456,7 @@ const  addSupplierPayment : IController = async (req, res) => {
     }
 };
 // fetch all approved challan for payment
-const  fetchApprovedChallan: IController = async (req, res) => {
+const getAllPayments: IController = async (req, res) => {
     try{
         let query = " "
         if(req.body.query != ""){
@@ -639,7 +639,7 @@ export default {
     updatechallan,
     fetchSupplierPOBySupplierId,
     addSupplierPayment,
-    fetchApprovedChallan,
+    getAllPayments,
     updatesupplierPayment,
     addSupplierSection,
     updateSupplierSelection,

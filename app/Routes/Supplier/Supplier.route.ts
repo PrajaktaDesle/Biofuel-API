@@ -96,7 +96,7 @@ router.post(
 )
 router.post(
     '/payment/get-all',
-    supplierController.fetchApprovedChallan
+    supplierController.getAllPayments
 )
 router.put(
     '/update/payment',
