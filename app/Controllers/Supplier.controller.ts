@@ -460,9 +460,9 @@ const  fetchApprovedChallan: IController = async (req, res) => {
     try{
         let query = " "
         if(req.body.query != ""){
-            query = ` and  sp.name like '%${req.body.query}%' or sp.mobile like '%${req.body.query}' `
+            query = ` and  sp.name like '%${req.body.query}%' or sp.mobile like '%${req.body.query}%' `
         }
-        let payment = await supplierService.fetchAllApprovedChallan(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
+        let payment = await supplierService.fetchPaymentsDetails(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
         let count = await supplierService.fetchAllPaymentsCount(query);
         if ( payment instanceof Error ){
             return apiResponse.error( res,
