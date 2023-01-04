@@ -3,11 +3,11 @@ const createNotification = async ( data : any ) => {
     let spo, vehicle_count, notification, quantity:any;
     try{
         let notificationData :any = {};
-        if(data.purchase_order_id !== undefined && data.purchase_order_id!== null && data.purchase_order_id !== "")
-         spo = await new NotificationModel().fetchSPO(data.purchase_order_id)
-        console.log('in notification --------------->', spo)
+        if(data.purchase_order_no !== undefined && data.purchase_order_no !== null && data.purchase_order_no !== "")
+         spo = await new NotificationModel().fetchSPO(data.purchase_order_no)
          notificationData.purchase_order_id = spo[0].id
         if(data.delivery_date !== undefined && data.delivery_date !== null && data.delivery_date !== "") notificationData.delivery_date=data.delivery_date;
+        // if(data.product_name !== undefined && data.product_name !== null && data.product_name !== "") notificationData.product_name=data.product_name;
         if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "")
         if(data.count_of_vehicles !== undefined && data.count_of_vehicles !== null && data.count_of_vehicles !== "")
         vehicle_count = data.count_of_vehicles
@@ -15,6 +15,8 @@ const createNotification = async ( data : any ) => {
         console.log('deliverable product  quantity distribution------>',quantity)
         notificationData.quantity = quantity
         console.log("notification",notificationData)
+        // let n = await new NotificationModel().fetchNotificationBy_purchase_order_id(notificationData.purchase_order_id)
+        // if(n.length !== 0 ) throw new Error("purchase order number already exist")
         for (let i = 0 ; i < vehicle_count ; i++){
             notification = await new NotificationModel().createNotification( notificationData );
             if ( notification.length == 0 ) throw new Error( "notification creation failed" )
