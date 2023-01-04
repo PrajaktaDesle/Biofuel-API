@@ -30,8 +30,8 @@ export class NotificationModel extends BaseModel
     async updateNotificationDetails(data:any, id:number){
        return await this._executeQuery("update purchase_order_dispatch_notifications set ? where id = ? ", [data,id]);
     }
-    async fetchSPO(spo_no:any) {
-        return await this._executeQuery("select * from supplier_purchase_order where po_number = ?", [spo_no])
+    async fetchSPO(id:any) {
+        return await this._executeQuery("select * from supplier_purchase_order where id = ?", [id])
     }
     async fetchAll(limit : number, offset : number, sortOrder : string, query : string) {
         return await this._executeQuery(` select pon.id,spo.supplier_id, sp.name as supplier, sp.mobile,spo.po_number, DATE_FORMAT(pon.delivery_date, '%d-%m-%Y')  as delivery_date, pon.status,p.name product, pon.quantity, pon.created_at, pon.updated_at 
