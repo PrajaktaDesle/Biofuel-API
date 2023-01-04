@@ -645,14 +645,14 @@ const addsupplierPaymentService = async (fields: any) => {
     }
 
 }
-const fetchAllApprovedChallan = async (pageIndex: number, pageSize: number, sort: any, query: string)=>{
+const  fetchPaymentsDetails = async (pageIndex: number, pageSize: number, sort: any, query: string)=>{
 
     try{
         let orderQuery: string = "";
         if (sort.key != "") {
             orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
         }
-        let challan = await new SupplierModel().fetchAllApprovedChallan(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
+        let challan = await new SupplierModel().fetchAllPayments(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
         if (challan == null ) throw new Error( "data not found" )
         for(var i = 0 ; i < challan.length ; i++){
             challan[i].ewaybill_url = config.baseUrl + "/" + challan[i].ewaybill_url;
@@ -682,7 +682,7 @@ const fetchAllApprovedChallan = async (pageIndex: number, pageSize: number, sort
 }
 const fetchAllPaymentsCount = async(query:string)=>{
     try {
-        let result = await new SupplierModel().fetchAllPaymentsCount(query);
+        let result = await new SupplierModel().fetchPaymentsCount(query);
         return result.length;
     }
     catch (error: any) {
@@ -878,7 +878,7 @@ export default {
     updateChallanServcie,
     fetchSupplierPOBySupplierId,
     addsupplierPaymentService,
-    fetchAllApprovedChallan,
+    fetchPaymentsDetails,
     fetchAllPaymentsCount,
     updateSupplierPayment,
     addSupplierSection,
