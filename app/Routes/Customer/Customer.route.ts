@@ -115,4 +115,13 @@ router.post(
     '/mapped/suppliers/by/customer_id',
     CustomerController.fetchAllMappedSuppliersByCustomerId
 )
+router.get(
+    '/estmateNumber/exists',
+    CustomerController.estimateNoExistsOrNot
+)
+
+router.get(
+    '/salesOrderNumber/exists',
+    CustomerController.salesOrderNoExistsOrNot
+)
 export default router;

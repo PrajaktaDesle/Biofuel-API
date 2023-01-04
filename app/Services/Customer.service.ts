@@ -788,6 +788,36 @@ const fetchAllMappedSuppliersByCustomerIdCount = async (query: string, condition
         return error
     }
 }
+
+const estimateNoExistsOrNot = async (req: any) => {
+    try {
+        let enumber = req.query.enumber
+        let suppliers = await new CustomerModel().estimateNoExistsOrNot(enumber)
+        if (suppliers.length == 0){
+            return false
+        }
+        else{
+        return  true
+        }
+    } catch (error: any) {
+        return error
+    }
+}
+
+const salesOrderNoExistsOrNot = async (req: any) => {
+    try {
+        let sonumber = req.query.sonumber
+        let suppliers = await new CustomerModel().salesOrderNoExistsOrNot(sonumber)
+        if (suppliers.length == 0){
+            return false
+        }
+        else{
+        return  true
+        }
+    } catch (error: any) {
+        return error
+    }
+}
 export default {
     createCustomer,
     fetchCustomerById,
@@ -813,5 +843,7 @@ export default {
     fetchAllCustomersSOList,
     fetchAllMappedSuppliersByCustomerId,
     fetchAllMappedSuppliersByCustomerIdCount,
-    fetchAllCSOList
+    fetchAllCSOList,
+    estimateNoExistsOrNot,
+    salesOrderNoExistsOrNot
 }

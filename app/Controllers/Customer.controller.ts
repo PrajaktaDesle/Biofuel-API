@@ -540,6 +540,49 @@ const fetchAllMappedSuppliersByCustomerId: IController = async (req, res) => {
             error.message)
     }
 }
+
+
+const estimateNoExistsOrNot: IController = async (req, res) => {
+    await CustomerService.estimateNoExistsOrNot(req)
+        .then((customer: any) => {
+            if (customer instanceof Error) {
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    customer.message
+                );
+            } else {
+                apiResponse.result(res, customer, httpStatusCodes.OK);
+            }
+        }).catch((err: any) => {
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                err.message
+            );
+        });
+};
+
+const salesOrderNoExistsOrNot: IController = async (req, res) => {
+    await CustomerService.salesOrderNoExistsOrNot(req)
+        .then((customer: any) => {
+            if (customer instanceof Error) {
+                apiResponse.error(
+                    res,
+                    httpStatusCodes.BAD_REQUEST,
+                    customer.message
+                );
+            } else {
+                apiResponse.result(res, customer, httpStatusCodes.OK);
+            }
+        }).catch((err: any) => {
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                err.message
+            );
+        });
+};
 export default {
     Create,
     fetchCustomerById,
@@ -561,5 +604,7 @@ export default {
     fetchAllActiveCustomers, fetchAllMappedSuppliersByAddressID,
     fetchAllCustomersSOList,
     fetchAllMappedSuppliersByCustomerId,
-    fetchAllCSOList
+    fetchAllCSOList,
+    estimateNoExistsOrNot,
+    salesOrderNoExistsOrNot
 }
