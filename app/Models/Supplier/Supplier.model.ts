@@ -43,8 +43,8 @@ export class SupplierModel extends UserModel {
                                          
                                          left join users_profile up ON u.id = up.user_id
                                          
-                                         LEFT join supplier_raw_material_mapping rm ON rm.supplier_id = u.id
-                                         LEFT join supplier_packaging_mapping pm ON pm.supplier_id = u.id
+                                         left join supplier_raw_material_mapping rm ON rm.supplier_id = u.id
+                                         left join supplier_packaging_mapping pm ON pm.supplier_id = u.id
                                          left join product_raw_material pr on rm.raw_material_id=pr.id
                                          left join product_packaging pp on pm.packaging_id=pp.id
                                          where u.id = ?  and rm.status=1
@@ -67,10 +67,10 @@ export class SupplierModel extends UserModel {
                                          max(case when a.address_type = "1" then a.pincode end) as billing_pincode,
                                          u.created_at, u.updated_at 
                                          FROM user u 
-                                         inner join addresses a ON a.user_id=u.id  
-                                         inner join users_profile p ON a.user_id=p.user_id
-                                         inner join address_city cty ON a.city_id = cty.id
-                                         inner join address_state st ON cty.state_id = st.id
+                                         left join addresses a ON a.user_id=u.id  
+                                         left join users_profile p ON a.user_id=p.user_id
+                                         left join address_city cty ON a.city_id = cty.id
+                                         left join address_state st ON cty.state_id = st.id
                                          where u.role_id = 3 ${query}
                                          group by u.id
                                          ${sortOrder} 
@@ -80,10 +80,10 @@ export class SupplierModel extends UserModel {
         return await this._executeQuery(`SELECT u.id, u.name , u.email,  u.mobile as contact_no, a.latitude, a.longitude, case when p.grade = 1 then 'A' when p.grade = 2 then 'B' when p.grade = 3 then 'C' when p.grade = 4 then 'D' else null end as grade,  u.status,
                                           u.created_at, u.updated_at 
                                           FROM user u 
-                                          inner join addresses a ON a.user_id=u.id  
-                                          inner join users_profile p ON a.user_id=p.user_id
-                                          inner join address_city cty ON a.city_id = cty.id
-                                          inner join address_state st ON cty.state_id = st.id
+                                          left join addresses a ON a.user_id=u.id  
+                                          left join users_profile p ON a.user_id=p.user_id
+                                          left join address_city cty ON a.city_id = cty.id
+                                          left join address_state st ON cty.state_id = st.id
                                           where u.role_id = 3 ${query}
                                           group by u.id
                                            `, [])
@@ -131,9 +131,9 @@ export class SupplierModel extends UserModel {
         return await this._executeQuery(`select sp.id, sp.name as supplier,sp.status,
                                                   ac.name as city,st.name as state
                                                   from user sp
-                                                  inner join addresses a on sp.id = a.user_id 
-                                                  inner join address_city ac on  a.city_id = ac.id 
-                                                  inner join address_state st on ac.state_id = st.id 
+                                                  left join addresses a on sp.id = a.user_id 
+                                                  left join address_city ac on  a.city_id = ac.id 
+                                                  left join address_state st on ac.state_id = st.id 
                                                   where a.address_type = 1 and sp.status = 1 and st.id = ?
                                                   `, [state_id])
     }
