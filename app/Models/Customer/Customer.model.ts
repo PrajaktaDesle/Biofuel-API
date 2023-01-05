@@ -177,8 +177,14 @@ export class CustomerModel extends BaseModel {
     async estimateNoExistsOrNot(no: number) {
         return await this._executeQuery("select id from customer_estimates where estimate_no = ? ", [no])
     }
+    async estimateIdNoExistsOrNot(id:number, no: number) {
+        return await this._executeQuery("select id from customer_estimates where id=? and estimate_no = ? ", [id, no])
+    }
     async salesOrderNoExistsOrNot(no: number) {
         return await this._executeQuery("select id from customer_sales_orders where sales_order_no = ? ", [no])
+    }
+    async salesOrdeIdrNoExistsOrNot(id:number, no: number) {
+        return await this._executeQuery("select id from customer_sales_orders where id=? and sales_order_no = ? ", [id, no])
     }
     // async fetchAllCustomerEstimatesCount(query: string) {
     async fetchALLActiveCustomers() {

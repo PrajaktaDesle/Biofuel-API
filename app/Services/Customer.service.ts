@@ -294,12 +294,17 @@ const createCustomerEstimate = async (data: any) => {
         let customerData;
         console.log("estimate : ", data)
         let estimate: any = {};
+        
         if (data.customer !== undefined && data.customer !== null && data.customer !== "")
             estimate.customer_id = data.customer;
-
+    
         if (data.estimate_no !== undefined && data.estimate_no !== null && data.estimate_no !== "")
-            estimate.estimate_no = data.estimate_no;
-
+        { 
+            let estimate_no = data.estimate_no
+            if( (await new CustomerModel().estimateNoExistsOrNot(estimate_no)).length )throw new Error( "Estimate number already exists ")
+            estimate.estimate_no = estimate_no;
+        }
+        
         if (data.product !== undefined && data.product !== null && data.product !== "")
             estimate.product_id = data.product;
 
@@ -357,18 +362,34 @@ const createCustomerEstimate = async (data: any) => {
 const updateCustomerEstimate = async (data: any) => {
     try {
         let estimate: any = {}, est: any;
-        if (data.id !== undefined && data.id !== null && data.id !== "")
+       
+        if (data.id !== undefined && data.id !== null && data.id !== ""){
             est = await new CustomerModel().estimateExistsOrNot(data.id);
-
-        if (data.id !== undefined && data.id !== null && data.id !== "")
-            est = await new CustomerModel().estimateExistsOrNot(data.id);
-        if (est.length == 0) throw new Error("Estimate not found")
-
+            if (est.length == 0) throw new Error("Estimate not found")
+        }
         if (data.customer !== undefined && data.customer !== null && data.customer !== "")
             estimate.customer_id = data.customer;
 
-        if (data.estimate_no !== undefined && data.estimate_no !== null && data.estimate_no !== "")
-            estimate.estimate_no = data.estimate_no;
+       
+        if (data.estimate_no !== undefined && data.estimate_no !== null && data.estimate_no !== ""){
+            let estimateNo = ((await new CustomerModel().estimateNoExistsOrNot(data.estimate_no))[0]) ? (await new CustomerModel().estimateNoExistsOrNot(data.estimate_no))[0] : null;
+            let estimateNoWithId = ((await new CustomerModel().estimateIdNoExistsOrNot(data.id,data.estimate_no))[0]) ? (await new CustomerModel().estimateIdNoExistsOrNot(data.id,data.estimate_no))[0] : null;
+            console.log( " Id : ", data.id, " estimate_no : ", data.estimate_no)
+            if(estimateNo && estimateNoWithId){
+                if( estimateNoWithId.id === estimateNo.id){
+                    estimate.estimate_no = data.estimate_no;
+                }
+                else{
+                    throw new Error( "Estimate Number already exists ")
+                }
+            } else if((!estimateNo && estimateNoWithId) || (estimateNo && !estimateNoWithId) ){
+                console.log('ERROR TEST CONSOLE ',estimateNo,estimateNoWithId);
+                throw new Error( "Estimate Number already exists ")
+            } else{
+                console.log('TEST CONSOLE ',estimateNo,estimateNoWithId);
+                estimate.estimate_no = data.estimate_no;
+            }
+        }
 
         if (data.product !== undefined && data.product !== null && data.product !== "")
             estimate.product_id = data.product;
@@ -537,8 +558,11 @@ const createCustomerSalesOrder = async (data: any) => {
         if (data.delivery_date !== undefined && data.delivery_date !== null && data.delivery_date !== "")
             sales_order.delivery_date = data.delivery_date;
 
-        if (data.customer_so_number !== undefined && data.customer_so_number !== null && data.customer_so_number !== "")
-            sales_order.sales_order_no = data.customer_so_number;
+        if (data.customer_so_number !== undefined && data.customer_so_number !== null && data.customer_so_number !== ""){
+                let customer_so_number = data.customer_so_number
+                if( (await new CustomerModel().salesOrderNoExistsOrNot(customer_so_number)).length )throw new Error( "Sales Order Number already exists ")
+                sales_order.sales_order_no = data.customer_so_number;
+        }
 
         if (data.product !== undefined && data.product !== null && data.product !== "")
             sales_order.product_id = data.product;
@@ -606,8 +630,28 @@ const updateCustomerSalesOrder = async (data: any) => {
         if (data.delivery_date !== undefined && data.delivery_date !== null && data.delivery_date !== "")
             sales_order.delivery_date = data.delivery_date;
 
-        if (data.customer_so_number !== undefined && data.customer_so_number !== null && data.customer_so_number !== "")
-            sales_order.sales_order_no = data.customer_so_number;
+      
+         if (data.customer_so_number !== undefined && data.customer_so_number !== null && data.customer_so_number !== ""){
+            let estimateNo = ((await new CustomerModel().salesOrderNoExistsOrNot(data.customer_so_number))[0]) ? (await new CustomerModel().salesOrderNoExistsOrNot(data.customer_so_number))[0] : null;
+            let estimateNoWithId = ((await new CustomerModel().salesOrdeIdrNoExistsOrNot(data.id,data.customer_so_number))[0]) ? (await new CustomerModel().salesOrdeIdrNoExistsOrNot(data.id,data.customer_so_number))[0] : null;
+            console.log( " Id : ", data.id, " customer_so_number : ", data.customer_so_number)
+            if(estimateNo && estimateNoWithId){
+                if( estimateNoWithId.id === estimateNo.id){
+                    sales_order.sales_order_no = data.customer_so_number;
+                }
+                else{
+                    throw new Error( "Sales Order Number already exists!")
+                }
+            } else if((!estimateNo && estimateNoWithId) || (estimateNo && !estimateNoWithId) ){
+                console.log('ERROR TEST CONSOLE ',estimateNo,estimateNoWithId);
+                throw new Error( "Customer Sales Order Number already exists!")
+            } else{
+                console.log('TEST CONSOLE ',estimateNo,estimateNoWithId);
+                sales_order.sales_order_no = data.customer_so_number;
+            }
+        }
+        // if (data.customer_so_number !== undefined && data.customer_so_number !== null && data.customer_so_number !== "")
+        //     sales_order.sales_order_no = data.customer_so_number;
 
         if (data.product !== undefined && data.product !== null && data.product !== "")
             sales_order.product_id = data.product;
