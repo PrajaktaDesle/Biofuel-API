@@ -168,13 +168,13 @@ export class SupplierModel extends UserModel {
     async createDeliveryChallenModel(data: any) {
         return await this._executeQuery("insert into purchase_order_delivery_challan set ?", [data]);
     }
-    async fetchAllNotificationsBySupplierId(id:number){
+    async fetchAllNotificationsBySupplierId(id: number) {
         return await this._executeQuery(`select pon.id as NotificationNo,spo.supplier_id, sp.name as supplier,
                                                 pon.status, DATE_FORMAT(pon.created_at, '%d-%m-%Y') as date, pon.created_at,pon.updated_at 
                                                 from purchase_order_dispatch_notifications pon
                                                 left join supplier_purchase_order spo on spo.id = pon.purchase_order_id 
                                                 left join user sp on sp.id = spo.supplier_id
-                                                where spo.supplier_id = ? ;`,[id])
+                                                where spo.supplier_id = ? ;`, [id])
     }
     async fetchAllDeliveryChallan(limit: number, offset: number, sortOrder: string, query: string) {
         return await this._executeQuery(`select dc.id ,dc.dispatch_id as notificationNo,  cs.name as customer, sp.name as supplier, sp.mobile,spo.supplier_id,
@@ -244,7 +244,7 @@ export class SupplierModel extends UserModel {
     async fetchchallanById(id: number) {
         return await this._executeQuery(`select * from purchase_order_delivery_challan where id = ?`, [id])
     }
-    async  fetchAllPayments(limit: number, offset: number, sortOrder: string, query: string) {
+    async fetchAllPayments(limit: number, offset: number, sortOrder: string, query: string) {
         return await this._executeQuery(`select dc.id as delivery_challan_id, dc.dispatch_id as notificationNo, sp.name as supplier, sp.mobile, 
                                                 DATE_FORMAT(dc.delivery_date, '%d-%m-%Y')  as delivery_date, dc.quantity,dc.status,
                                                 dc.ewaybill_url,dc.delivery_challan_url,dc.bilty_url,dc.invoice_url,dc.weight_slip_url,
@@ -256,9 +256,9 @@ export class SupplierModel extends UserModel {
                                                 where dc.status = 1
                                                 ${query}
                                                 ${sortOrder}
-                                                `,[limit, offset])
+                                                `, [limit, offset])
     }
-    async fetchPaymentsCount(query:string){
+    async fetchPaymentsCount(query: string) {
         return await this._executeQuery(`select dc.id as delivery_challan_id, dc.dispatch_id as notificationNo, sp.name as supplier, sp.mobile, 
                                                 DATE_FORMAT(dc.delivery_date, '%d-%m-%Y')  as delivery_date, dc.quantity,dc.status,
                                                 dc.ewaybill_url,dc.delivery_challan_url,dc.bilty_url,dc.invoice_url,dc.weight_slip_url,
@@ -268,10 +268,10 @@ export class SupplierModel extends UserModel {
                                                 left join supplier_purchase_order spo on noti.purchase_order_id = spo.id
                                                 left join user sp on spo.supplier_id = sp.id
                                                 where dc.status = 1 ${query}
-                                                `,[])
+                                                `, [])
 
     }
-    async addSupplierPayment(data:any) {
+    async addSupplierPayment(data: any) {
         return await this._executeQuery(`insert into supplier_payments set ?`, [data])
     }
     async fetchByDeliverychallanID(id: number) {
@@ -280,18 +280,18 @@ export class SupplierModel extends UserModel {
     async fetchPaymentById(id: number) {
         return await this._executeQuery(`select * from supplier_payments where id = ?`, [id])
     }
-    async updateSupplierPaymentDetails(data:any, id:number){
+    async updateSupplierPaymentDetails(data: any, id: number) {
         return await this._executeQuery(`update supplier_payments set ? where id = ?`, [data, id])
     }
-    async getAllPaymentsBySupplier_id(id:number){
+    async getAllPaymentsBySupplier_id(id: number) {
         return await this._executeQuery(`select py.id as payment_id, DATE_FORMAT(py.payment_date, '%d-%m-%Y') as date , py.invoice_no, py.amount, py.utr_no,
                                                 py.created_at, py.updated_at
                                                 from supplier_payments py
                                                 inner join purchase_order_delivery_challan dc on py.delivery_challan_id = dc.id
                                                 where dc.user_id = ? 
-                                                order by py.payment_date desc `,[id])
+                                                order by py.payment_date desc `, [id])
     }
-    async addSupplierSelection(data:any) {
+    async addSupplierSelection(data: any) {
         return await this._executeQuery(`insert into supplier_selection set ?`, [data])
     }
     async updateSupplierSelection(data: any, id: number) {
@@ -306,8 +306,8 @@ export class SupplierModel extends UserModel {
     async supplierPONoExistsOrNot(no: number) {
         return await this._executeQuery("select id from supplier_purchase_order where po_number = ? ", [no])
     }
-   
-    async supplierPOIdNoExistsOrNot(id:number, no: number) {
+
+    async supplierPOIdNoExistsOrNot(id: number, no: number) {
         return await this._executeQuery("select id from supplier_purchase_order where id=? and po_number = ? ", [id, no])
     }
 }
