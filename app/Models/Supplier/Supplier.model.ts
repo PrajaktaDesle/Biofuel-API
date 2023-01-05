@@ -43,8 +43,8 @@ export class SupplierModel extends UserModel {
                                          
                                          left join users_profile up ON u.id = up.user_id
                                          
-                                         LEFT join supplier_raw_material_mapping rm ON rm.supplier_id = u.id
-                                         LEFT join supplier_packaging_mapping pm ON pm.supplier_id = u.id
+                                         left join supplier_raw_material_mapping rm ON rm.supplier_id = u.id
+                                         left join supplier_packaging_mapping pm ON pm.supplier_id = u.id
                                          left join product_raw_material pr on rm.raw_material_id=pr.id
                                          left join product_packaging pp on pm.packaging_id=pp.id
                                          where u.id = ?  and rm.status=1
@@ -67,10 +67,10 @@ export class SupplierModel extends UserModel {
                                          max(case when a.address_type = "1" then a.pincode end) as billing_pincode,
                                          u.created_at, u.updated_at 
                                          FROM user u 
-                                         inner join addresses a ON a.user_id=u.id  
-                                         inner join users_profile p ON a.user_id=p.user_id
-                                         inner join address_city cty ON a.city_id = cty.id
-                                         inner join address_state st ON cty.state_id = st.id
+                                         left join addresses a ON a.user_id=u.id  
+                                         left join users_profile p ON a.user_id=p.user_id
+                                         left join address_city cty ON a.city_id = cty.id
+                                         left join address_state st ON cty.state_id = st.id
                                          where u.role_id = 3 ${query}
                                          group by u.id
                                          ${sortOrder} 
@@ -80,10 +80,10 @@ export class SupplierModel extends UserModel {
         return await this._executeQuery(`SELECT u.id, u.name , u.email,  u.mobile as contact_no, a.latitude, a.longitude, case when p.grade = 1 then 'A' when p.grade = 2 then 'B' when p.grade = 3 then 'C' when p.grade = 4 then 'D' else null end as grade,  u.status,
                                           u.created_at, u.updated_at 
                                           FROM user u 
-                                          inner join addresses a ON a.user_id=u.id  
-                                          inner join users_profile p ON a.user_id=p.user_id
-                                          inner join address_city cty ON a.city_id = cty.id
-                                          inner join address_state st ON cty.state_id = st.id
+                                          left join addresses a ON a.user_id=u.id  
+                                          left join users_profile p ON a.user_id=p.user_id
+                                          left join address_city cty ON a.city_id = cty.id
+                                          left join address_state st ON cty.state_id = st.id
                                           where u.role_id = 3 ${query}
                                           group by u.id
                                            `, [])
@@ -131,9 +131,9 @@ export class SupplierModel extends UserModel {
         return await this._executeQuery(`select sp.id, sp.name as supplier,sp.status,
                                                   ac.name as city,st.name as state
                                                   from user sp
-                                                  inner join addresses a on sp.id = a.user_id 
-                                                  inner join address_city ac on  a.city_id = ac.id 
-                                                  inner join address_state st on ac.state_id = st.id 
+                                                  left join addresses a on sp.id = a.user_id 
+                                                  left join address_city ac on  a.city_id = ac.id 
+                                                  left join address_state st on ac.state_id = st.id 
                                                   where a.address_type = 1 and sp.status = 1 and st.id = ?
                                                   `, [state_id])
     }
@@ -168,13 +168,13 @@ export class SupplierModel extends UserModel {
     async createDeliveryChallenModel(data: any) {
         return await this._executeQuery("insert into purchase_order_delivery_challan set ?", [data]);
     }
-    async fetchAllNotificationsBySupplierId(id:number){
+    async fetchAllNotificationsBySupplierId(id: number) {
         return await this._executeQuery(`select pon.id as NotificationNo,spo.supplier_id, sp.name as supplier,
                                                 pon.status, DATE_FORMAT(pon.created_at, '%d-%m-%Y') as date, pon.created_at,pon.updated_at 
                                                 from purchase_order_dispatch_notifications pon
                                                 left join supplier_purchase_order spo on spo.id = pon.purchase_order_id 
                                                 left join user sp on sp.id = spo.supplier_id
-                                                where spo.supplier_id = ? ;`,[id])
+                                                where spo.supplier_id = ? ;`, [id])
     }
     async fetchAllDeliveryChallan(limit: number, offset: number, sortOrder: string, query: string) {
         return await this._executeQuery(`select dc.id ,dc.dispatch_id as notificationNo,  cs.name as customer, sp.name as supplier, sp.mobile,spo.supplier_id,
@@ -244,7 +244,7 @@ export class SupplierModel extends UserModel {
     async fetchchallanById(id: number) {
         return await this._executeQuery(`select * from purchase_order_delivery_challan where id = ?`, [id])
     }
-    async  fetchAllPayments(limit: number, offset: number, sortOrder: string, query: string) {
+    async fetchAllPayments(limit: number, offset: number, sortOrder: string, query: string) {
         return await this._executeQuery(`select dc.id as delivery_challan_id, dc.dispatch_id as notificationNo, sp.name as supplier, sp.mobile, 
                                                 DATE_FORMAT(dc.delivery_date, '%d-%m-%Y')  as delivery_date, dc.quantity,dc.status,
                                                 dc.ewaybill_url,dc.delivery_challan_url,dc.bilty_url,dc.invoice_url,dc.weight_slip_url,
@@ -256,9 +256,9 @@ export class SupplierModel extends UserModel {
                                                 where dc.status = 1
                                                 ${query}
                                                 ${sortOrder}
-                                                `,[limit, offset])
+                                                `, [limit, offset])
     }
-    async fetchPaymentsCount(query:string){
+    async fetchPaymentsCount(query: string) {
         return await this._executeQuery(`select dc.id as delivery_challan_id, dc.dispatch_id as notificationNo, sp.name as supplier, sp.mobile, 
                                                 DATE_FORMAT(dc.delivery_date, '%d-%m-%Y')  as delivery_date, dc.quantity,dc.status,
                                                 dc.ewaybill_url,dc.delivery_challan_url,dc.bilty_url,dc.invoice_url,dc.weight_slip_url,
@@ -268,10 +268,10 @@ export class SupplierModel extends UserModel {
                                                 left join supplier_purchase_order spo on noti.purchase_order_id = spo.id
                                                 left join user sp on spo.supplier_id = sp.id
                                                 where dc.status = 1 ${query}
-                                                `,[])
+                                                `, [])
 
     }
-    async addSupplierPayment(data:any) {
+    async addSupplierPayment(data: any) {
         return await this._executeQuery(`insert into supplier_payments set ?`, [data])
     }
     async fetchByDeliverychallanID(id: number) {
@@ -280,18 +280,18 @@ export class SupplierModel extends UserModel {
     async fetchPaymentById(id: number) {
         return await this._executeQuery(`select * from supplier_payments where id = ?`, [id])
     }
-    async updateSupplierPaymentDetails(data:any, id:number){
+    async updateSupplierPaymentDetails(data: any, id: number) {
         return await this._executeQuery(`update supplier_payments set ? where id = ?`, [data, id])
     }
-    async getAllPaymentsBySupplier_id(id:number){
+    async getAllPaymentsBySupplier_id(id: number) {
         return await this._executeQuery(`select py.id as payment_id, DATE_FORMAT(py.payment_date, '%d-%m-%Y') as date , py.invoice_no, py.amount, py.utr_no,
                                                 py.created_at, py.updated_at
                                                 from supplier_payments py
                                                 inner join purchase_order_delivery_challan dc on py.delivery_challan_id = dc.id
                                                 where dc.user_id = ? 
-                                                order by py.payment_date desc `,[id])
+                                                order by py.payment_date desc `, [id])
     }
-    async addSupplierSelection(data:any) {
+    async addSupplierSelection(data: any) {
         return await this._executeQuery(`insert into supplier_selection set ?`, [data])
     }
     async updateSupplierSelection(data: any, id: number) {
@@ -306,8 +306,8 @@ export class SupplierModel extends UserModel {
     async supplierPONoExistsOrNot(no: number) {
         return await this._executeQuery("select id from supplier_purchase_order where po_number = ? ", [no])
     }
-   
-    async supplierPOIdNoExistsOrNot(id:number, no: number) {
+
+    async supplierPOIdNoExistsOrNot(id: number, no: number) {
         return await this._executeQuery("select id from supplier_purchase_order where id=? and po_number = ? ", [id, no])
     }
 }
