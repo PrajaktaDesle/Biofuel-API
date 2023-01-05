@@ -1,5 +1,7 @@
 import { Joi, Segments } from 'celebrate';
 // @ts-ignore
+import { CustomerModel } from '../../Models/Customer/Customer.model'
+
 export default {
     
     createCustomerEstimate: {

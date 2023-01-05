@@ -367,8 +367,27 @@ const updateSupplierPO = async (data: any) => {
         if (data.supplier !== undefined && data.supplier !== null && data.supplier !== "")
             sales_order.supplier_id = data.supplier;
 
-        if (data.supplier_po_number !== undefined && data.supplier_po_number !== null && data.supplier_po_number !== "")
-            sales_order.po_number = data.supplier_po_number;
+        let estimateNo = ((await new SupplierModel().supplierPONoExistsOrNot(data.supplier_po_number))[0]) ? (await new SupplierModel().supplierPONoExistsOrNot(data.supplier_po_number))[0] : null;
+        let estimateNoWithId = ((await new SupplierModel().supplierPOIdNoExistsOrNot(data.id,data.supplier_po_number))[0]) ? (await new SupplierModel().supplierPOIdNoExistsOrNot(data.id,data.supplier_po_number))[0] : null;
+        console.log( " Id : ", data.id, " estimate_no : ", data.estimate_no)
+        if (data.supplier_po_number !== undefined && data.supplier_po_number !== null && data.supplier_po_number !== ""){
+            if(estimateNo && estimateNoWithId){
+                if( estimateNoWithId.id === estimateNo.id){
+                    sales_order.po_number = data.supplier_po_number;
+                }
+                else{
+                    throw new Error( "Puchase Order Number already  exists! ")
+                }
+            } else if((!estimateNo && estimateNoWithId) || (estimateNo && !estimateNoWithId) ){
+                console.log('ERROR TEST CONSOLE ',estimateNo,estimateNoWithId);
+                throw new Error( "Puchase Order Number already exists!")
+            } else{
+                console.log('TEST CONSOLE ',estimateNo,estimateNoWithId);
+                sales_order.po_number = data.supplier_po_number;
+            }
+        }
+        // if (data.supplier_po_number !== undefined && data.supplier_po_number !== null && data.supplier_po_number !== "")
+        //     sales_order.po_number = data.supplier_po_number;
 
         if (data.po_date !== undefined && data.po_date !== null && data.po_date !== "")
             sales_order.po_date = data.po_date;
@@ -448,8 +467,13 @@ const createSupplierPO = async (data: any) => {
         if (data.supplier !== undefined && data.supplier !== null && data.supplier !== "")
             sales_order.supplier_id = data.supplier;
 
+          
         if (data.supplier_po_number !== undefined && data.supplier_po_number !== null && data.supplier_po_number !== "")
+        { 
+            let estimate_no = data.supplier_po_number
+            if( (await new SupplierModel().supplierPONoExistsOrNot(estimate_no)).length )throw new Error( "Puchase Order Number already  exists! ")
             sales_order.po_number = data.supplier_po_number;
+        }
 
         if (data.customer_so_number !== undefined && data.customer_so_number !== null && data.customer_so_number !== "")
             sales_order.sales_order_id = data.customer_so_number;

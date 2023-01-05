@@ -306,4 +306,8 @@ export class SupplierModel extends UserModel {
     async supplierPONoExistsOrNot(no: number) {
         return await this._executeQuery("select id from supplier_purchase_order where po_number = ? ", [no])
     }
+   
+    async supplierPOIdNoExistsOrNot(id:number, no: number) {
+        return await this._executeQuery("select id from supplier_purchase_order where id=? and po_number = ? ", [id, no])
+    }
 }
