@@ -129,7 +129,7 @@ export class CustomerModel extends BaseModel {
                                          left join addresses a ON csm.customer_id=a.user_id and a.address_type = 0
                                          left join address_city ac ON ac.id=a.city_id 
                                          left join address_state ast ON ac.state_id=ast.id
-                                         left csm.status  = 1 ${query}
+                                         where csm.status  = 1 ${query}
                                          group by csm.customer_id
                                          ${sortOrder}
                                          LIMIT ? OFFSET ? `,
