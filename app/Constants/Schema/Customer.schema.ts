@@ -54,7 +54,9 @@ export default {
     },
     updateStatus: {
         [Segments.BODY]:  Joi.object().keys({
-            id:Joi.number().required(),
+            // id:Joi.number().required(),
+            customer_id : Joi.number().required(),
+            supplier_id : Joi.number().required(),
             status: Joi.number().required().min(0).max(1)
         }).unknown()
     },

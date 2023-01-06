@@ -110,10 +110,10 @@ export class CustomerModel extends BaseModel {
             [status, id]
         );
     }
-    async fetchCSM(id: number) {
+    async fetchCSM(customer_id: number, supplier_id:number) {
         return await this._executeQuery(
-            "select * from customer_supplier_mapping where id = ? ",
-            [id]
+            "select * from customer_supplier_mapping where customer_id = ? and supplier_id ",
+            [customer_id, supplier_id]
         );
     }
     async fetchAllCustomerSuppliers(
@@ -123,7 +123,7 @@ export class CustomerModel extends BaseModel {
         query: string) {
         // return await this._executeQuery(`SELECT csm.id, customer_id, cs.name as customer,FLOOR((count(csm.supplier_id)/2)) as supplier, case when a.address_type=0 then ast.name ELSE null end as state FROM customer_supplier_mapping csm
         return await this._executeQuery(
-            `SELECT csm.id, customer_id, cs.name as customer,count(csm.supplier_id) as supplier, ast.name as state FROM customer_supplier_mapping csm
+            `SELECT customer_id as id, cs.name as customer,count(csm.supplier_id) as supplier, ast.name as state FROM customer_supplier_mapping csm
                                          left join customers cs on cs.id=csm.customer_id
                                          left join addresses a ON csm.customer_id=a.user_id and a.address_type = 0
                                          left join address_city ac ON ac.id=a.city_id 
@@ -136,7 +136,7 @@ export class CustomerModel extends BaseModel {
     }
     async fetchAllMappedSuppliers(customer_id: number) {
         return await this._executeQuery(
-            `SELECT  supplier_id, sp.name as supplier,csm.status, ast.name as state, csm.created_at , csm.updated_at FROM customer_supplier_mapping csm
+            `SELECT  supplier_id as id , sp.name as supplier,csm.status, ast.name as state, csm.created_at , csm.updated_at FROM customer_supplier_mapping csm
                                          left join customers cs on cs.id=csm.customer_id
                                          left join user sp on sp.id = csm.supplier_id
                                          left join addresses a ON sp.id=a.user_id and a.address_type = 2

@@ -81,7 +81,7 @@ router.post(
   '/sales/order/fetch/all',
   CustomerController.fetchAllCustomerSalesOrders
 );
-router.get(
+router.post(
     '/fetch/map-suppliers',
     celebrate(CustomerSchema.getsuppliersByCustomerId),
     CustomerController.fetchAllSuppliersAgainstCustomer
