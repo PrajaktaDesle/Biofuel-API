@@ -17,12 +17,13 @@ const createProduct = async (req: any) => {
                 resolve({ fields: fields, files: files });
             })}));
         // Fields validation
+        console.log( " fields  : ", fields )
         if (fields.name == undefined || fields.name == null || fields.name == "") throw new Error("name is required");
         product.name = fields.name;
         if (fields.category == undefined || fields.category == null || fields.category == "") throw new Error("category is required");
         product.category_id = fields.category
-        if (fields.description == undefined || fields.description == null || fields.description == "") throw new Error("description is required");
-        product.description = fields.description;
+        if (fields.description !== undefined && fields.description !== null && fields.description !== "")
+            product.description = fields.description;
         if (fields.hsn == undefined || fields.hsn == null || fields.hsn == "") throw new Error("hsn is required");
         product.hsn = fields.hsn;
         if (fields.gst == undefined || fields.gst == null || fields.gst == "") throw new Error("gst is required");
@@ -30,9 +31,10 @@ const createProduct = async (req: any) => {
         if (fields.user_id == undefined || fields.user_id == null || fields.user_id == "") throw new Error("user_id is required");
         product.user_id = fields.user_id;
         if (fields.usage_unit == undefined || fields.usage_unit == null || fields.usage_unit == "") throw new Error("usage_unit is required");
-        product.usage_unit_id = fields.usage_unit
-        if (fields.status == undefined || fields.status == null || fields.status == "") throw new Error("status is required");
+        product.usage_unit_id = fields.usage_unit;
+        if (fields.status !== undefined && fields.status !== null && fields.status !== "")
         product.status = fields.status;
+        console.log( " product  : ", product )
        
         // Files validation
         let s3Image: any = {}
@@ -96,6 +98,7 @@ const fetchAllProductCategories= async ( query : string ) => {
         if (productC.length == 0) {
             throw new Error("Product categories not found!")
         }
+        // productC[0].category.selected = true
         console.log( "categories : ", productC )
         return productC;
 
