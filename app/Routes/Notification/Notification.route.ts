@@ -17,15 +17,20 @@ router.put(
   notificationController.updateNotificationDetails
 )
 
-router.get(
-  '/fetch',
-  celebrate( notificationSchema.fetchNotificationById ),
-  notificationController.fetchNotificationById
+router.post(
+  '/fetch/all',
+  notificationController.fetchAllnotifications
 )
 
-// router.get(
-//   '/fetch/all',
-//   notificationController.fetchAllSuppliers
-// )
+router.get(
+  '/fetch/By-id',
+celebrate( notificationSchema.fetchNotificationById ),
+  notificationController.fetchNotificationById
+);
+
+router.get(
+  '/menu',
+  notificationController.getNotificationMenue
+)
 
 export default router;

@@ -58,7 +58,7 @@ const fetchProductById : IController = async ( req:any , res:any ) => {
         }
     }
     catch ( error : any ) {
-        console.log( "Error => ", error )
+        LOGGER.info( "Error => ", error )
         return apiResponse.error( res,
                                   httpStatusCodes.BAD_REQUEST )
     }
@@ -66,7 +66,13 @@ const fetchProductById : IController = async ( req:any , res:any ) => {
 
 const fetchAllProducts : IController = async ( req:any , res:any ) => {
     try{
-        let product = await productService.fetchAllProducts( req )
+        let query = " "
+        if(req.body.query != ""){
+            query = ` WHERE (p.name like '%${req.body.query}%' OR p.hsn like '%${req.body.query}%' ) `
+        }
+
+        let product = await productService.fetchAllProducts(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
+        let count = await productService.fetchAllProductCount(query);
         if ( product instanceof Error ){
            return apiResponse.error( res,
                                     httpStatusCodes.BAD_REQUEST,
@@ -74,12 +80,12 @@ const fetchAllProducts : IController = async ( req:any , res:any ) => {
         }
         else{
            return apiResponse.result( res,
-                                     product,
-                                     httpStatusCodes.OK )
+               {data :product, total : count},
+               httpStatusCodes.OK )
         }
     }
     catch ( error : any ) {
-        console.log( "Error => ", error )
+        LOGGER.info( "Error => ", error )
         return apiResponse.error( res,
                                   httpStatusCodes.BAD_REQUEST )
     }
@@ -87,7 +93,9 @@ const fetchAllProducts : IController = async ( req:any , res:any ) => {
 
 const fetchAllProductCategories : IController = async ( req:any , res:any ) => {
     try{
-        let product = await productService.fetchAllProductCategories(  )
+        let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " where name like '%"+ req.query.key + "%'" : "";
+        let product = await productService.fetchAllProductCategories( query )
+        console.log( " query ")
         if ( product instanceof Error ){
            return apiResponse.error( res,
                                     httpStatusCodes.BAD_REQUEST,
@@ -100,11 +108,12 @@ const fetchAllProductCategories : IController = async ( req:any , res:any ) => {
         }
     }
     catch ( error : any ) {
-        console.log( "Error => ", error )
+        LOGGER.info( "Error => ", error )
         return apiResponse.error( res,
                                   httpStatusCodes.BAD_REQUEST )
     }
 }
+
 const updateProductById : IController = async ( req:any , res:any ) => {
     try{
         let product = await productService.updateProductById( req )
@@ -120,7 +129,7 @@ const updateProductById : IController = async ( req:any , res:any ) => {
         }
     }
     catch ( error : any ) {
-        console.log( "Error => ", error )
+        LOGGER.info( "Error => ", error )
         return apiResponse.error( res,
                                   httpStatusCodes.BAD_REQUEST )
     }
@@ -128,7 +137,8 @@ const updateProductById : IController = async ( req:any , res:any ) => {
 
 const fetchAllProductUsageUnits : IController = async ( req:any , res:any ) => {
     try{
-        let product = await productService.fetchAllProductUsageUnits(  )
+        let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " where name like '%"+ req.query.key + "%'" : "";
+        let product = await productService.fetchAllProductUsageUnits( query )
         if ( product instanceof Error ){
            return apiResponse.error( res,
                                     httpStatusCodes.BAD_REQUEST,
@@ -141,7 +151,7 @@ const fetchAllProductUsageUnits : IController = async ( req:any , res:any ) => {
         }
     }
     catch ( error : any ) {
-        console.log( "Error => ", error )
+        LOGGER.info( "Error => ", error )
         return apiResponse.error( res,
                                   httpStatusCodes.BAD_REQUEST )
     }
@@ -150,7 +160,8 @@ const fetchAllProductUsageUnits : IController = async ( req:any , res:any ) => {
 
 const fetchAllProductRawMaterials: IController = async (req, res) => {
     try {
-        let rawMaterials : any = await productService.fetchAllProductRawMaterials();
+        let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " where name like '%"+ req.query.key + "%'" : "";
+        let rawMaterials : any = await productService.fetchAllProductRawMaterials(query);
         if (rawMaterials instanceof Error) {
             console.log("error", rawMaterials)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
@@ -159,7 +170,7 @@ const fetchAllProductRawMaterials: IController = async (req, res) => {
             apiResponse.result(res, rawMaterials, httpStatusCodes.OK);
         }
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
@@ -171,16 +182,17 @@ const fetchAllProductRawMaterials: IController = async (req, res) => {
 
 const fetchAllProductPackaging: IController = async (req, res) => {
     try {
-        let packaging : any = await productService.fetchAllProductPackaging();
+        let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " where name like '%"+ req.query.key + "%'" : "";
+        let packaging : any = await productService.fetchAllProductPackaging( query );
         if (packaging instanceof Error) {
-            console.log("error", packaging)
+            LOGGER.info("error", packaging)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
 
             apiResponse.result(res, packaging, httpStatusCodes.OK);
         }
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
@@ -189,6 +201,29 @@ const fetchAllProductPackaging: IController = async (req, res) => {
             return;
     }
 };
+
+const fetchAllProductsList: IController = async (req, res) => {
+    try {
+        let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " AND p.name like '%"+ req.query.key + "%'" : "";
+        let products : any = await productService.fetchAllProductsList( query );
+        if (products instanceof Error) {
+            LOGGER.info("error", products)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
+
+            apiResponse.result(res, products, httpStatusCodes.OK);
+        }
+    } catch (e:any) {
+        LOGGER.info("controller ->", e)
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+            return;
+    }
+};
+
 export default {
     createProduct,
     fetchProductById,
@@ -197,5 +232,6 @@ export default {
     fetchAllProductCategories,
     fetchAllProductUsageUnits,
     fetchAllProductRawMaterials,
-    fetchAllProductPackaging
+    fetchAllProductPackaging,
+    fetchAllProductsList
 }

@@ -17,22 +17,24 @@ const createProduct = async (req: any) => {
                 resolve({ fields: fields, files: files });
             })}));
         // Fields validation
+        console.log( " fields  : ", fields )
         if (fields.name == undefined || fields.name == null || fields.name == "") throw new Error("name is required");
         product.name = fields.name;
         if (fields.category == undefined || fields.category == null || fields.category == "") throw new Error("category is required");
         product.category_id = fields.category
-        if (fields.description == undefined || fields.description == null || fields.description == "") throw new Error("description is required");
-        product.description = fields.description;
+        if (fields.description !== undefined && fields.description !== null && fields.description !== "")
+            product.description = fields.description;
         if (fields.hsn == undefined || fields.hsn == null || fields.hsn == "") throw new Error("hsn is required");
         product.hsn = fields.hsn;
         if (fields.gst == undefined || fields.gst == null || fields.gst == "") throw new Error("gst is required");
-        product.gst = fields.gst;
+        product.igst = fields.gst;
         if (fields.user_id == undefined || fields.user_id == null || fields.user_id == "") throw new Error("user_id is required");
         product.user_id = fields.user_id;
         if (fields.usage_unit == undefined || fields.usage_unit == null || fields.usage_unit == "") throw new Error("usage_unit is required");
-        product.usage_unit_id = fields.usage_unit
-        if (fields.status == undefined || fields.status == null || fields.status == "") throw new Error("status is required");
+        product.usage_unit_id = fields.usage_unit;
+        if (fields.status !== undefined && fields.status !== null && fields.status !== "")
         product.status = fields.status;
+        console.log( " product  : ", product )
        
         // Files validation
         let s3Image: any = {}
@@ -47,7 +49,6 @@ const createProduct = async (req: any) => {
             product = Object.assign(product, s3Path);
         }
        
-        console.log( "product : ", product )
         productData = await new ProductModel().createProduct(product)
         return productData;
 
@@ -73,13 +74,13 @@ const fetchProductById = async (id: number) => {
         }
         product[0].image= config.baseUrl + "/" + product[0].image;
         product[0].category = {label : product[0].category , value : product[0].category_id};
-        product[0].usageUnit = {label : product[0].usage_unit , value : product[0].usage_unit_id};
+        product[0].usage_unit = {label : product[0].usage_unit , value : product[0].usage_unit_id};
         //product[0].imgList = [{file : product[0].image}]
         product[0].imgList = [{ file :"https://picsum.photos/200/300"}]
         if (product[0].status == 1){
-            product[0].productStatus = {value : 1, label : "Active"};
+            product[0].status = {value : 1, label : "Active"};
         }else{
-            product[0].productStatus = {value : 0, label : "Inactive"};
+            product[0].status = {value : 0, label : "Inactive"};
         }
         return product;
 
@@ -90,14 +91,15 @@ const fetchProductById = async (id: number) => {
 
 }
 
-const fetchAllProductCategories= async () => {
+const fetchAllProductCategories= async ( query : string ) => {
 
     try {
-        let productC = await new ProductModel().fetchAllProductCategories()
+        let productC = await new ProductModel().fetchAllProductCategories(query)
         if (productC.length == 0) {
             throw new Error("Product categories not found!")
         }
-       
+        // productC[0].category.selected = true
+        console.log( "categories : ", productC )
         return productC;
 
     }
@@ -107,10 +109,10 @@ const fetchAllProductCategories= async () => {
 
 }
 
-const fetchAllProductUsageUnits= async () => {
+const fetchAllProductUsageUnits= async ( query : string ) => {
 
     try {
-        let productUU = await new ProductModel().fetchAllProductUsageUnits()
+        let productUU = await new ProductModel().fetchAllProductUsageUnits( query )
         if (productUU.length == 0) {
             throw new Error("Product usagae units not found!")
         }
@@ -123,24 +125,35 @@ const fetchAllProductUsageUnits= async () => {
     }
 
 }
-const fetchAllProducts = async (id: number) => {
 
+const fetchAllProducts = async (pageIndex: number, pageSize : number, sort : any, query : string) => {
     try {
-        let products = await new ProductModel().fetchAllProducts()
-
+        let orderQuery : string;
+        if(sort.key != ""){
+            orderQuery = " ORDER BY "+ sort.key + " "+ sort.order +" ";
+        } else{
+            orderQuery = " ORDER BY p.status DESC";
+        }
+        let products = await new ProductModel().fetchAllProducts(pageSize, (pageIndex-1) * pageSize, orderQuery, query)
         for(let i=0;i< products.length;i++) {
-        products[i].image= config.baseUrl + "/" + products[i].image;
-       
-    }
+            products[i].image= config.baseUrl + "/" + products[i].image;
+        }
         return products;
-
     }
     catch (error: any) {
         return error
     }
-
 }
 
+const fetchAllProductCount = async (query: string) => {
+    try {
+        let products = await new ProductModel().fetchAllProductCount(query);
+        return products.length;
+    }
+    catch (error: any) {
+        return error
+    }
+}
 
 const updateProductById = async (req: any) => {
 
@@ -154,7 +167,6 @@ const updateProductById = async (req: any) => {
             })
         }))
         if (fields.id == undefined || fields.id == null || fields.id == "") throw new Error("id is missing");
-
         // supplier exists or not
         let pd = await new ProductModel().fetchProductById(fields.id)
         if (pd.length == 0) throw new Error("Product not found!")
@@ -167,7 +179,7 @@ const updateProductById = async (req: any) => {
         if (fields.hsn !== undefined && fields.hsn !== null && fields.hsn !== "")
             product.hsn = fields.hsn;
         if (fields.gst !== undefined && fields.gst !== null && fields.gst !== "")
-            product.gst = fields.gst;
+            product.igst = fields.gst;
         if (fields.status !== undefined && fields.status !== null && fields.status !== "")
             product.status = fields.status;
         if (fields.usage_unit !== undefined && fields.usage_unit !== null && fields.usage_unit !== ""){
@@ -199,22 +211,36 @@ const updateProductById = async (req: any) => {
 
 
 
-const fetchAllProductRawMaterials = async ( ) =>{
-    let data = await new ProductModel().fetchAllProductRawMaterials()
+const fetchAllProductRawMaterials = async (  query : string ) =>{
+    let data = await new ProductModel().fetchAllProductRawMaterials( query )
     if (data.length == 0) {
             throw new Error("Raw materials not found!")
         }
-    console.log( data )
     return data 
 }
 
-const fetchAllProductPackaging = async ( ) =>{
-    let data = await new ProductModel().fetchAllProductPackaging()
+const fetchAllProductPackaging = async (  query : string ) =>{
+    let data = await new ProductModel().fetchAllProductPackaging( query )
     if (data.length == 0) {
             throw new Error("packaging not found!")
         }
-    console.log( data )
     return data 
+}
+
+const fetchAllProductsList = async ( query : string ) => {
+    try{
+        let result = await new ProductModel().fetchAllProductsList( query );
+        if( result.length === 0 ){
+            throw new Error("Products  not found!")
+
+        }
+        else{
+            return result
+        }
+    }
+    catch(err){
+        return err 
+    }
 }
 
 export default {
@@ -222,9 +248,11 @@ export default {
     fetchProductById,
     updateProductById,
     fetchAllProducts,
+    fetchAllProductCount,
     fetchAllProductCategories,
     fetchAllProductUsageUnits,
     fetchAllProductRawMaterials,
-    fetchAllProductPackaging
+    fetchAllProductPackaging,
+    fetchAllProductsList
 
 }

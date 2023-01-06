@@ -15,8 +15,8 @@ router.put(
     '/update',
      CustomerController.updateCustomerDetails
 )
-router.get(
-    '/fetch-all',
+router.post(
+    '/all',
    CustomerController.fetchAllCustomers
 )
 // customer-supplier mapping
@@ -26,13 +26,13 @@ router.post(
     CustomerController.Create_customer_supplier
 );
 router.put(
-    '/update/status',
+    '/update/mapping/status',
     celebrate(CustomerSchema.updateStatus),
     CustomerController.updateCSMStatus
 );
-router.get(
-    '/fetch/all',
-    CustomerController.fetchAll_customers_suppliers
+router.post(
+    '/fetch/all/csm',
+    CustomerController.fetchAllCSM
 );
 
 router.post(
@@ -47,7 +47,7 @@ router.get(
     CustomerController.fetchCustomerEstimateById
 );
 
-router.get(
+router.post(
     '/estimate/fetch/all',
     CustomerController.fetchAllCustomerEstimates
 );
@@ -77,10 +77,51 @@ router.get(
   CustomerController.fetchCustomerSalesOrderById
 );
 
-router.get( 
+router.post( 
   '/sales/order/fetch/all',
   CustomerController.fetchAllCustomerSalesOrders
 );
+router.post(
+    '/fetch/map-suppliers',
+    celebrate(CustomerSchema.getsuppliersByCustomerId),
+    CustomerController.fetchAllSuppliersAgainstCustomer
 
+);
+router.get(
+    '/fetch/list',
+    CustomerController.fetchAllCustomersJson
+);
 
+router.get(
+    '/fetch/active',
+    CustomerController.fetchAllActiveCustomers
+
+);
+router.get(
+    '/fetch/suppliers',
+    celebrate(CustomerSchema.getsuppliers),
+    CustomerController.fetchAllMappedSuppliersByAddressID
+
+);
+router.get(
+    '/fetch/so/list',
+    CustomerController.fetchAllCustomersSOList
+);
+router.get(
+    '/fetch/sales/order/list',
+    CustomerController.fetchAllCSOList
+);
+router.post(
+    '/mapped/suppliers/by/customer_id',
+    CustomerController.fetchAllMappedSuppliersByCustomerId
+)
+router.get(
+    '/estmateNumber/exists',
+    CustomerController.estimateNoExistsOrNot
+)
+
+router.get(
+    '/salesOrderNumber/exists',
+    CustomerController.salesOrderNoExistsOrNot
+)
 export default router;

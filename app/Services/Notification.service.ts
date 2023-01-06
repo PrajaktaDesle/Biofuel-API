@@ -1,17 +1,24 @@
 import { NotificationModel } from "../Models/Notification/Notification.model";
-const {v4 : uuidv4} = require('uuid');
-
 const createNotification = async ( data : any ) => {
+    let spo, vehicle_count, notification, quantity:any;
     try{
-        let notificationData : any = {};
-        if(data.user_id !== undefined && data.user_id !== null && data.user_id !== "") notificationData.user_id=data.user_id;
+        let notificationData :any = {};
+        if(data.purchase_order_no !== undefined && data.purchase_order_no !== null && data.purchase_order_no !== "")
+         spo = await new NotificationModel().fetchSPO(data.purchase_order_no)
+         notificationData.purchase_order_id = spo[0].id
         if(data.delivery_date !== undefined && data.delivery_date !== null && data.delivery_date !== "") notificationData.delivery_date=data.delivery_date;
-        if(data.product_name !== undefined && data.product_name !== null && data.product_name !== "") notificationData.product_name=data.product_name;
-        if(data.order_no !== undefined && data.order_no !== null && data.order_no !== "") notificationData.spo_no=data.order_no;
-        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "") notificationData.quantity=data.quantity;
-        if(data.count_of_vehicles !== undefined && data.count_of_vehicles !== null && data.count_of_vehicles !== "") notificationData.count_of_vehicles=data.count_of_vehicles;
-        let notification = await new NotificationModel().createNotification( notificationData );
-        if ( notification.length == 0 ) throw new Error( "notification creation failed" )
+        // if(data.product_name !== undefined && data.product_name !== null && data.product_name !== "") notificationData.product_name=data.product_name;
+        if(data.quantity !== undefined && data.quantity !== null && data.quantity !== "")
+        if(data.count_of_vehicles !== undefined && data.count_of_vehicles !== null && data.count_of_vehicles !== "")
+        vehicle_count = data.count_of_vehicles
+        quantity = data.quantity/vehicle_count
+        console.log('deliverable product  quantity distribution------>',quantity)
+        notificationData.quantity = quantity
+        console.log("notification",notificationData)
+        for (let i = 0 ; i < vehicle_count ; i++){
+            notification = await new NotificationModel().createNotification( notificationData );
+            if ( notification.length == 0 ) throw new Error( "notification creation failed" )
+        }
         return notification
     }
     catch( error:any ){
@@ -19,15 +26,13 @@ const createNotification = async ( data : any ) => {
         throw error
     }
 }
-
-
 const updateNotificationDetails = async ( data:any ) => {
     try{
         let updatedNotification : any = {}
         let nf = await new NotificationModel().fetchNotification( data.id );
         if ( nf.length == 0 ) throw new Error( "notification not found")
         if(data.status !== undefined && data.status !== null && data.status !== "") updatedNotification.status=data.status;
-        let notification = await new NotificationModel().updateNotificationDetails( updatedNotification );
+        let notification = await new NotificationModel().updateNotificationDetails( updatedNotification, data.id );
         if ( notification.length == 0 ) throw new Error( "notification updation failed" )
         return notification
     }
@@ -36,22 +41,65 @@ const updateNotificationDetails = async ( data:any ) => {
         throw error
     }
 }
+const fetchAllNotifications = async (pageIndex: number, pageSize : number, sort : any, query : string) => {
+        let orderQuery: string;
+        try {
+            if (sort.key != "") {
+                orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
+            } else {
+                orderQuery = "  ";
+            }
+            let notification = await new NotificationModel().fetchAll(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
+            return notification
+        } catch (error: any) {
+            console.log(" Exception ===> ", error.message)
+            throw error
+        }
+    }
+const fetchNotificationCount =async(query : string) => {
+    try {
+        let count = await new NotificationModel().fetchNotificationCount(query);
+        return count.length;
+    }
+    catch (error: any) {
+        return error
+    }
+}
 
-
-const fetchNotificationById = async ( data:any ) => {
+const fetchNotificationById = async (data:any ) => {
     try{
-        let notification = await new NotificationModel().fetchNotification( data.id );
+        let notification = await new NotificationModel().fetchNotification(data);
         if ( notification.length == 0 ) throw new Error( "No notification found " )
-        return notification
+        let notifications = notification[0]
+        if(notification[0].status == 0){
+            notifications.status = {value : notification[0].status , label : "notification is pending"}
+        } else if (notification[0].status == 1){
+            notifications.status = {value : notification[0].status , label : "notification is approved"}
+        }else{
+            notifications.status = {value : notification[0].status , label : "notification is rejected"}
+        }
+        return notifications
     }
     catch( error:any ){
         console.log( " Exception ===> ", error.message )
         throw error
     }
 }
+const getNotificationMenue = async (  ) => {
+    let data = await new NotificationModel().getNotificationMenue()
+    if (data.length == 0) {
+        throw new Error("Home Page not found!")
+    }
+    // LOGGER.info(data)
+    return data
 
+}
 export default {
     createNotification, 
     updateNotificationDetails, 
-    fetchNotificationById
+    fetchNotificationById,
+    fetchAllNotifications,
+    fetchNotificationCount,
+    getNotificationMenue
+
 }

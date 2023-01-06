@@ -3,12 +3,9 @@ export default {
     createNotification: {
         [Segments.BODY]: Joi.object().keys({
             delivery_date: Joi.string().required(),
-            supplier_id: Joi.number().integer().required(),
-            order_no: Joi.number().integer().required(),
-            product_name: Joi.string().required(),
+            purchase_order_no: Joi.number().integer().required(),
             quantity: Joi.number().integer().required(),
             count_of_vehicles: Joi.number().integer().required(),
-            user_id: Joi.number().integer().required(),
           }).unknown(),
     },
     

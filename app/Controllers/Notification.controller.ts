@@ -9,8 +9,6 @@ const createNotification: IController = async (req, res) => {
     let notification: any;
     try {
         notification = await notificationService.createNotification(req.body);
-        console.log('Notification at controller-----> ', notification);
-
         if (notification instanceof Error) {
             console.log("error", notification)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
@@ -19,18 +17,8 @@ const createNotification: IController = async (req, res) => {
                 notification
             }, httpStatusCodes.CREATED);
         }
-
     } catch (e:any) {
-        console.log("controller ->", e)
         // @ts-ignore
-        if (e.code === constants.ErrorCodes.DUPLICATE_ENTRY) {
-            apiResponse.error(
-                res,
-                httpStatusCodes.BAD_REQUEST,
-                'MOBILE_AND_EMAIL_ALREADY_EXISTS',
-            );
-        }
-        else{
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
@@ -38,34 +26,30 @@ const createNotification: IController = async (req, res) => {
             );
         }
         return;
-    }
 };
-
-
-// const fetchAllnotifications: IController = async (req, res) => {
-//     notificationService.fetchAllnotifications()
-//         .then( (notifications) => {
-//             if(notifications instanceof Error){
-//                 console.log("User 2", notifications.message)
-//                 apiResponse.error(
-//                     res,
-//                     httpStatusCodes.BAD_REQUEST,
-//                     notifications.message
-//                 );
-//             }else{
-//                 console.log("User 3", notifications)
-//                 apiResponse.result(res, notifications, httpStatusCodes.OK);
-//             }
-//         }).catch(err => {
-//         console.log("Error  ->", err);
-//         apiResponse.error(
-//             res,
-//             httpStatusCodes.BAD_REQUEST,
-//             //locale.INVALID_CREDENTIALS,
-//         );
-//     });
-// };
-
+const fetchAllnotifications: IController = async (req, res) => {
+    try {
+        let query = ""
+        if (req.body.query != "") {
+            query = ` WHERE (p.name like '%${req.body.query}%' OR sp.name like '%${req.body.query}%' OR spo.po_number like '%${req.body.query}%') `
+        }
+        let result = await notificationService.fetchAllNotifications(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
+        let count = await notificationService.fetchNotificationCount(query);
+        if (result instanceof Error) {
+            return apiResponse.error(res,
+                httpStatusCodes.BAD_REQUEST,
+                result.message)
+        } else {
+            return apiResponse.result(res,
+                {data: result, total: count},
+                httpStatusCodes.OK)
+        }
+    }catch (error:any) {
+        return apiResponse.error( res,
+            httpStatusCodes.BAD_REQUEST,
+            error.message)
+    }
+}
 
 const fetchNotificationById: IController = async (req, res) => {
     notificationService.fetchNotificationById(req.query.id)
@@ -115,12 +99,30 @@ const updateNotificationDetails: IController = async (req, res) => {
     });
 };
 
+const getNotificationMenue: IController = async (req, res) => {
+    try {
+        let homePage : any = await notificationService.getNotificationMenue();
+        if (homePage instanceof Error) {
+            LOGGER.info("error", homePage)
+            apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+        } else {
 
-
+            apiResponse.result(res, homePage, httpStatusCodes.OK);
+        }
+    } catch (e:any) {
+        LOGGER.info("controller ->", e)
+            apiResponse.error(
+                res,
+                httpStatusCodes.BAD_REQUEST,
+                e.message
+            );
+            return;
+    }
+};
 export default {
     createNotification,
     updateNotificationDetails,
     fetchNotificationById,
-    // fetchAllnotifications,
-
+    fetchAllnotifications,
+    getNotificationMenue
 };

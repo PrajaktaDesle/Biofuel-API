@@ -7,16 +7,17 @@ import LOGGER from "../config/LOGGER";
 
 const getAllCities: IController = async (req, res) => {
     try {
-        let cities : any = await addressService.getAllCities();
+        let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " where name like '%"+ req.query.key + "%'" : "";
+        let cities : any = await addressService.getAllCities(query);
         if (cities instanceof Error) {
-            console.log("error", cities)
+            LOGGER.info("error", cities)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
 
             apiResponse.result(res, cities, httpStatusCodes.OK);
         }
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
@@ -28,16 +29,17 @@ const getAllCities: IController = async (req, res) => {
 
 const getAllStates: IController = async (req, res) => {
     try {
-        let states : any = await addressService.getAllStates();
+        let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " where name like '%"+ req.query.key + "%'" : "";
+        let states : any = await addressService.getAllStates(query);
         if (states instanceof Error) {
-            console.log("error", states)
+            LOGGER.info("error", states)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
 
             apiResponse.result(res, states, httpStatusCodes.OK);
         }
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,
@@ -49,16 +51,17 @@ const getAllStates: IController = async (req, res) => {
 
 const getCitiesByState: IController = async (req:any, res:any) => {
     try {
-        let states : any = await addressService.getCitiesByState(req.query.state_id);
+        let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " AND act.name like '%"+ req.query.key + "%'" : "";
+        let states : any = await addressService.getCitiesByState(req.query.state_id, query);
         if (states instanceof Error) {
-            console.log("error", states)
+            LOGGER.info("error", states)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);
         } else {
 
             apiResponse.result(res, states, httpStatusCodes.OK);
         }
     } catch (e:any) {
-        console.log("controller ->", e)
+        LOGGER.info("controller ->", e)
             apiResponse.error(
                 res,
                 httpStatusCodes.BAD_REQUEST,

@@ -2,7 +2,7 @@ import supplierController from '../../Controllers/Supplier.controller';
 import supplierSchema from '../../Constants/Schema/Supplier.schema';
 import express from 'express';
 import path from 'path';
-import { celebrate } from 'celebrate';
+import {celebrate, celebrator} from 'celebrate';
 const router = express.Router();
 
 router.post(
@@ -33,7 +33,7 @@ router.get(
   supplierController.fetchSupplierById
 );
 
-router.get(
+router.post(
   '/fetch/all',
   supplierController.fetchAllSuppliers
 );
@@ -42,5 +42,90 @@ router.get(
   '/home/page',
   supplierController.getHomePage
 );
+router.get(
+    '/fetch/all/by-state',
+    celebrate(supplierSchema.fetchSupplierByState),
+    supplierController.fetchAllSuppliersByState
+)
+router.post(
+  '/po/fetch/all',
+  supplierController.fetchAllSupplierPO
+);
+router.put( 
+  '/po/update/status',
+  celebrate(supplierSchema.updateSupplierPOStatus),
+  supplierController.updateSupplierPO
+)
+router.post(
+    '/generate-challan',
+    celebrate(supplierSchema.generateChallan),
+    supplierController.createChallan
+)
+router.post(
+    '/fetch/all/challan',
+    supplierController.fetchAllChallan
+)
+router.put(
+    '/challan/update',
+    supplierController.updatechallan
+)
+router.get(
+  '/fetch/list',
+  supplierController.fetchAllSuppliersList
+)
+router.post(
+  '/po/create',
+  supplierController.createSupplierPO
+)
+// fetchSupplierPOById
+router.get(
+  '/po/fetch',
+  supplierController.fetchSupplierPOById
+)
+router.get(
+    '/po/fetch/supplier-id',
+    supplierController.fetchSupplierPOBySupplierId
+)
+router.put( 
+  '/po/update',
+  supplierController.updateSupplierPO
+)
+router.post(
+    '/payment/notify-quantity',
+    supplierController.addSupplierPayment
+)
+router.post(
+    '/payment/get-all',
+    supplierController.getAllPayments
+)
+router.put(
+    '/update/payment',
+    // celebrate(supplierSchema.updateSupplierPayment),
+    supplierController.updatesupplierPayment
+)
+router.get(
+    '/fetch/all/notifications',
+    celebrate(supplierSchema.fetchNotificatonsBySupplierById),
+    supplierController.fetchAllNotificationsBySupplierID
 
+)
+router.get(
+    '/payment/fetch-all',
+    celebrate(supplierSchema.fetchAllPaymentsSupplierById),
+    supplierController.fetchAllPaymentsBySupplierID
+
+)
+router.post(
+  '/selection/add',
+  supplierController.addSupplierSection
+)
+router.put(
+  '/selection/update',
+  supplierController.updateSupplierSelection
+)
+
+router.get(
+  '/supplierPONumber/exists',
+  supplierController.supplierPONoExistsOrNot
+)
 export default router;

@@ -15,7 +15,7 @@ router.get(
   productController.fetchProductById
 );
 
-router.get( 
+router.post(
   '/all',
   productController.fetchAllProducts
 );
@@ -41,5 +41,10 @@ router.get(
 router.get(
   '/packaging/all',
    productController.fetchAllProductPackaging
+)
+
+router.get(
+  '/list/all',
+   productController.fetchAllProductsList
 )
 export default router;
