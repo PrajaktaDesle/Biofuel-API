@@ -516,7 +516,7 @@ const fetchAllMappedSuppliersByCustomerId: IController = async (req, res) => {
     try {
         let query = " "
         if (req.body.query != "") {
-            query = ` and cs.name like '%${req.body.query}%' OR cs.mobile like '%${req.body.query}%' `
+            query = ` and sp.name like '%${req.body.query}%' `
         }
         let condition = " "
         if (req.body.id != "") {
