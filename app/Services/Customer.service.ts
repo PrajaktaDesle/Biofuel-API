@@ -777,10 +777,10 @@ const fetchSuppliers = async (req: any) => {
     try {
         let address_id = req.query.address_id
         let suppliers = await new CustomerModel().fetchAllmappedSuppliersByAddressId(address_id)
-        if (suppliers.length == 0) throw new Error("customer not found")
-        return {suppliers: suppliers}
+        if (suppliers.length == 0) throw new Error("suppliers not found")
+        return suppliers
     } catch (error: any) {
-        return error
+        throw error
     }
 }
 const fetchAllCustomersSOList = async (query: string) => {
