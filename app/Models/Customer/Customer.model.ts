@@ -160,7 +160,7 @@ export class CustomerModel extends BaseModel {
                                          left join addresses a ON csm.customer_id=a.user_id and a.address_type = 0
                                          left join address_city ac ON ac.id=a.city_id 
                                          left join address_state ast ON ac.state_id=ast.id
-                                         left where csm.status  = 1 ${query}
+                                         where csm.status  = 1 ${query}
                                          group by csm.customer_id`,[])
     }
     async createCustomerEstimate(estimateData: any) {
@@ -311,6 +311,7 @@ export class CustomerModel extends BaseModel {
                                                 left join address_city ac on a.city_id = ac.id and a.address_type = 1
                                                 left join address_state ast on ac.state_id = ast.id
                                                 where csm.address_id = ? and csm.status = 1
+                                                group by supplier_id
                                                 `,
             [address_id]
         );
