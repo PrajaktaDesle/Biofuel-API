@@ -22,8 +22,8 @@ const createProduct = async (req: any) => {
         product.name = fields.name;
         if (fields.category == undefined || fields.category == null || fields.category == "") throw new Error("category is required");
         product.category_id = fields.category
-        if (fields.description == undefined || fields.description == null || fields.description == "") 
-        product.description = fields.description;
+        if (fields.description !== undefined && fields.description !== null && fields.description !== "")
+            product.description = fields.description;
         if (fields.hsn == undefined || fields.hsn == null || fields.hsn == "") throw new Error("hsn is required");
         product.hsn = fields.hsn;
         if (fields.gst == undefined || fields.gst == null || fields.gst == "") throw new Error("gst is required");
