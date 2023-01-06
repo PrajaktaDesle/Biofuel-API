@@ -120,8 +120,7 @@ export class CustomerModel extends BaseModel {
         limit: number,
         offset: number,
         sortOrder: string,
-        query: string
-    ) {
+        query: string) {
         // return await this._executeQuery(`SELECT csm.id, customer_id, cs.name as customer,FLOOR((count(csm.supplier_id)/2)) as supplier, case when a.address_type=0 then ast.name ELSE null end as state FROM customer_supplier_mapping csm
         return await this._executeQuery(
             `SELECT csm.id, customer_id, cs.name as customer,count(csm.supplier_id) as supplier, ast.name as state FROM customer_supplier_mapping csm
@@ -129,11 +128,10 @@ export class CustomerModel extends BaseModel {
                                          left join addresses a ON csm.customer_id=a.user_id and a.address_type = 0
                                          left join address_city ac ON ac.id=a.city_id 
                                          left join address_state ast ON ac.state_id=ast.id
-                                         left csm.status  = 1 ${query}
+                                         where csm.status  = 1 ${query}
                                          group by csm.customer_id
                                          ${sortOrder}
-                                         LIMIT ? OFFSET ? `,
-            [limit, offset]
+                                         LIMIT ? OFFSET ? `, [limit, offset]
         );
     }
     async fetchAllMappedSuppliers(customer_id: number) {
@@ -150,13 +148,20 @@ export class CustomerModel extends BaseModel {
         );
     }
     async fetch_csm_count(query: string) {
-        return await this._executeQuery(
-            `SELECT customer_id, cs.name as customer, supplier_id, sp.name as supplier,csm.status, csm.created_at , csm.updated_at FROM customer_supplier_mapping csm
-                                                left join customers cs on cs.id=csm.customer_id
-                                                left join user sp on sp.id = csm.supplier_id
-                                                ${query}`,
-            []
-        );
+        // return await this._executeQuery(
+        //     `SELECT customer_id, cs.name as customer, supplier_id, sp.name as supplier,csm.status, csm.created_at , csm.updated_at FROM customer_supplier_mapping csm
+        //                                         left join customers cs on cs.id=csm.customer_id
+        //                                         left join user sp on sp.id = csm.supplier_id
+        //                                         ${query}`,
+        //     []
+        // );
+        return this._executeQuery(`SELECT csm.id, customer_id, cs.name as customer,count(csm.supplier_id) as supplier, ast.name as state FROM customer_supplier_mapping csm
+                                         left join customers cs on cs.id=csm.customer_id
+                                         left join addresses a ON csm.customer_id=a.user_id and a.address_type = 0
+                                         left join address_city ac ON ac.id=a.city_id 
+                                         left join address_state ast ON ac.state_id=ast.id
+                                         left where csm.status  = 1 ${query}
+                                         group by csm.customer_id`,[])
     }
     async createCustomerEstimate(estimateData: any) {
         return await this._executeQuery("insert into customer_estimates set ? ", [
