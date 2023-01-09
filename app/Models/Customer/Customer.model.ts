@@ -294,18 +294,15 @@ export class CustomerModel extends BaseModel {
     async fetchALLActiveCustomers() {
         return await this._executeQuery(
                                         `select a.id as value ,
-                                         concat(cs.name ,', ', ac.name) as label
-                                         from addresses a
-                                         left join customers cs on a.user_id = cs.id 
-                                         left join biofuel.address_city ac on a.city_id = ac.id
-                                         where a.user_type = 0 and a.address_type = 0 and cs.status = 1;
-                                         `,
-                                         []
-        );
+                                               concat(cs.name ,', ', ac.name) as label
+                                               from addresses a
+                                               left join customers cs on a.user_id = cs.id 
+                                               left join biofuel.address_city ac on a.city_id = ac.id
+                                               where a.user_type = 0 and a.address_type = 0 and cs.status = 1;`, []);
     }
     async fetchAllmappedSuppliersByAddressId(address_id: number) {
         return await this._executeQuery(
-                                        `select csm.supplier_id ,sp.name as supplier,ac.name as city, ast.name as state,
+                                        `select csm.supplier_id ,sp.name as supplier,email,ac.name as city, ast.name as state,
                                          csm.status, csm.created_at, csm.updated_at
                                          from customer_supplier_mapping csm
                                          left join addresses a on csm.supplier_id = a.user_id 

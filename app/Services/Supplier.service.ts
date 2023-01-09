@@ -322,11 +322,12 @@ const getHomePage = async () => {
     return data
 }
 const fetchSuppliersByState = async (req: any) => {
-    let result, state
+    let result, state_id, address_id
     try {
-        state = req.query.state
+        state_id = req.query.state_id
+        address_id = req.query.address_id
         // @ts-ignore
-        result = await new SupplierModel().getSuppliersByState(state)
+        result = await new SupplierModel().getMappedUnmappedSuppliers(state_id, address_id)
         if (result.length == 0) throw new Error(" supplier not found!")
         return result;
     } catch (e) {
