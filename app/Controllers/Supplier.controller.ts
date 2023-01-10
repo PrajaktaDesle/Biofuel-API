@@ -185,9 +185,9 @@ const getHomePage: IController = async (req, res) => {
     }
 };
 
-const fetchAllSuppliersByState: IController = async (req, res) => {
+const fetchAllMappedUnmappedSuppliers: IController = async (req, res) => {
     try{
-        let suppliers = await supplierService.fetchSuppliersByState(req)
+        let suppliers = await supplierService.fetchSuppliersMappedUnmapped(req)
         if ( suppliers instanceof Error ){
             return apiResponse.error( res,
                 httpStatusCodes.BAD_REQUEST,
@@ -628,7 +628,7 @@ export default {
     fetchSupplierById,
     updateSupplierDetails,
     getHomePage,
-    fetchAllSuppliersByState,
+    fetchAllMappedUnmappedSuppliers,
     fetchAllSupplierPO,
     updateSupplierPO,
     fetchAllSuppliersList,

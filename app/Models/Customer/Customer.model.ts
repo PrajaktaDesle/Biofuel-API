@@ -298,7 +298,7 @@ export class CustomerModel extends BaseModel {
                                                from addresses a
                                                left join customers cs on a.user_id = cs.id 
                                                left join biofuel.address_city ac on a.city_id = ac.id
-                                               where a.user_type = 0 and a.address_type = 0 and cs.status = 1;`, []);
+                                               where a.user_type = 0 and a.address_type = 0 and a.status = 1;`, []);
     }
     async fetchAllmappedSuppliersByAddressId(address_id: number) {
         return await this._executeQuery(

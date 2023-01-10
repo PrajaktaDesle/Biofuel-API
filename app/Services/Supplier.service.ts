@@ -321,14 +321,14 @@ const getHomePage = async () => {
     LOGGER.info(data)
     return data
 }
-const fetchSuppliersByState = async (req: any) => {
+const fetchSuppliersMappedUnmapped = async (req: any) => {
     let result, state_id, address_id
     try {
         state_id = req.query.state_id
         address_id = req.query.address_id
         // @ts-ignore
         result = await new SupplierModel().getMappedUnmappedSuppliers(state_id, address_id)
-        if (result.length == 0) throw new Error(" supplier not found!")
+        if (result.length == null) throw new Error(" supplier not found!")
         return result;
     } catch (e) {
         return e
@@ -890,7 +890,7 @@ export default {
     verify_supplier_otp,
     getHomePage,
     fetchAllSuppliersCount,
-    fetchSuppliersByState,
+    fetchSuppliersMappedUnmapped,
     fetchAllSupplierPO,
     fetchAllSupplierPOCount,
     updateSupplierPO,
