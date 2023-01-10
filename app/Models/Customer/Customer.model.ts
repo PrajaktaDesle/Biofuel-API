@@ -189,7 +189,7 @@ export class CustomerModel extends BaseModel {
         query: string
     ) {
         return await this._executeQuery(
-                                         `SELECT es.id, customer_id, cs.name as customer,es.status, DATE_FORMAT(estimate_date, '%d-%m-%Y')  as estimate_date ,DATE_FORMAT(expiry_date, '%d-%m-%Y')  as expiry_date , estimate_no , es.id ,product_id,p.name as product_name, es.product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, IFNULL(adjustment_amount, 0)+(rate*quantity) as total_amount FROM customer_estimates es
+                                         `SELECT es.id, customer_id, cs.name as customer,cs.email,es.status, DATE_FORMAT(estimate_date, '%d-%m-%Y')  as estimate_date ,DATE_FORMAT(expiry_date, '%d-%m-%Y')  as expiry_date , estimate_no , es.id ,product_id,p.name as product_name, es.product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, IFNULL(adjustment_amount, 0)+(rate*quantity) as total_amount FROM customer_estimates es
                                           left join products p ON p.id=es.product_id
                                           left join customers cs ON cs.id=es.customer_id
                                           left join product_raw_material rm ON rm.id=es.raw_material_id
