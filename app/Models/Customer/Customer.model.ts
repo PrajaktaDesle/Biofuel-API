@@ -112,7 +112,7 @@ export class CustomerModel extends BaseModel {
     }
     async fetchCSM(customer_id: number, supplier_id:number) {
         return await this._executeQuery(
-            "select * from customer_supplier_mapping where customer_id = ? and supplier_id ",
+            "select * from customer_supplier_mapping where customer_id = ? and supplier_id =  ?",
             [customer_id, supplier_id]
         );
     }
@@ -298,7 +298,7 @@ export class CustomerModel extends BaseModel {
                                                from addresses a
                                                left join customers cs on a.user_id = cs.id 
                                                left join biofuel.address_city ac on a.city_id = ac.id
-                                               where a.user_type = 0 and a.address_type = 0 and cs.status = 1;`, []);
+                                               where a.user_type = 0 and a.address_type = 0 and a.status = 1;`, []);
     }
     async fetchAllmappedSuppliersByAddressId(address_id: number) {
         return await this._executeQuery(

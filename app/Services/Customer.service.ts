@@ -242,7 +242,6 @@ const CreateCSMService = async (req: any) => {
 const updateCSMService = async (req: any) => {
     let result, CSM;
     try {
-
         CSM = await new CustomerModel().fetchCSM(req.body.customer_id, req.body.supplier_id)
         if (CSM.length == 0) throw new Error("mapping not found");
         result = await new CustomerModel().updateStatusById(CSM[0].id, req.body.status)

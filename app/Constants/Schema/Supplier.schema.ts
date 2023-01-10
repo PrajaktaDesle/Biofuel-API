@@ -20,8 +20,9 @@ export default {
         }
     },
     fetchSupplierByState:{
-        [Segments.BODY]:{
-            state:Joi.number().required()
+        [Segments.QUERY]:{
+            state_id:Joi.number().required(),
+            address_id : Joi.number().required()
         }
     },
     updateSupplierPOStatus : {

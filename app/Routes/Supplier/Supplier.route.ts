@@ -43,9 +43,9 @@ router.get(
   supplierController.getHomePage
 );
 router.get(
-    '/fetch/all/by-state',
+    '/fetch/all/mapped-unmapped',
     celebrate(supplierSchema.fetchSupplierByState),
-    supplierController.fetchAllSuppliersByState
+    supplierController.fetchAllMappedUnmappedSuppliers
 )
 router.post(
   '/po/fetch/all',
