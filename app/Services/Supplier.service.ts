@@ -321,33 +321,24 @@ const getHomePage = async () => {
     LOGGER.info(data)
     return data
 }
-const fetchSuppliersMappedUnmapped = async (ageIndex: number, pageSize: number, sort: any, query: string) => {
+const fetchSuppliersMappedUnmapped = async (req:any) => {
     let result, state_id, address_id
-    // try {
-    //     state_id = req.query.state_id
-    //     address_id = req.query.address_id
-    //     // @ts-ignore
-    //     result = await new SupplierModel().getMappedUnmappedSuppliers(state_id, address_id)
-    //     if (result.length == null) throw new Error(" supplier not found!")
-    //     return result;
-    // } catch (e) {
-    //     return e
-    // }
-
     try {
-        let orderQuery: string = "";
-        if (sort.key != "") {
-            orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
-        }
+        state_id = req.query.state_id
+        address_id = req.query.address_id
         // @ts-ignore
-        result = await new SupplierModel().getMappedUnmappedSuppliers(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
-        if (result == null) throw new Error("challan not found");
-        return result;
-    } catch (error: any) {
-        throw error
+        result = await new SupplierModel().getMappedUnmappedSuppliers(state_id, address_id)
+        if (result.length == null) throw new Error(" supplier not found!")
+        for (var i = 0; i < result.length; i++) {
+        if (result[i].grade == 1) result[i].grade = {"label": "A", "value": 1};
+        if (result[i].grade == 2) result[i].grade = {"label": "B", "value": 2};
+        if (result[i].grade == 3) result[i].grade = {"label": "C", "value": 3};
+        if (result[i].grade == 4) result[i].grade = {"label": "D", "value": 4};
     }
-}
-const fetchAllMappedUnmappedSupppliersCount = async(query:any)=>{
+        return {"data":result,"total":result.length}
+    } catch (e) {
+        return e
+    }
 }
 // fetchAllSupplierPO
 const fetchAllSupplierPO = async (pageIndex: number, pageSize: number, sort: any, query: string) => {
@@ -906,7 +897,6 @@ export default {
     getHomePage,
     fetchAllSuppliersCount,
     fetchSuppliersMappedUnmapped,
-    fetchAllMappedUnmappedSupppliersCount,
     fetchAllSupplierPO,
     fetchAllSupplierPOCount,
     updateSupplierPO,
