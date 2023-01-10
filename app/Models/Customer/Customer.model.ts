@@ -112,7 +112,7 @@ export class CustomerModel extends BaseModel {
     }
     async fetchCSM(customer_id: number, supplier_id:number) {
         return await this._executeQuery(
-            "select * from customer_supplier_mapping where customer_id = ? and supplier_id ",
+            "select * from customer_supplier_mapping where customer_id = ? and supplier_id =  ?",
             [customer_id, supplier_id]
         );
     }
