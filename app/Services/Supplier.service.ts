@@ -321,18 +321,33 @@ const getHomePage = async () => {
     LOGGER.info(data)
     return data
 }
-const fetchSuppliersMappedUnmapped = async (req: any) => {
+const fetchSuppliersMappedUnmapped = async (ageIndex: number, pageSize: number, sort: any, query: string) => {
     let result, state_id, address_id
+    // try {
+    //     state_id = req.query.state_id
+    //     address_id = req.query.address_id
+    //     // @ts-ignore
+    //     result = await new SupplierModel().getMappedUnmappedSuppliers(state_id, address_id)
+    //     if (result.length == null) throw new Error(" supplier not found!")
+    //     return result;
+    // } catch (e) {
+    //     return e
+    // }
+
     try {
-        state_id = req.query.state_id
-        address_id = req.query.address_id
+        let orderQuery: string = "";
+        if (sort.key != "") {
+            orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
+        }
         // @ts-ignore
-        result = await new SupplierModel().getMappedUnmappedSuppliers(state_id, address_id)
-        if (result.length == null) throw new Error(" supplier not found!")
+        result = await new SupplierModel().getMappedUnmappedSuppliers(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
+        if (result == null) throw new Error("challan not found");
         return result;
-    } catch (e) {
-        return e
+    } catch (error: any) {
+        throw error
     }
+}
+const fetchAllMappedUnmappedSupppliersCount = async(query:any)=>{
 }
 // fetchAllSupplierPO
 const fetchAllSupplierPO = async (pageIndex: number, pageSize: number, sort: any, query: string) => {
@@ -891,6 +906,7 @@ export default {
     getHomePage,
     fetchAllSuppliersCount,
     fetchSuppliersMappedUnmapped,
+    fetchAllMappedUnmappedSupppliersCount,
     fetchAllSupplierPO,
     fetchAllSupplierPOCount,
     updateSupplierPO,

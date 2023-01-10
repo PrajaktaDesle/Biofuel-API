@@ -187,7 +187,12 @@ const getHomePage: IController = async (req, res) => {
 
 const fetchAllMappedUnmappedSuppliers: IController = async (req, res) => {
     try{
-        let suppliers = await supplierService.fetchSuppliersMappedUnmapped(req)
+        let query = " "
+        if(req.body.query != ""){
+            query = ` and  u.name like '%${req.body.query}%' or u.contact_no like '%${req.body.query}' `
+        }
+        let suppliers = await supplierService.fetchSuppliersMappedUnmapped(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
+        let count = await supplierService.fetchAllMappedUnmappedSupppliersCount(query);
         if ( suppliers instanceof Error ){
             return apiResponse.error( res,
                 httpStatusCodes.BAD_REQUEST,
@@ -195,16 +200,18 @@ const fetchAllMappedUnmappedSuppliers: IController = async (req, res) => {
         }
         else{
             return apiResponse.result( res,
-                 suppliers,
+                {data :suppliers, total : count},
                 httpStatusCodes.OK )
         }
+
     }
     catch (error:any) {
         LOGGER.info( "Error => ", error )
         return apiResponse.error( res,
-            httpStatusCodes.BAD_REQUEST ,error.message)
+            httpStatusCodes.BAD_REQUEST )
     }
 };
+
 
 // fetchAllSupplierPO
 const fetchAllSupplierPO: IController = async (req, res) => {
