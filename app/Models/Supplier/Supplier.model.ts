@@ -127,16 +127,17 @@ export class SupplierModel extends UserModel {
     async getHomePage() {
         return await this._executeQuery("select id , name, image_url from app_homepage ", [])
     }
-    async getSuppliersByState(state_id: number) {
-        return await this._executeQuery(`select sp.id, sp.name as supplier,sp.status,
-                                                  ac.name as city,st.name as state
-                                                  from user sp
-                                                  left join addresses a on sp.id = a.user_id 
-                                                  left join address_city ac on  a.city_id = ac.id 
-                                                  left join address_state st on ac.state_id = st.id 
-                                                  where a.address_type = 1 and sp.status = 1 and st.id = ?
-                                                  `, [state_id])
+    async getMappedUnmappedSuppliers(state_id: number,address_id: number) {
+        return await this._executeQuery(`select sp.id,sp.name as supplier, sp.email,sp.mobile, cty.name as city,st.name as state,prof.grade, csm.customer_id,csm.address_id, if(csm.address_id is null, false, true) as isMapped  from user sp
+                                                    LEFT JOIN addresses a on sp.id = a.user_id and a.user_type = 1 and a.address_type = 2  
+                                                    LEFT JOIN users_profile prof on sp.id = prof.user_id 
+                                                    LEFT JOIN address_city cty on a.city_id = cty.id
+                                                    LEFT JOIN address_state st on cty.state_id = st.id
+                                                    LEFT JOIN customer_supplier_mapping csm on sp.id = csm.supplier_id and csm.address_id = ${address_id}
+                                                    where sp.role_id = 3 and cty.state_id = ${state_id}
+                                                  `, [])
     }
+
     async fetchAllSupplierPO(limit: number, offset: number, sortOrder: string, query: string) {
         return await this._executeQuery(`SELECT spo.id, spo.po_number, s.name as supplier, c.name as customer, p.name as product, spo.sales_order_id, spo.quantity,DATE_FORMAT(spo.delivery_date, '%d-%m-%Y')  as delivery_date, spo.status FROM supplier_purchase_order spo
                                          left join customer_sales_orders cso on cso.id = spo.sales_order_id

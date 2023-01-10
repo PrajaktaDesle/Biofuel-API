@@ -185,16 +185,18 @@ const getHomePage: IController = async (req, res) => {
     }
 };
 
-const fetchAllSuppliersByState: IController = async (req, res) => {
+const fetchAllMappedUnmappedSuppliers: IController = async (req, res) => {
     try{
-        let suppliers = await supplierService.fetchSuppliersByState(req)
+        let suppliers = await supplierService.fetchSuppliersMappedUnmapped(req)
         if ( suppliers instanceof Error ){
             return apiResponse.error( res,
                 httpStatusCodes.BAD_REQUEST,
                 suppliers.message )
         }
         else{
+            // @ts-ignore
             return apiResponse.result( res,
+                // @ts-ignore
                  suppliers,
                 httpStatusCodes.OK )
         }
@@ -205,6 +207,7 @@ const fetchAllSuppliersByState: IController = async (req, res) => {
             httpStatusCodes.BAD_REQUEST ,error.message)
     }
 };
+
 
 // fetchAllSupplierPO
 const fetchAllSupplierPO: IController = async (req, res) => {
@@ -628,7 +631,7 @@ export default {
     fetchSupplierById,
     updateSupplierDetails,
     getHomePage,
-    fetchAllSuppliersByState,
+    fetchAllMappedUnmappedSuppliers,
     fetchAllSupplierPO,
     updateSupplierPO,
     fetchAllSuppliersList,
