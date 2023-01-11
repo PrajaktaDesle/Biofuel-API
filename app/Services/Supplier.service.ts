@@ -270,8 +270,8 @@ const loginSupplier = async (data: any) => {
 
         let supplier = await new SupplierModel().fetchUserByMobile(data.mobile, 3)
         LOGGER.info("service.supplier", supplier)
-        if (supplier.length === 0) throw new Error("User does not exist");
-        if (supplier[0].status !== 1) throw new Error("Your account is not active");
+        if (supplier.length === 0) return { userExists: 0 , isApproved : 0};
+        if (supplier[0].status !== 1) return { userExists: 1, isApproved : 0};
         // const otp = Math.floor( 100000 + Math.random() * 900000 )
         const otp = "1234";
         LOGGER.info("otp", otp)
