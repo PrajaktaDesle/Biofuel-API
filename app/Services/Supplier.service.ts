@@ -284,7 +284,7 @@ const loginSupplier = async (data: any) => {
         LOGGER.info("Data before create otp", data)
         const otp_details = await new SupplierModel().createOtp(data)
         LOGGER.info("create Otp result", otp_details)
-        return { request_id: data.req_id };
+        return { request_id: data.req_id, userExists: 1, isApproved : 1  };;
     } catch (e) {
         return e;
     }
