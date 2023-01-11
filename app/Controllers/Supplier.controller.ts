@@ -194,7 +194,9 @@ const fetchAllMappedUnmappedSuppliers: IController = async (req, res) => {
                 suppliers.message )
         }
         else{
+            // @ts-ignore
             return apiResponse.result( res,
+                // @ts-ignore
                  suppliers,
                 httpStatusCodes.OK )
         }
@@ -205,6 +207,7 @@ const fetchAllMappedUnmappedSuppliers: IController = async (req, res) => {
             httpStatusCodes.BAD_REQUEST ,error.message)
     }
 };
+
 
 // fetchAllSupplierPO
 const fetchAllSupplierPO: IController = async (req, res) => {
