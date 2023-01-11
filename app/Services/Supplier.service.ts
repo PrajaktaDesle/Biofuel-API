@@ -334,6 +334,9 @@ const fetchSuppliersMappedUnmapped = async (req:any) => {
         if (result[i].grade == 2) result[i].grade = {"label": "B", "value": 2};
         if (result[i].grade == 3) result[i].grade = {"label": "C", "value": 3};
         if (result[i].grade == 4) result[i].grade = {"label": "D", "value": 4};
+        if (result[i].isMapped == 1) result[i].status = {"label": "True", "value": 1};
+        if (result[i].isMapped == 0) result[i].status = {"label": "False", "value": 0};
+        delete result[i].isMapped
     }
         return {"data":result,"total":result.length}
     } catch (e) {
