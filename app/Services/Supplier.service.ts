@@ -25,7 +25,6 @@ const createSupplier = async (req: any) => {
         if (fd.pan_no == undefined || fd.pan_no == null || fd.pan_no == "") throw new Error("pan_no is required");
         if (fd.gstin_no == undefined || fd.gstin_no == null || fd.gstin_no == "") throw new Error("gstin_no is required");
         if (fd.msme_no == undefined || fd.msme_no == null || fd.msme_no == "") throw new Error("msme_no is required");
-        if (fd.raw_material == undefined || fd.raw_material == null || fd.raw_material == "") throw new Error("raw_material is required");
         if (fd.packaging == undefined || fd.packaging == null || fd.packaging == "") throw new Error("packaging is required");
         // if (fd.payment_term == undefined || fd.payment_term == null || fd.payment_term == "") throw new Error("payment_term is required");
         // if(fd.comment == undefined || fd.comment == null || fd.comment == "") throw new Error("comment is required");
@@ -73,12 +72,19 @@ const createSupplier = async (req: any) => {
         let user_id = suppliersData.insertId
         let profile = { "aadhaar_no": fd.aadhaar_no, "pan_no": fd.pan_no, "gstin_no": fd.gstin_no, "msme_no": fd.msme_no, "user_id": user_id, "comment": fd.comment || null, "payment_term": fd.payment_term || null, "grade": fd.grade || null }
         Object.assign(profile, s3Paths);
-        let arr = [];
-        // fd.raw_material = fd.raw_material.replaceAll("\"\\[","[");
-        for (let i = 1; i < fd.raw_material.length - 1; i += 2) {
-            arr.push([user_id, fd.raw_material[i], 1])
+
+        if (fd.raw_material == undefined || fd.raw_material == null || fd.raw_material == ""){ throw new Error("raw_material is required");}
+        else{
+            let raw_material_mapping=  JSON.parse(fd.raw_material) ;
+            let arr = []
+            if( raw_material_mapping.length ){
+                for (let i = 0; i < raw_material_mapping.length; i ++) {
+                    arr.push([user_id, raw_material_mapping[i], 1])
+                }
+            if( arr.length ) await new SupplierModel().supplierRawMaterialMappingMany(arr);
+            } 
         }
-        await new SupplierModel().supplierRawMaterialMappingMany(arr)
+        
         await new SupplierModel().supplierPackagingMapping({ "supplier_id": user_id, "packaging_id": fd.packaging })
         suppliersProfile = await new SupplierModel().createSuppliersProfile(profile)
         let billing_address = { "address_type": 1, "address": fd.billing_address, "pincode": fd.billing_pincode, "city_id": fd.billing_city, "user_type": 1, "user_id": user_id }
@@ -224,8 +230,7 @@ const updateSupplierDetails = async (req: any) => {
         // supplier packagning and raw materials details 
         if (fd.packaging !== undefined && fd.packaging !== null && fd.packaging !== "")
             packaging_mapping.packaging_id = fd.packaging;
-        if (fd.raw_material !== undefined && fd.raw_material !== null && fd.raw_material !== "")
-            raw_material_mapping.raw_material_id = fd.raw_material;
+        
         // Files validation
         let s3Images: any = {};
         if (fl.aadhaar_img !== undefined && fl.aadhaar_img !== null && fl.aadhaar_img !== "") {
@@ -249,14 +254,21 @@ const updateSupplierDetails = async (req: any) => {
         if (Object.keys(profile).length) { await new SupplierModel().updateSuppliersProfileDetails(profile, fd.id).then((data) => { LOGGER.info("supplier's profile details updated successfully") }) }
         if (Object.keys(billing_address).length) { await new SupplierModel().updateSuppliersAddressDetails(billing_address, fd.id, 1).then((data) => { LOGGER.info("supplier's billing address details updated successfully") }) }
         if (Object.keys(source_address).length) { await new SupplierModel().updateSuppliersAddressDetails(source_address, fd.id, 2).then((data) => { LOGGER.info("supplier's source address details updated successfully") }) }
-        if (Object.keys(raw_material_mapping).length) {
-            let arr = [];
-            for (let i = 1; i < fd.raw_material.length - 1; i += 2) {
-                arr.push([fd.id, fd.raw_material[i], 1])
+       
+        if (fd.raw_material !== undefined && fd.raw_material !== null && fd.raw_material !== ""){
+            raw_material_mapping = JSON.parse(fd.raw_material);
+            let arr = []
+             console.log( " raw material mapping : ", raw_material_mapping )
+            if (raw_material_mapping.length) {
+                for (let i = 0; i < raw_material_mapping.length; i ++) {
+                    arr.push([fd.id, raw_material_mapping[i], 1])
+                }
+                await new SupplierModel().updateSuppliersRawMaterialMapping({ 'status': 0 }, fd.id);
+                if( arr.length )await new SupplierModel().supplierRawMaterialMappingMany(arr).then((data) => { LOGGER.info("supplier's raw materials details updated successfully") });
             }
-            await new SupplierModel().updateSuppliersRawMaterialMapping({ 'status': 0 }, fd.id);
-            await new SupplierModel().supplierRawMaterialMappingMany(arr).then((data) => { LOGGER.info("supplier's raw materials details updated successfully") })
+           
         }
+      
         if (Object.keys(packaging_mapping).length) { await new SupplierModel().updateSuppliersPackagingMapping(packaging_mapping, fd.id).then((data) => { LOGGER.info("supplier's packaging details updated successfully") }) }
         return { "message": "supplier updated successfully", "changedRows": 1 };
     } catch (e) {
