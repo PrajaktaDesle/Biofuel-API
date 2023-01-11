@@ -8,7 +8,6 @@ export class SupplierModel extends UserModel {
     }
 
     async createSuppliersProfile(supplierData: any) {
-        console.log("insert into users_profile set ?", [supplierData])
         return await this._executeQuery("insert into users_profile set ?", [supplierData]);
     }
 

@@ -18,6 +18,7 @@ const createSupplier = async (req: any) => {
                 resolve({ fd: fields, fl: files });
             })
         }));
+        console.log( " fd, fl : ", fd, fl)
         // Profile Fields validation
         if (fd.name == undefined || fd.name == null || fd.name == "") throw new Error("name is required");
         if (fd.contact_no == undefined || fd.contact_no == null || fd.contact_no == "") throw new Error("contact_no is required");
@@ -73,12 +74,8 @@ const createSupplier = async (req: any) => {
         let user_id = suppliersData.insertId
         let profile = { "aadhaar_no": fd.aadhaar_no, "pan_no": fd.pan_no, "gstin_no": fd.gstin_no, "msme_no": fd.msme_no, "user_id": user_id, "comment": fd.comment || null, "payment_term": fd.payment_term || null, "grade": fd.grade || null }
         Object.assign(profile, s3Paths);
-        let arr = [];
-        // fd.raw_material = fd.raw_material.replaceAll("\"\\[","[");
-        for (let i = 1; i < fd.raw_material.length - 1; i += 2) {
-            arr.push([user_id, fd.raw_material[i], 1])
-        }
-        await new SupplierModel().supplierRawMaterialMappingMany(arr)
+        let arr =  JSON.parse(fd.raw_material) ;
+        if( arr.length ) await new SupplierModel().supplierRawMaterialMappingMany(arr);
         await new SupplierModel().supplierPackagingMapping({ "supplier_id": user_id, "packaging_id": fd.packaging })
         suppliersProfile = await new SupplierModel().createSuppliersProfile(profile)
         let billing_address = { "address_type": 1, "address": fd.billing_address, "pincode": fd.billing_pincode, "city_id": fd.billing_city, "user_type": 1, "user_id": user_id }
@@ -249,14 +246,10 @@ const updateSupplierDetails = async (req: any) => {
         if (Object.keys(profile).length) { await new SupplierModel().updateSuppliersProfileDetails(profile, fd.id).then((data) => { LOGGER.info("supplier's profile details updated successfully") }) }
         if (Object.keys(billing_address).length) { await new SupplierModel().updateSuppliersAddressDetails(billing_address, fd.id, 1).then((data) => { LOGGER.info("supplier's billing address details updated successfully") }) }
         if (Object.keys(source_address).length) { await new SupplierModel().updateSuppliersAddressDetails(source_address, fd.id, 2).then((data) => { LOGGER.info("supplier's source address details updated successfully") }) }
-        if (Object.keys(raw_material_mapping).length) {
-            let arr = [];
-            for (let i = 1; i < fd.raw_material.length - 1; i += 2) {
-                arr.push([fd.id, fd.raw_material[i], 1])
-            }
+        let arr =  JSON.parse(fd.raw_material) 
+        if ( arr.length ) {
             await new SupplierModel().updateSuppliersRawMaterialMapping({ 'status': 0 }, fd.id);
-            await new SupplierModel().supplierRawMaterialMappingMany(arr).then((data) => { LOGGER.info("supplier's raw materials details updated successfully") })
-        }
+            await new SupplierModel().supplierRawMaterialMappingMany(arr).then((data) => { LOGGER.info("supplier's raw materials details updated successfully") }) }
         if (Object.keys(packaging_mapping).length) { await new SupplierModel().updateSuppliersPackagingMapping(packaging_mapping, fd.id).then((data) => { LOGGER.info("supplier's packaging details updated successfully") }) }
         return { "message": "supplier updated successfully", "changedRows": 1 };
     } catch (e) {
