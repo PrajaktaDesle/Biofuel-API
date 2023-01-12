@@ -22,6 +22,3 @@ export default {
         `${base}/address/cities-by-state`,
     ],
 };
-
-
-
