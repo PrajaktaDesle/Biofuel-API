@@ -514,16 +514,19 @@ const fetchAllCSOList: IController = async (req, res) => {
 };
 const fetchAllMappedSuppliersByCustomerId: IController = async (req, res) => {
     try {
-        let query = " "
-        if (req.body.query != "") {
-            query = ` and sp.name like '%${req.body.query}%' `
-        }
-        let condition = " "
-        if (req.body.id != "") {
+        let condition = " ", customer : any, count = 0 
+        if (req.body.id !== "" && req.body.id !== null) {
             condition = ` and csm.customer_id = '${req.body.id}' `
+            let query = " "
+            if (req.body.query != "") {
+                query = ` and sp.name like '%${req.body.query}%' `
+            }
+             customer = await customerService.fetchAllMappedSuppliersByCustomerId(req.body.pageIndex, req.body.pageSize, req.body.sort, query, condition)
+             count = await customerService.fetchAllMappedSuppliersByCustomerIdCount(query, condition);
         }
-        let customer = await customerService.fetchAllMappedSuppliersByCustomerId(req.body.pageIndex, req.body.pageSize, req.body.sort, query, condition)
-        let count = await customerService.fetchAllMappedSuppliersByCustomerIdCount(query, condition);
+        else{
+            customer = []
+        } 
         if (customer instanceof Error) {
             return apiResponse.error(res,
                 httpStatusCodes.BAD_REQUEST,

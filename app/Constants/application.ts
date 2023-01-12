@@ -14,6 +14,11 @@ export default {
         `${base}/supplier/register`,
         `${base}/supplier/login`,
         `${base}/supplier/verify-OTP`,
-        `${base}/admin/sign-in`
+        `${base}/admin/sign-in`,
+        `${base}/product/raw_materials/all`,
+        `${base}/product/packaging/all`,
+        `${base}/address/states/all`,
+        `${base}/address/cities/all`,
+        `${base}/address/cities-by-state`,
     ],
 };
