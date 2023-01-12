@@ -789,6 +789,7 @@ const addSupplierSection = async (data: any) => {
             else { model_data.status = 1 }
             
             if( id ){
+                console.log( "model data : ", model_data )
                 model_result.push( await new SupplierModel().updateSupplierSelection(model_data, id) )
             }
             else{

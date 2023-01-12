@@ -809,7 +809,7 @@ const fetchAllCSOList = async (query: string) => {
     }
 }
 
-const fetchAllMappedSuppliersByCustomerId = async (pageIndex: number, pageSize: number, sort: any, query: string, condition: string) => {
+const fetchAllMappedSuppliersByCustomerId = async (pageIndex: number, pageSize: number, sort: any, query: string, sales_order_id : number, condition: string) => {
     let orderQuery: string;
     try {
         if (sort.key != "") {
@@ -817,15 +817,15 @@ const fetchAllMappedSuppliersByCustomerId = async (pageIndex: number, pageSize: 
         } else {
             orderQuery = " ORDER BY cs.status DESC ";
         }
-        let customers = await new CustomerModel().fetchAllMappedSuppliersByCustomerId(pageSize, (pageIndex - 1) * pageSize, orderQuery, query, condition)
+        let customers = await new CustomerModel().fetchAllMappedSuppliersByCustomerId(pageSize, (pageIndex - 1) * pageSize, orderQuery, query, sales_order_id, condition)
         return customers;
     } catch (e) {
         return e
     }
 }
-const fetchAllMappedSuppliersByCustomerIdCount = async (query: string, condition: string) => {
+const fetchAllMappedSuppliersByCustomerIdCount = async (query: string, sales_order_id : number, condition: string) => {
     try {
-        let customers = await new CustomerModel().fetchAllMappedSuppliersByCustomerIdCount(query, condition);
+        let customers = await new CustomerModel().fetchAllMappedSuppliersByCustomerIdCount(query, sales_order_id, condition);
         return customers.length;
     } catch (error: any) {
         return error
