@@ -258,7 +258,6 @@ const updateSupplierDetails = async (req: any) => {
         if (fd.raw_material !== undefined && fd.raw_material !== null && fd.raw_material !== ""){
             raw_material_mapping = JSON.parse(fd.raw_material);
             let arr = []
-             console.log( " raw material mapping : ", raw_material_mapping )
             if (raw_material_mapping.length) {
                 for (let i = 0; i < raw_material_mapping.length; i ++) {
                     arr.push([fd.id, raw_material_mapping[i], 1])
