@@ -4,7 +4,6 @@ import apiResponse from '../utilities/ApiResponse';
 import constants from "../Constants";
 import LOGGER from "../config/LOGGER";
 import CustomerService from "../Services/Customer.service";
-import productService from "../Services/Product.service";
 import customerService from "../Services/Customer.service";
 
 const Create: IController = async (req, res) => {
@@ -103,7 +102,7 @@ const fetchAllCustomers: IController = async (req, res) => {
     }
 };
 // customer-supplier mapping
-const Create_customer_supplier: IController = async (req, res) => {
+const Create_customer_supplier_mapping: IController = async (req, res) => {
     let CSM: any;
     try {
         CSM = await CustomerService.CreateCSMService(req);
@@ -588,7 +587,7 @@ export default {
     fetchCustomerById,
     updateCustomerDetails,
     fetchAllCustomers,
-    Create_customer_supplier,
+    Create_customer_supplier_mapping,
     updateCSMStatus,
     fetchAllCSM,
     createCustomerEstimate,

@@ -85,11 +85,14 @@ export class CustomerModel extends BaseModel {
         );
     }
     // customer-supplier mapping
-    async createCSM(data: any) {
+    async createCSM(data:any) {
         return await this._executeQuery(
-            "insert ignore into customer_supplier_mapping set ? ",
+            "insert into customer_supplier_mapping set ? ",
             [data]
         );
+    }
+    async getCustomerId(address_id:number){
+        return await this._executeQuery(`select user_id from addresses where id = ?`, [address_id])
     }
     async createCustomerSupplierMapping(
         customer_id: number,

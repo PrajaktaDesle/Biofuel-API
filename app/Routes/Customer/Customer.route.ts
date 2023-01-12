@@ -23,7 +23,7 @@ router.post(
 router.post(
     '/add',
     celebrate(CustomerSchema.customer_supplier),
-    CustomerController.Create_customer_supplier
+    CustomerController.Create_customer_supplier_mapping
 );
 router.put(
     '/update/mapping/status',

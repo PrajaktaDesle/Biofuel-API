@@ -219,23 +219,19 @@ const fetchAllCustomerCount = async (query: string) => {
 
 // customer-supplier mapping
 const CreateCSMService = async (req: any) => {
-    let result, suppliers: any
+    let customer_id,address_id,suppliers,result:any;
     try {
-        if (req.body.customer_id !== undefined && req.body.customer_id !== null && req.body.customer_id !== "")
-            if (req.body.supplier_id !== undefined && req.body.supplier_id !== null && req.body.supplier_id !== "")
-                //  data= await new CustomerModel().fetchCustomerSupplier(req.body.customer_id,req.body.supplier_id)
-                // if(data.length == 0) throw new Error("csm ids not found")
-                // result = await new CustomerModel().createCSM(data[0])
-                suppliers = req.body.supplier_id
-        for (var i = 0; i < suppliers.length; i++) {
-            result = await new CustomerModel().createCustomerSupplierMapping(req.body.customer_id, suppliers[i])
+    address_id = req.body.address_id
+    let id = await new CustomerModel().getCustomerId(address_id)
+        customer_id = id[0].user_id
+        suppliers =  req.body.supplier_id
+        for(var i = 0 ; i < suppliers.length ; i++){
+            let data = {"customer_id": customer_id, "address_id":address_id, "supplier_id":suppliers[i]}
+            result = await new CustomerModel().createCSM(data)
         }
-        if (result.insertId == 0) {
-            return {message: " entry not found ", insertId: result.insertId}
-        }
-        return {message: "added successfully ", insertId: result.insertId}
+        return result
     } catch (e) {
-        throw {message: "mapping already exists for this ids", e}
+        throw {message: "mapping already exists ", e}
     }
 }
 
