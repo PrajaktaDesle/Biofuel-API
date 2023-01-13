@@ -625,7 +625,7 @@ const supplierPONoExistsOrNot: IController = async (req, res) => {
 };
 
 const fetchPotentialOrderBySupplierId: IController = async (req, res) => {
-    supplierService.fetchPotentialOrderBySupplierId(req.query.id)
+    supplierService.fetchPotentialOrderBySupplierId(req.query.supplier_id)
         .then( (supplier : any) => {
             if(supplier instanceof Error){
                 LOGGER.info("User 2", supplier.message)
