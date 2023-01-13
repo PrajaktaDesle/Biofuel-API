@@ -519,10 +519,10 @@ const fetchAllMappedSuppliersByCustomerId: IController = async (req, res) => {
             condition = ` and csm.customer_id = '${req.body.id}' `
             let query = " "
             if (req.body.query != "") {
-                query = ` and sp.name like '%${req.body.query}%' `
+                query = ` and (sp.name like '%${req.body.query}%' or  sp.mobile like '%${req.body.query}%' ) `
             }
-             customer = await customerService.fetchAllMappedSuppliersByCustomerId(req.body.pageIndex, req.body.pageSize, req.body.sort, query, condition)
-             count = await customerService.fetchAllMappedSuppliersByCustomerIdCount(query, condition);
+             customer = await customerService.fetchAllMappedSuppliersByCustomerId(req.body.pageIndex, req.body.pageSize, req.body.sort, query, req.body.id,  req.body.sales_order_id, condition)
+             count = await customerService.fetchAllMappedSuppliersByCustomerIdCount(query, req.body.id, req.body.sales_order_id, condition);
         }
         else{
             customer = []

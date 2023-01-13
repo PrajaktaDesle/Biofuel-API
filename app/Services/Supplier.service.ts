@@ -18,6 +18,7 @@ const createSupplier = async (req: any) => {
                 resolve({ fd: fields, fl: files });
             })
         }));
+        console.log( " fd, fl : ", fd, fl)
         // Profile Fields validation
         if (fd.name == undefined || fd.name == null || fd.name == "") throw new Error("name is required");
         if (fd.contact_no == undefined || fd.contact_no == null || fd.contact_no == "") throw new Error("contact_no is required");
@@ -340,12 +341,6 @@ const fetchSuppliersMappedUnmapped = async (req:any) => {
         // @ts-ignore
         result = await new SupplierModel().getMappedUnmappedSuppliers(state_id, address_id)
         if (result.length == null) throw new Error(" supplier not found!")
-        for (var i = 0; i < result.length; i++) {
-        if (result[i].grade == 1) result[i].grade = {"label": "A", "value": 1};
-        if (result[i].grade == 2) result[i].grade = {"label": "B", "value": 2};
-        if (result[i].grade == 3) result[i].grade = {"label": "C", "value": 3};
-        if (result[i].grade == 4) result[i].grade = {"label": "D", "value": 4};
-    }
         return {"data":result,"total":result.length}
     } catch (e) {
         return e
@@ -794,6 +789,7 @@ const addSupplierSection = async (data: any) => {
             else { model_data.status = 1 }
             
             if( id ){
+                console.log( "model data : ", model_data )
                 model_result.push( await new SupplierModel().updateSupplierSelection(model_data, id) )
             }
             else{
@@ -883,7 +879,16 @@ const fetchAllPaymentsBySupplierId = async(req:any)=>{
         throw err
     }
 }
-
+const fetchPotentialOrderBySupplierId = async( id : any )=> {
+    let result
+    try{
+    
+        result = await new SupplierModel().fetchPotentialOrderBySupplierId(id)
+        return result
+    }catch(err:any){
+        throw err
+    }
+}
 const supplierPONoExistsOrNot = async (req: any) => {
     try {
         let sponumber = req.query.sponumber
@@ -927,5 +932,6 @@ export default {
     updateSupplierSelection,
     fetchAllNotificationsBySupplierId,
     fetchAllPaymentsBySupplierId,
-    supplierPONoExistsOrNot
+    supplierPONoExistsOrNot,
+    fetchPotentialOrderBySupplierId
 }
