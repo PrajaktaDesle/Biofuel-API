@@ -879,7 +879,16 @@ const fetchAllPaymentsBySupplierId = async(req:any)=>{
         throw err
     }
 }
-
+const fetchPotentialOrderBySupplierId = async( id : any )=> {
+    let result
+    try{
+    
+        result = await new SupplierModel().fetchPotentialOrderBySupplierId(id)
+        return result
+    }catch(err:any){
+        throw err
+    }
+}
 const supplierPONoExistsOrNot = async (req: any) => {
     try {
         let sponumber = req.query.sponumber
@@ -923,5 +932,6 @@ export default {
     updateSupplierSelection,
     fetchAllNotificationsBySupplierId,
     fetchAllPaymentsBySupplierId,
-    supplierPONoExistsOrNot
+    supplierPONoExistsOrNot,
+    fetchPotentialOrderBySupplierId
 }
