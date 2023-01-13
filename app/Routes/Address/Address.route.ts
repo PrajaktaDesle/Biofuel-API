@@ -13,7 +13,7 @@ router.get(
     '/states/all',
     addressController.getAllStates
   );
-router.get(
+router.post(
     '/cities-by-state',
     celebrate( addressSchema.citiesByState ),
     addressController.getCitiesByState
