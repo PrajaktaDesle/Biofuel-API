@@ -512,12 +512,15 @@ const createSupplierPO = async (data: any) => {
 }
 const createChallanService = async (fields: any) => {
     let data: any = {}
+    let notiNo
     try {
         if (fields.quantity !== undefined && fields.quantity !== null && fields.quantity !== "")
             data.quantity = fields.quantity
         if (fields.DeliveryDate !== undefined && fields.DeliveryDate !== null && fields.DeliveryDate !== "")
             data.delivery_date = fields.DeliveryDate
         if (fields.NotificationNo !== undefined && fields.NotificationNo !== null && fields.NotificationNo !== "")
+            notiNo = await new SupplierModel().getnotificationNO(fields.NotificationNo)         
+            if(notiNo.length !== 0 ) throw new Error("notification no already exist")
             data.dispatch_id = fields.NotificationNo
         if (fields.VehicleNo !== undefined && fields.VehicleNo !== null && fields.VehicleNo !== "")
             data.vehicle_no = fields.VehicleNo

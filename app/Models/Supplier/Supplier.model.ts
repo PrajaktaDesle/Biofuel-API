@@ -169,6 +169,10 @@ export class SupplierModel extends UserModel {
     async createDeliveryChallenModel(data: any) {
         return await this._executeQuery("insert into purchase_order_delivery_challan set ?", [data]);
     }
+    async getnotificationNO(notiNo: Number) {
+        return await this._executeQuery("select dispatch_id from purchase_order_delivery_challan where dispatch_id = ?", [notiNo]);
+    }
+
     async fetchAllNotificationsBySupplierId(id: number) {
         return await this._executeQuery(`select pon.id as NotificationNo,spo.supplier_id, sp.name as supplier,
                                                 pon.status, DATE_FORMAT(pon.created_at, '%d-%m-%Y') as date, pon.created_at,pon.updated_at 
