@@ -27,7 +27,7 @@ router.post(
 );
 router.put(
     '/update/mapping/status',
-    celebrate(CustomerSchema.updateStatus),
+    // celebrate(CustomerSchema.updateStatus),
     CustomerController.updateCSMStatus
 );
 router.post(
