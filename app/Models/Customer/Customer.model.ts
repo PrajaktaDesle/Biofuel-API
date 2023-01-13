@@ -370,9 +370,10 @@ export class CustomerModel extends BaseModel {
              deliveredRate.delivered_rate as latest_delivered_rate,
              qt_factory_rate,qt_transportation_rate, qt_delivered_rate, qt_quantity, ss.status ,ac.id as city_id, ac.name as city,  ast.name as state, csm.created_at , csm.updated_at
              FROM customer_supplier_mapping csm
+             left join customers cs on cs.id=csm.customer_id
              left join customer_sales_orders cso on cso.customer_id=csm.customer_id
              INNER join user sp on sp.id = csm.supplier_id
-             INNER join supplier_selection ss on ss.sales_order_id= ${sales_order_id} and ss.supplier_id = sp.id
+             LEFT join supplier_selection ss on ss.sales_order_id= ${sales_order_id} and ss.supplier_id = sp.id
              LEFT JOIN(select supplier_id, rate as factory_rate from supplier_purchase_order where id in
              (SELECT max(id) FROM supplier_purchase_order  
              where rate_type = "0" group by supplier_id))factoryRate on sp.id = factoryRate.supplier_id
@@ -383,8 +384,9 @@ export class CustomerModel extends BaseModel {
              left join addresses a ON sp.id=a.user_id and a.address_type = 2
              left join address_city ac ON ac.id=a.city_id 
              left join address_state ast ON ac.state_id=ast.id
-             where csm.status = 1 and csm.customer_id = ${customer_id}
+             where csm.status = 1 and csm.customer_id = ${customer_id}                                        
              ${condition}  ${query}
+             group by csm.supplier_id
              ${sortOrder}
              LIMIT ? OFFSET ? `,
             [limit, offset]
@@ -405,7 +407,7 @@ export class CustomerModel extends BaseModel {
              left join customers cs on cs.id=csm.customer_id
              left join customer_sales_orders cso on cso.customer_id=csm.customer_id
              INNER join user sp on sp.id = csm.supplier_id
-             left join supplier_selection ss on ss.sales_order_id= ${sales_order_id} and ss.supplier_id = sp.id
+             LEFT join supplier_selection ss on ss.sales_order_id= ${sales_order_id} and ss.supplier_id = sp.id
              LEFT JOIN(select supplier_id, rate as factory_rate from supplier_purchase_order where id in
              (SELECT max(id) FROM supplier_purchase_order  
              where rate_type = "0" group by supplier_id))factoryRate on sp.id = factoryRate.supplier_id
@@ -416,8 +418,9 @@ export class CustomerModel extends BaseModel {
              left join addresses a ON sp.id=a.user_id and a.address_type = 2
              left join address_city ac ON ac.id=a.city_id 
              left join address_state ast ON ac.state_id=ast.id
-             where csm.status = 1 and csm.customer_id = ${customer_id}
+             where csm.status = 1 and csm.customer_id = ${customer_id} 
              ${condition}  ${query}
+             group by csm.supplier_id
              `,
             []
         );
