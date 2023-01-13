@@ -51,8 +51,8 @@ const getAllStates: IController = async (req, res) => {
 
 const getCitiesByState: IController = async (req:any, res:any) => {
     try {
-        let query : string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " AND act.name like '%"+ req.query.key + "%'" : "";
-        let states : any = await addressService.getCitiesByState(req.query.state_id, query);
+        let query : string = (req.body.key !== undefined && req.body.key !== null && req.body.key !== "") ? " AND act.name like '%"+ req.body.key + "%'" : "";
+        let states : any = await addressService.getCitiesByState(req.body.state_id, query);
         if (states instanceof Error) {
             LOGGER.info("error", states)
             apiResponse.error(res, httpStatusCodes.BAD_REQUEST);

@@ -128,4 +128,11 @@ router.get(
   '/supplierPONumber/exists',
   supplierController.supplierPONoExistsOrNot
 )
+
+
+router.get(
+  '/potential/order/fetch',
+  supplierController.fetchPotentialOrderBySupplierId
+)
+
 export default router;

@@ -8,7 +8,6 @@ export class SupplierModel extends UserModel {
     }
 
     async createSuppliersProfile(supplierData: any) {
-        console.log("insert into users_profile set ?", [supplierData])
         return await this._executeQuery("insert into users_profile set ?", [supplierData]);
     }
 
@@ -127,7 +126,7 @@ export class SupplierModel extends UserModel {
     async getHomePage() {
         return await this._executeQuery("select id , name, image_url from app_homepage ", [])
     }
-    async getMappedUnmappedSuppliers(state_id: number,address_id: number) {
+    async getMappedUnmappedSuppliers(state_id: number, address_id: number) {
         return await this._executeQuery(`select sp.id,sp.name as supplier, sp.email,sp.mobile, cty.name as city,st.name as state,prof.grade,csm.status, csm.customer_id,csm.address_id, if(csm.address_id is null, false, true) as isMapped  from user sp
                                                     LEFT JOIN addresses a on sp.id = a.user_id and a.user_type = 1 and a.address_type = 2  
                                                     LEFT JOIN users_profile prof on sp.id = prof.user_id 
@@ -315,4 +314,19 @@ export class SupplierModel extends UserModel {
     async supplierPOIdNoExistsOrNot(id: number, no: number) {
         return await this._executeQuery("select id from supplier_purchase_order where id=? and po_number = ? ", [id, no])
     }
+    async fetchPotentialOrderBySupplierId(id: number) {
+        return await this._executeQuery(` select ss.id, ss.supplier_id, cso.customer_id, cs.name as customer, cso.payment_term, a.address, a.address_type,ac.name as city, ast.name as state ,  a.pincode, product_id,p.name as product, cso.product_description, raw_material_id, rm.name as raw_material, packaging_id, pp.name as packaging, cso.rate, cso.quantity, cso.tnc, cso.customer_note,  DATE_FORMAT(cso.delivery_date, '%Y-%m-%d') as delivery_date, ss.status from supplier_selection ss
+        left join customer_sales_orders cso on cso.id = ss.sales_order_id
+        left join products p ON p.id=cso.product_id
+        left join customers cs ON cs.id=cso.customer_id 
+        left join addresses a on a.user_id = cs.id and a.address_type = 1
+        left join address_city ac on ac.id = a.city_id
+        left join address_state ast on ast.id = ac.id
+        left join product_raw_material rm ON rm.id=cso.raw_material_id
+        left join product_packaging pp ON pp.id=cso.packaging_id
+        where ss.supplier_id = ? and ss.status > 0 `, [id])
+    }
+    // async updateSupplierPaymentDetails(data: any, id: number) {
+    //     return await this._executeQuery(`update supplier_payments set ? where id = ?`, [data, id])
+    // }
 }
