@@ -85,9 +85,16 @@ export class CustomerModel extends BaseModel {
         );
     }
     // customer-supplier mapping
-    async createCSM(data: any) {
+    async addCustomerSupplierMapping(data: any) {
         return await this._executeQuery(
-            "insert ignore into customer_supplier_mapping set ? ",
+            "insert into customer_supplier_mapping ( customer_id, state_id, supplier_id ) values ? ",
+            [data]
+        );
+    }
+    async addOrUpdateCustomerSupplierMapping(data: any) {
+        return await this._executeQuery(
+            `INSERT INTO customer_supplier_mapping set ? ON DUPLICATE KEY UPDATE    
+            status=1 `,
             [data]
         );
     }
@@ -104,10 +111,17 @@ export class CustomerModel extends BaseModel {
             [customer_id, supplier_id]
         );
     }
-    async updateStatusById(id: number, status: number) {
+
+    async updateStatusById(status: number, id: number) {
         return await this._executeQuery(
-            "update customer_supplier_mapping set status = ? where id = ? ",
+            "update customer_supplier_mapping set status = ? where id = ?  ",
             [status, id]
+        );
+    }
+    async updateCustomerSupplierMapping(data : any, customer_id: number, state_id: number) {
+        return await this._executeQuery(
+            "update customer_supplier_mapping set ? where customer_id = ? and state_id = ? ",
+            [data, customer_id, state_id]
         );
     }
     async fetchCSM(customer_id: number, supplier_id: number) {
@@ -337,7 +351,7 @@ export class CustomerModel extends BaseModel {
             []
         );
     }
-    async fetchAllCustomersJson(query: string) {
+    async fetchAllCustomersList(query: string) {
         return await this._executeQuery(
             `SELECT cs.id as value,  cs.name AS label FROM biofuel.customers cs where cs.status = 1 ${query}`,
             []

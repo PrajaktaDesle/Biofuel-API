@@ -46,10 +46,11 @@ export default {
             id:Joi.number().required()
         }
     },
-    customer_supplier: {
+    addCustomerSupplierMapping: {
         [Segments.BODY]:  Joi.object().keys({
             customer_id: Joi.number().required(),
-            supplier_id: Joi.array().required()
+            supplier_id: Joi.array().required(),
+            state_id: Joi.number().required(),
         }).unknown()
     },
     updateStatus: {

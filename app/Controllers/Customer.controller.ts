@@ -103,10 +103,11 @@ const fetchAllCustomers: IController = async (req, res) => {
     }
 };
 // customer-supplier mapping
-const Create_customer_supplier: IController = async (req, res) => {
+const addCustomerSupplierMapping: IController = async (req, res) => {
     let CSM: any;
     try {
-        CSM = await CustomerService.CreateCSMService(req);
+        CSM = await CustomerService.addCustomerSupplierMapping(req);
+        console.log( " Csm : ", CSM )
         if (CSM instanceof Error) {
             apiResponse.error(res,
                 httpStatusCodes.BAD_REQUEST);
@@ -445,9 +446,9 @@ const fetchAllMappedSuppliersByAddressID: IController = async (req, res) => {
         });
 };
 
-const fetchAllCustomersJson: IController = async (req, res) => {
+const fetchAllCustomersList: IController = async (req, res) => {
     let query: string = (req.query.key !== undefined && req.query.key !== null && req.query.key !== "") ? " AND cs.name like '%" + req.query.key + "%'" : "";
-    await CustomerService.fetchAllCustomersJson(query)
+    await CustomerService.fetchAllCustomersList(query)
         .then((customer: any) => {
             if (customer instanceof Error) {
                 apiResponse.error(
@@ -591,7 +592,7 @@ export default {
     fetchCustomerById,
     updateCustomerDetails,
     fetchAllCustomers,
-    Create_customer_supplier,
+    addCustomerSupplierMapping,
     updateCSMStatus,
     fetchAllCSM,
     createCustomerEstimate,
@@ -603,7 +604,7 @@ export default {
     fetchCustomerSalesOrderById,
     fetchAllCustomerSalesOrders,
     fetchAllSuppliersAgainstCustomer,
-    fetchAllCustomersJson,
+    fetchAllCustomersList,
     fetchAllActiveCustomers, fetchAllMappedSuppliersByAddressID,
     fetchAllCustomersSOList,
     fetchAllMappedSuppliersByCustomerId,

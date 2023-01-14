@@ -334,12 +334,12 @@ const getHomePage = async () => {
     return data
 }
 const fetchSuppliersMappedUnmapped = async (req:any) => {
-    let result, state_id, address_id
+    let result, state_id, customer_id
     try {
         state_id = req.query.state_id
-        address_id = req.query.address_id
+        customer_id = req.query.customer_id
         // @ts-ignore
-        result = await new SupplierModel().getMappedUnmappedSuppliers(state_id, address_id)
+        result = await new SupplierModel().getMappedUnmappedSuppliers(customer_id, state_id)
         if (result.length == null) throw new Error(" supplier not found!")
         return {"data":result,"total":result.length}
     } catch (e) {

@@ -217,26 +217,22 @@ const fetchAllCustomerCount = async (query: string) => {
     }
 }
 
-// customer-supplier mapping
-const CreateCSMService = async (req: any) => {
-    let result, suppliers: any
-    try {
-        if (req.body.customer_id !== undefined && req.body.customer_id !== null && req.body.customer_id !== "")
-            if (req.body.supplier_id !== undefined && req.body.supplier_id !== null && req.body.supplier_id !== "")
-                //  data= await new CustomerModel().fetchCustomerSupplier(req.body.customer_id,req.body.supplier_id)
-                // if(data.length == 0) throw new Error("csm ids not found")
-                // result = await new CustomerModel().createCSM(data[0])
-                suppliers = req.body.supplier_id
-        for (var i = 0; i < suppliers.length; i++) {
-            result = await new CustomerModel().createCustomerSupplierMapping(req.body.customer_id, suppliers[i])
-        }
-        if (result.insertId == 0) {
-            return {message: " entry not found ", insertId: result.insertId}
-        }
-        return {message: "added successfully ", insertId: result.insertId}
-    } catch (e) {
-        throw {message: "mapping already exists for this ids", e}
+const addCustomerSupplierMapping = async (req: any) => {
+    let fields = req.body
+    let result = await new CustomerModel().updateCustomerSupplierMapping( { status : 0 }, fields.customer_id, fields.state_id)
+    if( result.info.split(' ')[2] == 0 ){
+        let data = fields.supplier_id.map( (supplier:any) => ([fields.customer_id , fields.state_id,  supplier]))
+        // Multiple recoreds insert in one query beacuase not data found for given custoemr_id and state_id 
+        let result =  await new CustomerModel().addCustomerSupplierMapping( data ) 
     }
+    else{
+        let data = fields.supplier_id.map( async (supplier:any) => {
+        // insert if customer_id , state_id and supplier_id does not exists  or update if they  exists   
+        let result = await new CustomerModel().addOrUpdateCustomerSupplierMapping( {"customer_id" : fields.customer_id, "state_id" : fields.state_id, "supplier_id": supplier } )
+        })
+    }
+    return result
+   
 }
 
 const updateCSMService = async (req: any) => {
@@ -759,9 +755,9 @@ const fetchAllCustomerSalesOrdersCount = async (query: string) => {
         return error
     }
 }
-const fetchAllCustomersJson = async (query: string) => {
+const fetchAllCustomersList = async (query: string) => {
     try {
-        let result = await new CustomerModel().fetchAllCustomersJson(query);
+        let result = await new CustomerModel().fetchAllCustomersList(query);
         if (result.length === 0) {
             throw new Error("Customers not found!")
 
@@ -867,7 +863,7 @@ export default {
     updateCustomerdetails,
     fetchAllCustomer,
     fetchAllCustomerCount,
-    CreateCSMService,
+    addCustomerSupplierMapping,
     updateCSMService,
     fetchAllCSM,
     fetchCSMCount,
@@ -881,7 +877,7 @@ export default {
     fetchAllCustomerSalesOrders, fetchAllMappedSuppliers,
     fetchAllCustomerEsimatesCount,
     fetchAllCustomerSalesOrdersCount,
-    fetchAllCustomersJson,
+    fetchAllCustomersList,
     fetchAllActiveCustomerService, fetchSuppliers,
     fetchAllCustomersSOList,
     fetchAllMappedSuppliersByCustomerId,

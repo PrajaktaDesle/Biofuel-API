@@ -44,7 +44,7 @@ router.get(
 );
 router.get(
     '/fetch/all/mapped-unmapped',
-    celebrate(supplierSchema.fetchSupplierByState),
+    celebrate(supplierSchema.validateFetchAllMappedUnmappedSuppliers),
     supplierController.fetchAllMappedUnmappedSuppliers
 )
 router.post(
