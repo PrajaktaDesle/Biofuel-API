@@ -8,6 +8,7 @@ import moment from 'moment';
 import Encryption from "../utilities/Encryption";
 import { CustomerModel } from "../Models/Customer/Customer.model";
 import dayjs from 'dayjs'
+import { rm } from "fs";
 
 const createSupplier = async (req: any) => {
     try {
@@ -18,7 +19,7 @@ const createSupplier = async (req: any) => {
                 resolve({ fd: fields, fl: files });
             })
         }));
-        console.log( " fd, fl : ", fd, fl)
+        console.log(" fd, fl : ", fd, fl)
         // Profile Fields validation
         if (fd.name == undefined || fd.name == null || fd.name == "") throw new Error("name is required");
         if (fd.contact_no == undefined || fd.contact_no == null || fd.contact_no == "") throw new Error("contact_no is required");
@@ -74,18 +75,18 @@ const createSupplier = async (req: any) => {
         let profile = { "aadhaar_no": fd.aadhaar_no, "pan_no": fd.pan_no, "gstin_no": fd.gstin_no, "msme_no": fd.msme_no, "user_id": user_id, "comment": fd.comment || null, "payment_term": fd.payment_term || null, "grade": fd.grade || null }
         Object.assign(profile, s3Paths);
 
-        if (fd.raw_material == undefined || fd.raw_material == null || fd.raw_material == ""){ throw new Error("raw_material is required");}
-        else{
-            let raw_material_mapping=  JSON.parse(fd.raw_material) ;
+        if (fd.raw_material == undefined || fd.raw_material == null || fd.raw_material == "") { throw new Error("raw_material is required"); }
+        else {
+            let raw_material_mapping = JSON.parse(fd.raw_material);
             let arr = []
-            if( raw_material_mapping.length ){
-                for (let i = 0; i < raw_material_mapping.length; i ++) {
+            if (raw_material_mapping.length) {
+                for (let i = 0; i < raw_material_mapping.length; i++) {
                     arr.push([user_id, raw_material_mapping[i], 1])
                 }
-            if( arr.length ) await new SupplierModel().supplierRawMaterialMappingMany(arr);
-            } 
+                if (arr.length) await new SupplierModel().supplierRawMaterialMappingMany(arr);
+            }
         }
-        
+
         await new SupplierModel().supplierPackagingMapping({ "supplier_id": user_id, "packaging_id": fd.packaging })
         suppliersProfile = await new SupplierModel().createSuppliersProfile(profile)
         let billing_address = { "address_type": 1, "address": fd.billing_address, "pincode": fd.billing_pincode, "city_id": fd.billing_city, "user_type": 1, "user_id": user_id }
@@ -231,7 +232,7 @@ const updateSupplierDetails = async (req: any) => {
         // supplier packagning and raw materials details 
         if (fd.packaging !== undefined && fd.packaging !== null && fd.packaging !== "")
             packaging_mapping.packaging_id = fd.packaging;
-        
+
         // Files validation
         let s3Images: any = {};
         if (fl.aadhaar_img !== undefined && fl.aadhaar_img !== null && fl.aadhaar_img !== "") {
@@ -255,20 +256,17 @@ const updateSupplierDetails = async (req: any) => {
         if (Object.keys(profile).length) { await new SupplierModel().updateSuppliersProfileDetails(profile, fd.id).then((data) => { LOGGER.info("supplier's profile details updated successfully") }) }
         if (Object.keys(billing_address).length) { await new SupplierModel().updateSuppliersAddressDetails(billing_address, fd.id, 1).then((data) => { LOGGER.info("supplier's billing address details updated successfully") }) }
         if (Object.keys(source_address).length) { await new SupplierModel().updateSuppliersAddressDetails(source_address, fd.id, 2).then((data) => { LOGGER.info("supplier's source address details updated successfully") }) }
-       
-        if (fd.raw_material !== undefined && fd.raw_material !== null && fd.raw_material !== ""){
+
+        if (fd.raw_material !== undefined && fd.raw_material !== null && fd.raw_material !== "") {
             raw_material_mapping = JSON.parse(fd.raw_material);
-            let arr = []
+            await new SupplierModel().updateSuppliersRawMaterialMapping({ 'status': 0 }, id);
             if (raw_material_mapping.length) {
-                for (let i = 0; i < raw_material_mapping.length; i ++) {
-                    arr.push([fd.id, raw_material_mapping[i], 1])
-                }
-                await new SupplierModel().updateSuppliersRawMaterialMapping({ 'status': 0 }, fd.id);
-                if( arr.length )await new SupplierModel().supplierRawMaterialMappingMany(arr).then((data) => { LOGGER.info("supplier's raw materials details updated successfully") });
+                let data = raw_material_mapping.map(async (rm: any) => {
+                    // insert if supplier_id  and raw_material_id does not exists  or update if they  exists   
+                    await new SupplierModel().addOrUpdateSuppliersRawMaterialMapping({ supplier_id: id, raw_material_id: rm })
+                })
             }
-           
         }
-      
         if (Object.keys(packaging_mapping).length) { await new SupplierModel().updateSuppliersPackagingMapping(packaging_mapping, fd.id).then((data) => { LOGGER.info("supplier's packaging details updated successfully") }) }
         return { "message": "supplier updated successfully", "changedRows": 1 };
     } catch (e) {
@@ -282,8 +280,8 @@ const loginSupplier = async (data: any) => {
 
         let supplier = await new SupplierModel().fetchUserByMobile(data.mobile, 3)
         LOGGER.info("service.supplier", supplier)
-        if (supplier.length === 0) return { userExists: 0 , isApproved : 0};
-        if (supplier[0].status !== 1) return { userExists: 1, isApproved : 0};
+        if (supplier.length === 0) return { userExists: 0, isApproved: 0 };
+        if (supplier[0].status !== 1) return { userExists: 1, isApproved: 0 };
         // const otp = Math.floor( 100000 + Math.random() * 900000 )
         const otp = "1234";
         LOGGER.info("otp", otp)
@@ -296,7 +294,7 @@ const loginSupplier = async (data: any) => {
         LOGGER.info("Data before create otp", data)
         const otp_details = await new SupplierModel().createOtp(data)
         LOGGER.info("create Otp result", otp_details)
-        return { request_id: data.req_id, userExists: 1, isApproved : 1  };;
+        return { request_id: data.req_id, userExists: 1, isApproved: 1 };;
     } catch (e) {
         return e;
     }
@@ -333,7 +331,7 @@ const getHomePage = async () => {
     LOGGER.info(data)
     return data
 }
-const fetchSuppliersMappedUnmapped = async (req:any) => {
+const fetchSuppliersMappedUnmapped = async (req: any) => {
     let result, state_id, customer_id
     try {
         state_id = req.query.state_id
@@ -341,7 +339,7 @@ const fetchSuppliersMappedUnmapped = async (req:any) => {
         // @ts-ignore
         result = await new SupplierModel().getMappedUnmappedSuppliers(customer_id, state_id)
         if (result.length == null) throw new Error(" supplier not found!")
-        return {"data":result,"total":result.length}
+        return { "data": result, "total": result.length }
     } catch (e) {
         return e
     }
@@ -381,21 +379,21 @@ const updateSupplierPO = async (data: any) => {
             sales_order.supplier_id = data.supplier;
 
         let estimateNo = ((await new SupplierModel().supplierPONoExistsOrNot(data.supplier_po_number))[0]) ? (await new SupplierModel().supplierPONoExistsOrNot(data.supplier_po_number))[0] : null;
-        let estimateNoWithId = ((await new SupplierModel().supplierPOIdNoExistsOrNot(data.id,data.supplier_po_number))[0]) ? (await new SupplierModel().supplierPOIdNoExistsOrNot(data.id,data.supplier_po_number))[0] : null;
-        console.log( " Id : ", data.id, " estimate_no : ", data.estimate_no)
-        if (data.supplier_po_number !== undefined && data.supplier_po_number !== null && data.supplier_po_number !== ""){
-            if(estimateNo && estimateNoWithId){
-                if( estimateNoWithId.id === estimateNo.id){
+        let estimateNoWithId = ((await new SupplierModel().supplierPOIdNoExistsOrNot(data.id, data.supplier_po_number))[0]) ? (await new SupplierModel().supplierPOIdNoExistsOrNot(data.id, data.supplier_po_number))[0] : null;
+        console.log(" Id : ", data.id, " estimate_no : ", data.estimate_no)
+        if (data.supplier_po_number !== undefined && data.supplier_po_number !== null && data.supplier_po_number !== "") {
+            if (estimateNo && estimateNoWithId) {
+                if (estimateNoWithId.id === estimateNo.id) {
                     sales_order.po_number = data.supplier_po_number;
                 }
-                else{
-                    throw new Error( "Puchase Order Number already  exists! ")
+                else {
+                    throw new Error("Puchase Order Number already  exists! ")
                 }
-            } else if((!estimateNo && estimateNoWithId) || (estimateNo && !estimateNoWithId) ){
-                console.log('ERROR TEST CONSOLE ',estimateNo,estimateNoWithId);
-                throw new Error( "Puchase Order Number already exists!")
-            } else{
-                console.log('TEST CONSOLE ',estimateNo,estimateNoWithId);
+            } else if ((!estimateNo && estimateNoWithId) || (estimateNo && !estimateNoWithId)) {
+                console.log('ERROR TEST CONSOLE ', estimateNo, estimateNoWithId);
+                throw new Error("Puchase Order Number already exists!")
+            } else {
+                console.log('TEST CONSOLE ', estimateNo, estimateNoWithId);
                 sales_order.po_number = data.supplier_po_number;
             }
         }
@@ -480,11 +478,10 @@ const createSupplierPO = async (data: any) => {
         if (data.supplier !== undefined && data.supplier !== null && data.supplier !== "")
             sales_order.supplier_id = data.supplier;
 
-          
-        if (data.supplier_po_number !== undefined && data.supplier_po_number !== null && data.supplier_po_number !== "")
-        { 
+
+        if (data.supplier_po_number !== undefined && data.supplier_po_number !== null && data.supplier_po_number !== "") {
             let estimate_no = data.supplier_po_number
-            if( (await new SupplierModel().supplierPONoExistsOrNot(estimate_no)).length )throw new Error( "Puchase Order Number already  exists! ")
+            if ((await new SupplierModel().supplierPONoExistsOrNot(estimate_no)).length) throw new Error("Puchase Order Number already  exists! ")
             sales_order.po_number = data.supplier_po_number;
         }
 
@@ -539,7 +536,7 @@ const createChallanService = async (fields: any) => {
             data.transportation_rate = fields.TransportationRate
         if (fields.user_id !== undefined && fields.user_id !== null && fields.user_id !== "")
             data.user_id = fields.user_id
-            data.status = 0
+        data.status = 0
         let result = await new SupplierModel().createDeliveryChallenModel(data)
         if (result.length == 0) throw new Error("failed to generate delivery challan")
         return result
@@ -574,22 +571,23 @@ const fetchAllChallansCount = async (query: string) => {
     }
 }
 
-const updateChallanServcie = async(req:any)=>{
+const updateChallanServcie = async (req: any) => {
     // @ts-ignore
-    try{
-        let fields,files, result;
-        let challan:any = {};
+    try {
+        let fields, files, result;
+        let challan: any = {};
         // @ts-ignore
-        ({fields, files} = await new Promise((resolve) => {
+        ({ fields, files } = await new Promise((resolve) => {
             new formidable.IncomingForm().parse(req, async (err: any, fields: any, files: any) => {
-                resolve({fields: fields, files: files});})
+                resolve({ fields: fields, files: files });
+            })
         }));
-        if(fields.challan_id == undefined || fields.challan_id == null || fields.challan_id == "") throw new Error("id is missing");
+        if (fields.challan_id == undefined || fields.challan_id == null || fields.challan_id == "") throw new Error("id is missing");
         result = await new SupplierModel().fetchchallanById(fields.challan_id)
         if (result.length == 0) throw new Error("challan id not found");
-        if(fields.status !== undefined && fields.status !== null && fields.status !== "")
+        if (fields.status !== undefined && fields.status !== null && fields.status !== "")
             challan.status = fields.status
-        if(fields.EwayBillNo !== undefined && fields.EwayBillNo !== null && fields.EwayBillNo !== "")
+        if (fields.EwayBillNo !== undefined && fields.EwayBillNo !== null && fields.EwayBillNo !== "")
             challan.eway_bill = fields.EwayBillNo
         let s3Images: any = {};
         if (files.EwayBill !== undefined && files.EwayBill !== null && files.EwayBill !== "") {
@@ -598,10 +596,10 @@ const updateChallanServcie = async(req:any)=>{
         if (files.Bilty !== undefined && files.Bilty !== null && files.Bilty !== "") {
             if (isFileNotValid(files.Bilty.mimetype)) throw new Error("Only .png, .jpg, .jpeg, .pdf  format allowed!"); else { s3Images.bilty_url = files.Bilty; }
         }
-        if (files.challan !== undefined && files.challan  !== null && files.challan !== "") {
+        if (files.challan !== undefined && files.challan !== null && files.challan !== "") {
             if (isFileNotValid(files.challan.mimetype)) throw new Error("Only .png, .jpg, .jpeg, .pdf format allowed!"); else { s3Images.delivery_challan_url = files.challan; }
         }
-        if (files.invoice !== undefined && files.invoice !== null && files.invoice!== "") {
+        if (files.invoice !== undefined && files.invoice !== null && files.invoice !== "") {
             if (isFileNotValid(files.invoice.mimetype)) throw new Error("Only .png, .jpg ,.jpeg, .pdf format allowed! "); else { s3Images.invoice_url = files.invoice; }
         }
         if (files.weight_slip !== undefined && files.weight_slip !== null && files.weight_slip !== "") {
@@ -610,13 +608,13 @@ const updateChallanServcie = async(req:any)=>{
         // Multiple fl upload to s3Bucket
         if (Object.keys(s3Images).length) { const s3Paths = await uploadFiles(s3Images); Object.assign(challan, s3Paths); }
 
-        if( Object.keys(challan).length) {
-                let updatedData = await new SupplierModel().updateChallan(challan, fields.challan_id)
-                return {message: "updated successfully", result:updatedData}
-            }
-                return {message: "updated successfully", "changedRows":0 }
+        if (Object.keys(challan).length) {
+            let updatedData = await new SupplierModel().updateChallan(challan, fields.challan_id)
+            return { message: "updated successfully", result: updatedData }
+        }
+        return { message: "updated successfully", "changedRows": 0 }
 
-    }catch(error){
+    } catch (error) {
         throw error
     }
 }
@@ -682,16 +680,16 @@ const addsupplierPaymentService = async (fields: any) => {
     }
 
 }
-const  fetchPaymentsDetails = async (pageIndex: number, pageSize: number, sort: any, query: string)=>{
+const fetchPaymentsDetails = async (pageIndex: number, pageSize: number, sort: any, query: string) => {
 
-    try{
+    try {
         let orderQuery: string = "";
         if (sort.key != "") {
             orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
         }
         let challan = await new SupplierModel().fetchAllPayments(pageSize, (pageIndex - 1) * pageSize, orderQuery, query)
-        if (challan == null ) throw new Error( "data not found" )
-        for(var i = 0 ; i < challan.length ; i++){
+        if (challan == null) throw new Error("data not found")
+        for (var i = 0; i < challan.length; i++) {
             challan[i].ewaybill_url = config.baseUrl + "/" + challan[i].ewaybill_url;
             challan[i].delivery_challan_url = config.baseUrl + "/" + challan[i].delivery_challan_url;
             challan[i].bilty_url = config.baseUrl + "/" + challan[i].bilty_url;
@@ -703,7 +701,7 @@ const  fetchPaymentsDetails = async (pageIndex: number, pageSize: number, sort: 
             challan[i].invoice_no = null
             challan[i].utr_no = null
             challan[i].payment_date = null
-            if( pay.length !== 0){
+            if (pay.length !== 0) {
                 challan[i].payment_id = pay[0].id
                 challan[i].approved_quantity = pay[0].approved_quantity
                 challan[i].amount = pay[0].amount
@@ -713,11 +711,11 @@ const  fetchPaymentsDetails = async (pageIndex: number, pageSize: number, sort: 
             }
         }
         return challan
-    }catch (error){
+    } catch (error) {
         throw error
     }
 }
-const fetchAllPaymentsCount = async(query:string)=>{
+const fetchAllPaymentsCount = async (query: string) => {
     try {
         let result = await new SupplierModel().fetchPaymentsCount(query);
         return result.length;
@@ -741,7 +739,7 @@ const updateSupplierPayment = async (fields: any) => {
             data.amount = fields.amount;
         if (fields.utr_no !== undefined && fields.utr_no !== null && fields.utr_no !== "")
             data.utr_no = fields.utr_no;
-        if(fields.approved_quantity !== undefined && fields.approved_quantity !== null && fields.approved_quantity !== "")
+        if (fields.approved_quantity !== undefined && fields.approved_quantity !== null && fields.approved_quantity !== "")
             data.approved_quantity = fields.approved_quantity
         if (fields.status !== undefined && fields.status !== null && fields.status !== "")
             data.status = fields.status;
@@ -760,40 +758,40 @@ const updateSupplierPayment = async (fields: any) => {
 const addSupplierSection = async (data: any) => {
     try {
         let model_result: any = [];
-        for ( let i = 0 ; i < data.length ; i ++ ){
+        for (let i = 0; i < data.length; i++) {
             let model_data: any = {};
             let id = 0;
             console.log("request Data : ", data[i])
             if (data[i].supplier_selection_id !== undefined && data[i].supplier_selection_id !== null && data[i].supplier_selection_id !== "")
-             id = data[i].supplier_selection_id;
+                id = data[i].supplier_selection_id;
 
             if (data[i].sales_order_id !== undefined && data[i].sales_order_id !== null && data[i].sales_order_id !== "")
                 model_data.sales_order_id = data[i].sales_order_id;
-    
+
             if (data[i].supplier_id !== undefined && data[i].supplier_id !== null && data[i].supplier_id !== "")
                 model_data.supplier_id = data[i].supplier_id;
-    
+
             if (data[i].qt_factory_rate !== undefined && data[i].qt_factory_rate !== null && data[i].qt_factory_rate !== "")
                 model_data.qt_factory_rate = data[i].qt_factory_rate;
-    
+
             if (data[i].qt_transportation_rate !== undefined && data[i].qt_transportation_rate !== null && data[i].qt_transportation_rate !== "")
                 model_data.qt_transportation_rate = data[i].qt_transportation_rate;
-    
+
             if (data[i].qt_delivered_rate !== undefined && data[i].qt_delivered_rate !== null && data[i].qt_delivered_rate !== "")
                 model_data.qt_delivered_rate = data[i].qt_delivered_rate;
-            
+
             if (data[i].qt_quantity !== undefined && data[i].qt_quantity !== null && data[i].qt_quantity !== "")
                 model_data.qt_quantity = data[i].qt_quantity;
-    
+
             if (data[i].status !== undefined && data[i].status !== null && data[i].status !== "") model_data.status = data[i].status;
             else { model_data.status = 1 }
-            
-            if( id ){
-                console.log( "model data : ", model_data )
-                model_result.push( await new SupplierModel().updateSupplierSelection(model_data, id) )
+
+            if (id) {
+                console.log("model data : ", model_data)
+                model_result.push(await new SupplierModel().updateSupplierSelection(model_data, id))
             }
-            else{
-                model_result.push( await new SupplierModel().addSupplierSelection(model_data) )
+            else {
+                model_result.push(await new SupplierModel().addSupplierSelection(model_data))
 
             }
         }
@@ -805,26 +803,28 @@ const addSupplierSection = async (data: any) => {
 }
 const updateSupplierSelection = async (data: any) => {
     try {
-        let model_data: any = {}, dt: any;
-        let id = data.supplier_selection_id;
-        dt = await new SupplierModel().SupplierSelectionExistsOrNot(id);
-        if (dt.length == 0) throw new Error("Selected Supplier does not exists !")
+        let model_data: any = {}, dt: any, id: any;
+       
 
-        if (data.supplier_selection_id !== undefined && data.supplier_selection_id !== null && data.supplier_selection_id !== "")
-             id = data.supplier_selection_id;
-
-            if (data.qt_factory_rate !== undefined && data.qt_factory_rate !== null && data.qt_factory_rate !== "")
-                model_data.qt_factory_rate = data.qt_factory_rate;
-    
-            if (data.qt_transportation_rate !== undefined && data.qt_transportation_rate !== null && data.qt_transportation_rate !== "")
-                model_data.qt_transportation_rate = data.qt_transportation_rate;
-    
-            if (data.qt_delivered_rate !== undefined && data.qt_delivered_rate !== null && data.qt_delivered_rate !== "")
-                model_data.qt_delivered_rate = data.qt_delivered_rate;
+        if (data.id !== undefined && data.id !== null && data.id !== ""){
+            id = data.id;
+            dt = await new SupplierModel().SupplierSelectionExistsOrNot(id);
+            if (dt.length == 0) throw new Error("Selected Supplier does not exists !")
+        }
             
-            if (data.qt_quantity !== undefined && data.qt_quantity !== null && data.qt_quantity !== "")
-                model_data.qt_quantity = data.qt_quantity;
-    
+
+        if (data.qt_factory_rate !== undefined && data.qt_factory_rate !== null && data.qt_factory_rate !== "")
+            model_data.qt_factory_rate = data.qt_factory_rate;
+
+        if (data.qt_transportation_rate !== undefined && data.qt_transportation_rate !== null && data.qt_transportation_rate !== "")
+            model_data.qt_transportation_rate = data.qt_transportation_rate;
+
+        if (data.qt_delivered_rate !== undefined && data.qt_delivered_rate !== null && data.qt_delivered_rate !== "")
+            model_data.qt_delivered_rate = data.qt_delivered_rate;
+
+        if (data.qt_quantity !== undefined && data.qt_quantity !== null && data.qt_quantity !== "")
+            model_data.qt_quantity = data.qt_quantity;
+
         if (data.status !== undefined && data.status !== null && data.status !== "") {
             model_data.status = data.status;
             let log: any = { "supplier_selection_id": id, "stage": data.status, "user_id": data.user_id || 123 }
@@ -857,35 +857,35 @@ const updateSupplierSelection = async (data: any) => {
         throw e;
     }
 }
-const fetchAllNotificationsBySupplierId = async(req:any)=>{
-    let result,id:any;
-    try{
+const fetchAllNotificationsBySupplierId = async (req: any) => {
+    let result, id: any;
+    try {
         id = req.query.supplier_id
         result = await new SupplierModel().fetchAllNotificationsBySupplierId(id)
-        if (result.length == 0 ) throw new Error( "notification  not found" )
+        if (result.length == 0) throw new Error("notification  not found")
         return result
-    }catch(err:any){
+    } catch (err: any) {
         throw err
     }
 }
-const fetchAllPaymentsBySupplierId = async(req:any)=>{
-    let result,id:any;
-    try{
+const fetchAllPaymentsBySupplierId = async (req: any) => {
+    let result, id: any;
+    try {
         id = req.query.supplier_id
         result = await new SupplierModel().getAllPaymentsBySupplier_id(id)
-        if (result.length == 0 ) throw new Error( "payment details  not found for given supplier" )
+        if (result.length == 0) throw new Error("payment details  not found for given supplier")
         return result
-    }catch(err:any){
+    } catch (err: any) {
         throw err
     }
 }
-const fetchPotentialOrderBySupplierId = async( id : any )=> {
+const fetchPotentialOrderBySupplierId = async (id: any) => {
     let result
-    try{
-    
+    try {
+
         result = await new SupplierModel().fetchPotentialOrderBySupplierId(id)
         return result
-    }catch(err:any){
+    } catch (err: any) {
         throw err
     }
 }
@@ -893,11 +893,11 @@ const supplierPONoExistsOrNot = async (req: any) => {
     try {
         let sponumber = req.query.sponumber
         let suppliers = await new SupplierModel().supplierPONoExistsOrNot(sponumber)
-        if (suppliers.length == 0){
+        if (suppliers.length == 0) {
             return false
         }
-        else{
-        return  true
+        else {
+            return true
         }
     } catch (error: any) {
         return error

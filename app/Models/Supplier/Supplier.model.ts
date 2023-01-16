@@ -101,6 +101,13 @@ export class SupplierModel extends UserModel {
     async updateSuppliersRawMaterialMapping(updatedData: any, id: number) {
         return await this._executeQuery("update supplier_raw_material_mapping set ? where supplier_id = ? ", [updatedData, id]);
     }
+    async addOrUpdateSuppliersRawMaterialMapping(data: any) {
+        return await this._executeQuery(
+            `INSERT INTO supplier_raw_material_mapping set ? ON DUPLICATE KEY UPDATE    
+            status=1 `,
+            [data]
+        );
+    }
     async createOtp(data: any) {
         return await this._executeQuery("insert into users_login_logs set ?", [data]);
     }
