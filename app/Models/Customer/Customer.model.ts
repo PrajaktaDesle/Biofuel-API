@@ -307,11 +307,10 @@ export class CustomerModel extends BaseModel {
     // async fetchAllCustomerEstimatesCount(query: string) {
     async fetchALLActiveCustomers() {
         return await this._executeQuery(
-            `select cs.id as value ,
-                                               concat(cs.name ,', ', ac.name) as label
-                                               from addresses a
-                                               left join customers cs on a.user_id = cs.id 
-                                               left join biofuel.address_city ac on a.city_id = ac.id
+            `select cs.id as value , concat(cs.name ,', ', ac.name) as label
+                                               from customers cs
+                                               left join addresses a on a.user_id = cs.id 
+                                               left join address_city ac on a.city_id = ac.id
                                                where a.user_type = 0 and a.address_type = 0 and a.status = 1;`, []);
     }
     async fetchAllmappedSuppliersByAddressId(address_id: number) {
