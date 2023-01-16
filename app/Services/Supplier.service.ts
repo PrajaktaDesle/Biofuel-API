@@ -805,26 +805,27 @@ const addSupplierSection = async (data: any) => {
 }
 const updateSupplierSelection = async (data: any) => {
     try {
-        let model_data: any = {}, dt: any;
-        let id = data.supplier_selection_id;
-        dt = await new SupplierModel().SupplierSelectionExistsOrNot(id);
-        if (dt.length == 0) throw new Error("Selected Supplier does not exists !")
+        let model_data: any = {}, dt: any, id: any;
 
-        if (data.supplier_selection_id !== undefined && data.supplier_selection_id !== null && data.supplier_selection_id !== "")
-             id = data.supplier_selection_id;
-
-            if (data.qt_factory_rate !== undefined && data.qt_factory_rate !== null && data.qt_factory_rate !== "")
-                model_data.qt_factory_rate = data.qt_factory_rate;
-    
-            if (data.qt_transportation_rate !== undefined && data.qt_transportation_rate !== null && data.qt_transportation_rate !== "")
-                model_data.qt_transportation_rate = data.qt_transportation_rate;
-    
-            if (data.qt_delivered_rate !== undefined && data.qt_delivered_rate !== null && data.qt_delivered_rate !== "")
-                model_data.qt_delivered_rate = data.qt_delivered_rate;
+        if (data.id !== undefined && data.id !== null && data.id !== ""){
+            id = data.id;
+            dt = await new SupplierModel().SupplierSelectionExistsOrNot(id);
+            if (dt.length == 0) throw new Error("Selected Supplier does not exists !")
+        }
             
-            if (data.qt_quantity !== undefined && data.qt_quantity !== null && data.qt_quantity !== "")
-                model_data.qt_quantity = data.qt_quantity;
-    
+
+        if (data.qt_factory_rate !== undefined && data.qt_factory_rate !== null && data.qt_factory_rate !== "")
+            model_data.qt_factory_rate = data.qt_factory_rate;
+
+        if (data.qt_transportation_rate !== undefined && data.qt_transportation_rate !== null && data.qt_transportation_rate !== "")
+            model_data.qt_transportation_rate = data.qt_transportation_rate;
+
+        if (data.qt_delivered_rate !== undefined && data.qt_delivered_rate !== null && data.qt_delivered_rate !== "")
+            model_data.qt_delivered_rate = data.qt_delivered_rate;
+
+        if (data.qt_quantity !== undefined && data.qt_quantity !== null && data.qt_quantity !== "")
+            model_data.qt_quantity = data.qt_quantity;
+
         if (data.status !== undefined && data.status !== null && data.status !== "") {
             model_data.status = data.status;
             let log: any = { "supplier_selection_id": id, "stage": data.status, "user_id": data.user_id || 123 }
