@@ -85,9 +85,16 @@ export class CustomerModel extends BaseModel {
         );
     }
     // customer-supplier mapping
-    async createCSM(data: any) {
+    async addCustomerSupplierMapping(data: any) {
         return await this._executeQuery(
-            "insert ignore into customer_supplier_mapping set ? ",
+            "insert into customer_supplier_mapping ( customer_id, state_id, supplier_id ) values ? ",
+            [data]
+        );
+    }
+    async addOrUpdateCustomerSupplierMapping(data: any) {
+        return await this._executeQuery(
+            `INSERT INTO customer_supplier_mapping set ? ON DUPLICATE KEY UPDATE    
+            status=1 `,
             [data]
         );
     }
@@ -104,10 +111,17 @@ export class CustomerModel extends BaseModel {
             [customer_id, supplier_id]
         );
     }
-    async updateStatusById(id: number, status: number) {
+
+    async updateStatusById(status: number, id: number) {
         return await this._executeQuery(
-            "update customer_supplier_mapping set status = ? where id = ? ",
+            "update customer_supplier_mapping set status = ? where id = ?  ",
             [status, id]
+        );
+    }
+    async updateCustomerSupplierMapping(data : any, customer_id: number, state_id: number) {
+        return await this._executeQuery(
+            "update customer_supplier_mapping set ? where customer_id = ? and state_id = ? ",
+            [data, customer_id, state_id]
         );
     }
     async fetchCSM(customer_id: number, supplier_id: number) {
@@ -137,7 +151,7 @@ export class CustomerModel extends BaseModel {
     }
     async fetchAllMappedSuppliers(customer_id: number) {
         return await this._executeQuery(
-            `SELECT  supplier_id as id , sp.name as supplier,csm.status, ast.name as state, csm.created_at , csm.updated_at FROM customer_supplier_mapping csm
+            `SELECT  csm.id as mapping_id, supplier_id as id , sp.name as supplier,csm.status, ast.name as state, csm.created_at , csm.updated_at FROM customer_supplier_mapping csm
                                          left join customers cs on cs.id=csm.customer_id
                                          left join user sp on sp.id = csm.supplier_id
                                          left join addresses a ON sp.id=a.user_id and a.address_type = 2
@@ -293,11 +307,10 @@ export class CustomerModel extends BaseModel {
     // async fetchAllCustomerEstimatesCount(query: string) {
     async fetchALLActiveCustomers() {
         return await this._executeQuery(
-            `select a.id as value ,
-                                               concat(cs.name ,', ', ac.name) as label
-                                               from addresses a
-                                               left join customers cs on a.user_id = cs.id 
-                                               left join biofuel.address_city ac on a.city_id = ac.id
+            `select cs.id as value , concat(cs.name ,', ', ac.name) as label
+                                               from customers cs
+                                               left join addresses a on a.user_id = cs.id 
+                                               left join address_city ac on a.city_id = ac.id
                                                where a.user_type = 0 and a.address_type = 0 and a.status = 1;`, []);
     }
     async fetchAllmappedSuppliersByAddressId(address_id: number) {
@@ -337,7 +350,7 @@ export class CustomerModel extends BaseModel {
             []
         );
     }
-    async fetchAllCustomersJson(query: string) {
+    async fetchAllCustomersList(query: string) {
         return await this._executeQuery(
             `SELECT cs.id as value,  cs.name AS label FROM biofuel.customers cs where cs.status = 1 ${query}`,
             []
@@ -365,28 +378,27 @@ export class CustomerModel extends BaseModel {
         condition: string
     ) {
         return await this._executeQuery(
-            `SELECT  csm.id, cs.id as customer_id, cs.name as customer, cso.sales_order_no, csm.supplier_id, sp.name as supplier,sp.mobile, sp.email, up.grade, ss.id as supplier_selection_id, 
-             factoryRate.factory_rate as latest_factory_rate,
-             deliveredRate.delivered_rate as latest_delivered_rate,
-             qt_factory_rate,qt_transportation_rate, qt_delivered_rate, qt_quantity, ss.status ,ac.id as city_id, ac.name as city,  ast.name as state, csm.created_at , csm.updated_at
-             FROM customer_supplier_mapping csm
-             left join customers cs on cs.id=csm.customer_id
-             left join customer_sales_orders cso on cso.customer_id=csm.customer_id
-             INNER join user sp on sp.id = csm.supplier_id
-             LEFT join supplier_selection ss on ss.sales_order_id= ${sales_order_id} and ss.supplier_id = sp.id
-             LEFT JOIN(select supplier_id, rate as factory_rate from supplier_purchase_order where id in
-             (SELECT max(id) FROM supplier_purchase_order  
-             where rate_type = "0" group by supplier_id))factoryRate on sp.id = factoryRate.supplier_id
-             LEFT JOIN(select supplier_id, rate as delivered_rate from supplier_purchase_order where id in
-             (SELECT max(id) FROM supplier_purchase_order  
-             where rate_type = "1" group by supplier_id))deliveredRate on sp.id = deliveredRate.supplier_id
-             left join users_profile up on up.user_id=sp.id
-             left join addresses a ON sp.id=a.user_id and a.address_type = 2
-             left join address_city ac ON ac.id=a.city_id 
-             left join address_state ast ON ac.state_id=ast.id
-             where csm.status = 1 and csm.customer_id = ${customer_id}                                        
+            `SELECT  csm.id,ss.sales_order_id, cs.id as customer_id, cs.name as customer, cso.sales_order_no, csm.supplier_id, sp.name as supplier,sp.mobile, sp.email, up.grade, ss.id as supplier_selection_id, 
+            factoryRate.factory_rate as latest_factory_rate,
+            deliveredRate.delivered_rate as latest_delivered_rate,
+            qt_factory_rate,qt_transportation_rate, qt_delivered_rate, qt_quantity, ss.status ,ac.id as city_id, ac.name as city,  ast.name as state, csm.created_at , csm.updated_at
+            FROM customer_supplier_mapping csm
+            INNER join customers cs on cs.id=csm.customer_id
+            left join customer_sales_orders cso on cso.id= ${sales_order_id} and cso.customer_id=csm.customer_id
+            LEFT join user sp on sp.id = csm.supplier_id
+            LEFT join supplier_selection ss on  ss.supplier_id = sp.id
+            LEFT JOIN(select supplier_id, rate as factory_rate from supplier_purchase_order where id in
+            (SELECT max(id) FROM supplier_purchase_order  
+            where rate_type = "0" group by supplier_id))factoryRate on sp.id = factoryRate.supplier_id
+            LEFT JOIN(select supplier_id, rate as delivered_rate from supplier_purchase_order where id in
+            (SELECT max(id) FROM supplier_purchase_order  
+            where rate_type = "1" group by supplier_id))deliveredRate on sp.id = deliveredRate.supplier_id
+            left join users_profile up on up.user_id=sp.id
+            left join addresses a ON sp.id=a.user_id and a.address_type = 2
+            left join address_city ac ON ac.id=a.city_id 
+            left join address_state ast ON ac.state_id=ast.id
+            where csm.status = 1 and csm.customer_id = ${customer_id}                                      
              ${condition}  ${query}
-             group by csm.supplier_id
              ${sortOrder}
              LIMIT ? OFFSET ? `,
             [limit, offset]
