@@ -133,15 +133,15 @@ export class SupplierModel extends UserModel {
     async getHomePage() {
         return await this._executeQuery("select id , name, image_url from app_homepage ", [])
     }
-    async getMappedUnmappedSuppliers(custoemr_id: number, state_id: number) {
-        return await this._executeQuery(`select sp.id as supplier_id, csm.id as mapping_id,sp.name as supplier, sp.email,sp.mobile, cty.name as city,st.name as state,prof.grade,csm.status, csm.customer_id,csm.address_id, IFNULL(csm.status, 0 ) as isMapped  from user sp
-                                         LEFT JOIN addresses a on sp.id = a.user_id and a.user_type = 1 and a.address_type = 2  
-                                         LEFT JOIN users_profile prof on sp.id = prof.user_id 
-                                         LEFT JOIN address_city cty on a.city_id = cty.id
-                                         LEFT JOIN address_state st on cty.state_id = st.id
-                                         LEFT JOIN customer_supplier_mapping csm on sp.id = csm.supplier_id and csm.state_id = ${state_id} and csm.customer_id = ${custoemr_id}
-                                         where sp.role_id = 3 and cty.state_id = ${state_id};
-                                         `, [])
+    async getMappedUnmappedSuppliers(state_id: number, address_id: number) {
+        return await this._executeQuery(`select sp.id,sp.name as supplier, sp.email,sp.mobile, cty.name as city,st.name as state,prof.grade,csm.status, csm.customer_id,csm.address_id, if(csm.address_id is null, false, true) as isMapped  from user sp
+                                                    LEFT JOIN addresses a on sp.id = a.user_id and a.user_type = 1 and a.address_type = 2  
+                                                    LEFT JOIN users_profile prof on sp.id = prof.user_id 
+                                                    LEFT JOIN address_city cty on a.city_id = cty.id
+                                                    LEFT JOIN address_state st on cty.state_id = st.id
+                                                    LEFT JOIN customer_supplier_mapping csm on sp.id = csm.supplier_id and csm.address_id = ${address_id}
+                                                    where sp.role_id = 3 and cty.state_id = ${state_id}
+                                                  `, [])
     }
 
     async fetchAllSupplierPO(limit: number, offset: number, sortOrder: string, query: string) {
@@ -305,10 +305,10 @@ export class SupplierModel extends UserModel {
         return await this._executeQuery("update supplier_selection set ? where id = ?", [data, id])
     }
     async SupplierSelectionExistsOrNot(id: number) {
-        return await this._executeQuery(`select id from supplier_selection_stage_logs where id = ?`, [id])
+        return await this._executeQuery(`select id from supplier_selection where id = ?`, [id])
     }
     async createSupplierSelectionLogs(data: any) {
-        return await this._executeQuery(` insert into supplier_selection set ? `, [data])
+        return await this._executeQuery(` insert into supplier_selection_stage_logs set ? `, [data])
     }
     async supplierPONoExistsOrNot(no: number) {
         return await this._executeQuery("select id from supplier_purchase_order where po_number = ? ", [no])
