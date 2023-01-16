@@ -305,7 +305,7 @@ export class SupplierModel extends UserModel {
         return await this._executeQuery("update supplier_selection set ? where id = ?", [data, id])
     }
     async SupplierSelectionExistsOrNot(id: number) {
-        return await this._executeQuery(`select id from supplier_selection where id = ?`, [id])
+        return await this._executeQuery(`select id from supplier_selection_stage_logs where id = ?`, [id])
     }
     async createSupplierSelectionLogs(data: any) {
         return await this._executeQuery(` insert into supplier_selection set ? `, [data])
