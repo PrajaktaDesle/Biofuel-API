@@ -307,7 +307,7 @@ export class CustomerModel extends BaseModel {
     // async fetchAllCustomerEstimatesCount(query: string) {
     async fetchALLActiveCustomers() {
         return await this._executeQuery(
-            `select a.id as value ,
+            `select cs.id as value ,
                                                concat(cs.name ,', ', ac.name) as label
                                                from addresses a
                                                left join customers cs on a.user_id = cs.id 
