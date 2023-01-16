@@ -379,28 +379,27 @@ export class CustomerModel extends BaseModel {
         condition: string
     ) {
         return await this._executeQuery(
-            `SELECT  csm.id, cs.id as customer_id, cs.name as customer, cso.sales_order_no, csm.supplier_id, sp.name as supplier,sp.mobile, sp.email, up.grade, ss.id as supplier_selection_id, 
-             factoryRate.factory_rate as latest_factory_rate,
-             deliveredRate.delivered_rate as latest_delivered_rate,
-             qt_factory_rate,qt_transportation_rate, qt_delivered_rate, qt_quantity, ss.status ,ac.id as city_id, ac.name as city,  ast.name as state, csm.created_at , csm.updated_at
-             FROM customer_supplier_mapping csm
-             left join customers cs on cs.id=csm.customer_id
-             left join customer_sales_orders cso on cso.customer_id=csm.customer_id
-             INNER join user sp on sp.id = csm.supplier_id
-             LEFT join supplier_selection ss on ss.sales_order_id= ${sales_order_id} and ss.supplier_id = sp.id
-             LEFT JOIN(select supplier_id, rate as factory_rate from supplier_purchase_order where id in
-             (SELECT max(id) FROM supplier_purchase_order  
-             where rate_type = "0" group by supplier_id))factoryRate on sp.id = factoryRate.supplier_id
-             LEFT JOIN(select supplier_id, rate as delivered_rate from supplier_purchase_order where id in
-             (SELECT max(id) FROM supplier_purchase_order  
-             where rate_type = "1" group by supplier_id))deliveredRate on sp.id = deliveredRate.supplier_id
-             left join users_profile up on up.user_id=sp.id
-             left join addresses a ON sp.id=a.user_id and a.address_type = 2
-             left join address_city ac ON ac.id=a.city_id 
-             left join address_state ast ON ac.state_id=ast.id
-             where csm.status = 1 and csm.customer_id = ${customer_id}                                        
+            `SELECT  csm.id,ss.sales_order_id, cs.id as customer_id, cs.name as customer, cso.sales_order_no, csm.supplier_id, sp.name as supplier,sp.mobile, sp.email, up.grade, ss.id as supplier_selection_id, 
+            factoryRate.factory_rate as latest_factory_rate,
+            deliveredRate.delivered_rate as latest_delivered_rate,
+            qt_factory_rate,qt_transportation_rate, qt_delivered_rate, qt_quantity, ss.status ,ac.id as city_id, ac.name as city,  ast.name as state, csm.created_at , csm.updated_at
+            FROM customer_supplier_mapping csm
+            INNER join customers cs on cs.id=csm.customer_id
+            left join customer_sales_orders cso on cso.id= ${sales_order_id} and cso.customer_id=csm.customer_id
+            LEFT join user sp on sp.id = csm.supplier_id
+            LEFT join supplier_selection ss on  ss.supplier_id = sp.id
+            LEFT JOIN(select supplier_id, rate as factory_rate from supplier_purchase_order where id in
+            (SELECT max(id) FROM supplier_purchase_order  
+            where rate_type = "0" group by supplier_id))factoryRate on sp.id = factoryRate.supplier_id
+            LEFT JOIN(select supplier_id, rate as delivered_rate from supplier_purchase_order where id in
+            (SELECT max(id) FROM supplier_purchase_order  
+            where rate_type = "1" group by supplier_id))deliveredRate on sp.id = deliveredRate.supplier_id
+            left join users_profile up on up.user_id=sp.id
+            left join addresses a ON sp.id=a.user_id and a.address_type = 2
+            left join address_city ac ON ac.id=a.city_id 
+            left join address_state ast ON ac.state_id=ast.id
+            where csm.status = 1 and csm.customer_id = ${customer_id}                                      
              ${condition}  ${query}
-             group by csm.supplier_id
              ${sortOrder}
              LIMIT ? OFFSET ? `,
             [limit, offset]
