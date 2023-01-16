@@ -804,7 +804,6 @@ const addSupplierSection = async (data: any) => {
 const updateSupplierSelection = async (data: any) => {
     try {
         let model_data: any = {}, dt: any, id: any;
-      
         if (data.id !== undefined && data.id !== null && data.id !== ""){
             id = data.id;
             dt = await new SupplierModel().SupplierSelectionExistsOrNot(id);
