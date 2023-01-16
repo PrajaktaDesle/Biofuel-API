@@ -46,17 +46,17 @@ export default {
             id:Joi.number().required()
         }
     },
-    customer_supplier: {
+    addCustomerSupplierMapping: {
         [Segments.BODY]:  Joi.object().keys({
-            address_id: Joi.number().required(),
-            supplier_id: Joi.array().required()
+            customer_id: Joi.number().required(),
+            supplier_id: Joi.array().required(),
+            state_id: Joi.number().required(),
         }).unknown()
     },
     updateStatus: {
         [Segments.BODY]:  Joi.object().keys({
             // id:Joi.number().required(),
-            customer_id : Joi.number().required(),
-            supplier_id : Joi.number().required(),
+            mapping_id : Joi.number().required(),
             status: Joi.number().required().min(0).max(1)
         }).unknown()
     },

@@ -25,6 +25,12 @@ export default {
             address_id : Joi.number().required()
         }
     },
+    validateFetchAllMappedUnmappedSuppliers:{
+        [Segments.QUERY]:{
+            state_id:Joi.number().required(),
+            customer_id : Joi.number().required()
+        }
+    },
     updateSupplierPOStatus : {
         [Segments.BODY] : {
             id : Joi.number().required(),

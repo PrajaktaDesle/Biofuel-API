@@ -91,7 +91,7 @@ const fetchAllSuppliers: IController = async (req, res) => {
     try{
         let query = " "
         if(req.body.query != ""){
-            query = ` and  u.name like '%${req.body.query}%' or u.contact_no like '%${req.body.query}' `
+            query = ` and ( u.name like '%${req.body.query}%' or u.mobile like '%${req.body.query}' ) `
         }
         let suppliers = await supplierService.fetchAllSuppliers(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
         let count = await supplierService.fetchAllSuppliersCount(query);

@@ -22,12 +22,12 @@ router.post(
 // customer-supplier mapping
 router.post(
     '/add',
-    celebrate(CustomerSchema.customer_supplier),
-    CustomerController.Create_customer_supplier_mapping
+    celebrate(CustomerSchema.addCustomerSupplierMapping),
+    CustomerController.addCustomerSupplierMapping
 );
 router.put(
     '/update/mapping/status',
-    // celebrate(CustomerSchema.updateStatus),
+    celebrate(CustomerSchema.updateStatus),
     CustomerController.updateCSMStatus
 );
 router.post(
@@ -89,7 +89,7 @@ router.post(
 );
 router.get(
     '/fetch/list',
-    CustomerController.fetchAllCustomersJson
+    CustomerController.fetchAllCustomersList
 );
 
 router.get(
