@@ -113,10 +113,6 @@ export class CustomerModel extends BaseModel {
     }
 
     async updateStatusById(status: number, id: number) {
-        console.log(
-            "update customer_supplier_mapping set status = ? where id = ?  ",
-            [status, id]
-        )
         return await this._executeQuery(
             "update customer_supplier_mapping set status = ? where id = ?  ",
             [status, id]
