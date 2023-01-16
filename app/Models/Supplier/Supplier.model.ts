@@ -134,7 +134,7 @@ export class SupplierModel extends UserModel {
         return await this._executeQuery("select id , name, image_url from app_homepage ", [])
     }
     async getMappedUnmappedSuppliers(custoemr_id: number, state_id: number) {
-        return await this._executeQuery(`select sp.id as supplier_id, csm.id as mapping_id,sp.name as supplier, sp.email,sp.mobile, cty.name as city,st.name as state,prof.grade,csm.status, csm.customer_id,csm.address_id, IFNULL(csm.status, 0 ) as isMapped  from user sp
+        return await this._executeQuery(`select sp.id as id, csm.id as mapping_id,sp.name as supplier, sp.email,sp.mobile, cty.name as city,st.name as state,prof.grade,csm.status, csm.customer_id,csm.address_id, if(csm.status is null, false, true) as isMapped  from user sp
                                          LEFT JOIN addresses a on sp.id = a.user_id and a.user_type = 1 and a.address_type = 2  
                                          LEFT JOIN users_profile prof on sp.id = prof.user_id 
                                          LEFT JOIN address_city cty on a.city_id = cty.id
