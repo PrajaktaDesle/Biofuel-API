@@ -113,6 +113,10 @@ export class CustomerModel extends BaseModel {
     }
 
     async updateStatusById(status: number, id: number) {
+        console.log(
+            "update customer_supplier_mapping set status = ? where id = ?  ",
+            [status, id]
+        )
         return await this._executeQuery(
             "update customer_supplier_mapping set status = ? where id = ?  ",
             [status, id]
@@ -151,7 +155,7 @@ export class CustomerModel extends BaseModel {
     }
     async fetchAllMappedSuppliers(customer_id: number) {
         return await this._executeQuery(
-            `SELECT  supplier_id as id , sp.name as supplier,csm.status, ast.name as state, csm.created_at , csm.updated_at FROM customer_supplier_mapping csm
+            `SELECT  csm.id as mapping_id, supplier_id as id , sp.name as supplier,csm.status, ast.name as state, csm.created_at , csm.updated_at FROM customer_supplier_mapping csm
                                          left join customers cs on cs.id=csm.customer_id
                                          left join user sp on sp.id = csm.supplier_id
                                          left join addresses a ON sp.id=a.user_id and a.address_type = 2
