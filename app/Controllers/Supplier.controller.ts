@@ -191,8 +191,8 @@ const fetchAllMappedUnmappedSuppliers: IController = async (req, res) => {
         if(req.body.query != ""){
             query = ` and ( sp.name like '%${req.body.query}%' or sp.mobile like '%${req.body.query}' ) `
         }
-        let suppliers = await supplierService.fetchSuppliersMappedUnmapped(req.body.pageIndex, req.body.pageSize, req.body.sort,  req.body.custoemr_id,  req.body.state_id, query)
-        let count = await supplierService.fetchSuppliersMappedUnmappedCount( req.body.custoemr_id,  req.body.state_id, query)
+        let suppliers = await supplierService.fetchSuppliersMappedUnmapped(req.body.pageIndex, req.body.pageSize, req.body.sort,  req.body.customer_id,  req.body.state_id, query)
+        let count = await supplierService.fetchSuppliersMappedUnmappedCount( req.body.customer_id,  req.body.state_id, query)
         
         if ( suppliers instanceof Error ){
             return apiResponse.error( res,
