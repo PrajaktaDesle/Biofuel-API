@@ -331,17 +331,27 @@ const getHomePage = async () => {
     LOGGER.info(data)
     return data
 }
-const fetchSuppliersMappedUnmapped = async (req: any) => {
-    let result, state_id, customer_id
+ // @ts-ignore
+const fetchSuppliersMappedUnmapped = async (pageIndex , pageSize, sort,  custoemr_id,  state_id, query) => {
+   let result, orderQuery;
     try {
-        state_id = req.query.state_id
-        customer_id = req.query.customer_id
+        if (sort.key != "") {
+            orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
+        }
         // @ts-ignore
-        result = await new SupplierModel().getMappedUnmappedSuppliers(customer_id, state_id)
-        if (result.length == null) throw new Error(" supplier not found!")
-        return { "data": result, "total": result.length }
+        result = await new SupplierModel().getMappedUnmappedSuppliers(pageIndex, pageSize, orderQuery,  custoemr_id,  state_id, query)
+        return result
     } catch (e) {
         return e
+    }
+}
+// @ts-ignore
+const fetchSuppliersMappedUnmappedCount = async ( custoemr_id,  state_id, query) => {
+    try {
+        let suppliers = await new SupplierModel().getMappedUnmappedSuppliersCount(  custoemr_id,  state_id, query );
+        return suppliers.length;
+    } catch (error: any) {
+        return error
     }
 }
 // fetchAllSupplierPO
@@ -807,8 +817,8 @@ const addSupplierSection = async (data: any) => {
 const updateSupplierSelection = async (data: any) => {
     try {
         let model_data: any = {}, dt: any, id: any;
-        if (data.id !== undefined && data.id !== null && data.id !== ""){
-            id = data.id;
+        if (data.supplier_selection_id !== undefined && data.supplier_selection_id !== null && data.supplier_selection_id !== ""){
+            id = data.supplier_selection_id;
             dt = await new SupplierModel().SupplierSelectionExistsOrNot(id);
             if (dt.length == 0) throw new Error("Selected Supplier does not exists !")
         }
@@ -921,6 +931,7 @@ export default {
     getHomePage,
     fetchAllSuppliersCount,
     fetchSuppliersMappedUnmapped,
+    fetchSuppliersMappedUnmappedCount,
     fetchAllSupplierPO,
     fetchAllSupplierPOCount,
     updateSupplierPO,

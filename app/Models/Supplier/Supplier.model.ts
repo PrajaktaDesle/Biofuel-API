@@ -133,17 +133,31 @@ export class SupplierModel extends UserModel {
     async getHomePage() {
         return await this._executeQuery("select id , name, image_url from app_homepage ", [])
     }
-    async getMappedUnmappedSuppliers(custoemr_id: number, state_id: number) {
-        return await this._executeQuery(`select sp.id as supplier_id, csm.id as mapping_id,sp.name as supplier, sp.email,sp.mobile, cty.name as city,st.name as state,prof.grade,csm.status, csm.customer_id,csm.address_id, IFNULL(csm.status, 0 ) as isMapped  from user sp
+    async getMappedUnmappedSuppliers(limit: number, offset: number, sortOrder: string, query: string, custoemr_id: number, state_id: number) {
+        return await this._executeQuery(`select sp.id as id, csm.id as mapping_id,sp.name as supplier, sp.email,sp.mobile, cty.name as city,st.name as state,prof.grade,csm.status, csm.customer_id,csm.address_id, if(csm.status is null, false, true) as isMapped  from user sp
                                          LEFT JOIN addresses a on sp.id = a.user_id and a.user_type = 1 and a.address_type = 2  
                                          LEFT JOIN users_profile prof on sp.id = prof.user_id 
                                          LEFT JOIN address_city cty on a.city_id = cty.id
                                          LEFT JOIN address_state st on cty.state_id = st.id
                                          LEFT JOIN customer_supplier_mapping csm on sp.id = csm.supplier_id and csm.state_id = ${state_id} and csm.customer_id = ${custoemr_id}
                                          where sp.role_id = 3 and cty.state_id = ${state_id};
-                                         `, [])
+                                         ${query}
+                                         ${sortOrder} 
+                                         LIMIT ? OFFSET ?`, [limit, offset])
     }
-
+    async getMappedUnmappedSuppliersCount( query: string,custoemr_id: number, state_id: number) {
+        return await this._executeQuery(`select sp.id as id, csm.id as mapping_id,sp.name as supplier, sp.email,sp.mobile, cty.name as city,st.name as state,prof.grade,csm.status, csm.customer_id,csm.address_id, if(csm.status is null, false, true) as isMapped  from user sp
+                                         LEFT JOIN addresses a on sp.id = a.user_id and a.user_type = 1 and a.address_type = 2  
+                                         LEFT JOIN users_profile prof on sp.id = prof.user_id 
+                                         LEFT JOIN address_city cty on a.city_id = cty.id
+                                         LEFT JOIN address_state st on cty.state_id = st.id
+                                         LEFT JOIN customer_supplier_mapping csm on sp.id = csm.supplier_id and csm.state_id = ${state_id} and csm.customer_id = ${custoemr_id}
+                                         where sp.role_id = 3 and cty.state_id = ${state_id};
+                                         ${query}
+                                         
+                                          ?`, [])
+    }
+    
     async fetchAllSupplierPO(limit: number, offset: number, sortOrder: string, query: string) {
         return await this._executeQuery(`SELECT spo.id, spo.po_number, s.name as supplier, c.name as customer, p.name as product, spo.sales_order_id, spo.quantity,DATE_FORMAT(spo.delivery_date, '%d-%m-%Y')  as delivery_date, spo.status FROM supplier_purchase_order spo
                                          left join customer_sales_orders cso on cso.id = spo.sales_order_id
