@@ -180,11 +180,12 @@ export class SupplierModel extends UserModel {
     }
 
     async fetchAllNotificationsBySupplierId(id: number) {
-        return await this._executeQuery(`select pon.id as NotificationNo,spo.supplier_id, sp.name as supplier,
+        return await this._executeQuery(`select pon.id as NotificationNo,spo.supplier_id, sp.name as supplier,dc.ewaybill_url, dc.delivery_challan_url, dc.bilty_url,dc.invoice_url, dc.weight_slip_url,
                                                 pon.status, DATE_FORMAT(pon.created_at, '%d-%m-%Y') as date, pon.created_at,pon.updated_at 
                                                 from purchase_order_dispatch_notifications pon
                                                 left join supplier_purchase_order spo on spo.id = pon.purchase_order_id 
                                                 left join user sp on sp.id = spo.supplier_id
+                                                left join purchase_order_delivery_challan dc on pon.id = dc.dispatch_id and dc.status = 1
                                                 where spo.supplier_id = ? ;`, [id])
     }
     async fetchAllDeliveryChallan(limit: number, offset: number, sortOrder: string, query: string) {
@@ -249,11 +250,11 @@ export class SupplierModel extends UserModel {
                                                 left join product_packaging pp ON pp.id=cso.packaging_id
                                                 where spo.supplier_id = ?  `, [id])
     }
-    async updateChallan(data: any, id: number) {
-        return await this._executeQuery("update purchase_order_delivery_challan set ? where id = ?", [data, id])
+    async updateChallan(data: any, dispatch_id: number) {
+        return await this._executeQuery("update purchase_order_delivery_challan set ? where dispatch_id = ?", [data, dispatch_id])
     }
-    async fetchchallanById(id: number) {
-        return await this._executeQuery(`select * from purchase_order_delivery_challan where id = ?`, [id])
+    async fetchchallanById(dispatch_id: number) {
+        return await this._executeQuery(`select * from purchase_order_delivery_challan where dispatch_id = ?`, [dispatch_id])
     }
     async fetchAllPayments(limit: number, offset: number, sortOrder: string, query: string) {
         return await this._executeQuery(`select dc.id as delivery_challan_id, dc.dispatch_id as notificationNo, sp.name as supplier, sp.mobile, 
