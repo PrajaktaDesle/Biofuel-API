@@ -42,9 +42,9 @@ router.get(
   '/home/page',
   supplierController.getHomePage
 );
-router.get(
+router.post(
     '/fetch/all/mapped-unmapped',
-    celebrate(supplierSchema.validateFetchAllMappedUnmappedSuppliers),
+    // celebrate(supplierSchema.validateFetchAllMappedUnmappedSuppliers),
     supplierController.fetchAllMappedUnmappedSuppliers
 )
 router.post(
