@@ -540,7 +540,7 @@ const createChallanService = async (fields: any) => {
             data.delivery_date = fields.DeliveryDate
         if (fields.NotificationNo !== undefined && fields.NotificationNo !== null && fields.NotificationNo !== "")
             notiNo = await new SupplierModel().getnotificationNO(fields.NotificationNo)         
-            if(notiNo.length !== 0 ) throw new Error("notification no already exist")
+            if(notiNo.length !== 0 ) throw new Error("you have already requested for challan")
             data.dispatch_id = fields.NotificationNo
         if (fields.VehicleNo !== undefined && fields.VehicleNo !== null && fields.VehicleNo !== "")
             data.vehicle_no = fields.VehicleNo
@@ -874,13 +874,13 @@ const fetchAllNotificationsBySupplierId = async (req: any) => {
         id = req.query.supplier_id
         result = await new SupplierModel().fetchAllNotificationsBySupplierId(id)
         if (result.length == 0) throw new Error("notification  not found")
-        // for (var i = 0; i < result.length; i++) {
-        //     result[i].ewaybill_url = config.baseUrl + "/" + result[i].ewaybill_url;
-        //     result[i].delivery_challan_url = config.baseUrl + "/" + result[i].delivery_challan_url;
-        //     result[i].bilty_url = config.baseUrl + "/" + result[i].bilty_url;
-        //     result[i].invoice_url = config.baseUrl + "/" + result[i].invoice_url;
-        //     result[i].weight_slip_url = config.baseUrl + "/" + result[i].weight_slip_url;
-        // }
+        for (var i = 0; i < result.length; i++) {
+            result[i].ewaybill_url = result[i].ewaybill_url == null ? null : config.baseUrl + "/" + result[i].ewaybill_url;
+            result[i].delivery_challan_url = result[i].delivery_challan_url == null ? null : config.baseUrl + "/" + result[i].delivery_challan_url;
+            result[i].bilty_url =  result[i].bilty_url == null ? null:  config.baseUrl + "/" + result[i].bilty_url;
+            result[i].invoice_url = result[i].invoice_url == null ? null: config.baseUrl + "/" + result[i].invoice_url;
+            result[i].weight_slip_url = result[i].weight_slip_url == null ? null :config.baseUrl + "/" + result[i].weight_slip_url;
+        }
         return result
     } catch (err: any) {
         throw err
