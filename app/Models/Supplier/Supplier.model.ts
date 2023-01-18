@@ -194,12 +194,12 @@ export class SupplierModel extends UserModel {
     }
 
     async fetchAllNotificationsBySupplierId(id: number) {
-        return await this._executeQuery(`select pon.id as NotificationNo,spo.supplier_id, sp.name as supplier,dc.ewaybill_url, dc.delivery_challan_url, dc.bilty_url,dc.invoice_url, dc.weight_slip_url,
+        return await this._executeQuery(`select pon.id as NotificationNo,spo.supplier_id, sp.name as supplier,dc.ewaybill_url, dc.delivery_challan_url, dc.bilty_url,dc.invoice_url, dc.weight_slip_url, dc.status as challanStatus,
                                                 pon.status, DATE_FORMAT(pon.created_at, '%d-%m-%Y') as date, pon.created_at,pon.updated_at 
                                                 from purchase_order_dispatch_notifications pon
                                                 left join supplier_purchase_order spo on spo.id = pon.purchase_order_id 
                                                 left join user sp on sp.id = spo.supplier_id
-                                                left join purchase_order_delivery_challan dc on pon.id = dc.dispatch_id and dc.status = 1
+                                                left join purchase_order_delivery_challan dc on pon.id = dc.dispatch_id 
                                                 where spo.supplier_id = ? ;`, [id])
     }
     async fetchAllDeliveryChallan(limit: number, offset: number, sortOrder: string, query: string) {
