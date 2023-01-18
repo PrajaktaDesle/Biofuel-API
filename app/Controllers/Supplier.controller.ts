@@ -188,7 +188,7 @@ const getHomePage: IController = async (req, res) => {
 const fetchAllMappedUnmappedSuppliers: IController = async (req, res) => {
     try{
         let query = " ", suppliers, count;
-        if( req.body.customer_id.length ){
+        if( req.body.customer_id !== ""  ){
             if(req.body.query != "" ){
                 query = ` and ( sp.name like '%${req.body.query}%' or sp.mobile like '%${req.body.query}' ) `
             }
