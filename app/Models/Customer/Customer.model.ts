@@ -91,11 +91,17 @@ export class CustomerModel extends BaseModel {
             [data]
         );
     }
-    async addOrUpdateCustomerSupplierMapping(data: any) {
+    async addOrUpdateCustomerSupplierMapping(data: any, isSelected : any ) {
         return await this._executeQuery(
             `INSERT INTO customer_supplier_mapping set ? ON DUPLICATE KEY UPDATE    
-            status=1 `,
+            status = ${isSelected}`,
             [data]
+        );
+    }
+    async customerSupplierMappingExistsOrNot(custoemr_id: any, state_id : any) {
+        return await this._executeQuery(
+            `select id from customer_supplier_mapping where customer_id = ? and state_id = ? `,
+            [custoemr_id, state_id]
         );
     }
     async createCustomerSupplierMapping(

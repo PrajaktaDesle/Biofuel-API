@@ -218,20 +218,21 @@ const fetchAllCustomerCount = async (query: string) => {
 }
 
 const addCustomerSupplierMapping = async (req: any) => {
-    let fields = req.body
-    let result = await new CustomerModel().updateCustomerSupplierMapping( { status : 0 }, fields.customer_id, fields.state_id)
-    if( result.info.split(' ')[2] == 0 ){
+    let fields = req.body; let updatedResult  : any = [];
+    let result = await new CustomerModel().customerSupplierMappingExistsOrNot(req.body.customer_id, req.body.state_id)
+    if( !result.length ){
         let data = fields.supplier_id.map( (supplier:any) => ([fields.customer_id , fields.state_id,  supplier]))
-        // Multiple recoreds insert in one query beacuase not data found for given custoemr_id and state_id
-        let result =  await new CustomerModel().addCustomerSupplierMapping( data )
+        // Multiple recoreds insert in one query beacuase data not found for given custoemr_id and state_id
+        updatedResult =  await new CustomerModel().addCustomerSupplierMapping( data )
     }
     else{
-        let data = fields.supplier_id.map( async (supplier:any) => {
-        // insert if customer_id , state_id and supplier_id does not exists  or update if they  exists
-        let result = await new CustomerModel().addOrUpdateCustomerSupplierMapping( {"customer_id" : fields.customer_id, "state_id" : fields.state_id, "supplier_id": supplier } )
-        })
+        // // insert if customer_id , state_id and supplier_id does not exists  or update if they  exists
+        for (let index = 0; index < fields.supplier_id.length; index++) {
+            const supplier = fields.supplier_id[index];
+            updatedResult.push( await new CustomerModel().addOrUpdateCustomerSupplierMapping( {"customer_id" : fields.customer_id, "state_id" : fields.state_id, "supplier_id": supplier.id }, supplier.isSelected ) )
+        }
     }
-    return result
+    return updatedResult
 
 }
 
