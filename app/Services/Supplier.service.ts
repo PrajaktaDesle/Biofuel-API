@@ -332,28 +332,29 @@ const getHomePage = async () => {
     return data
 }
  // @ts-ignore
-const fetchSuppliersMappedUnmapped = async (pageIndex , pageSize, sort,  custoemr_id,  state_id, query) => {
-   let result, orderQuery;
-    try {
-        if (sort.key != "") {
-            orderQuery = " ORDER BY " + sort.key + " " + sort.order + " ";
-        }
-        // @ts-ignore
-        result = await new SupplierModel().getMappedUnmappedSuppliers(pageIndex, pageSize, orderQuery,  custoemr_id,  state_id, query)
-        return result
-    } catch (e) {
-        return e
-    }
-}
-// @ts-ignore
-const fetchSuppliersMappedUnmappedCount = async ( custoemr_id,  state_id, query) => {
-    try {
-        let suppliers = await new SupplierModel().getMappedUnmappedSuppliersCount(  custoemr_id,  state_id, query );
-        return suppliers.length;
-    } catch (error: any) {
-        return error
-    }
-}
+ const fetchSuppliersMappedUnmapped = async (pageIndex , pageSize, sort,  customer_id,  state_id, query) => {
+    let result, sortOrder = '';
+     try {
+         if (sort.key != "") {
+             sortOrder = " ORDER BY " + sort.key + " " + sort.order + " ";
+         }
+         console.log( ' sort ' )
+         // @ts-ignore
+         result = await new SupplierModel().getMappedUnmappedSuppliers(pageSize, (pageIndex - 1) * pageSize , sortOrder,  customer_id,  state_id, query)
+         return result
+     } catch (e) {
+         return e
+     }
+ }
+ // @ts-ignore
+ const fetchSuppliersMappedUnmappedCount = async ( customer_id,  state_id, query) => {
+     try {
+         let suppliers = await new SupplierModel().getMappedUnmappedSuppliersCount(  customer_id,  state_id, query );
+         return suppliers.length;
+     } catch (error: any) {
+         return error
+     }
+ }
 // fetchAllSupplierPO
 const fetchAllSupplierPO = async (pageIndex: number, pageSize: number, sort: any, query: string) => {
     let suppliers;
@@ -800,7 +801,6 @@ const addSupplierSection = async (data: any) => {
             else { model_data.status = 1 }
 
             if (id) {
-                console.log("model data : ", model_data)
                 model_result.push(await new SupplierModel().updateSupplierSelection(model_data, id))
             }
             else {

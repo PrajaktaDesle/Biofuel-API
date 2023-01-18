@@ -139,9 +139,6 @@ const fetchSupplierById: IController = async (req, res) => {
 };
 
 
-
-
-
 const updateSupplierDetails : IController = async (req, res) => {
     try {
         let supplier : any = await supplierService.updateSupplierDetails(req);
@@ -187,12 +184,18 @@ const getHomePage: IController = async (req, res) => {
 
 const fetchAllMappedUnmappedSuppliers: IController = async (req, res) => {
     try{
-        let query = " "
-        if(req.body.query != ""){
-            query = ` and ( sp.name like '%${req.body.query}%' or sp.mobile like '%${req.body.query}' ) `
+        let query = " ", suppliers, count;
+        if( req.body.customer_id !== ""  ){
+            if(req.body.query != "" ){
+                query = ` and ( sp.name like '%${req.body.query}%' or sp.mobile like '%${req.body.query}' ) `
+            }
+            suppliers = await supplierService.fetchSuppliersMappedUnmapped(req.body.pageIndex, req.body.pageSize, req.body.sort,  req.body.customer_id,  req.body.state_id, query)
+            count = await supplierService.fetchSuppliersMappedUnmappedCount( req.body.customer_id,  req.body.state_id, query)
         }
-        let suppliers = await supplierService.fetchSuppliersMappedUnmapped(req.body.pageIndex, req.body.pageSize, req.body.sort,  req.body.custoemr_id,  req.body.state_id, query)
-        let count = await supplierService.fetchSuppliersMappedUnmappedCount( req.body.custoemr_id,  req.body.state_id, query)
+        else{
+            suppliers = []
+            count = 0
+        }
         
         if ( suppliers instanceof Error ){
             return apiResponse.error( res,
@@ -213,7 +216,6 @@ const fetchAllMappedUnmappedSuppliers: IController = async (req, res) => {
             httpStatusCodes.BAD_REQUEST ,error.message)
     }
 };
-
 
 // fetchAllSupplierPO
 const fetchAllSupplierPO: IController = async (req, res) => {
