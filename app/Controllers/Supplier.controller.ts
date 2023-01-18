@@ -214,7 +214,6 @@ const fetchAllMappedUnmappedSuppliers: IController = async (req, res) => {
     }
 };
 
-
 // fetchAllSupplierPO
 const fetchAllSupplierPO: IController = async (req, res) => {
     try{
