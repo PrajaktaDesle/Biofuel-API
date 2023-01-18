@@ -145,7 +145,7 @@ const fetchAllCSM: IController = async (req: any, res: any) => {
     try {
         let query = ""
         if (req.body.query != "") {
-            query = ` and cs.name like '%${req.body.query}%' or sp.name like '%${req.body.query}%'  `
+            query = ` and cs.name like '%${req.body.query}%' or ast.name like '%${req.body.query}%' `
         }
         let result = await CustomerService.fetchAllCSM(req.body.pageIndex, req.body.pageSize, req.body.sort, query)
         let count = await customerService.fetchCSMCount(query);

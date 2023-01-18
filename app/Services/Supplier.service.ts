@@ -532,12 +532,15 @@ const createSupplierPO = async (data: any) => {
 }
 const createChallanService = async (fields: any) => {
     let data: any = {}
+    let notiNo
     try {
         if (fields.quantity !== undefined && fields.quantity !== null && fields.quantity !== "")
             data.quantity = fields.quantity
         if (fields.DeliveryDate !== undefined && fields.DeliveryDate !== null && fields.DeliveryDate !== "")
             data.delivery_date = fields.DeliveryDate
         if (fields.NotificationNo !== undefined && fields.NotificationNo !== null && fields.NotificationNo !== "")
+            notiNo = await new SupplierModel().getnotificationNO(fields.NotificationNo)         
+            if(notiNo.length !== 0 ) throw new Error("notification no already exist")
             data.dispatch_id = fields.NotificationNo
         if (fields.VehicleNo !== undefined && fields.VehicleNo !== null && fields.VehicleNo !== "")
             data.vehicle_no = fields.VehicleNo
@@ -593,9 +596,9 @@ const updateChallanServcie = async (req: any) => {
                 resolve({ fields: fields, files: files });
             })
         }));
-        if (fields.challan_id == undefined || fields.challan_id == null || fields.challan_id == "") throw new Error("id is missing");
-        result = await new SupplierModel().fetchchallanById(fields.challan_id)
-        if (result.length == 0) throw new Error("challan id not found");
+        if (fields.notificationNo == undefined || fields.notificationNo == null || fields.notificationNo == "") throw new Error("notification no is required");
+        result = await new SupplierModel().fetchchallanById(fields.notificationNo)
+        if (result.length == 0) throw new Error("notification  not found");
         if (fields.status !== undefined && fields.status !== null && fields.status !== "")
             challan.status = fields.status
         if (fields.EwayBillNo !== undefined && fields.EwayBillNo !== null && fields.EwayBillNo !== "")
@@ -620,7 +623,7 @@ const updateChallanServcie = async (req: any) => {
         if (Object.keys(s3Images).length) { const s3Paths = await uploadFiles(s3Images); Object.assign(challan, s3Paths); }
 
         if (Object.keys(challan).length) {
-            let updatedData = await new SupplierModel().updateChallan(challan, fields.challan_id)
+            let updatedData = await new SupplierModel().updateChallan(challan, fields.notificationNo)
             return { message: "updated successfully", result: updatedData }
         }
         return { message: "updated successfully", "changedRows": 0 }
@@ -871,6 +874,13 @@ const fetchAllNotificationsBySupplierId = async (req: any) => {
         id = req.query.supplier_id
         result = await new SupplierModel().fetchAllNotificationsBySupplierId(id)
         if (result.length == 0) throw new Error("notification  not found")
+        for (var i = 0; i < result.length; i++) {
+            result[i].ewaybill_url = config.baseUrl + "/" + result[i].ewaybill_url;
+            result[i].delivery_challan_url = config.baseUrl + "/" + result[i].delivery_challan_url;
+            result[i].bilty_url = config.baseUrl + "/" + result[i].bilty_url;
+            result[i].invoice_url = config.baseUrl + "/" + result[i].invoice_url;
+            result[i].weight_slip_url = config.baseUrl + "/" + result[i].weight_slip_url;
+        }
         return result
     } catch (err: any) {
         throw err

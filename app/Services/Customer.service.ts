@@ -222,17 +222,17 @@ const addCustomerSupplierMapping = async (req: any) => {
     let result = await new CustomerModel().updateCustomerSupplierMapping( { status : 0 }, fields.customer_id, fields.state_id)
     if( result.info.split(' ')[2] == 0 ){
         let data = fields.supplier_id.map( (supplier:any) => ([fields.customer_id , fields.state_id,  supplier]))
-        // Multiple recoreds insert in one query beacuase not data found for given custoemr_id and state_id 
-        let result =  await new CustomerModel().addCustomerSupplierMapping( data ) 
+        // Multiple recoreds insert in one query beacuase not data found for given custoemr_id and state_id
+        let result =  await new CustomerModel().addCustomerSupplierMapping( data )
     }
     else{
         let data = fields.supplier_id.map( async (supplier:any) => {
-        // insert if customer_id , state_id and supplier_id does not exists  or update if they  exists   
+        // insert if customer_id , state_id and supplier_id does not exists  or update if they  exists
         let result = await new CustomerModel().addOrUpdateCustomerSupplierMapping( {"customer_id" : fields.customer_id, "state_id" : fields.state_id, "supplier_id": supplier } )
         })
     }
     return result
-   
+
 }
 
 const updateCSMService = async (req: any) => {
