@@ -874,13 +874,13 @@ const fetchAllNotificationsBySupplierId = async (req: any) => {
         id = req.query.supplier_id
         result = await new SupplierModel().fetchAllNotificationsBySupplierId(id)
         if (result.length == 0) throw new Error("notification  not found")
-        for (var i = 0; i < result.length; i++) {
-            result[i].ewaybill_url = config.baseUrl + "/" + result[i].ewaybill_url;
-            result[i].delivery_challan_url = config.baseUrl + "/" + result[i].delivery_challan_url;
-            result[i].bilty_url = config.baseUrl + "/" + result[i].bilty_url;
-            result[i].invoice_url = config.baseUrl + "/" + result[i].invoice_url;
-            result[i].weight_slip_url = config.baseUrl + "/" + result[i].weight_slip_url;
-        }
+        // for (var i = 0; i < result.length; i++) {
+        //     result[i].ewaybill_url = config.baseUrl + "/" + result[i].ewaybill_url;
+        //     result[i].delivery_challan_url = config.baseUrl + "/" + result[i].delivery_challan_url;
+        //     result[i].bilty_url = config.baseUrl + "/" + result[i].bilty_url;
+        //     result[i].invoice_url = config.baseUrl + "/" + result[i].invoice_url;
+        //     result[i].weight_slip_url = config.baseUrl + "/" + result[i].weight_slip_url;
+        // }
         return result
     } catch (err: any) {
         throw err
