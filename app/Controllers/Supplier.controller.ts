@@ -139,9 +139,6 @@ const fetchSupplierById: IController = async (req, res) => {
 };
 
 
-
-
-
 const updateSupplierDetails : IController = async (req, res) => {
     try {
         let supplier : any = await supplierService.updateSupplierDetails(req);
