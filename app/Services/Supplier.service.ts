@@ -873,7 +873,7 @@ const fetchAllNotificationsBySupplierId = async (req: any) => {
     try {
         id = req.query.supplier_id
         result = await new SupplierModel().fetchAllNotificationsBySupplierId(id)
-        if (result.length == 0) throw new Error("notification  not found")
+        if (result.length == null) throw new Error("notification  not found")
         for (var i = 0; i < result.length; i++) {
             result[i].ewaybill_url = result[i].ewaybill_url == null ? null : config.baseUrl + "/" + result[i].ewaybill_url;
             result[i].delivery_challan_url = result[i].delivery_challan_url == null ? null : config.baseUrl + "/" + result[i].delivery_challan_url;
@@ -891,7 +891,7 @@ const fetchAllPaymentsBySupplierId = async (req: any) => {
     try {
         id = req.query.supplier_id
         result = await new SupplierModel().getAllPaymentsBySupplier_id(id)
-        if (result.length == 0) throw new Error("payment details  not found for given supplier")
+        if (result.length == null) throw new Error("payment details  not found for given supplier")
         return result
     } catch (err: any) {
         throw err

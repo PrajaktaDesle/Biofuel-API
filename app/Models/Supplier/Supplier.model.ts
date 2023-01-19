@@ -312,8 +312,10 @@ export class SupplierModel extends UserModel {
         return await this._executeQuery(`select py.id as payment_id, DATE_FORMAT(py.payment_date, '%d-%m-%Y') as date , py.invoice_no, py.amount, py.utr_no,
                                                 py.created_at, py.updated_at
                                                 from supplier_payments py
-                                                inner join purchase_order_delivery_challan dc on py.delivery_challan_id = dc.id
-                                                where dc.user_id = ? 
+                                                left join purchase_order_delivery_challan dc on py.delivery_challan_id = dc.id
+                                                left join purchase_order_dispatch_notifications noti on  dc.dispatch_id = noti.id
+                                                left join supplier_purchase_order spo on noti.purchase_order_id = spo.id
+                                                where spo.supplier_id = ?
                                                 order by py.payment_date desc `, [id])
     }
     async addSupplierSelection(data: any) {
