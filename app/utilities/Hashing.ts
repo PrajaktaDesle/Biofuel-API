@@ -22,7 +22,7 @@ export default class Hashing {
                 if (!err) {
                     resolve(hash);
                 }
-                reject(err);
+                reject(err)
             });
         });
     }

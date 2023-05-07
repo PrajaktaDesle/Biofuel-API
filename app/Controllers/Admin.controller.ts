@@ -5,6 +5,7 @@ import adminService from "../Services/Admin.service";
 
 const login : IController = async (req : any, res : any) => {
     try{
+        console.log( "Admin login data : ", req.body )
         let admin : any = await adminService.admin_login( req.body );
         console.log( "Admin login data : ", admin )
         if ( admin instanceof Error ){
